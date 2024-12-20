@@ -1,0 +1,8 @@
+[
+{"symbol": "BANKIETF", "underlying": "Nifty Bank"}, 
+{"symbol": "SMALLCAP", "underlying": "Mirae Asset Nifty Smallcap 250 Momentum Quality 100 ETF"},
+{"symbol": "MODEFENCE", "underlying": "Nifty India Defence Total Return Index"},
+{"symbol": "HNGSNGBEES", "underlying": "Hang Seng Index"},
+{"symbol": "MAFANG", "underlying": "NYSE FANG+ Total Return Index"},
+{"symbol": "PHARMABEES", "underlying": "Nifty Pharma TRI"}
+]
