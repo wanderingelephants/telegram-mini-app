@@ -9,7 +9,7 @@
           
           <v-card-text>
             <p class="text-body-1">
-              This is a responsive Telegram Mini App built with Vue3 and Vuetify.
+              SIPs are bad, they make only Mutual Fund Houses very rich.
             </p>
           </v-card-text>
           
