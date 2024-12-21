@@ -8,7 +8,7 @@ let route = async (req, res) => {
         const output = []
         let result = db.prepare('select * from user_profile').all()
         result =  result.map(r => ({...r, expiryDate : new Date(r.expiry_date)}))
-        console.log(result[0].expiry_date, new Date(result[0].expiry_date))
+        //console.log(result[0].expiry_date, new Date(result[0].expiry_date))
         output.push(result)
         result = db.prepare('select * from user_config').all()
         output.push(result)
