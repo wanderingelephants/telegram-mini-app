@@ -601,6 +601,17 @@ export default {
       console.log(this.etfSelected);
       this.showSaveConfigDialog = true;
     },
+    async getInstrumentList(){
+      try{
+        const resp = await api.get('/api/nse/instruments')
+        
+        this.etfList = resp.data.map(_ => {return {value: _.symbol, title: _.underlying}})
+        console.log(this.etfList)
+      }
+      catch(e){
+        console.log(e)
+      }
+    },
     async saveConfigApi() {
       this.showSaveConfigDialog = false;
       try {
@@ -667,7 +678,8 @@ export default {
       }
     },
   },
-  mounted() {
+  async mounted() {
+    await this.getInstrumentList()
     this.isProduction = process.env.NODE_ENV === "dev" ? false : true;
     this.frameworkParamsChanged();
   },
@@ -714,14 +726,7 @@ export default {
       },
       showSaveConfigDialog: false,
       accountExpiry: "",
-      etfList: [
-        { value: "BANKNIFTY1", title: "Bank Nifty(BANKNIFTY1)" },
-        { value: "ICICIB22", title: "ICICI Pru Bharat 22(ICICIB22)" },
-        { value: "MID150CASE", title: "Zerodha Mid 150(MID150CASE)" },
-        { value: "NXST-RR", title: "Nexus REIT (NXST-RR)" },
-        { value: "GOLDCASE", title: "Zerodha GOLD ETF (GOLDCASE)" },
-        { value: "MAFANG", title: "Mirae Asset FANG USA(MAFANG)" },
-      ],
+      etfList: [],
       etfSelected: [],
       selectionCriteriaDialog: false
     };

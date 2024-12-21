@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app theme="light">
     <v-navigation-drawer 
       v-model="drawer" 
       temporary 
