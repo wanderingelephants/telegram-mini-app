@@ -1,10 +1,6 @@
 const fs = require('fs')
 const TelegramNotify = require('../telegram/notify')
 const TG_ADMIN_ID = process.env.TG_ADMIN_ID
-const db_path = process.env.SQLITE_DB + '/dipsip.db'
-const options = { fileMustExist: true }
-const db = require('better-sqlite3')(db_path, options)
-db.pragma('journal_mode = WAL')
     
 class ProcessETFQuotes{
     constructor(){
@@ -38,6 +34,12 @@ class ProcessETFQuotes{
         } 
         const etf_quotes_raw = fs.readFileSync('./etf_quotes.json')
         const data = JSON.parse(etf_quotes_raw)
+
+        const db_path = process.env.SQLITE_DB + '/dipsip.db'
+        const options = { fileMustExist: true }
+        const db = require('better-sqlite3')(db_path, options)
+        db.pragma('journal_mode = WAL')
+
         const users = db.prepare('select profile.tg_id, cfg.trigger, cfg.base_amt, cfg.buy_factor, cfg.instrument from user_config cfg, user_profile profile where cfg.user_id=profile.id').all()
         const tgNotify = new TelegramNotify()
             
