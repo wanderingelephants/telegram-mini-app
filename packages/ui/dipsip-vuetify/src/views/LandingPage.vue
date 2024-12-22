@@ -2,8 +2,8 @@
   <v-container>
     <v-row justify="center" align="center">
       <v-col cols="12" md="8">
-        <v-card elevation="12" class="pa-6 text-center">
-          <v-card-title class="text-h4 mb-4">
+        <v-card elevation="6" class=" text-center">
+          <v-card-title class="text-h5 mb-3">
             SIPs are Bad
           </v-card-title>
           
@@ -12,50 +12,43 @@
               They make only Fund Houses rich.
             </p>
           </v-card-text>
-          
-          <!--<v-card-actions class="justify-center">
-            <v-btn 
-              color="primary" 
-              variant="elevated" 
-              to="/profile"
-            >
-              Go to Profile
-            </v-btn>
-          </v-card-actions> -->
         </v-card>
       </v-col>
       <v-col cols="12" md="8">
-        <v-card elevation="12" class="pa-6 text-center">
-          <v-card-title class="text-h4 mb-4">
+        <v-card elevation="6" class=" text-center">
+          <v-card-title class="text-h5 mb-3">
             MFs are Expensive
           </v-card-title>
           
           <v-card-text>
             <p class="text-body-1">
-              ETFs fee is ~0.1 % compared to ~1.5 % for MFs. Majority of MFs dont even beat indexes.
+              ETFs fee is ~0.1 % compared to ~1.5 % for MFs. Big Majority of MFs dont even beat indexes.
             </p>
           </v-card-text>
-          
-          <!--<v-card-actions class="justify-center">
-            <v-btn 
-              color="primary" 
-              variant="elevated" 
-              to="/profile"
-            >
-              Go to Profile
-            </v-btn>
-          </v-card-actions> -->
         </v-card>
       </v-col>
       <v-col cols="12" md="8">
-        <v-card elevation="12" class="pa-6 text-center">
-          <v-card-title class="text-h4 mb-4">
+        <v-card elevation="6" class=" text-center">
+          <v-card-title class="text-h5 mb-3">
+            Wealth Creation
+          </v-card-title>
+          
+          <v-card-text>
+            <p class="text-body-1">
+              Suitable for people with 3-5 year horizon, and who do not have time to actively monitor/research markets. Learn more under Principles section.
+            </p>
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="12" md="8">
+        <v-card elevation="6" class=" text-center">
+          <v-card-title class="text-h5 mb-3">
             DipSip ETFs
           </v-card-title>
           
           <v-card-text>
             <p class="text-body-1">
-              Buy only on Correction, and Buy More on Deeper Corrections.
+              Framework to Buy on Correction, Buy More on Deeper Corrections.
             </p>
           </v-card-text>
           

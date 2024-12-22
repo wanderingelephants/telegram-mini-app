@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import LandingPage from '@/views/LandingPage.vue'
-import ProfilePage from '@/views/ProfilePage.vue'
+import TheWelcome from '../components/TheWelcome'
 import SettingsPage from '@/views/SettingsPage.vue'
 import DipSip from '@/views/DipSip.vue'
 import Postman from '@/views/Postman.vue'
@@ -13,9 +13,9 @@ const routes = [
     component: LandingPage
   },
   {
-    path: '/profile',
-    name: 'Profile',
-    component: ProfilePage
+    path: '/principles',
+    name: 'Principles',
+    component: TheWelcome
   },
   {
     path: '/settings',

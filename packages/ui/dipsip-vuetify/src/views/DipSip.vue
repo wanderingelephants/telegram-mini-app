@@ -1,36 +1,7 @@
 <template>
   <v-container class="fill-height">
     <v-responsive class="align-centerfill-height mx-auto" max-width="400">
-      <v-row no-gutters>
-        <!--<v-col cols="6">
-          <h2 class="green">Smart ETF SIPs</h2>
-        </v-col> -->
-        <v-col cols="12" v-if="loggedIn == false">
-          <v-tooltip
-            v-model="showTooltip_tg"
-            location="top"
-            :open-on-click="true"
-            :open-on-hover="false"
-          >
-            <template v-slot:activator="{ props }">
-              <div v-bind="props" @click.stop="toggleTooltip">
-                <TelegramLogin
-                  :botName="botName"
-                  @telegram-auth="handleTelegramAuth"
-                />
-                <!--<v-icon size="small" color="grey" class="ml-1">
-                  mdi-information-outline
-                </v-icon>-->
-              </div>
-            </template>
-            <!--<span>{{ tooltip_tg }}</span>-->
-          </v-tooltip>
-        </v-col>
-        <!--<v-col cols="6" v-if="loggedIn == true">
-          <div>Welcome {{user.username}}</div>
-        </v-col> -->
-      </v-row>
-      <h7 class="text-h7 mt-1">How it Works - Simple Notification Service. So, you never miss Golden Opportunities. 12 pm every day, if any ETF corrects more than your trigger, you get a TG Notification. Based on your Investment Params, we suggest the Order amount and price, that you can edit, and execute on your brokerage. Zerodha users can place pre-filled orders.</h7>
+            <h7 class="text-h7 mt-1"><b>How it Works</b> - Simple Notification Service. So, you never miss Golden Days. 12 pm every day, if any of your ETFs correct more than your trigger, you get a TG Notification. Based on your Investment Parameters, system suggests the Order Amount and Price, that you can edit, and place on your brokerage. Zerodha users can edit and place pre-filled orders. See <a href="/principles">Principles</a> for better understanding.</h7>
       <h5 class="text-h5 mt-1">Investment Parameters</h5>
       <v-row>
         <!--<v-col cols="3">
@@ -307,7 +278,7 @@
           </button>
         </v-col>
         <v-col v-if="loggedIn == false" >
-          <v-card-text>Login with Telegram above, to Save</v-card-text>
+          <v-card-text>Login with Telegram, to Save and Subscribe</v-card-text>
         </v-col>
         <!--<v-col cols="8">
           Expiry
@@ -320,6 +291,36 @@
           }}
         </v-col> -->
       </v-row>
+      <v-row no-gutters>
+        <!--<v-col cols="6">
+          <h2 class="green">Smart ETF SIPs</h2>
+        </v-col> -->
+        <v-col cols="12" v-if="loggedIn == false">
+          <v-tooltip
+            v-model="showTooltip_tg"
+            location="top"
+            :open-on-click="true"
+            :open-on-hover="false"
+          >
+            <template v-slot:activator="{ props }">
+              <div v-bind="props" @click.stop="toggleTooltip">
+                <TelegramLogin
+                  :botName="botName"
+                  @telegram-auth="handleTelegramAuth"
+                />
+                <v-icon size="small" color="grey" class="ml-1">
+                  mdi-information-outline
+                </v-icon>
+              </div>
+            </template>
+            <span >{{ tooltip_tg }}</span>
+          </v-tooltip>
+        </v-col>
+        <v-col cols="6" v-if="loggedIn == true">
+          <div><b>Welcome {{user.username}}</b></div>
+        </v-col> 
+      </v-row>
+
       <v-dialog v-model="dialog" width="auto">
         <v-card color="primary" theme="light">
           <v-card-title class="d-flex justify-space-between align-center">
@@ -700,7 +701,7 @@ export default {
       tooltip_tg:
         "Why Telegram ? It offers the best encryption and privacy preserving features. Notice here, no collection of your gmail, phone, OTPs etc",
       tooltip_baseAmt:
-        "Base Amt is the minimum invested amount, on which the Allocation Factor is applied. Each investment is therefore small, and relatively low risk, but staggered trades over long periods of time add up to big compounding corpus.",
+        "Base Amount (think SIP amount), on which the Allocation Factor is applied. Each investment is therefore small, and relatively low risk, but staggered trades over long periods of time add up to big compounding corpus.",
       tooltip_trigger:
         "You invest when Market (i.e. this index) falls more than this percentage",
       tooltip_buy_factor:

@@ -3,7 +3,7 @@
     <v-row justify="center">
       <v-col cols="12" md="6">
         <v-card>
-          <v-card-title>User Profile</v-card-title>
+          <v-card-title>Principles</v-card-title>
           <v-card-text>
             <v-text-field 
               v-model="username" 
