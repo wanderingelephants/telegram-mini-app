@@ -35,7 +35,7 @@
           
           <v-card-text>
             <p class="text-body-1">
-              Suitable for people with 3-5 year horizon, and who do not have time to actively monitor/research markets. Learn more under Principles section.
+              Suitable for people with 3-5 year horizon, and who do not have time to actively monitor/research markets. Learn more under <a href="/principles">Principles</a> section.
             </p>
           </v-card-text>
         </v-card>
@@ -58,7 +58,7 @@
               variant="elevated" 
               to="/dipsip"
             >
-              Subscribe for Free
+              Subscribe
             </v-btn>
           </v-card-actions>
         </v-card>
