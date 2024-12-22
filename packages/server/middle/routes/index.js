@@ -5,6 +5,7 @@ const routes = {
     api: {
         db: {
             create: require('./api/db/create'),
+            import: require('./api/db/import'),
             getuser: require('./api/db/getuser'),
             updateuser: require('./api/db/updateuser'),
             saveconfig: require('./api/db/saveconfig')
@@ -36,6 +37,7 @@ const routes = {
 router.get('/api/telegram/auth', routes.api.telegram.auth)
 //router.get('/api/telegram/notify', routes.api.telegram.notify)
 router.get('/api/db/create', routes.api.db.create)
+router.post('/api/db/import', routes.api.db.import)
 router.get('/api/db/getuser', routes.api.db.getuser)
 router.post('/api/db/updateuser', routes.api.db.updateuser)
 router.post('/api/db/saveconfig', routes.api.db.saveconfig)

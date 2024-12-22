@@ -1,21 +1,21 @@
-let route = async (req, res) => {
+const route = async (req, res) => {
     try{
         const db_path = process.env.SQLITE_DB + '/dipsip.db'
         const options =  {fileMustExist: true}
         const db = require('better-sqlite3')(db_path, options)
         db.pragma('journal_mode = WAL')
 
-        const output = []
-        let result = db.prepare('select * from user_profile').all()
-        result =  result.map(r => ({...r, expiryDate : new Date(r.expiry_date)}))
+        //const output = []
+        //let result = db.prepare('select * from user_profile').all()
+        let result = db.prepare('select user_profile.tg_id, user_profile.tg_firstname, user_profile.tg_lastname, user_profile.tg_username,  user_profile.expiry_date,  user_profile.last_notification, user_config.user_id, user_config.trigger, user_config.base_amt, user_config.buy_factor, user_config.instrument from user_profile left outer join user_config on user_profile.id=user_config.user_id').all()
+        console.log(result)
+        //result =  result.map(r => ({...r, expiryDate : new Date(r.expiry_date)}))
         //console.log(result[0].expiry_date, new Date(result[0].expiry_date))
-        output.push(result)
-        result = db.prepare('select * from user_config').all()
-        output.push(result)
+        //output.push(result)
+        //result = db.prepare('select * from user_config').all()
+        //output.push(result)
 
-        return res.status(200).json({
-            output
-        })
+        return res.status(200).json(result)
     }
     catch(e){
         console.log('err in get user', e)

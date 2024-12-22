@@ -1,14 +1,68 @@
 <template>
   <v-container fluid theme="light">
-    <v-text :v-text="postUrl"></v-text>
-    <v-textarea v-model="dataToPost" rows="50"></v-textarea>
-    <v-btn @click="submit">Submit</v-btn>
+    <v-row>
+        
+    <v-col cols="6" v-if="loggedIn == false">
+          <v-tooltip
+            v-model="showTooltip_tg"
+            location="top"
+            :open-on-click="true"
+            :open-on-hover="false"
+          >
+            <template v-slot:activator="{ props }">
+              <div v-bind="props" @click.stop="toggleTooltip">
+                <TelegramLogin
+                  :botName="botName"
+                  @telegram-auth="handleTelegramAuth"
+                />
+                <v-icon size="small" color="grey" class="ml-1">
+                  mdi-information-outline
+                </v-icon>
+              </div>
+            </template>
+            
+          </v-tooltip>
+        </v-col>
+    <v-col cols="3"  v-if="showSubmit == true">
+          <v-select
+            max-width="150px"
+            label="url"
+            theme="light"
+            v-model="postUrl"
+            :items="[
+              '/api/nse/receive', '/api/db/import'
+            ]"
+            variant="underlined"
+          ></v-select>
+        </v-col>
+    </v-row>
+    <v-textarea v-if="showSubmit == true" v-model="dataToPost" rows="50"></v-textarea>
+    <v-btn @click="submit" v-if="showSubmit == true">Submit</v-btn>
   </v-container>
 </template>
 <script>
+import { mapState } from "vuex";
+import TelegramLogin from "../components/TelegramLogin.vue";
+import axios from "axios";
+//const botName = import.meta.env.VITE_TG_BOT_NAME;
 export default {
+  components: {
+    TelegramLogin,
+  },
+  mounted(){
+    this.botName = import.meta.env.VITE_TG_BOT_NAME;
+    console.log('botName', import.meta.env)
+    this.tg_admin_id=import.meta.env.VITE_TG_ADMIN_ID
+  },
+  computed:mapState([
+    // map this.count to store.state.count
+    "loggedIn",
+    "user",
+  ]),
   methods: {
     async submit() {
+      console.log(this.$store.state.user)
+      console.log('session', this.loggedIn, this.user)
       function preprocessJSON(jsonString) {
     // Step 1: Enclose keys in double quotes
     let fixedString = jsonString.replace(/([{,]\s*)(\w+)(?=\s*:)/g, '$1"$2"');
@@ -45,18 +99,21 @@ export default {
 
       //console.log(fixedJson);
       const parsed = JSON.parse(fixedJson);
-      //console.log("parsed", parsed);
-      const filtered = parsed.data.filter(
+      let filtered = parsed
+      if (this.postUrl === '/api/nse/receive'){
+        filtered = parsed.data.filter(
         (record) =>
           this.filteredList.map((_) => _.symbol).indexOf(record.symbol) > -1
       );
       console.log(filtered);
+      }
+      
       await  this.postToApi(filtered)
     },
     async postToApi(data) {
       console.log("post,", data);
       try {
-        const response = await fetch("/api/nse/receive", {
+        const response = await fetch(this.postUrl, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -69,10 +126,34 @@ export default {
         // Handle API error
       }
     },
+    async handleTelegramAuth(user) {
+      try {
+        const response = await axios.get("/api/telegram/auth", {
+          params: user,
+        });
+        const { token } = response.data;
+        
+        console.log("tg_admin_id", this.tg_admin_id)
+        if (user.id == this.tg_admin_id) this.showSubmit = true
+
+        // Store the JWT in localStorage or a secure cookie
+        localStorage.setItem("jwt", token);
+        // You might want to update your app's state here
+        this.$store.commit("setLoggedIn", true);
+        this.$store.commit("setUser", user);
+      } catch (error) {
+        console.error("Authentication failed:", error);
+      }
+    },
   },
   data() {
     return {
+      tg_admin_id: '',
+      showSubmit: false,
+      botName: 'Dev_DipSip_bot',
+      showTooltip_tg: false,
       dataToPost: "",
+      postUrls: ['/api/nse/receive', '/api/db/import'],
       postUrl: "/api/nse/receive",
       filteredList: [
         { symbol: "BANKIETF", underlying: "Nifty Bank" },

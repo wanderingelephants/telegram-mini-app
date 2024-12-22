@@ -305,7 +305,7 @@
             Save
           </button>
         </v-col>
-        <v-col cols="8">
+        <!--<v-col cols="8">
           Expiry
           {{
             accountExpiry.toLocaleString("default", {
@@ -314,7 +314,7 @@
               day: "numeric",
             })
           }}
-        </v-col>
+        </v-col> -->
       </v-row>
       <v-dialog v-model="dialog" width="auto">
         <v-card color="primary" theme="light">
