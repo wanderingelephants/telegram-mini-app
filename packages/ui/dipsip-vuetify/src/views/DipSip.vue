@@ -2,10 +2,10 @@
   <v-container class="fill-height">
     <v-responsive class="align-centerfill-height mx-auto" max-width="400">
       <v-row no-gutters>
-        <v-col cols="6">
+        <!--<v-col cols="6">
           <h2 class="green">Smart ETF SIPs</h2>
-        </v-col>
-        <v-col cols="6" v-if="loggedIn == false">
+        </v-col> -->
+        <v-col cols="12" v-if="loggedIn == false">
           <v-tooltip
             v-model="showTooltip_tg"
             location="top"
@@ -18,21 +18,22 @@
                   :botName="botName"
                   @telegram-auth="handleTelegramAuth"
                 />
-                <v-icon size="small" color="grey" class="ml-1">
+                <!--<v-icon size="small" color="grey" class="ml-1">
                   mdi-information-outline
-                </v-icon>
+                </v-icon>-->
               </div>
             </template>
-            <span>{{ tooltip_tg }}</span>
+            <!--<span>{{ tooltip_tg }}</span>-->
           </v-tooltip>
         </v-col>
         <!--<v-col cols="6" v-if="loggedIn == true">
           <div>Welcome {{user.username}}</div>
         </v-col> -->
       </v-row>
-      <h5 class="text-h5 mt-1">Strategy Test (Bank Nifty)</h5>
+      <h7 class="text-h7 mt-1">How it Works - Simple Notification Service. So, you never miss Golden Opportunities. 12 pm every day, if any ETF corrects more than your trigger, you get a TG Notification. Based on your Investment Params, we suggest the Order amount and price, that you can edit, and execute on your brokerage. Zerodha users can place pre-filled orders.</h7>
+      <h5 class="text-h5 mt-1">Investment Parameters</h5>
       <v-row>
-        <v-col cols="3">
+        <!--<v-col cols="3">
           <v-select
             max-width="150px"
             label="Start Date"
@@ -58,8 +59,8 @@
             ]"
             variant="underlined"
           ></v-select>
-        </v-col>
-        <v-col cols="3">
+        </v-col> -->
+        <v-col cols="6">
           <div class="d-flex align-center">
             <v-select
               theme="light"
@@ -78,7 +79,7 @@
                 '90 k',
               ]"
               variant="underlined"
-              label="Base Amt"
+              label="Amount"
             />
             <v-tooltip
               location="top"
@@ -95,7 +96,7 @@
           </div>
         </v-col>
 
-        <v-col cols="3">
+        <v-col cols="6">
           <div class="d-flex align-center">
             <v-select
               theme="light"
@@ -173,13 +174,13 @@
       </v-row>
       <v-row no-gutters>
         <v-col>
-          <v-card class="pb-2" color="primary" theme="light" max-width="280px">
+          <v-card class="pb-2" color="primary" theme="light" max-width="380px">
             <v-card-title
               >Allocation (Factor
               {{ Math.round(buy_factor * 100) / 100 }})</v-card-title
             >
             <v-card-subtitle
-              >Deeper Correction, Bigger Allocation</v-card-subtitle
+              >Scroll. Deeper Correction, Bigger Allocation</v-card-subtitle
             >
             <!--<template v-slot:title>
                 <span class="font-weight-black"
@@ -191,7 +192,7 @@
               density="compact"
               theme="light"
               class="ml-2 mr-2"
-              height="200px"
+              height="100px"
               fixed-header
             >
               <thead>
@@ -210,7 +211,7 @@
           </v-card>
         </v-col>
       </v-row>
-      <v-row no-gutters class="mt-2">
+      <!--<v-row no-gutters class="mt-2">
         <v-col cols="12">
           <v-card class="pb-2" color="primary" theme="light" max-width="280px">
             <v-card-title class="d-flex justify-space-between align-center">
@@ -247,12 +248,12 @@
             </v-table>
           </v-card>
         </v-col>
-      </v-row>
+      </v-row> -->
       <v-row no-gutters class="mt-2">
         <v-col cols="12">
           <v-card class="pb-2" color="primary" theme="light" max-width="100%">
             <v-card-title class="d-flex justify-space-between align-center">
-              Choose Your ETF
+              Select Your ETFs
               <a
                 href="#"
                 @click.prevent="selectionCriteriaDialog = true"
@@ -261,7 +262,7 @@
                 Selection Criteria
               </a>
             </v-card-title>
-            <v-card-subtitle
+            <v-card-subtitle v-if="false"
               >Check Zerodha for Details by using (ETF Code)</v-card-subtitle
             >
             <v-combobox
@@ -283,7 +284,7 @@
                 </v-card-action>
                 <v-card-text class="mt-4">
                   <ul>
-                  <li>One of the core objectives of this Project is to declutter and filter the investment options for end users.</li>
+                  <li>One of the core objectives of this Platform is to declutter and filter the investment options for end users.</li>
                   <li>With more than 2500 Mutual Fund schemes alone, it is tough to filter. Cost comes later.</li>
                   <li>We believe Passive Investments offer best risk adjusted returns over long term.</li>
                   <li>Hence, we will present to users well-researched ETFs, which are low cost, liquid and there is public data to analyze them.</li>
@@ -297,13 +298,16 @@
         </v-col>
       </v-row>
       <v-row no-gutters class="mt-2">
-        <v-col v-if="loggedIn == true" cols="4">
+        <v-col v-if="loggedIn == true" >
           <button
             @click="saveConfig"
             class="v-btn v-theme--light text-primary v-btn--density-default v-btn--size-default v-btn--variant-outlined"
           >
             Save
           </button>
+        </v-col>
+        <v-col v-if="loggedIn == false" >
+          <v-card-text>Login with Telegram above, to Save</v-card-text>
         </v-col>
         <!--<v-col cols="8">
           Expiry
@@ -690,8 +694,8 @@ export default {
       showInvestmentDetails: false,
       color: "teal",
       buy_factor: 1.33,
-      base_amtShort: "20 k",
-      base_amt: 20000,
+      base_amtShort: "10 k",
+      base_amt: 10000,
       showTooltip_tg: false,
       tooltip_tg:
         "Why Telegram ? It offers the best encryption and privacy preserving features. Notice here, no collection of your gmail, phone, OTPs etc",
@@ -700,7 +704,7 @@ export default {
       tooltip_trigger:
         "You invest when Market (i.e. this index) falls more than this percentage",
       tooltip_buy_factor:
-        "Factor: A slow exponential function, that increases allocation as market correction increases. Factor of 1 means constant base amount, irrespective of correction severity. Factor of 2 (most aggressive) means investment amount doubles on every 1 % correction.",
+        "Allocation Factor: A function, that increases allocation as market correction increases. Factor of 1 means constant base amount, irrespective of correction severity. Factor of 2 (most aggressive) means investment amount doubles on every 1 % correction.",
       trigger: 1.0,
       correctionTable: [],
       market: [],
