@@ -43,7 +43,8 @@ const drawer = ref(false)
 const menuItems = [
   { title: 'Home', path: '/' },
   { title: 'DipSip', path: '/dipsip' },
-  { title: 'Principles', path: '/principles' }
+  { title: 'Principles', path: '/principles' },
+  { title: 'ETF List', path: '/etfList' }
 ]
 </script>
 

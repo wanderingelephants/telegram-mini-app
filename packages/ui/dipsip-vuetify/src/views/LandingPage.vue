@@ -4,7 +4,7 @@
       <v-col cols="12" md="8">
         <v-card elevation="6" class=" text-center">
           <v-card-title class="text-h5 mb-3">
-            SIPs are Bad
+            Regular SIPs are Bad
           </v-card-title>
           
           <v-card-text>

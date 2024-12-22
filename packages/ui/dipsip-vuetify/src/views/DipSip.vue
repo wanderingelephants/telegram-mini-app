@@ -259,8 +259,7 @@
                   <li>With more than 2500 Mutual Fund schemes alone, it is tough to filter. Cost comes later.</li>
                   <li>We believe Passive Investments offer best risk adjusted returns over long term.</li>
                   <li>Hence, we will present to users well-researched ETFs, which are low cost, liquid and there is public data to analyze them.</li>
-                  <li>To keep overlap to a minimum we have Kotak's Bank Nifty, Zerodha Mid150Case, ICICI Pru Bharat22 (Blue Chip), Nexus REIT (exposure to commerical real estate), GOLDCASE (Gold exposure), MAFANG (NYSE Facebook-Apple-Netflix-Google-Plus theme)</li>
-                  
+                  <li>See section <a href="etfList">ETFs</a> for more details</li>
                   </ul>
                 </v-card-text>
               </v-card>
@@ -610,7 +609,7 @@ export default {
       try{
         const resp = await api.get('/api/nse/instruments')
         
-        this.etfList = resp.data.map(_ => {return {value: _.symbol, title: _.underlying}})
+        this.etfList = resp.data.map(_ => {return {value: _.symbol, title: "("+_.symbol+") "+_.underlying}})
         console.log(this.etfList)
       }
       catch(e){
