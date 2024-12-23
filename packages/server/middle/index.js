@@ -4,7 +4,7 @@ const app = express()
 const port = process.env.PORT || 3000;
 const cron = require('node-cron');
 const ProcessETFQuotes = require('./routes/api/nse/processETFQuotes')
-cron.schedule('0 21 * * 1-5', async () => {
+cron.schedule('0 12 * * 1-5', async () => {
   console.log('running a task during market hours of NSE', new Date());
   const processor = new ProcessETFQuotes()
   await processor.process()
