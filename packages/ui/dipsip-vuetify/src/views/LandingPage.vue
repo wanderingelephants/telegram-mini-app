@@ -22,7 +22,7 @@
           
           <v-card-text>
             <p class="text-body-1">
-              ETFs fee is ~0.1 % compared to ~1.5 % for MFs. Big Majority of MFs dont even beat indexes.
+              ETFs fee is ~0.15 %, compared to ~1.5 % for MFs. Vast majority of MFs dont even beat indexes.
             </p>
           </v-card-text>
         </v-card>

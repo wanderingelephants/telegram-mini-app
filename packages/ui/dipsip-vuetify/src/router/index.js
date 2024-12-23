@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import LandingPage from '@/views/LandingPage.vue'
 import ETFPage from '@/views/ETFPage.vue'
+import RiskProfile from '@/views/RiskProfile.vue'
 import TheWelcome from '../components/TheWelcome'
 import SettingsPage from '@/views/SettingsPage.vue'
 import DipSip from '@/views/DipSip.vue'
@@ -32,6 +33,11 @@ const routes = [
     path: '/etfList',
     name: 'ETFPage',
     component: ETFPage
+  },
+  {
+    path: '/riskProfile',
+    name: 'RiskProfile',
+    component: RiskProfile
   },
   {
     path: '/postman',
