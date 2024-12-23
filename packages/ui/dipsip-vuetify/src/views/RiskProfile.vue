@@ -707,7 +707,7 @@ const recommendedAllocation = computed(() => {
         finalAllocation['Real Estate'] = {
           percentage: allocation.alternativesTotal,
           etfs: [
-            { name: 'Embassy REIT', code: 'EMBASSY', weight: allocation.alternativesTotal }
+            { name: 'Nexus REIT', code: 'NXST-RR', weight: allocation.alternativesTotal }
           ]
         }
         break
@@ -715,7 +715,7 @@ const recommendedAllocation = computed(() => {
         finalAllocation['Infrastructure'] = {
           percentage: allocation.alternativesTotal,
           etfs: [
-            { name: 'PowerGrid InvIT', code: 'PGINVIT', weight: allocation.alternativesTotal }
+            { name: 'PowerGrid InvIT', code: 'PGINVIT-IV', weight: allocation.alternativesTotal }
           ]
         }
         break
