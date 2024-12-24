@@ -17,12 +17,13 @@
       <v-col cols="12" md="8">
         <v-card elevation="6" class=" text-center">
           <v-card-title class="text-h5 mb-3">
-            MFs are Expensive
+            MFs Underperform, are Expensive
           </v-card-title>
           
           <v-card-text>
             <p class="text-body-1">
-              ETFs fee is ~0.15 %, compared to ~1.5 % for MFs. Vast majority of MFs dont even beat indexes.
+              ETFs fee is ~0.15 %, MFs is ~1.5 %. Vast majority of MFs underperform.
+              <a href="https://economictimes.indiatimes.com/mf/analysis/63-equity-mutual-funds-fail-to-beat-benchmarks-in-3-years/articleshow/112729472.cms" target="_blank">Reference</a>
             </p>
           </v-card-text>
         </v-card>
@@ -48,7 +49,7 @@
           
           <v-card-text>
             <p class="text-body-1">
-              Framework to Buy on Correction, Buy More on Deeper Corrections.
+              Maximize Returns, Minimize Risks and Costs.
             </p>
           </v-card-text>
           
