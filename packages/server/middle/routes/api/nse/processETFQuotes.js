@@ -43,15 +43,14 @@ class ProcessETFQuotes{
         const users = db.prepare('select profile.tg_id, cfg.trigger, cfg.base_amt, cfg.buy_factor, cfg.instrument from user_config cfg, user_profile profile where cfg.user_id=profile.id').all()
         const tgNotify = new TelegramNotify()
             
-        console.log("users ", users)
         for (const user of users) {
             console.log('user', user)
             const instrumentsToAlertForUser = []
             for (const instrument of data){
                 if (user.instrument.indexOf(instrument.symbol)  > -1){
-                    console.log('user subscribed to ', instrument.symbol, user.trigger)
                     const userTrigger = parseFloat(user.trigger)
                     const instrumentChangePercent  = parseFloat(instrument.per)
+                    console.log('user subscribed to ', instrument.symbol, user.trigger, instrumentChangePercent)
                     if (instrumentChangePercent < userTrigger*-1){
                         instrumentsToAlertForUser.push({
                             symbol: instrument.symbol,
@@ -66,8 +65,10 @@ class ProcessETFQuotes{
                 }
                 else continue;
             }
+            console.log("instrumentsToAlertForUser", instrumentsToAlertForUser)
             const querystring = this.getQueryString(instrumentsToAlertForUser)
             console.log('Send TG Alert', user.tg_id, 'Alert : ' + process.env.WEB_APP_HOST + 'trade' + querystring)
+            if (instrumentsToAlertForUser.length > 0)
             await tgNotify.sendTelegramMessage(user.tg_id,  'Alert : ' + process.env.WEB_APP_HOST + 'trade' + querystring)
             
         }
