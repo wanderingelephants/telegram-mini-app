@@ -7,7 +7,6 @@ class ProcessETFQuotes{
 
     }
     getQueryString(instruments){
-        console.log(instruments)
         let querystring  = ''
         let count = 0
         for (const instr of instruments){
@@ -69,7 +68,7 @@ class ProcessETFQuotes{
             const querystring = this.getQueryString(instrumentsToAlertForUser)
             console.log('Send TG Alert', user.tg_id, 'Alert : ' + process.env.WEB_APP_HOST + 'trade' + querystring)
             if (instrumentsToAlertForUser.length > 0)
-            await tgNotify.sendTelegramMessage(user.tg_id,  'Alert : ' + process.env.WEB_APP_HOST + 'trade' + querystring)
+            await tgNotify.sendTelegramMessage(user.tg_id,  'DipSip Opporunities : ' + process.env.WEB_APP_HOST + 'trade' + querystring)
             
         }
         //fs.unlinkSync(etfQuoteFile)
