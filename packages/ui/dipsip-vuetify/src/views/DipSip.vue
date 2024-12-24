@@ -444,7 +444,9 @@ h3 {
 </style>
 <script setup>
 const title = import.meta.env.VITE_APP_TITLE;
-const botName = import.meta.env.VITE_TG_BOT_NAME;
+let botName = 'DipSipBot'
+if (import.meta.env.MODE == 'development') botName = 'Dev_DipSip_bot'
+
 </script>
 <script>
 import { mapState } from "vuex";
@@ -683,12 +685,15 @@ export default {
     },
   },
   async mounted() {
+    //if (import.meta.env.MODE == 'development') this.botName = 'Dev_DipSip_bot'
+    //else this.botName = 'DipSipBot'
     await this.getInstrumentList()
     this.isProduction = process.env.NODE_ENV === "dev" ? false : true;
     this.frameworkParamsChanged();
   },
   data() {
     return {
+      //botName: 'DipSipBot',
       isProduction: true,
       dialog: false,
       showInvestmentDetails: false,

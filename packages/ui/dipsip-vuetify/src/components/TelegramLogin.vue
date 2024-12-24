@@ -16,7 +16,11 @@ export default {
     const script = document.createElement('script')
     script.src = 'https://telegram.org/js/telegram-widget.js?22'
     script.async = true
-    script.setAttribute('data-telegram-login', this.botName)
+    console.log('TG', import.meta.env)
+    console.log('data-telegram-login', this.botName)
+    if (import.meta.env.MODE === 'production')
+    script.setAttribute('data-telegram-login', 'DipSipBot')
+    else script.setAttribute('data-telegram-login', 'Dev_DipSip_bot') 
     script.setAttribute('data-size', 'large')
     script.setAttribute('data-onauth', 'onTelegramAuth(user)')
     script.setAttribute('data-request-access', 'write')

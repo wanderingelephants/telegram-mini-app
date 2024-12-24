@@ -44,14 +44,14 @@
 import { mapState } from "vuex";
 import TelegramLogin from "../components/TelegramLogin.vue";
 import axios from "axios";
-//const botName = import.meta.env.VITE_TG_BOT_NAME;
+let botName = 'DipSipBot';
+if (import.meta.env.MODE == 'development') botName = 'Dev_DipSip_bot'
 export default {
   components: {
     TelegramLogin,
   },
   mounted(){
-    this.botName = import.meta.env.VITE_TG_BOT_NAME;
-    console.log('botName', import.meta.env)
+    console.log('env', import.meta.env)
     this.tg_admin_id=import.meta.env.VITE_TG_ADMIN_ID
   },
   computed:mapState([
@@ -150,7 +150,6 @@ export default {
     return {
       tg_admin_id: '',
       showSubmit: false,
-      botName: 'Dev_DipSip_bot',
       showTooltip_tg: false,
       dataToPost: "",
       postUrls: ['/api/nse/receive', '/api/db/import'],
