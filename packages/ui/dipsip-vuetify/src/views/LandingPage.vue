@@ -4,6 +4,29 @@
       <v-col cols="12" md="8">
         <v-card elevation="6" class=" text-center">
           <v-card-title class="text-h5 mb-3">
+            DipSip ETFs
+          </v-card-title>
+          
+          <v-card-text>
+            <p class="text-body-1">
+              Maximize Returns, Minimize Risks.
+            </p>
+          </v-card-text>
+          
+          <v-card-actions class="justify-center">
+            <v-btn 
+              color="primary" 
+              variant="elevated" 
+              to="/dipsip"
+            >
+              Subscribe
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+      <v-col cols="12" md="8">
+        <v-card elevation="6" class=" text-center">
+          <v-card-title class="text-h5 mb-3">
             Regular SIPs are Bad
           </v-card-title>
           
@@ -39,29 +62,6 @@
               Suitable for people with 3-5 year horizon, and who do not have time to actively monitor/research markets. Learn more under <a href="/principles">Principles</a> section.
             </p>
           </v-card-text>
-        </v-card>
-      </v-col>
-      <v-col cols="12" md="8">
-        <v-card elevation="6" class=" text-center">
-          <v-card-title class="text-h5 mb-3">
-            DipSip ETFs
-          </v-card-title>
-          
-          <v-card-text>
-            <p class="text-body-1">
-              Maximize Returns, Minimize Risks and Costs.
-            </p>
-          </v-card-text>
-          
-          <v-card-actions class="justify-center">
-            <v-btn 
-              color="primary" 
-              variant="elevated" 
-              to="/dipsip"
-            >
-              Subscribe
-            </v-btn>
-          </v-card-actions>
         </v-card>
       </v-col>
     </v-row>
