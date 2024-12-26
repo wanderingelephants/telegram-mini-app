@@ -45,7 +45,8 @@ const menuItems = [
   { title: 'DipSip', path: '/dipsip' },
   { title: 'Principles', path: '/principles' },
   { title: 'Risk  Profile', path: '/riskProfile' },
-  { title: 'ETF List', path: '/etfList' }
+  { title: 'ETF List', path: '/etfList' },
+  { title: 'Stocks', path: '/stocks' }
 ]
 </script>
 

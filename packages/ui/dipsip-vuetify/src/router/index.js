@@ -6,6 +6,7 @@ import TheWelcome from '../components/TheWelcome'
 import SettingsPage from '@/views/SettingsPage.vue'
 import DipSip from '@/views/DipSip.vue'
 import Postman from '@/views/Postman.vue'
+import Stocks from '@/views/Stocks.vue'
 import KiteConnectApp from '../components/KiteConnectApp'
 
 const routes = [
@@ -43,6 +44,11 @@ const routes = [
     path: '/postman',
     name: 'Postman',
     component: Postman
+  },
+  {
+    path: '/stocks',
+    name: 'Stocks',
+    component: Stocks
   },
   {
     path: '/trade',
