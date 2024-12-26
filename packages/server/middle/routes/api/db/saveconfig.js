@@ -8,19 +8,23 @@ function persistConfig(req){
         const db = require('better-sqlite3')(db_path, options)
         db.pragma('journal_mode = WAL')
 
-        const {tg_id, tg_username, trigger, base_amt, buy_factor, instrument} = req.body
+        const {tg_id, tg_username, trigger, base_amt, buy_factor, instrument, unsubscribe} = req.body
+        console.log('unsubcribe', {tg_id, tg_username, trigger, base_amt, buy_factor, instrument, unsubscribe})
         console.log('select id from user_profile where tg_id=' + tg_id)
         const user_pk_records = db.prepare('select id from user_profile where tg_id=' + tg_id).all()
         const user_pk = user_pk_records[0].id
         console.log("user_pk", user_pk)
+        if (true == unsubscribe){
+            db.prepare('delete from user_config where user_id=@user_id').run({user_id: user_pk})
+            return
+        }
         console.log({tg_id, tg_username, trigger, base_amt, buy_factor, instrument})
+    
         const config_count = db.prepare('select count(*) as cnt from user_config where user_id=@user_id').get({user_id: user_pk}).cnt
         if (config_count == 0)
         db.prepare('insert into user_config(user_id, base_amt, trigger, buy_factor, instrument) values(@user_id, @base_amt, @trigger, @buy_factor, @instrument)').run({user_id: user_pk, base_amt, trigger, buy_factor, instrument})
         else
         db.prepare('update user_config set base_amt=@base_amt, trigger=@trigger, buy_factor=@buy_factor, instrument=@instrument where user_id=@user_id').run({user_id: user_pk, base_amt, trigger, buy_factor, instrument})
-        
-        //db.prepare('insert into user_config(user_id, config_json) values (@user_id, @config_json)').run({user_id: user_pk[0].id, config_json: JSON.stringify({trigger, baseAmount, buyFactor})})
         
     }
     catch(e){
