@@ -276,6 +276,15 @@
             Save
           </button>
         </v-col>
+        <v-col v-if="loggedIn == true" >
+          <button
+            @click="deleteConfig"
+            class="v-btn v-theme--light text-primary v-btn--density-default v-btn--size-default v-btn--variant-outlined"
+          >
+            Unsubscribe
+          </button>
+        </v-col>
+        
         <v-col v-if="loggedIn == false" >
           <v-card-text>Login with Telegram, to Save and Subscribe</v-card-text>
         </v-col>
@@ -616,6 +625,28 @@ export default {
       }
       catch(e){
         console.log(e)
+      }
+    },
+    async deleteConfig() {
+      //console.log(this.etfSelected);
+      try {
+        const resp = await api.post("/api/db/saveconfig", {
+          tg_id: this.$store.state.user.id,
+          unsubscribe: true
+        });
+        if (resp.status == 200) {
+          this.snackbar.show = true;
+          this.snackbar.message = "Unsubscribed !";
+          this.snackbar.color = "success";
+        } else {
+          this.snackbar.show = true;
+          this.snackbar.message = "Pls try later !";
+          this.snackbar.color = "error";
+        }
+      } catch (e) {
+        this.snackbar.show = true;
+        this.snackbar.message = "Pls try later !";
+        this.snackbar.color = "error";
       }
     },
     async saveConfigApi() {
