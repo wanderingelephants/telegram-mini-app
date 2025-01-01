@@ -1,0 +1,14 @@
+<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <!-- Circle background -->
+  <circle cx="16" cy="16" r="15" fill="#FFF8E1"/>
+  
+  <!-- Actual Rupee symbol ₹ -->
+  <text x="16" y="22" 
+        font-family="Arial, sans-serif" 
+        font-size="20"
+        font-weight="bold"
+        fill="#FFA000"
+        text-anchor="middle">
+    ₹
+  </text>
+</svg>

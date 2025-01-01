@@ -44,10 +44,10 @@
             <th class="corner-header">
               <div class="corner-content">
                 <div class="exit-label">
-                  Entry →
+                  Entry P/E →
                 </div>
                 <div class="entry-label">
-                  Exit ↓
+                  Exit P/E ↓
                 </div>
               </div>
             </th>

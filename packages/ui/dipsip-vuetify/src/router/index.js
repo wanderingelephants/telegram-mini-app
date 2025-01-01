@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import LandingPage from '@/views/LandingPage.vue'
+import Carousel from '@/views/Carousel.vue'
 import ETFPage from '@/views/ETFPage.vue'
 import RiskProfile from '@/views/RiskProfile.vue'
 import TheWelcome from '../components/TheWelcome'
@@ -13,7 +13,7 @@ const routes = [
   {
     path: '/',
     name: 'Landing',
-    component: LandingPage
+    component: Carousel
   },
   {
     path: '/principles',

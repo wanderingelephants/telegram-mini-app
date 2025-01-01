@@ -475,6 +475,7 @@ export default {
   methods: {
     async handleTelegramAuth(user) {
       try {
+        gtag_report_conversion()
         const response = await axios.get("/api/telegram/auth", {
           params: user,
         });
