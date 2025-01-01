@@ -31,3 +31,4 @@ services:
     volumes:
       - ./.env:/.env  
       - ./sqlite_db:/app/sqlite_db  
+      - ./server/downloads:/app/downloads
