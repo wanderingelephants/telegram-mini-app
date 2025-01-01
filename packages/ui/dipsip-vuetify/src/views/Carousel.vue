@@ -7,7 +7,7 @@
       elevation="1"
     >
       <v-app-bar-title class="text-amber-darken-2 text-h4 font-weight-bold">
-        Finnie
+        Wealthie<span class="text-h4 text-amber-darken-2">₹</span> 
       </v-app-bar-title>
     </v-app-bar>
 
@@ -17,7 +17,7 @@
         <v-row justify="center" align="center">
           <v-col cols="12" class="text-center">
             <p class="text-h6 text-grey-darken-1">
-              Your Financial Information  Assistant
+              Your Wealth Manage₹
             </p>
           </v-col>
         </v-row>
