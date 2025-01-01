@@ -1,6 +1,7 @@
 const fs = require('fs')
 const TelegramNotify = require('../telegram/notify')
 const TG_ADMIN_ID = process.env.TG_ADMIN_ID
+const etfList = require('./etfList.json')
     
 class ProcessETFQuotes{
     constructor(){
@@ -24,16 +25,22 @@ class ProcessETFQuotes{
         return querystring
     }
     async process(){
-        const etfQuoteFile = './etf_quotes.json'
+        const etfQuoteFile = process.env.DOWNLOADS +  '/etf_quotes.json'
+        console.log('etfQuoteFile', etfQuoteFile)
         if (!fs.existsSync(etfQuoteFile)){
             console.log('ETF Quotes not found')
             const tgNotify = new TelegramNotify()
             await tgNotify.sendTelegramMessage(TG_ADMIN_ID, 'ETF Quotes File Not Found')
             return;
         } 
-        const etf_quotes_raw = fs.readFileSync('./etf_quotes.json')
-        const data = JSON.parse(etf_quotes_raw)
-        
+        const etf_quotes_raw = fs.readFileSync(etfQuoteFile)
+        const raw_data = JSON.parse(etf_quotes_raw)
+        const data = raw_data.data.filter(
+            (record) =>
+              etfList.map((_) => _.symbol).indexOf(record.symbol) > -1
+          );
+        console.log("Filtered Data", data.map(_ => _.symbol))
+         
         const db_path = process.env.SQLITE_DB + '/dipsip.db'
         const options = { fileMustExist: true }
         const db = require('better-sqlite3')(db_path, options)
@@ -71,7 +78,7 @@ class ProcessETFQuotes{
         console.log("done loop")
         }
         console.log('deleting etf quotes file')
-        fs.unlinkSync(etfQuoteFile)
+        //fs.unlinkSync(etfQuoteFile)
         console.log("deleted file")
         console.log("processing done")
         

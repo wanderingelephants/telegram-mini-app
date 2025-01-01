@@ -41,6 +41,8 @@
   </v-container>
 </template>
 <script>
+import api from "./api";
+
 import { mapState } from "vuex";
 import TelegramLogin from "../components/TelegramLogin.vue";
 import axios from "axios";
@@ -50,9 +52,11 @@ export default {
   components: {
     TelegramLogin,
   },
-  mounted(){
+  async  mounted(){
+    
     console.log('env', import.meta.env)
     this.tg_admin_id=import.meta.env.VITE_TG_ADMIN_ID
+    await this.getETFList()
   },
   computed:mapState([
     // map this.count to store.state.count
@@ -60,6 +64,16 @@ export default {
     "user",
   ]),
   methods: {
+    async getETFList(){
+      try{
+        const resp = await api.get('/api/nse/instruments')
+        this.etfList = resp.data;
+        console.log(this.etfList)
+      }
+      catch(e){
+        console.log(e)
+      }
+    },
     async submit() {
       console.log(this.$store.state.user)
       console.log('session', this.loggedIn, this.user)
@@ -103,7 +117,7 @@ export default {
       if (this.postUrl === '/api/nse/receive'){
         filtered = parsed.data.filter(
         (record) =>
-          this.filteredList.map((_) => _.symbol).indexOf(record.symbol) > -1
+          this.etfList.map((_) => _.symbol).indexOf(record.symbol) > -1
       );
       console.log(filtered);
       }
@@ -148,13 +162,14 @@ export default {
   },
   data() {
     return {
+      etfList: [],
       tg_admin_id: '',
-      showSubmit: false,
+      showSubmit: true,
       showTooltip_tg: false,
       dataToPost: "",
       postUrls: ['/api/nse/receive', '/api/db/import'],
       postUrl: "/api/nse/receive",
-      filteredList: [
+      /*filteredList: [
         { symbol: "BANKIETF", underlying: "Nifty Bank" },
         {
           symbol: "SMALLCAP",
@@ -167,7 +182,7 @@ export default {
         { symbol: "HNGSNGBEES", underlying: "Hang Seng Index" },
         { symbol: "MAFANG", underlying: "NYSE FANG+ Total Return Index" },
         { symbol: "PHARMABEES", underlying: "Nifty Pharma TRI" },
-      ],
+      ],*/
     };
   },
 };

@@ -21,3 +21,4 @@ services:
     volumes:
       - ./sqlite_db:/app/sqlite_db  
       - ./server/middle/docker.env:/app/.env
+      - ./server/downloads:/app/downloads
