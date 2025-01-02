@@ -2,10 +2,15 @@ const fs = require('fs')
 const TelegramNotify = require('../telegram/notify')
 const TG_ADMIN_ID = process.env.TG_ADMIN_ID
 const etfList = require('./etfList.json')
+const Puppet = require('./puppet.js')
+
+const downloadPath = process.env.DOWNLOADS
     
 class ProcessETFQuotes{
-    constructor(){
-
+    constructor(baseUrl, urlSuffix, etfQuoteFileName){
+        this.baseUrl = baseUrl
+        this.urlSuffix = urlSuffix
+        this.etfQuoteFileName = etfQuoteFileName
     }
     getQueryString(instruments){
         let querystring  = ''
@@ -25,7 +30,11 @@ class ProcessETFQuotes{
         return querystring
     }
     async process(){
-        const etfQuoteFile = process.env.DOWNLOADS +  '/etf_quotes.json'
+        console.log('ETF Processor', this.baseUrl, this.urlSuffix, downloadPath, this.etfQuoteFileName)
+        const puppet = new Puppet(this.baseUrl, this.urlSuffix, downloadPath, this.etfQuoteFileName)
+        await puppet.downloadFile()
+        
+        const etfQuoteFile = downloadPath + '/' +  this.etfQuoteFileName
         console.log('etfQuoteFile', etfQuoteFile)
         if (!fs.existsSync(etfQuoteFile)){
             console.log('ETF Quotes not found')

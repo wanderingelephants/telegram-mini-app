@@ -46,7 +46,7 @@ router.get('/api/kite/order/create', routes.api.kite.order.create)
 router.get('/api/kite/login/success', routes.api.kite.login.success)
 router.get('/api/kite/instrument/quote', routes.api.kite.instrument.quote)
 router.post('/api/nse/receive', routes.api.nse.receive)
-router.get('/api/nse/download', routes.api.nse.download)
+router.post('/api/nse/download', routes.api.nse.download)
 router.get('/api/nse/process', routes.api.nse.process)
 router.get('/api/nse/instruments', routes.api.nse.instruments)
 

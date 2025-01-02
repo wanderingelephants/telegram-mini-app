@@ -1,22 +1,23 @@
 const Puppet = require('./puppet.js')
-//const path = require('path');
 const downloadPath = process.env.DOWNLOADS
+const ProcessETFQuotes = require('./processETFQuotes')
+
 const route = async (req, res) => {
 
     try {
-        console.log('recd download req')
-        const baseUrl = 'https://www.nseindia.com';
-        const csvUrlSuffix = '/api/etf'
-        //const downloadPath = path.join(__dirname, 'downloads');
-
-        const puppet = new Puppet()
-        const resp = await puppet.downloadCSV(baseUrl, csvUrlSuffix, downloadPath)
-        console.log('downloaded', resp)
-
+        const {baseUrl, urlSuffix, downloadFileName} = req.body
+        console.log('recd download req', {baseUrl, urlSuffix, downloadFileName})
+        
+        const puppet = new Puppet(baseUrl, urlSuffix, downloadPath, downloadFileName)
+        await puppet.downloadFile()
+        const processor = new ProcessETFQuotes(downloadFileName)
+        await processor.process()
+        res.status(200).json("OK")
     }
     catch(e){
-        console.log('err in  download', e)
+        console.log('err in  processing', e)
+        res.status(500).json("ETF did not process")
     }
-    res.status(200).json("Download processed")
+    
 }
 module.exports = route

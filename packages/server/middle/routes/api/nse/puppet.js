@@ -8,7 +8,11 @@ puppeteer.use(StealthPlugin);
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 class Puppet {
-    constructor(){
+    constructor(baseUrl, urlSuffix, downloadPath, downloadFileName){
+        this.baseUrl = baseUrl
+        this.urlSuffix = urlSuffix
+        this.downloadPath = downloadPath
+        this.downloadFileName = downloadFileName
 
     }
     async saveResponseToFile(response, downloadPath) {
@@ -20,17 +24,17 @@ class Puppet {
         console.log('First 100 characters of response:', content.slice(0, 100));
     
         // Generate filename based on current timestamp if not provided in headers
-        const filename = headers['content-disposition']?.split('filename=')[1]?.trim() || 
-                        `nse_data_${new Date().toISOString().replace(/[:.]/g, '-')}.csv`;
+        //const filename = headers['content-disposition']?.split('filename=')[1]?.trim() || 
+          //              `nse_data_${new Date().toISOString().replace(/[:.]/g, '-')}.csv`;
         
-        const filepath = path.join(downloadPath, filename);
+        const filepath = path.join(downloadPath, this.downloadFileName);
         await fs.writeFile(filepath, content);
         console.log('Saved response content to:', filepath);
         return filepath;
     }
     
-    async  downloadCSV(baseUrl, csvUrlSuffix, downloadPath) {
-        await fs.mkdir(downloadPath, { recursive: true });
+    async  downloadFile() {
+        await fs.mkdir(this.downloadPath, { recursive: true });
     
         const browser = await puppeteer.launch({
             headless: 'new',
@@ -72,7 +76,7 @@ class Puppet {
             console.log('page.setExtraHttpHeaders')
             // Visit main site first
             console.log('Visiting main site...');
-            await page.goto(baseUrl, {
+            await page.goto(this.baseUrl, {
                 waitUntil: ['networkidle0', 'domcontentloaded'],
                 timeout: 60000
             });
@@ -85,13 +89,13 @@ class Puppet {
                 cookies.map(c => `${c.name}=${c.value}`).join('; '));
     
             // Now try to get the CSV
-            console.log('Attempting to get CSV...');
-            const csvUrl = `${baseUrl}${csvUrlSuffix}`;
+            console.log('Attempting to get file...');
+            const fileUrl = `${this.baseUrl}${this.urlSuffix}`;
             
             // Try to fetch the CSV content directly using page.evaluate
             try {
                 console.log('Attempting direct fetch...');
-                const csvContent = await page.evaluate(async (url) => {
+                const fileContent = await page.evaluate(async (url) => {
                     const response = await fetch(url, {
                         method: 'GET',
                         credentials: 'include',
@@ -101,11 +105,11 @@ class Puppet {
                     });
                     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                     return await response.text();
-                }, csvUrl);
+                }, fileUrl);
     
-                if (csvContent) {
-                    const filename = path.join(downloadPath, `nse_data_${new Date().toISOString().replace(/[:.]/g, '-')}.csv`);
-                    await fs.writeFile(filename, csvContent);
+                if (fileContent) {
+                    const filename = path.join(this.downloadPath, this.downloadFileName);
+                    await fs.writeFile(filename, fileContent);
                     console.log('Successfully saved CSV using direct fetch to:', filename);
                     return;
                 }
@@ -115,7 +119,7 @@ class Puppet {
             }
     
             // If direct fetch fails, try navigation method
-            const response = await page.goto(csvUrl, {
+            const response = await page.goto(fileUrl, {
                 waitUntil: 'networkidle0',
                 timeout: 30000
             });
@@ -128,7 +132,7 @@ class Puppet {
             
             if (response.status() === 200) {
                 // Try to save the response content
-                await saveResponseToFile(response, downloadPath);
+                await saveResponseToFile(response, this.downloadPath);
             } else {
                 throw new Error(`Unexpected status code: ${response.status()}`);
             }

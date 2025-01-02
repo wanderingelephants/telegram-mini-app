@@ -6,9 +6,9 @@ const cron = require('node-cron');
 const ProcessETFQuotes = require('./routes/api/nse/processETFQuotes')
 cron.schedule('0 12 * * 1-5', async () => {
   console.log('running a task during market hours of NSE', new Date());
-  const processor = new ProcessETFQuotes()
+  let jsonFileName = new Date().toISOString().split('T')[0]
+  const processor = new ProcessETFQuotes("https://www.nseindia.com",  "/api/etf", jsonFileName + '.json')
   await processor.process()
-  //await getquote(['BANKNIFTY1','MID150CASE','ICICIB22', 'MAFANG', 'NXST-RR', 'GOLDCASE'], true)
 }, {timezone: "Asia/Kolkata"});
 
 app.use([
