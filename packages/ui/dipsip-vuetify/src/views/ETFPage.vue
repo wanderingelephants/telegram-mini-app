@@ -156,6 +156,7 @@
                   <!-- <th class="text-left text-nowrap">₹ Invested</th> -->
                   <th class="text-left text-nowrap">₹ Final (SIP)</th>
                   <th class="text-left">Underlying</th>
+                  <th class="text-left">Details</th> 
                   
                 </tr>
               </thead>
@@ -169,6 +170,22 @@
                   <!--<td>{{ Math.round(totalInvestment[item.symbol][false]).toLocaleString() }}</td> -->
                   <td>{{ Math.round(currentValue[item.symbol][false]).toLocaleString() }}</td>
                   <td>{{ item.underlying }}</td>
+                  <td>
+                    <v-dialog v-model="showChart[item.symbol]" width="1000">
+    <template v-slot:activator="{ props }">
+      <v-btn v-bind="props">
+        Details
+      </v-btn>
+    </template>
+    
+    <investment-chart v-if="showChart[item.symbol]"
+      :price-data="market[item.symbol]"
+      :strategy1-data="investments[item.symbol][true]"
+      :strategy2-data="investments[item.symbol][false]"
+    />
+    <v-btn @click="showChart[item.symbol] = false">Close</v-btn>
+  </v-dialog>
+                  </td>
                 </tr>
               </tbody>
             </v-table>
@@ -180,6 +197,9 @@
   </div>
 </template>
 <script>
+
+import InvestmentChart from '../components/InvestmentChart.vue'
+
 import api from "./api";
 import AUTOBEES from "./indices/AUTOBEES.json";
 import GOLDBEES from "./indices/GOLDBEES.json";
@@ -208,6 +228,8 @@ const etfImports = {
   TNIDETF
 };
 const includeList = ['NIFTYBEES', 'BANKBEES', 'AUTOBEES', 'ITBEES', 'MID150BEES', 'SMALLCAP', 'SHARIABEES','PHARMABEES', 'MAKEINDIA','TNIDETF']
+//const includeList = ['NIFTYBEES']
+
 export default {
   async mounted() {
     this.$nextTick(() => {
@@ -220,9 +242,7 @@ export default {
     try {
       const resp = await api.get("/api/nse/instruments");
       this.etfList = resp.data.filter(_ => includeList.indexOf(_.symbol) > -1);
-      console.log(this.etfList)
       for (const etf of this.etfList) {
-        console.log('etf', etf, includeList.indexOf(etf.symbol))
         if (includeList.indexOf(etf.symbol) == -1) continue;
         const etfData = etfImports[etf.symbol];
         this.market[etf.symbol] = etfData.map((_) => {
@@ -230,16 +250,17 @@ export default {
           return {
             date: new Date(dateToks[2], dateToks[1] * 1 - 1, dateToks[0]),
             deltaPercent: parseFloat(_.change),
-            price: parseFloat(_.price),
+            price: parseFloat(_.price.replace(',', '')),
           };
         });
       }
-      console.log(this.market)
+      console.log(this.market['NIFTYBEES'])
       this.updateInvestments()
     } catch (e) {
       console.log(e);
     }
   },
+  components: {InvestmentChart},
   methods: {
     updateInvestments(){
       this.base_amt =  this.base_amtShort.substring(0, this.base_amtShort.length - 2) * 1000;
@@ -251,6 +272,7 @@ export default {
         this.currentValue[_] = {}
         this.totalUnitsBought[_] = {}
         this.returnsFromInvestment[_] = {}
+        this.showChart[_] = false
         this.makeInvestment(_, true);
         this.makeInvestment(_, false);
       })
@@ -386,6 +408,48 @@ export default {
         "You invest when your index falls more than this percentage",
       tooltip_buy_factor:
         "Allocation Factor: A function, that increases allocation as the specific index correction increases. Factor of 1 means constant base amount, irrespective of correction severity. Factor of 2 (most aggressive) means investment amount doubles on every 1 % correction.",
+
+      showChart : {},
+
+// Sample data for testing
+    priceData : [
+  { date: '2024-12-31', price: '22,834.00', change: '0.29%' },
+  { date: '2024-12-30', price: '22,768.25', change: '-1.43%' }
+  ],
+
+  strategy1Data : [
+  {
+    investmentAmount: 10029,
+    unitsBought: 589.94,
+    price: 17,
+    investmentDate: '2024-12-20',
+    correction: -2.01
+  },
+  {
+    investmentAmount: 13530,
+    unitsBought: 845.63,
+    price: 16,
+    investmentDate: '2024-11-13',
+    correction: -3.06
+  }
+],
+
+strategy2Data :[
+  {
+    investmentAmount: 18119.42,
+    unitsBought: 3623.88,
+    price: 5,
+    investmentDate: '2019-01-31',
+    correction: 0.55
+  },
+  {
+    investmentAmount: 18119.42,
+    unitsBought: 4529.85,
+    price: 4,
+    investmentDate: '2019-02-28',
+    correction: 0.86
+  }
+]
       
     };
   },
