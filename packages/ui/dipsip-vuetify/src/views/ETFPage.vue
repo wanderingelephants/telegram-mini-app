@@ -138,7 +138,7 @@
             >
             <v-card-text>DipSip on Volatile Indexes Presents Better and More Investing Opportunities. Increasing the Allocation Factor, improves Returns because you more when index corrects more</v-card-text>
             <v-card-text>MAKEINDIA, DIGITALINDIA Data only from 2022 onwards</v-card-text>
-            <div class="table-container">
+            <div class="table-wrapper">
             <v-table
               density="compact"
               theme="light"
@@ -147,26 +147,28 @@
             >
               <thead>
                 <tr>
-                  <th class="text-left">Code</th>
-                  <th class="text-left">Underlying</th>
-                  <th class="text-left text-nowrap">Cumulative Investment</th>
-                  <th class="text-left text-nowrap">DipSIP %</th>
+                  <th class="text-left sticky-col first-col">Code</th>
+                  <th class="text-left sticky-col second-col text-nowrap">DipSIP %</th>
+                  <th class="text-left text-nowrap">Investment</th>
+                  
                   <th class="text-left text-nowrap">₹ Final (DipSIP)</th>
                   <th class="text-left text-nowrap">SIP %</th>
                   <!-- <th class="text-left text-nowrap">₹ Invested</th> -->
                   <th class="text-left text-nowrap">₹ Final (SIP)</th>
+                  <th class="text-left">Underlying</th>
+                  
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="item in etfList" :key="item.symbol">
-                  <td>{{ item.symbol }}</td>
-                  <td>{{ item.underlying }}</td>
+                  <td class="sticky-col first-col">{{ item.symbol }}</td>
+                  <td  class="sticky-col second-col">{{ Math.round(returnsFromInvestment[item.symbol][true]*10000)/100 }}</td>
                   <td>{{ Math.round(totalInvestment[item.symbol][true]).toLocaleString() }}</td>
-                  <td>{{ Math.round(returnsFromInvestment[item.symbol][true]*10000)/100 }}</td>
                   <td>{{ Math.round(currentValue[item.symbol][true]).toLocaleString() }}</td>
                   <td>{{ Math.round(returnsFromInvestment[item.symbol][false]*10000)/100 }}</td>
                   <!--<td>{{ Math.round(totalInvestment[item.symbol][false]).toLocaleString() }}</td> -->
                   <td>{{ Math.round(currentValue[item.symbol][false]).toLocaleString() }}</td>
+                  <td>{{ item.underlying }}</td>
                 </tr>
               </tbody>
             </v-table>
@@ -208,6 +210,13 @@ const etfImports = {
 const includeList = ['NIFTYBEES', 'BANKBEES', 'AUTOBEES', 'ITBEES', 'MID150BEES', 'SMALLCAP', 'SHARIABEES','PHARMABEES', 'MAKEINDIA','TNIDETF']
 export default {
   async mounted() {
+    this.$nextTick(() => {
+      const firstCol = document.querySelector('.first-col');
+      if (firstCol) {
+        const width = firstCol.offsetWidth;
+        document.documentElement.style.setProperty('--first-col-width', `${width}px`);
+      }
+    });
     try {
       const resp = await api.get("/api/nse/instruments");
       this.etfList = resp.data.filter(_ => includeList.indexOf(_.symbol) > -1);
@@ -384,6 +393,28 @@ export default {
 };
 </script>
 <style>
+.table-wrapper {
+  position: relative;
+  overflow-x: auto;
+  overflow-y: visible;
+  width: 100%;
+}
+
+.sticky-col {
+  position: sticky;
+  background: white; /* Match your table background */
+  z-index: 1;
+}
+
+.first-col {
+  left: 0;
+  z-index: 2;
+}
+
+.second-col {
+  left: var(--first-col-width); /* Will be set by JavaScript */
+  z-index: 2;
+}
 .text-nowrap {
   white-space: nowrap;
 }
@@ -426,5 +457,16 @@ export default {
 
 .table-container::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+/* Add box shadow for better visual separation */
+.sticky-col::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(to right, rgba(0,0,0,0.05), rgba(0,0,0,0));
+  pointer-events: none;
 }
 </style>
