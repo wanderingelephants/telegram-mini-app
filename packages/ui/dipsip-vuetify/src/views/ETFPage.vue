@@ -136,7 +136,7 @@
              <v-card-subtitle
               >Returns (XIRR) calculated for 6 years from Jan-2019</v-card-subtitle
             >
-            <v-card-text>DipSip on Volatile Indexes Presents Better and More Investing Opportunities. Increasing the Allocation Factor, improves Returns because you more when index corrects more</v-card-text>
+            <v-card-text>DipSip on Volatile Indexes Presents Better and More Investing Opportunities. Increasing the Allocation Factor, improves Returns because you buy more, when index corrects more.</v-card-text>
             <v-card-text>MAKEINDIA, DIGITALINDIA Data only from 2022 onwards</v-card-text>
             <div class="table-wrapper">
             <v-table
