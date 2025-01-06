@@ -17,7 +17,7 @@
         <v-row justify="center" align="center">
           <v-col cols="12" class="text-center">
             <p class="text-h6 text-grey-darken-1">
-              Your Wealth Manage₹
+              Your Toolkit to create Generational Wealth
             </p>
           </v-col>
         </v-row>
@@ -105,21 +105,27 @@ const currentSlide = ref(0)
 // Card data
 const cards = ref([
   {
-    title: "Investment Planning",
+    title: "",
     subtitle: "Mutual Fund Sahi Hai ?",
     description: "MFs vastly underperform the market, and charge hefty fees. You can do much better, yourself. See <a href='/principles'>Principles</a>.",
     hasHtml: true
   },
   {
-    title: "Portfolio Management",
-    subtitle: "Commercial Real Estate",
-    description: "Did you know you can invest in commercial real estate with a button click ?",
+    title: "",
+    subtitle: "ETF >> MF",
+    description: "ETFs are ~10 times lower cost, and majority MFs do not even beat the indexes.",
     hasHtml: false
   },
   {
-    title: "US Tech Stocks",
-    subtitle: "US Tech Stocks",
-    description: "Sitting in India, you can ride the US Tech sector. <a href='/etfList'>ETFs</a>",
+    title: "",
+    subtitle: "DipSIP >> SIP",
+    description: "Buy Aggressively, on Index Dips <a href='/dipsip'>DipSIP</a>",
+    hasHtml: true
+  },
+  {
+    title: "",
+    subtitle: "DipSIP ETF >>>> MF SIP",
+    description: "See Actual Data to believe <a href='/etfList'>DipSIP ETFs</a>",
     hasHtml: true
   },
   {
