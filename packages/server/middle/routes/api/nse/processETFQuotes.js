@@ -31,8 +31,11 @@ class ProcessETFQuotes{
     }
     async process(){
         console.log('ETF Processor', this.baseUrl, this.urlSuffix, downloadPath, this.etfQuoteFileName)
-        const puppet = new Puppet(this.baseUrl, this.urlSuffix, downloadPath, this.etfQuoteFileName)
-        await puppet.downloadFile()
+        if (this.baseUrl && this.baseUrl != null && this.baseUrl != ""){
+            const puppet = new Puppet(this.baseUrl, this.urlSuffix, downloadPath, this.etfQuoteFileName)
+            await puppet.downloadFile()
+        }
+        
         
         const etfQuoteFile = downloadPath + '/' +  this.etfQuoteFileName
         console.log('etfQuoteFile', etfQuoteFile)
@@ -61,7 +64,9 @@ class ProcessETFQuotes{
             console.log('user', user)
             const instrumentsToAlertForUser = []
             for (const instrument of data){
-                if (user.instument && user.instrument.indexOf(instrument.symbol)  > -1){
+                console.log('checking', instrument.symbol, user.instrument, user.instrument.indexOf(instrument.symbol))
+                if (user.instrument && (user.instrument.indexOf(instrument.symbol)  > -1)){
+                    console.log("Instrument MATCH", instrument.symbol)
                     const userTrigger = parseFloat(user.trigger)
                     const instrumentChangePercent  = parseFloat(instrument.per)
                     console.log('user subscribed to ', instrument.symbol, user.trigger, instrumentChangePercent)

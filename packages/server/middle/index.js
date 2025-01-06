@@ -4,7 +4,7 @@ const app = express()
 const port = process.env.PORT || 3000;
 const cron = require('node-cron');
 const ProcessETFQuotes = require('./routes/api/nse/processETFQuotes')
-cron.schedule('0 12 * * 1-5', async () => {
+cron.schedule('0 13 * * 1-5', async () => {
   console.log('running a task during market hours of NSE', new Date());
   let jsonFileName = new Date().toISOString().split('T')[0]
   const processor = new ProcessETFQuotes("https://www.nseindia.com",  "/api/etf", jsonFileName + '.json')
