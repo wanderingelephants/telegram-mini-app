@@ -1,6 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Carousel from '@/views/Carousel.vue'
 import ETFPage from '@/views/ETFPage.vue'
+import PrivacyPolicy from '@/views/PrivacyPolicy.vue'
+import ContactUs from '@/views/ContactUs.vue'
+import AboutUs from '@/views/AboutUs.vue'
+
 import RiskProfile from '@/views/RiskProfile.vue'
 import TheWelcome from '../components/TheWelcome'
 import SettingsPage from '@/views/SettingsPage.vue'
@@ -54,6 +58,21 @@ const routes = [
     path: '/trade',
     name: 'Trade',
     component: KiteConnectApp
+  },
+  {
+    path: '/privacy',
+    name: 'Privacy',
+    component: PrivacyPolicy
+  },
+  {
+    path: '/about',
+    name: 'About',
+    component: AboutUs
+  },
+  {
+    path: '/contact',
+    name: 'Contact',
+    component: ContactUs
   }
 ]
 

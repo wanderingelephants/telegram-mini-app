@@ -7,7 +7,7 @@
       elevation="1"
     >
       <v-app-bar-title class="text-amber-darken-2 text-h4 font-weight-bold">
-        Wealthie<span class="text-h4 text-amber-darken-2">₹</span> 
+        Wealthei<span class="text-h4 text-amber-darken-2">₹</span> 
       </v-app-bar-title>
     </v-app-bar>
 

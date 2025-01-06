@@ -39,14 +39,14 @@
     </v-main>
 
     <!-- Footer -->
-    <v-footer class="bg-grey-darken-4" v-if="false">
+    <v-footer class="bg-grey-darken-4">
       <v-container fluid>
         <v-row justify="center">
           <!-- Footer Links -->
           <v-col cols="12" sm="9" md="6">
             <v-row justify="center" class="text-center">
               <v-col cols="6" sm="3">
-                <router-link to="/privacy-policy" class="text-white text-decoration-none">Privacy Policy</router-link>
+                <router-link to="/privacy" class="text-white text-decoration-none">Privacy Policy</router-link>
               </v-col>
               <v-col cols="6" sm="3">
                 <router-link to="/about" class="text-white text-decoration-none">About Us</router-link>
