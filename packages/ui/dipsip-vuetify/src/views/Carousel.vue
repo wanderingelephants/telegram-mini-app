@@ -39,6 +39,7 @@
                 :key="index"
                 transition="fade-transition"
                 reverse-transition="fade-transition"
+                class="wealth-carousel"
               >
                 <v-card
                   class="mx-auto wealth-card"
@@ -185,5 +186,11 @@ const cards = ref([
 :deep(.v-window__left),
 :deep(.v-window__right) {
   display: none !important;
+}
+.wealth-carousel :deep(.v-carousel__controls) {
+  top: 0;
+  bottom: unset;
+  
+  padding: 8px;
 }
 </style>
