@@ -61,5 +61,14 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes
 })
+router.beforeEach((to, from) => {
+  // Send page view event to Google Analytics
+  gtag('event', 'page_view', {
+    page_title: to.name,
+    page_path: to.path,
+    page_location: window.location.href
+  })
+})
+
 
 export default router
