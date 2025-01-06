@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-title>Investment Comparison</v-card-title>
+    <v-card-title>DipSIP  v/s SIP</v-card-title>
     <v-card-text>
       <div class="d-flex flex-wrap gap-4 mb-4">
         <v-select
