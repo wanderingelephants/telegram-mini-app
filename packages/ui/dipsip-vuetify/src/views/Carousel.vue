@@ -6,8 +6,8 @@
       color="white"
       elevation="1"
     >
-      <v-app-bar-title class="text-amber-darken-2 text-h4 font-weight-bold">
-        Wealthei<span class="text-h4 text-amber-darken-2">₹</span> 
+      <v-app-bar-title class="text-amber-darken-2 text-h5 font-weight-bold">
+        DipSIP
       </v-app-bar-title>
     </v-app-bar>
 
@@ -46,20 +46,14 @@
                   elevation="4"
                 >
                   <v-card-item class="text-center">
-                    <!-- Placeholder for image - can be replaced with actual image -->
                     <div class="d-flex justify-center mb-6">
-                      <v-avatar
-                        color="amber-lighten-4"
-                        size="150"
-                        class="wealth-icon"
-                      >
-                        <span class="text-h2 text-amber-darken-2">₹</span>
+                      <v-avatar size="150">
+                      <v-img
+                        alt="DipSip"
+                        src="/DipSIP.jpg"
+                      ></v-img>
                       </v-avatar>
                     </div>
-                    
-                    <!--<v-card-title class="text-h4 mb-2">
-                      {{ card.title }}
-                    </v-card-title> -->
                     
                     <v-card-subtitle class="text-h6 text-amber-darken-2 mb-2">
                       {{ card.subtitle }}
