@@ -91,9 +91,9 @@ class ProcessETFQuotes{
             await tgNotify.sendTelegramMessage(user.tg_id,  'DipSip Opporunities : ' + process.env.WEB_APP_HOST + 'trade' + querystring)    
         console.log("done loop")
         }
-        console.log('deleting etf quotes file')
+        //console.log('deleting etf quotes file')
         //fs.unlinkSync(etfQuoteFile)
-        console.log("deleted file")
+        //console.log("deleted file")
         console.log("processing done")
         
     }
