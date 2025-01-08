@@ -42,7 +42,8 @@ class Puppet {
                 '--no-sandbox',
                 '--disable-setuid-sandbox',
                 '--enable-javascript',
-                '--window-size=1920,1080'
+                '--window-size=1920,1080',
+                '--disable-gpu', '--disable-setuid-sandbox'
             ]
         });
         console.log('Browser initialized')
