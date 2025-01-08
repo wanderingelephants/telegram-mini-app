@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    volumes:
+      - type: bind
+        source: ./ollama-models
+        target: /root/.ollama
+    ports:
+      - "11434:11434"
+    environment:
+      - OLLAMA_MODELS=/root/.ollama/models
+
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - type: bind
+        source: /var/poc/geth/announcements
+        target: /app/data/announcements
+        read_only: true
+      - type: bind
+        source: /var/poc/geth/announcement_summaries
+        target: /app/data/announcement_summaries
+    depends_on:
+      ollama:
+        condition: service_started

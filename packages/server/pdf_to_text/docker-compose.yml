@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  pdf-processor:
+    build: .
+    container_name: pdf-processor
+    ports:
+      - "3500:3500"
+    volumes:
+      - ${PDF_INPUT_DIR:-./input}:/app/input
+      - ${PDF_OUTPUT_DIR:-./output}:/app/output
+    environment:
+      - PORT=3500
+      - HOST=0.0.0.0
+    restart: unless-stopped
