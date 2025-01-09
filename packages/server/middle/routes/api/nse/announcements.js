@@ -4,6 +4,8 @@ const axios = require('axios');
 const fs = require('fs');
 const { parse } = require('csv-parse');
 const path = require('path');
+const fetchPDF = require('./pdfFetcher');
+
 
 const route = async (req, res) => {
 
@@ -61,7 +63,8 @@ const route = async (req, res) => {
     }
     async function processCSVAndDownload(csvPath, downloadPath) {
         const results = [];
-        const wordsToCheck = ['update', 'award', 'promotion'];
+        //const wordsToCheck = ['update', 'award', 'promotion'];
+        const wordsToCheck = ['Resignation'];
     
         // Create download directory if it doesn't exist
         if (!fs.existsSync(downloadPath)) {
@@ -92,15 +95,15 @@ const route = async (req, res) => {
         console.log(`Found ${filteredResults.length} matching records to download`);
             
         // Download files sequentially
-        /*for (const row of filteredResults) {
+        for (const row of filteredResults) {
             try {
                 console.log(`Downloading file for ${row.symbol}...`);
-                const downloadedPath = await downloadFile(row.attachment, downloadPath);
-                console.log(`Successfully downloaded to: ${downloadedPath}`);
+                await fetchPDF(row.attachment, downloadPath + '/' + row.symbol + '.pdf');
+                console.log(`Successfully downloaded for : ${row.symbol}`);
             } catch (error) {
                 console.error(`Error downloading file for ${row.symbol}:`, error.message);
             }
-        }*/
+        }
     }
 
     try {

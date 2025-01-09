@@ -14,7 +14,7 @@ const routes = {
             receive: require('./api/nse/receive'),
             publish: require('./api/nse/publish'),
             process: require('./api/nse/process'),
-            download: require('./api/nse/download'),
+            announcements: require('./api/nse/announcements'),
             instruments: require('./api/nse/instruments')
         },
         kite:{
@@ -46,7 +46,7 @@ router.get('/api/kite/order/create', routes.api.kite.order.create)
 router.get('/api/kite/login/success', routes.api.kite.login.success)
 router.get('/api/kite/instrument/quote', routes.api.kite.instrument.quote)
 router.post('/api/nse/receive', routes.api.nse.receive)
-router.post('/api/nse/download', routes.api.nse.download)
+router.post('/api/nse/announcements', routes.api.nse.announcements)
 router.get('/api/nse/process', routes.api.nse.process)
 router.get('/api/nse/instruments', routes.api.nse.instruments)
 
