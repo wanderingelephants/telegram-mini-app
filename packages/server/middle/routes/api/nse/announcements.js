@@ -86,12 +86,13 @@ const route = async (req, res) => {
         //const {baseUrl, urlSuffix, downloadFileName} = req.body
         console.log('recd download req', {baseUrl, urlSuffix, downloadFileName})
         
-        //const puppet = new Puppet(baseUrl, urlSuffix, downloadFolder, downloadFileName)
-        //await puppet.downloadFile()
+        const puppet = new Puppet(baseUrl, urlSuffix, downloadFolder, downloadFileName)
+        await puppet.downloadFile()
         const filepath = path.join(downloadFolder, downloadFileName);
         
        processCSVAndDownload(filepath, downloadFolder).then(() => console.log('Processing completed'))
        .catch(error => console.error('Error:', error));
+       res.status(200).json("CSV Downloaded and Processed")
         
     }
     catch(e){
