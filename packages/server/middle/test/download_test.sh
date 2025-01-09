@@ -1,10 +1,6 @@
 curl -X POST http://localhost:3000/api/nse/announcements \
 -H "Content-Type: application/json" \
--d '{
-  "baseUrl": "https://www.nseindia.com",
-  "urlSuffix": "/api/corporate-announcements?index=sme&from_date=02-01-2025&to_date=03-01-2025&csv=true",
-  "downloadFileName": "announcement.csv"
-}'
+-d '{"fromDate": "02-01-2025", "toDate": "05-01-2025", "index": "sme"}'
 
 
 curl -X POST http://localhost:3000/api/nse/download \

@@ -1,10 +1,11 @@
 const Puppet = require('./puppet.js')
-const downloadPath = process.env.DOWNLOADS
+const downloadFolder = process.env.DOWNLOADS
 const axios = require('axios');
 const fs = require('fs');
 const { parse } = require('csv-parse');
 const path = require('path');
 const fetchPDF = require('./pdfFetcher');
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 
 const route = async (req, res) => {
@@ -15,60 +16,14 @@ const route = async (req, res) => {
             .replace(/[^a-zA-Z0-9]+(.)/g, (_, chr) => chr.toUpperCase())
             .replace(/[^a-zA-Z0-9]/g, '');
     }
-    async function downloadFile(url, downloadPath) {
-        try {
-            // Extract filename from URL
-            const fileName = path.basename(url);
-            const filePath = path.join(downloadPath, fileName);
-            
-            // Download file
-            const response = await axios({
-                method: 'GET',
-                url: url,
-                responseType: 'stream',
-                headers: {
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
-                    'Accept-Encoding': 'gzip, deflate, br',
-                    'Accept-Language': 'en-US,en;q=0.9',
-                    'Cache-Control': 'no-cache',
-                    'Connection': 'keep-alive',
-                    'Sec-Fetch-Dest': 'document',
-                    'Sec-Fetch-Mode': 'navigate',
-                    'Sec-Fetch-Site': 'none',
-                    'Sec-Fetch-User': '?1',
-                    'Upgrade-Insecure-Requests': '1',
-                    'sec-ch-ua': '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
-                    'sec-ch-ua-mobile': '?0',
-                    'sec-ch-ua-platform': '"Windows"'
-                },
-                maxRedirects: 5,  // Handle redirects if any
-                timeout: 10000    
-            });
-    
-            // Create write stream
-            const writer = fs.createWriteStream(filePath);
-    
-            // Pipe the response data to the file
-            response.data.pipe(writer);
-    
-            // Return a promise that resolves when the file is written
-            return new Promise((resolve, reject) => {
-                writer.on('finish', () => resolve(filePath));
-                writer.on('error', reject);
-            });
-        } catch (error) {
-            throw new Error(`Failed to download ${url}: ${error.message}`);
-        }
-    }
-    async function processCSVAndDownload(csvPath, downloadPath) {
+    async function processCSVAndDownload(csvPath, downloadPdfPath) {
         const results = [];
-        //const wordsToCheck = ['update', 'award', 'promotion'];
-        const wordsToCheck = ['Resignation'];
+        const wordsToCheck = [];
+        //const wordsToCheck = ['Resignation'];
     
         // Create download directory if it doesn't exist
-        if (!fs.existsSync(downloadPath)) {
-            fs.mkdirSync(downloadPath, { recursive: true });
+        if (!fs.existsSync(downloadPdfPath)) {
+            fs.mkdirSync(downloadPdfPath, { recursive: true });
         }
     
         // Read and parse CSV
@@ -88,17 +43,34 @@ const route = async (req, res) => {
         const filteredResults = results
             .filter(row => {
                 const subject = row.subject.toLowerCase();
-                return wordsToCheck.some(word => subject.includes(word.toLowerCase()));
+                return wordsToCheck.length == 0 ? true : wordsToCheck.some(word => subject.includes(word.toLowerCase()));
             })
-            .map(({ symbol, subject, attachment }) => ({ symbol, subject, attachment }));
+            .map(({ symbol, subject, attachment, dissemination }) => ({ symbol, subject, attachment, dissemination }));
     
         console.log(`Found ${filteredResults.length} matching records to download`);
             
         // Download files sequentially
         for (const row of filteredResults) {
             try {
-                console.log(`Downloading file for ${row.symbol}...`);
-                await fetchPDF(row.attachment, downloadPath + '/' + row.symbol + '.pdf');
+                console.log(row.symbol, row.dissemination)
+                const dateToks = row.dissemination.split(' ')
+                if (dateToks.length != 2) {
+                    console.log("SSSSKIPING invalid disemination.................", row)
+                    continue;
+                }
+                const  dateFolder = downloadFolder + '/' + dateToks[0]
+                if (!fs.existsSync(dateFolder)){
+                    fs.mkdirSync(dateFolder, { recursive: true });
+                }
+                const fileToks = row.attachment.split('/')
+                const fileName = fileToks[fileToks.length - 1]
+                if (!fileName.endsWith('.pdf')) {
+                    console.log("SSSSKIPING non-pdf.................", row)
+                    continue;
+                }
+                console.log(`Downloading file for ${row.symbol}...at ${dateFolder}/${fileName}`);
+                await fetchPDF(row.attachment, dateFolder + '/' + fileName);
+                await delay(1000)
                 console.log(`Successfully downloaded for : ${row.symbol}`);
             } catch (error) {
                 console.error(`Error downloading file for ${row.symbol}:`, error.message);
@@ -107,21 +79,19 @@ const route = async (req, res) => {
     }
 
     try {
-        const {baseUrl, urlSuffix, downloadFileName} = req.body
+        const {fromDate, toDate, index} = req.body
+        const baseUrl = "https://www.nseindia.com"
+        const urlSuffix = `/api/corporate-announcements?index=${index}&from_date=${fromDate}&to_date=${toDate}&csv=true`
+        const downloadFileName = `nse_announcements_${fromDate}_${toDate}.csv`
+        //const {baseUrl, urlSuffix, downloadFileName} = req.body
         console.log('recd download req', {baseUrl, urlSuffix, downloadFileName})
         
-        //const puppet = new Puppet(baseUrl, urlSuffix, downloadPath, downloadFileName)
+        //const puppet = new Puppet(baseUrl, urlSuffix, downloadFolder, downloadFileName)
         //await puppet.downloadFile()
-        const results = [];
-        const wordsToCheck = ['update', 'award', 'promotion'];
-
-        const filepath = path.join(downloadPath, downloadFileName);
+        const filepath = path.join(downloadFolder, downloadFileName);
         
-       processCSVAndDownload(filepath, downloadPath)
-    .then(() => console.log('Processing completed'))
-    .catch(error => console.error('Error:', error));
-        
-
+       processCSVAndDownload(filepath, downloadFolder).then(() => console.log('Processing completed'))
+       .catch(error => console.error('Error:', error));
         
     }
     catch(e){
