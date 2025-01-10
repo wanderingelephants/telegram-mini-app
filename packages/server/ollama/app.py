@@ -140,34 +140,6 @@ def write_output_json(output_path: str, data: dict) -> str:
         logger.error(f"Error writing output file: {str(e)}")
         raise
 
-def get_subject(text: str) -> str:
-    logger.info("Creating LLM instance for subject extraction")
-    llm = create_llm()
-    logger.info("LLM instance created successfully")
-    subject_template = """
-    Given the following text, identify its main subject in one line:
-    
-    Text: {text}
-    
-    Subject:"""
-    
-    subject_prompt = PromptTemplate(template=subject_template, input_variables=["text"])
-    return llm.invoke(subject_prompt.format(text=text))
-
-def get_summary(text: str) -> str:
-    logger.info("Creating LLM instance for summary generation")
-    llm = create_llm()
-    logger.info("LLM instance created successfully")
-    summary_template = """
-    Summarize the following text in exactly 3 lines:
-    
-    Text: {text}
-    
-    Summary:"""
-    
-    summary_prompt = PromptTemplate(template=summary_template, input_variables=["text"])
-    return llm.invoke(summary_prompt.format(text=text))
-
 @app.get("/health")
 async def health_check():
     try:
@@ -181,18 +153,56 @@ async def health_check():
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/analyze")
-async def analyze_text(request: TextRequest):
-    try:
-        subject = get_subject(request.text)
-        summary = get_summary(request.text)
-        
-        return {
-            "subject": subject.strip(),
-            "summary": summary.strip()
-        }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+
+def get_analysis(text: str) -> tuple[str, str, str]:
+    logger.info("Creating LLM instance for text analysis")
+    llm = create_llm()
+    logger.info("LLM instance created successfully")
+    
+    analysis_template = """
+    Analyze this corporate stock exchange announcement.
+    Provide three things in exactly this order:
+
+    1. Classification - choose the most appropriate category from:
+       - 'Resignation of KMP'
+       - 'Preference Shares Issue'
+       - 'Receipt of Order'
+       - 'Procedural Update'
+       - 'Fund Raising'
+       - 'Capital Expenditure'
+       - 'Merger and Acquisition'
+       - 'Board Meeting'
+       - 'Financial Results'
+       - 'Credit Rating'
+       - 'Regulatory Compliance'
+       - 'Market Operations'
+       - 'Legal Proceedings'
+       - 'Strategic Alliance'
+       - 'Asset Sale'
+       - 'New Project'
+
+    2. Main subject in one line
+    3. Three-line summary
+
+    Keep the output simple and direct:
+    First line should be just the classification
+    Second line should be the subject
+    Next three lines should be the summary
+
+    Text: {text}
+    """
+    
+    analysis_prompt = PromptTemplate(template=analysis_template, input_variables=["text"])
+    response = llm.invoke(analysis_prompt.format(text=text))
+    
+    # Split the response and extract each component
+    lines = [line.strip() for line in response.strip().split('\n') if line.strip()]
+    classification = lines[0]
+    subject = lines[1]
+    summary = '\n'.join(lines[2:5])  # Take next 3 lines for summary
+    
+    logger.info(f"Analysis complete. Classification: {classification}, Subject length: {len(subject)}, Summary length: {len(summary)}")
+    return classification, subject, summary
 
 @app.post("/summarizeFile")
 async def summarize_file(request: FileRequest):
@@ -204,20 +214,19 @@ async def summarize_file(request: FileRequest):
         logger.info(f"Successfully read file. Content length: {len(content)} characters")
         logger.debug(f"File content preview: {content[:200]}...")
         
-        # Get subject and summary
-        logger.info("Getting subject from LLM")
-        subject = get_subject(content)
+        # Get analysis in a single LLM call
+        logger.info("Getting analysis from LLM")
+        classification, subject, summary = get_analysis(content)
+        logger.info(f"Got classification: {classification}")
         logger.info(f"Got subject: {subject}")
-        
-        logger.info("Getting summary from LLM")
-        summary = get_summary(content)
         logger.info(f"Got summary: {summary}")
         
         # Prepare response data
         response_data = {
             "input_file": request.file_path,
-            "subject": subject.strip(),
-            "summary": summary.strip()
+            "classification": classification,
+            "subject": subject,
+            "summary": summary
         }
         
         # Write output to JSON file

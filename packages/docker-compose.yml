@@ -32,3 +32,23 @@ services:
       - ./.env:/.env  
       - ./sqlite_db:/app/sqlite_db  
       - ./server/downloads:/app/downloads
+  pdf-to-text:
+    build:
+      context: ./server/pdf_to_text
+      dockerfile: Dockerfile
+    container_name: pdf-processor
+    ports:
+      - "3500:3500"
+    volumes:
+      - ${PDF_INPUT_DIR:-./input}:/app/input
+      - ${PDF_OUTPUT_DIR:-./output}:/app/output
+    environment:
+      - PORT=3500
+      - HOST=0.0.0.0
+    restart: unless-stopped
+  ollama:
+    image: ollama/ollama
+    ports:
+      - "21434:11434"
+    volumes:
+      - ${OLLAMA_MODELS:-./server/ollama/ollama_models}:/root/.ollama

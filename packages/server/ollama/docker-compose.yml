@@ -5,24 +5,24 @@ services:
     image: ollama/ollama:latest
     volumes:
       - type: bind
-        source: ./ollama-models
+        source: /var/poc/temp/geth/packages/ollama_models
         target: /root/.ollama
     ports:
       - "11434:11434"
     environment:
       - OLLAMA_MODELS=/root/.ollama/models
 
-  app:
+  summary_app:
     build: .
     ports:
       - "8000:8000"
     volumes:
       - type: bind
-        source: /var/poc/geth/announcements
+        source: /var/poc/temp/geth/packages/server/downloads
         target: /app/data/announcements
         read_only: true
       - type: bind
-        source: /var/poc/geth/announcement_summaries
+        source: /var/poc/temp/geth/packages/server/announcement_summaries
         target: /app/data/announcement_summaries
     depends_on:
       ollama:

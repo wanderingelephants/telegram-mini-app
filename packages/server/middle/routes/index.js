@@ -10,13 +10,6 @@ const routes = {
             updateuser: require('./api/db/updateuser'),
             saveconfig: require('./api/db/saveconfig')
         },
-        nse: {
-            receive: require('./api/nse/receive'),
-            publish: require('./api/nse/publish'),
-            process: require('./api/nse/process'),
-            announcements: require('./api/nse/announcements'),
-            instruments: require('./api/nse/instruments')
-        },
         kite:{
             order: {
                 create: require('./api/kite/order/create')
@@ -28,10 +21,21 @@ const routes = {
                 quote: require('./api/kite/instrument/quote')
             }
         },
-        telegram:{
-            auth: require('./api/telegram/auth'),
-            //notify: require('./api/telegram/notify')
+        nse: {
+            receive: require('./api/nse/receive'),
+            publish: require('./api/nse/publish'),
+            process: require('./api/nse/process'),
+            announcements: require('./api/nse/announcements'),
+            instruments: require('./api/nse/instruments')
         },
+        ollama:{
+            chat: require('./api/ollama/chat'),
+            chatStream: require('./api/ollama/chatStream')
+        },
+        telegram:{
+            auth: require('./api/telegram/auth')
+        },
+
         
     }
 };
