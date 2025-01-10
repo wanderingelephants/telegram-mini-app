@@ -52,4 +52,4 @@ services:
     ports:
       - "11434:11434"
     volumes:
-      - ${OLLAMA_MODELS:-/home/ec2-user/data/ollama/ollama_models}:/root/.ollama
+      - ${OLLAMA_MODELS:-/home/ec2-user/data/ollama/ollama_models}:/root/.ollama/ollama_models

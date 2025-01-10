@@ -3,12 +3,12 @@ curl -X POST http://51.158.62.147:3000/api/chat \
 -d '{"messages": [], "model": "llama3.2"}'
 
 
-curl -X POST http://localhost:3000/api/nse/download \
+curl -X POST http://51.158.62.147/api/nse/announcements \
 -H "Content-Type: application/json" \
 -d '{
-  "baseUrl": "https://nsearchives.nseindia.com",
-  "urlSuffix": "/corporate/SURANI_03012025182629_RTAintimation03012025.pdf",
-  "downloadFileName": "SURANI.pdf"
+  "fromDate": "08-01-2025",
+  "toDate": "08-01-2025",
+  "index": "sme"
 }'
 
 #/api/etf
