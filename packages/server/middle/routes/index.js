@@ -40,7 +40,8 @@ const routes = {
     }
 };
 router.get('/api/telegram/auth', routes.api.telegram.auth)
-//router.get('/api/telegram/notify', routes.api.telegram.notify)
+router.post('/api/chat', routes.api.ollama.chat)
+router.post('/api/chat/stream', routes.api.ollama.chatStream)
 router.get('/api/db/create', routes.api.db.create)
 router.post('/api/db/import', routes.api.db.import)
 router.get('/api/db/getuser', routes.api.db.getuser)

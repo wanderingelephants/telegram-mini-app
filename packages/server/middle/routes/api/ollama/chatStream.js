@@ -1,6 +1,8 @@
 const OLLAMA_URL = 'http://localhost:11434';  // Adjust this to your Ollama container URL
+const { initializeOllama } = require('./initOllama');
 
 const route = async (req, res) => {
+    await initializeOllama();
     const { messages, model } = req.body;
 
   // Set up SSE headers
@@ -57,3 +59,4 @@ const route = async (req, res) => {
     res.end();
   }
 }
+module.exports = route

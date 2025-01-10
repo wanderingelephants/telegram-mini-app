@@ -1,6 +1,7 @@
 const OLLAMA_URL = 'http://localhost:11434';
-
+const {initializeOllama} = require('./initOllama')
 const route = async (req, res) => {
+    await initializeOllama()
     const { messages, model } = req.body;
     console.log('Messages received:', messages);
 
