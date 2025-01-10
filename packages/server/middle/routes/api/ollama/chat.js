@@ -1,4 +1,4 @@
-const OLLAMA_URL = 'http://localhost:11434';
+const OLLAMA_URL = process.env.OLLAMA_URL;
 const {initializeOllama} = require('./initOllama')
 const route = async (req, res) => {
     await initializeOllama()
