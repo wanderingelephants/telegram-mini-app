@@ -30,8 +30,8 @@ services:
       - NODE_ENV=production
     volumes:
       - ./.env:/.env  
-      - ./sqlite_db:/app/sqlite_db  
-      - ./server/downloads:/app/downloads
+      - /home/ec2-user/data/sqlite_db:/app/sqlite_db  
+      - /home/ec2-user/data/nse_announcements/pdf:/app/downloads
   pdf-to-text:
     build:
       context: ./server/pdf_to_text
@@ -40,8 +40,8 @@ services:
     ports:
       - "3500:3500"
     volumes:
-      - ${PDF_INPUT_DIR:-./input}:/app/input
-      - ${PDF_OUTPUT_DIR:-./output}:/app/output
+      - ${PDF_INPUT_DIR:-/home/ec2-user/data/nse_announcements/pdf}:/app/input
+      - ${PDF_OUTPUT_DIR:-/home/ec2-user/data/nse_announcements/txt}:/app/output
     environment:
       - PORT=3500
       - HOST=0.0.0.0
@@ -49,6 +49,6 @@ services:
   ollama:
     image: ollama/ollama
     ports:
-      - "21434:11434"
+      - "11434:11434"
     volumes:
-      - ${OLLAMA_MODELS:-./server/ollama/ollama_models}:/root/.ollama
+      - ${OLLAMA_MODELS:-/home/ec2-user/data/ollama/ollama_models}:/root/.ollama
