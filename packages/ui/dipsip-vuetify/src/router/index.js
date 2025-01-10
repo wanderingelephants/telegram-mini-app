@@ -7,6 +7,7 @@ import AboutUs from '@/views/AboutUs.vue'
 
 import RiskProfile from '@/views/RiskProfile.vue'
 import TheWelcome from '../components/TheWelcome'
+import ChatApp from '../components/ChatApp'
 import SettingsPage from '@/views/SettingsPage.vue'
 import DipSip from '@/views/DipSip.vue'
 import Postman from '@/views/Postman.vue'
@@ -38,6 +39,11 @@ const routes = [
     path: '/etfList',
     name: 'ETFPage',
     component: ETFPage
+  },
+  {
+    path: '/chat',
+    name: 'chat',
+    component: ChatApp
   },
   {
     path: '/riskProfile',
