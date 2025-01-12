@@ -6,7 +6,7 @@
     "scripts": {
         "serve": "nodemon --env-file=.env index.js",
         "funds-category": "node utils/funds-category.js",
-        "portfolio-scraper": "node utils/portfolio-scraper.js flexi-cap-fund"
+        "portfolio-scraper": "node utils/portfolio-scraper.js"
     },
     "dependencies": {
         "axios": "^1.7.7",

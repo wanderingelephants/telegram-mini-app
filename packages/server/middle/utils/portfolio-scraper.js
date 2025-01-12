@@ -33,6 +33,50 @@ async function setupPage(browser) {
     return page;
 }
 
+// Function to check if fund holdings already exist
+async function checkExistingHoldings(category, schemeCode) {
+    const holdingsBasePath = path.join('../../downloads/moneycontrol', category, schemeCode, 'holdings');
+    
+    try {
+        // Check if holdings directory exists
+        if (!fs.existsSync(holdingsBasePath)) {
+            return false;
+        }
+
+        // Get all date folders
+        const dateFolders = fs.readdirSync(holdingsBasePath)
+            .filter(folder => fs.statSync(path.join(holdingsBasePath, folder)).isDirectory())
+            .sort((a, b) => b.localeCompare(a)); // Sort descending to get most recent first
+
+        if (dateFolders.length === 0) {
+            return false;
+        }
+
+        // Check most recent folder for holdings.json
+        const latestFolder = dateFolders[0];
+        const holdingsFile = path.join(holdingsBasePath, latestFolder, 'holdings.json');
+        
+        if (fs.existsSync(holdingsFile)) {
+            // Validate the JSON file is properly formed
+            try {
+                const holdings = JSON.parse(fs.readFileSync(holdingsFile, 'utf8'));
+                if (holdings && holdings.holdings && holdings.holdings.length > 0) {
+                    console.log(`Skipping ${schemeCode} - Found existing holdings for ${latestFolder}`);
+                    return true;
+                }
+            } catch (e) {
+                console.log(`Invalid holdings file for ${schemeCode}, will reprocess`);
+                return false;
+            }
+        }
+
+        return false;
+    } catch (error) {
+        console.error(`Error checking existing holdings for ${schemeCode}:`, error);
+        return false;
+    }
+}
+
 // Function to parse the portfolio holdings date
 function parseHoldingsDate(dateText) {
     // Extract date from format "as on 30th Nov,2024" to "30-Nov-2024"
@@ -49,19 +93,21 @@ async function scrapePortfolioHoldings(page, fund, category) {
     console.log(`Scraping holdings for ${fund.name}`);
     
     try {
-        // Construct portfolio URL by removing "-growth" and changing nav to portfolio-holdings
+        // Construct portfolio URL by:
+        // 1. Remove '-growth' from fund name
+        // 2. Remove '/nav/'
+        // 3. Insert '/portfolio-holdings/' after fund name but before scheme code
         const baseUrl = fund.url.replace('-growth', '').replace('/nav/', '/');
-const lastSlashIndex = baseUrl.lastIndexOf('/');
-const portfolioUrl = baseUrl.slice(0, lastSlashIndex) + '/portfolio-holdings' + baseUrl.slice(lastSlashIndex);
+        const lastSlashIndex = baseUrl.lastIndexOf('/');
+        const portfolioUrl = baseUrl.slice(0, lastSlashIndex) + '/portfolio-holdings' + baseUrl.slice(lastSlashIndex);
 
-console.log('Original URL:', fund.url);
-console.log('Portfolio URL:', portfolioUrl);
+        console.log('Portfolio URL:', portfolioUrl);
 
-await page.goto(portfolioUrl, {
-    waitUntil: ['networkidle0', 'domcontentloaded', 'load'],
-    timeout: 30000
-});
-        console.log('fetched', portfolioUrl)
+        await page.goto(portfolioUrl, {
+            waitUntil: ['networkidle0', 'domcontentloaded', 'load'],
+            timeout: 60000
+        });
+
         await delay(2000);
 
         // Extract holdings date
@@ -96,32 +142,31 @@ await page.goto(portfolioUrl, {
 
             // Get holdings
             const holdings = Array.from(table.querySelectorAll('tbody tr'))
-    .map(row => {
-        const cells = Array.from(row.querySelectorAll('td'));
-        const holding = {};
-        
-        headers.forEach((header, index) => {
-            if (cells[index]) {
-                if (index === 0) { // Special handling for first column "Stock Invested in"
-                    // Get the stock name from the second span (port_right) containing the actual link
-                    const stockNameElement = cells[index].querySelector('span.port_right a');
-                    if (stockNameElement) {
-                        const stockName = stockNameElement.textContent.trim();
-                        if (stockName === 'No group') {
-                            return null; // Skip this row entirely
+                .map(row => {
+                    const cells = Array.from(row.querySelectorAll('td'));
+                    const holding = {};
+                    headers.forEach((header, index) => {
+                        if (cells[index]) {
+                            if (index === 0) { // Special handling for first column "Stock Invested in"
+                                // Get the stock name from the second span (port_right) containing the actual link
+                                const stockNameElement = cells[index].querySelector('span.port_right a');
+                                if (stockNameElement) {
+                                    const stockName = stockNameElement.textContent.trim();
+                                    if (stockName === 'No group') {
+                                        return null; // Skip this row entirely
+                                    }
+                                    holding[header] = stockName;
+                                } else {
+                                    return null; // Skip if we can't find the stock name
+                                }
+                            } else {
+                                holding[header] = cells[index].textContent.trim();
+                            }
                         }
-                        holding[header] = stockName;
-                    } else {
-                        return null; // Skip if we can't find the stock name
-                    }
-                } else {
-                    holding[header] = cells[index].textContent.trim();
-                }
-            }
-        });
-        return holding;
-    })
-    .filter(holding => holding !== null); // Remove any null entries (skipped rows)
+                    });
+                    return holding;
+                })
+                .filter(holding => holding !== null); // Remove any null entries (skipped rows)
 
             return {
                 headers,
@@ -159,55 +204,7 @@ await page.goto(portfolioUrl, {
     }
 }
 
-// Main function to process all funds in a category
-async function processCategory(category) {
-    try {
-        // Read the category's funds data
-        const categoryFile = path.join('../../downloads/moneycontrol', category, 'mutual_funds_data.json');
-        const fundsData = JSON.parse(fs.readFileSync(categoryFile, 'utf8'));
-
-        console.log(`Processing ${fundsData.length} funds in category ${category}`);
-
-        const browser = await puppeteer.launch({
-            headless: "new",
-            args: [
-                '--no-sandbox',
-                '--disable-setuid-sandbox',
-                '--disable-infobars',
-                '--window-position=0,0',
-                '--ignore-certifcate-errors',
-                '--ignore-certifcate-errors-spki-list',
-                '--enable-javascript',
-                '--window-size=1920,1080',
-                '--disable-gpu', '--disable-setuid-sandbox',
-                '--user-agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"'
-            ]
-        });
-
-        try {
-            const page = await setupPage(browser);
-            const results = [];
-
-            for (const fund of fundsData) {
-                const result = await scrapePortfolioHoldings(page, fund, category);
-                if (result) results.push(result);
-                await delay(3000 + Math.random() * 2000); // Random delay between funds
-            }
-
-            // Save summary of processing
-            const summaryFile = path.join('../../downloads/moneycontrol', category, 'holdings_summary.json');
-            fs.writeFileSync(summaryFile, JSON.stringify(results, null, 2));
-
-        } finally {
-            await browser.close();
-        }
-
-    } catch (error) {
-        console.error(`Error processing category ${category}:`, error);
-    }
-}
-
-// Modified processCategory to handle specific scheme codes
+// Function to process a category
 async function processCategory(category, specificSchemeCodes = null) {
     try {
         const categoryFile = path.join('../../downloads/moneycontrol', category, 'mutual_funds_data.json');
@@ -216,13 +213,29 @@ async function processCategory(category, specificSchemeCodes = null) {
         // Filter funds if specific scheme codes are provided
         if (specificSchemeCodes) {
             fundsData = fundsData.filter(fund => specificSchemeCodes.includes(fund.schemeCode));
-            console.log(`Processing ${fundsData.length} specific funds in category ${category}`);
+            console.log(`Found ${fundsData.length} specific funds in category ${category}`);
             if (fundsData.length === 0) {
                 console.log('No matching funds found for the provided scheme codes');
                 return;
             }
-        } else {
-            console.log(`Processing all ${fundsData.length} funds in category ${category}`);
+        }
+
+        // Filter out funds that already have holdings
+        const fundsToProcess = [];
+        for (const fund of fundsData) {
+            const hasExistingHoldings = await checkExistingHoldings(category, fund.schemeCode);
+            if (!hasExistingHoldings) {
+                fundsToProcess.push(fund);
+            }
+        }
+
+        console.log(`Total funds in category: ${fundsData.length}`);
+        console.log(`Funds already processed: ${fundsData.length - fundsToProcess.length}`);
+        console.log(`Funds to process: ${fundsToProcess.length}`);
+
+        if (fundsToProcess.length === 0) {
+            console.log('No new funds to process in this category');
+            return;
         }
 
         const browser = await puppeteer.launch({
@@ -240,16 +253,36 @@ async function processCategory(category, specificSchemeCodes = null) {
 
         try {
             const page = await setupPage(browser);
-            const results = [];
+            const results = {
+                success: [],
+                skipped: fundsData.length - fundsToProcess.length,
+                failed: []
+            };
 
-            for (const fund of fundsData) {
+            for (const fund of fundsToProcess) {
                 console.log(`Processing fund: ${fund.name} (${fund.schemeCode})`);
-                const result = await scrapePortfolioHoldings(page, fund, category);
-                if (result) results.push(result);
-                await delay(3000 + Math.random() * 2000); // Random delay between funds
+                try {
+                    const result = await scrapePortfolioHoldings(page, fund, category);
+                    if (result) {
+                        results.success.push(result);
+                    } else {
+                        results.failed.push({
+                            schemeCode: fund.schemeCode,
+                            name: fund.name,
+                            error: 'Failed to scrape holdings'
+                        });
+                    }
+                } catch (error) {
+                    results.failed.push({
+                        schemeCode: fund.schemeCode,
+                        name: fund.name,
+                        error: error.message
+                    });
+                }
+                await delay(10000 + Math.random() * 2000);
             }
 
-            // Save summary with timestamp to track different processing runs
+            // Save enhanced summary
             const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
             const summaryFile = path.join(
                 '../../downloads/moneycontrol', 
@@ -261,8 +294,14 @@ async function processCategory(category, specificSchemeCodes = null) {
                 category,
                 processedAt: timestamp,
                 specificSchemeCodes: specificSchemeCodes || 'all',
-                totalProcessed: results.length,
-                results
+                summary: {
+                    totalFunds: fundsData.length,
+                    alreadyProcessed: fundsData.length - fundsToProcess.length,
+                    successfullyProcessed: results.success.length,
+                    failedToProcess: results.failed.length
+                },
+                successfulFunds: results.success,
+                failedFunds: results.failed
             }, null, 2));
 
         } finally {
@@ -274,7 +313,7 @@ async function processCategory(category, specificSchemeCodes = null) {
     }
 }
 
-// Process specific category/schemes or all categories
+// Main function
 async function main() {
     const args = process.argv.slice(2);
     
