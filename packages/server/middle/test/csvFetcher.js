@@ -14,6 +14,10 @@ async function fetchWithRetry(url, options, maxRetries = 3) {
 }
 
 async function fetchCSV(csvUrl, targetPath) {
+    const targetFolderLastIndex = targetPath.lastIndexOf('/')
+    const targetFolderPath = targetPath.substring(0, targetFolderLastIndex)
+    console.log(targetFolderPath)
+    fs.mkdirSync(targetFolderPath, {recursive: true})
     try {
         const agent = new https.Agent({
             keepAlive: true,

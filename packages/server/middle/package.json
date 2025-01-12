@@ -4,7 +4,9 @@
     "description": "DipSip API Server",
     "main": "index.js",
     "scripts": {
-        "serve": "nodemon --env-file=.env index.js"
+        "serve": "nodemon --env-file=.env index.js",
+        "funds-category": "node utils/funds-category.js",
+        "portfolio-scraper": "node utils/portfolio-scraper.js flexi-cap-fund"
     },
     "dependencies": {
         "axios": "^1.7.7",
