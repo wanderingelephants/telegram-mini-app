@@ -3,6 +3,7 @@ const fs = require('fs');
 // Utility function for delays
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
+const outputFolder = '../../downloads/moneycontrol'
 // List of mutual fund categories to scrape
 const FUND_CATEGORIES = [
     /*
@@ -186,8 +187,8 @@ async function getAllMutualFunds() {
         for (const category of FUND_CATEGORIES) {
             const categoryFunds = await scrapeCategoryPage(page, category);
             allFunds.push(...categoryFunds);
-            const outputFile = `../../downloads/moneycontrol/${category}/mutual_funds_data.json`;
-            fs.mkdirSync(`../../downloads/moneycontrol/${category}`);
+            const outputFile = `outputFolder/${category}/mutual_funds_data.json`;
+            fs.mkdirSync(`outputFolder/${category}`);
             fs.writeFileSync(outputFile, JSON.stringify(categoryFunds, null, 2));
             // Add longer delay between categories
             await delay(3000 + Math.random() * 2000); // Random delay 3-5 seconds

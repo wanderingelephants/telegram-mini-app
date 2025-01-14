@@ -5,8 +5,10 @@
     "main": "index.js",
     "scripts": {
         "serve": "nodemon --env-file=.env index.js",
-        "funds-category": "node utils/funds-category.js",
-        "portfolio-scraper": "node utils/portfolio-scraper.js"
+        "funds-category": "node utils/moneycontrolscraper.js",
+        "portfolio-scraper": "node utils/portfolio-scraper.js",
+        "etf-portfolio-scraper": "node utils/etf-portfolio-scraper.js",
+        "etf-scraper": "node utils/etfScraper.js"
     },
     "dependencies": {
         "axios": "^1.7.7",

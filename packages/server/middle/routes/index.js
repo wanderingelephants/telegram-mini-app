@@ -21,6 +21,9 @@ const routes = {
                 quote: require('./api/kite/instrument/quote')
             }
         },
+        mutualfunds: {
+            list: require('./api/mutualfunds/list')
+        },
         nse: {
             receive: require('./api/nse/receive'),
             publish: require('./api/nse/publish'),
@@ -50,6 +53,7 @@ router.post('/api/db/saveconfig', routes.api.db.saveconfig)
 router.get('/api/kite/order/create', routes.api.kite.order.create)
 router.get('/api/kite/login/success', routes.api.kite.login.success)
 router.get('/api/kite/instrument/quote', routes.api.kite.instrument.quote)
+router.get('/api/mutualfunds/list', routes.api.mutualfunds.list)
 router.post('/api/nse/receive', routes.api.nse.receive)
 router.post('/api/nse/announcements', routes.api.nse.announcements)
 router.get('/api/nse/process', routes.api.nse.process)

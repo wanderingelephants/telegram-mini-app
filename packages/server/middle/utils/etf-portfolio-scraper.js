@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
-
+const outputFolder = '../../downloads/moneycontrol'
 // Utility function for delays
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -35,7 +35,7 @@ async function setupPage(browser) {
 
 // Function to check if fund holdings already exist
 async function checkExistingHoldings(category, schemeCode) {
-    const holdingsBasePath = path.join('../../downloads/moneycontrol', category, schemeCode, 'holdings');
+    const holdingsBasePath = path.join(outputFolder, category, schemeCode, 'holdings');
     
     try {
         // Check if holdings directory exists
@@ -89,7 +89,7 @@ function parseHoldingsDate(dateText) {
 }
 
 // Function to scrape portfolio holdings for a single fund
-async function scrapePortfolioHoldings(page, fund, category) {
+async function scrapePortfolioHoldings(page, fund) {
     console.log(`Scraping holdings for ${fund.name}`);
     //"/mutual-funds/nav/nippon-india-etf-nifty-next-50-junior-bees/MBM002"
     try {
@@ -128,7 +128,7 @@ async function scrapePortfolioHoldings(page, fund, category) {
         }
 
         // Create directory structure
-        const holdingsDir = path.join('../../downloads/moneycontrol', category, fund.schemeCode, 'holdings', holdingsReportingDate);
+        const holdingsDir = path.join(outputFolder, 'etfs', fund.name, 'holdings', holdingsReportingDate);
         if (!fs.existsSync(holdingsDir)) fs.mkdirSync(holdingsDir, { recursive: true });
 
         // Extract holdings data
@@ -207,7 +207,7 @@ async function scrapePortfolioHoldings(page, fund, category) {
 // Function to process a category
 async function processCategory(category, specificSchemeCodes = null) {
     try {
-        const categoryFile = path.join('../../downloads/moneycontrol', category, 'mutual_funds_data.json');
+        const categoryFile = path.join(outputFolder, category, 'mutual_funds_data.json');
         let fundsData = JSON.parse(fs.readFileSync(categoryFile, 'utf8'));
 
         // Filter funds if specific scheme codes are provided
@@ -262,7 +262,7 @@ async function processCategory(category, specificSchemeCodes = null) {
             for (const fund of fundsToProcess) {
                 console.log(`Processing fund: ${fund.name} (${fund.schemeCode})`);
                 try {
-                    const result = await scrapePortfolioHoldings(page, fund, category);
+                    const result = await scrapePortfolioHoldings(page, fund);
                     if (result) {
                         results.success.push(result);
                     } else {
@@ -285,7 +285,7 @@ async function processCategory(category, specificSchemeCodes = null) {
             // Save enhanced summary
             const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
             const summaryFile = path.join(
-                '../../downloads/moneycontrol', 
+                outputFolder, 
                 category, 
                 `holdings_summary_${specificSchemeCodes ? 'partial_' : ''}${timestamp}.json`
             );
@@ -315,29 +315,41 @@ async function processCategory(category, specificSchemeCodes = null) {
 
 // Main function
 async function main() {
-    const args = process.argv.slice(2);
-    
-    if (args.length === 0) {
-        // No arguments: process all categories
-        const categories = fs.readdirSync('../../downloads/moneycontrol')
-            .filter(dir => fs.statSync(path.join('../../downloads/moneycontrol', dir)).isDirectory());
-        console.log(`Processing all funds in categories: ${categories.join(', ')}`);
-        
-        for (const category of categories) {
-            await processCategory(category);
-            await delay(5000);
+    const browser = await puppeteer.launch({
+        headless: "new",
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-infobars',
+            '--window-position=0,0',
+            '--ignore-certifcate-errors',
+            '--ignore-certifcate-errors-spki-list',
+            '--user-agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"'
+        ]
+    });
+    try{
+        const page = await setupPage(browser);
+        const etfs = JSON.parse(fs.readFileSync(outputFolder + '/etf_links_2025-01-12.json', 'utf8'));
+        for (f of etfs){
+            const url = "https://www.moneycontrol.com" + f
+            const fund = {
+                url,
+                name: f.split("/")[3]
+            }
+            //console.log(fund)
+            const result = await scrapePortfolioHoldings(page, fund);  
+            console.log(result)
+            await delay(10000)
         }
-    } else {
-        const category = args[0];
-        const schemeCodes = args[1] ? args[1].split(',').map(code => code.trim()) : null;
-        
-        if (schemeCodes) {
-            console.log(`Processing specific schemes in ${category}:`, schemeCodes);
-        } else {
-            console.log(`Processing all funds in category: ${category}`);
+        /*const fund = {
+            url: "https://www.moneycontrol.com/mutual-funds/nav/nippon-india-etf-nifty-100/MRC1048",
+            name: "nippon-india-etf-nifty-100"
         }
-        
-        await processCategory(category, schemeCodes);
+        const result = await scrapePortfolioHoldings(page, fund);  
+        console.log(result)*/  
+    }
+    catch(e){
+        console.log(e)
     }
 }
 
