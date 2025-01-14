@@ -79,11 +79,13 @@ async function checkExistingHoldings(category, schemeCode) {
 
 // Function to parse the portfolio holdings date
 function parseHoldingsDate(dateText) {
+    const monthMap = {'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04', 'May': '05', 'Jun': '06', 
+        'Jul': '07', 'Aug': '08', 'Sep': '09', 'Oct': '10', 'Nov': '11', 'Dec': '12'}
     // Extract date from format "as on 30th Nov,2024" to "30-Nov-2024"
     const match = dateText.match(/(\d{1,2})[a-z]{2}\s+([A-Za-z]+),(\d{4})/);
     if (match) {
         const [_, day, month, year] = match;
-        return `${day.padStart(2, '0')}-${month}-${year}`;
+        return `${year}-${monthMap[month]}-${day.padStart(2, '0')}`;
     }
     return null;
 }

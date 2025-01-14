@@ -8,7 +8,6 @@ const route = async (req, res) => {
         // Recursive function to search directories
         async function searchDirectory(dirPath) {
             const files = await fs.readdir(dirPath);
-            console.log("search dir", dirPath)
             for (const file of files) {
                 const fullPath = path.join(dirPath, file);
                 const stat = await fs.stat(fullPath);
