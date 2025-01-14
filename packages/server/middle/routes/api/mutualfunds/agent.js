@@ -224,9 +224,10 @@ Respond with just the category name in uppercase, nothing else.`;
     // Only use LLM for general knowledge questions
     const response = await axios.post(this.ollamaUrl, {
       model: "llama3.2",
-      prompt: `You are a mutual fund expert specializing in Indian markets. Your audience consists exclusively of Indian retail investors. 
+      prompt: `You are a mutual fund expert specializing in Indian markets. Your audience consists exclusively of Indian retail investors.
+      If user requests Tips of any kind, politely refuse and explain that you can explain investment principles but not give specific tips. 
       Question: ${query}
-      Provide a helpful explanation suitable for an Indian retail investor, using only Indian market examples and context.`,
+      Provide a brief helpful explanation suitable for an Indian retail investor, using only Indian market examples and context.`,
       stream: false
     });
 
