@@ -1,0 +1,1 @@
+create table mutual_fund()

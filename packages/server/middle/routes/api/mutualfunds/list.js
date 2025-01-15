@@ -1,12 +1,15 @@
 const fs = require('fs').promises;
 const path = require('path');
+const Database = require('better-sqlite3');
+const db = new Database(process.env.SQLITE_DB + '/dipsip.db', { verbose: console.log });
 
 const route = async (req, res) => {
     try {
-        const mutualFundList = [];
-        
+        const dbResp = db.prepare('SELECT * FROM mutual_fund').all();
+        console.log(dbResp)
+        const mutualFundList = dbResp.map(m => ({"name": m.name, "category": m.category, "aum": m.aum}))
         // Recursive function to search directories
-        async function searchDirectory(dirPath) {
+       /* async function searchDirectory(dirPath) {
             const files = await fs.readdir(dirPath);
             for (const file of files) {
                 const fullPath = path.join(dirPath, file);
@@ -36,7 +39,7 @@ const route = async (req, res) => {
             throw new Error('DOWNLOADS environment variable is not set');
         }
         
-        await searchDirectory(dataFolder);
+        await searchDirectory(dataFolder);*/
         
         res.status(200).json(mutualFundList);
     } catch (e) {
