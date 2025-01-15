@@ -208,6 +208,7 @@ async function scrapePortfolioHoldings(page, fund, category) {
 
 // Function to process a category
 async function processCategory(category, specificSchemeCodes = null) {
+    console.log('processCategory', category)
     try {
         const categoryFile = path.join('../../downloads/moneycontrol', category, 'mutual_funds_data.json');
         let fundsData = JSON.parse(fs.readFileSync(categoryFile, 'utf8'));

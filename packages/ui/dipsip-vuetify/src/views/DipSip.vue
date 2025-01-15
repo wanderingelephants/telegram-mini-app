@@ -286,6 +286,7 @@
         </v-col>
         
         <v-col v-if="loggedIn == false" >
+          <google-sign-in/>
           <v-card-text>Login with Telegram, to Save and Subscribe</v-card-text>
         </v-col>
         <!--<v-col cols="8">
@@ -461,11 +462,12 @@ if (import.meta.env.MODE == 'development') botName = 'Dev_DipSip_bot'
 import { mapState } from "vuex";
 import api from "./api";
 import TelegramLogin from "../components/TelegramLogin.vue";
+import GoogleSignIn from '../components/GoogleSignIn'
 import axios from "axios";
 import market_data from "./indices.json";
 export default {
   components: {
-    TelegramLogin,
+    TelegramLogin,  GoogleSignIn
   },
   computed: mapState([
     // map this.count to store.state.count
