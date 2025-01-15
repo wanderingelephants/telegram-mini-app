@@ -6,7 +6,8 @@ sqlite_db
 .env
 .env.local
 .env.*.local
-
+dipsip2025-firebase-admin-dev.json
+firebase.config.dev.json
 # Log files
 npm-debug.log*
 yarn-debug.log*
