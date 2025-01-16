@@ -32,7 +32,7 @@
                   v-model="selectedFunds"
                   :items="fundList"
                   item-title="displayName"
-                  item-value="schemeCode"
+                  item-value="name"
                   :label="'Select Mutual Funds ' + (selectedFunds.length ? `(${selectedFunds.length} selected)` : '')"
                   multiple
                   chips
@@ -52,11 +52,9 @@
                     </v-chip>
                   </template>
                 </v-autocomplete>
-                <v-btn v-if="selectedFunds.length > 1">Compare</v-btn>
+                <v-btn v-if="selectedFunds.length > 1" @click="sendCompare(selectedFunds)">Compare</v-btn>
               </v-card-text>
             </v-card>
-
-            
       </v-col>
       <v-col
             cols="12"
@@ -153,8 +151,7 @@
 </template>
 
 <script>
-import axios from 'axios'
-
+import api from './api'
 export default {
   name: 'ChatApp',
   
@@ -167,21 +164,20 @@ export default {
       errorMessage: '',
       fundList: [],
       selectedFunds: [],
-      portfolio: []
+      portfolio: [],
+      compareData: {}
     }
   },
 
   methods: {
     async fetchFundList(){
       try {
-        const response = await axios.get('/api/mutualfunds/list')
+        const response = await api.get('/api/mutualfunds/list')
         this.fundList = response.data.map(m => {
           const returnsLabel = m.Returns_3Y ? " (3 Y Returns " +m.Returns_3Y + " %)" : ""
           return {
             "name": m.name,
-            "schemeCode":  m.schemeCode,
             "displayName": m.name +  returnsLabel
-
           }
         })
         console.log(this.fundList)
@@ -189,10 +185,21 @@ export default {
         console.error('Error fetching fund list:', error)
       }
     },
+    async sendCompare(){
+      try {
+        const response = await api.post('/api/mutualfunds/compare', {
+         "fundList": this.selectedFunds
+        })
+        console.log("sendCompare response",response)
+        this.compareData = response.data
+      } catch (error) {
+        console.error('Error in sendCompare:', error)
+      }
+    },
     handleFundSelection(value){
       console.log('handleFuncSelection', value)
-      portfolio.value = value.map(schemeCode => {
-        const fund = fundList.value.find(f => f.schemeCode === schemeCode)
+      this.portfolio.value = value.map(name => {
+        const fund = this.fundList.find(f => f.name === name)
         return {
           ...fund,
           currentValue: '',
@@ -200,7 +207,7 @@ export default {
           investedAmount: ''
         }
       })
-      console.log(portfolio.value)
+      console.log(this.portfolio)
     },
     getSelectionHint(count){
       /*if (count === 0) return 'Select funds to compare or analyze'
