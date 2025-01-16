@@ -35,7 +35,7 @@
                 <v-autocomplete
                   v-model="selectedFunds"
                   :items="fundList"
-                  item-title="name"
+                  item-title="displayName"
                   item-value="schemeCode"
                   :label="'Select Mutual Funds ' + (selectedFunds.length ? `(${selectedFunds.length} selected)` : '')"
                   multiple
@@ -226,7 +226,16 @@ export default {
     const fetchFundList = async () => {
       try {
         const response = await axios.get('/api/mutualfunds/list')
-        fundList.value = response.data
+        fundList.value = response.data.map(m => {
+          const returnsLabel = m.Returns_3Y ? " (3 Y Returns " +m.Returns_3Y + " %)" : ""
+          return {
+            "name": m.name,
+            "schemeCode":  m.schemeCode,
+            "displayName": m.name +  returnsLabel
+
+          }
+        })
+        console.log(fundList.value)
 	      //fundList.value = mflist
       } catch (error) {
         console.error('Error fetching fund list:', error)
@@ -234,6 +243,7 @@ export default {
     }
 
     const handleFundSelection = (value) => {
+      console.log('handleFuncSelection', value)
       portfolio.value = value.map(schemeCode => {
         const fund = fundList.value.find(f => f.schemeCode === schemeCode)
         return {
@@ -243,6 +253,7 @@ export default {
           investedAmount: ''
         }
       })
+      console.log(portfolio.value)
     }
 
     const getSelectionHint = (count) => {

@@ -108,7 +108,8 @@ const menuItems = [
   { title: 'DipSip', path: '/dipsip' },
   { title: 'Principles', path: '/principles' },
   { title: 'Risk  Profile', path: '/riskProfile' },
-  { title: 'ETF List', path: '/etfList' },
+  { title: 'Mutual Funds', path: '/mutualfunds' },
+  { title: 'ETFs', path: '/etfList' },
   { title: 'Stocks', path: '/stocks' }
 ]
 

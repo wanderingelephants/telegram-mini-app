@@ -5,9 +5,8 @@ const db = new Database(process.env.SQLITE_DB + '/dipsip.db', { verbose: console
 
 const route = async (req, res) => {
     try {
-        const dbResp = db.prepare('SELECT * FROM mutual_fund').all();
-        console.log(dbResp)
-        const mutualFundList = dbResp.map(m => ({"name": m.name, "category": m.category, "aum": m.aum}))
+        const dbResp = db.prepare('SELECT * FROM mutual_fund order by percentage_annualized_returns_for_3_year_period desc').all();
+        const mutualFundList = dbResp.map(m => ({"schemeCode": m.scheme_code, "name": m.mutual_fund_name, "category": m.mutual_fund_category, "aum": m.mutual_fund_assets_under_management, "Returns_3Y": m.percentage_annualized_returns_for_3_year_period}))
         // Recursive function to search directories
        /* async function searchDirectory(dirPath) {
             const files = await fs.readdir(dirPath);

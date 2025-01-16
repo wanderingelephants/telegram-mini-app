@@ -6,7 +6,7 @@
           <!-- Chat Header -->
           <v-card-title class="primary white--text">
             <v-icon left color="white">mdi-chat</v-icon>
-            Ollama Chat
+            Your Assistant
           </v-card-title>
 
           <!-- Messages Area -->
@@ -44,7 +44,7 @@
                       size="24"
                       class="mr-2"
                     ></v-progress-circular>
-                    Thinking...
+                    Fetching Your Response...
                   </v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
@@ -56,14 +56,14 @@
             <v-text-field
               v-model="userInput"
               label="Type your message"
-              outlined
-              dense
-              hide-details
-              @keyup.enter="sendMessage"
               :disabled="isLoading"
-              append-outer-icon="mdi-send"
-              @click:append-outer="sendMessage"
-            ></v-text-field>
+              variant="outlined"
+                  density="comfortable"
+                  hide-details
+                  @keyup.enter="sendMessage"
+                  append-inner-icon="mdi-send"
+                  @click:append-inner="sendMessage"
+              ></v-text-field>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -100,7 +100,6 @@ export default {
       isLoading: false,
       showError: false,
       errorMessage: '',
-      model: 'llama2' // configurable model name
     }
   },
 
@@ -145,15 +144,14 @@ export default {
         }); */
 	      // For streaming version:
 
-	      const response = await fetch('/api/chat/stream', {
+	      const response = await fetch('/api/mutualfunds/chatStream', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'text/event-stream',
       },
       body: JSON.stringify({
-        messages: [...this.messages],
-        model: this.model
+        messages: [...this.messages]
       })
     });
 
@@ -165,6 +163,7 @@ export default {
     // Read the stream
     while (true) {
       const { done, value } = await reader.read();
+      console.log("while true", done, value)
       if (done) break;
 
       // Decode the chunk and split into lines

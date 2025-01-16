@@ -31,16 +31,15 @@ const isValidHolding = (holding) => {
 // Load a single mutual fund
 const loadMutualFund = db.prepare(`
     INSERT OR REPLACE INTO mutual_fund (
-        name, url, scheme_code, url_category, plan, category, rating, aum,
-        return_1w, return_1m, return_3m, return_6m, return_ytd,
-        return_1y, return_2y, return_3y, return_5y, return_10y,
-        created_at, updated_at
+        mutual_fund_name, url, scheme_code, url_category, plan, mutual_fund_category, mutual_fund_star_rating, mutual_fund_assets_under_management,
+    return_1w, return_1m, return_3m, return_6m, return_ytd,
+    percentage_annualized_returns_for_1_year_period, percentage_annualized_returns_for_2_year_period, percentage_annualized_returns_for_3_year_period, percentage_annualized_returns_for_5_year_period, percentage_annualized_returns_for_10_year_period,
+    created_at, updated_at
     ) VALUES (
         ?, ?, ?, ?, ?, ?, ?, ?,
-        ?, ?, ?, ?, ?,
-        ?, ?, ?, ?, ?,
-        CURRENT_TIMESTAMP,
-        CURRENT_TIMESTAMP
+    ?, ?, ?, ?, ?,
+    ?, ?, ?, ?, ?,
+    CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
     )
 `);
 
@@ -94,9 +93,9 @@ const insertHolding = db.prepare(`
         mutual_fund_id,
         scheme_code,
         stock_name,
-        sector,
-        value_mn,
-        holdings_percent,
+        stock_sector,
+        stock_market_value_in_millions,
+        stock_holding_in_percentage,
         change_1m_percent,
         highest_holding_1y_percent,
         highest_holding_1y_date,
@@ -116,9 +115,9 @@ const insertHolding = db.prepare(`
     const updateHolding = db.prepare(`
     UPDATE mutual_fund_holdings SET
         stock_name = ?,
-        sector = ?,
-        value_mn = ?,
-        holdings_percent = ?,
+        stock_sector = ?,
+        stock_market_value_in_millions = ?,
+        stock_holding_in_percentage = ?,
         change_1m_percent = ?,
         highest_holding_1y_percent = ?,
         highest_holding_1y_date = ?,

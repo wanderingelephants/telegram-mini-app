@@ -5,24 +5,24 @@ const db = new Database(process.env.SQLITE_DB + '/dipsip.db', { verbose: console
 const createTableSchema = `
 CREATE TABLE IF NOT EXISTS mutual_fund (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
+    mutual_fund_name TEXT NOT NULL,
     url TEXT,
     scheme_code TEXT UNIQUE NOT NULL,
     url_category TEXT,
     plan TEXT,
-    category TEXT,
-    rating INTEGER,
-    aum TEXT,
+    mutual_fund_category TEXT,
+    mutual_fund_star_rating INTEGER,
+    mutual_fund_assets_under_management TEXT,
     return_1w REAL,
     return_1m REAL,
     return_3m REAL,
     return_6m REAL,
     return_ytd REAL,
-    return_1y REAL,
-    return_2y REAL,
-    return_3y REAL,
-    return_5y REAL,
-    return_10y REAL,
+    percentage_annualized_returns_for_1_year_period REAL,
+    percentage_annualized_returns_for_2_year_period REAL,
+    percentage_annualized_returns_for_3_year_period REAL,
+    percentage_annualized_returns_for_5_year_period REAL,
+    percentage_annualized_returns_for_10_year_period REAL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 )`;
@@ -42,9 +42,9 @@ function percentToFloat(percentStr) {
 // Example insert statement preparation
 const insertMutualFund = db.prepare(`
 INSERT INTO mutual_fund (
-    name, url, scheme_code, url_category, plan, category, rating, aum,
+    mutual_fund_name, url, scheme_code, url_category, plan, mutual_fund_category, mutual_fund_star_rating, mutual_fund_assets_under_management,
     return_1w, return_1m, return_3m, return_6m, return_ytd,
-    return_1y, return_2y, return_3y, return_5y, return_10y,
+    percentage_annualized_returns_for_1_year_period, percentage_annualized_returns_for_2_year_period, percentage_annualized_returns_for_3_year_period, percentage_annualized_returns_for_5_year_period, percentage_annualized_returns_for_10_year_period,
     created_at, updated_at
 ) VALUES (
     ?, ?, ?, ?, ?, ?, ?, ?,
@@ -56,23 +56,23 @@ INSERT INTO mutual_fund (
 // Example update statement preparation
 const updateMutualFund = db.prepare(`
 UPDATE mutual_fund SET
-    name = ?,
+    mutual_fund_name = ?,
     url = ?,
     url_category = ?,
     plan = ?,
-    category = ?,
-    rating = ?,
-    aum = ?,
+    mutual_fund_category = ?,
+    mutual_fund_star_rating = ?,
+    mutual_fund_assets_under_management = ?,
     return_1w = ?,
     return_1m = ?,
     return_3m = ?,
     return_6m = ?,
     return_ytd = ?,
-    return_1y = ?,
-    return_2y = ?,
-    return_3y = ?,
-    return_5y = ?,
-    return_10y = ?,
+    percentage_annualized_returns_for_1_year_period = ?,
+    percentage_annualized_returns_for_2_year_period = ?,
+    percentage_annualized_returns_for_3_year_period = ?,
+    percentage_annualized_returns_for_5_year_period = ?,
+    percentage_annualized_returns_for_10_year_period = ?,
     updated_at = CURRENT_TIMESTAMP
 WHERE scheme_code = ?
 `);
