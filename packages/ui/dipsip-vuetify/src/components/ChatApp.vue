@@ -1,8 +1,71 @@
 <template>
-  <v-container class="fill-height">
-    <v-row justify="center">
-      <v-col cols="12" sm="10" md="8">
-        <v-card height="90vh" class="d-flex flex-column">
+  <v-container fluid class="fill-height pa-0">
+    <v-row no-gutters class="fill-height">
+      <v-col
+            cols="12"
+            md="6"
+            order="last"
+            order-md="first"
+            class="fill-height"
+          >
+            <v-card class="ma-2">
+              <v-card-title>Mutual Fund Analysis</v-card-title>
+              <v-card-subtitle class="text-subtitle-2">
+                Compare Mutual Funds to gain insights.
+              </v-card-subtitle>
+              <!-- Analysis Type Chips -->
+              <v-card-text class="pb-0">
+                <v-chip
+                  v-for="type in analysisTypes"
+                  :key="type.name"
+                  class="me-2 mb-2"
+                  :color="type.color"
+                  variant="outlined"
+                >
+                  <v-icon start>{{ type.icon }}</v-icon>
+                  {{ type.name }}
+                </v-chip>
+              </v-card-text>
+              <v-card-text>
+                <!-- Fund Selector -->
+                <v-autocomplete
+                  v-model="selectedFunds"
+                  :items="fundList"
+                  item-title="displayName"
+                  item-value="schemeCode"
+                  :label="'Select Mutual Funds ' + (selectedFunds.length ? `(${selectedFunds.length} selected)` : '')"
+                  multiple
+                  chips
+                  closable-chips
+                  persistent-hint
+                  :hint="getSelectionHint(selectedFunds.length)"
+                  @update:model-value="handleFundSelection"
+                >
+                  <template v-slot:chip="{ props, item }">
+                    <v-chip
+                      v-bind="props"
+                      :text="item.raw.name"
+                      variant="elevated"
+                    >
+                      <v-icon start>mdi-chart-line</v-icon>
+                      {{ item.raw.name }}
+                    </v-chip>
+                  </template>
+                </v-autocomplete>
+                <v-btn v-if="selectedFunds.length > 1">Compare</v-btn>
+              </v-card-text>
+            </v-card>
+
+            
+      </v-col>
+      <v-col
+            cols="12"
+            md="6"
+            order="first"
+            order-md="last"
+            class="fill-height"
+          >
+        <v-card class="fill-height d-flex flex-column ma-2">
           <!-- Chat Header -->
           <v-card-title class="primary white--text">
             <v-icon left color="white">mdi-chat</v-icon>
@@ -55,7 +118,7 @@
           <v-card-actions class="pa-4">
             <v-text-field
               v-model="userInput"
-              label="Type your message"
+              label="Ask Questions in your language"
               :disabled="isLoading"
               variant="outlined"
                   density="comfortable"
@@ -90,6 +153,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'ChatApp',
   
@@ -100,10 +165,49 @@ export default {
       isLoading: false,
       showError: false,
       errorMessage: '',
+      fundList: [],
+      selectedFunds: [],
+      portfolio: []
     }
   },
 
   methods: {
+    async fetchFundList(){
+      try {
+        const response = await axios.get('/api/mutualfunds/list')
+        this.fundList = response.data.map(m => {
+          const returnsLabel = m.Returns_3Y ? " (3 Y Returns " +m.Returns_3Y + " %)" : ""
+          return {
+            "name": m.name,
+            "schemeCode":  m.schemeCode,
+            "displayName": m.name +  returnsLabel
+
+          }
+        })
+        console.log(this.fundList)
+      } catch (error) {
+        console.error('Error fetching fund list:', error)
+      }
+    },
+    handleFundSelection(value){
+      console.log('handleFuncSelection', value)
+      portfolio.value = value.map(schemeCode => {
+        const fund = fundList.value.find(f => f.schemeCode === schemeCode)
+        return {
+          ...fund,
+          currentValue: '',
+          investedDate: '',
+          investedAmount: ''
+        }
+      })
+      console.log(portfolio.value)
+    },
+    getSelectionHint(count){
+      /*if (count === 0) return 'Select funds to compare or analyze'
+      if (count === 1) return 'Select more funds for comparison'
+      return 'Ask questions about the selected funds'*/
+      return ''
+    },
     async sendMessage() {
       if (!this.userInput.trim()) return;
 
@@ -234,10 +338,11 @@ export default {
     }
   },
 
-  mounted() {
+  async mounted() {
 	  console.log('mounted')
+    await this.fetchFundList()
     // Initial scroll to bottom
-    this.scrollToBottom();
+    //this.scrollToBottom();
   }
 }
 </script>
