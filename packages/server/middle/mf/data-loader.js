@@ -216,7 +216,7 @@ async function loadMutualFundsData() {
                         fund.plan,
                         fund.category,
                         parseInt(fund.rating),
-                        fund.aum,
+                        parseFloat(fund.aum.replaceAll(",", "")),
                         returns['1W'],
                         returns['1M'],
                         returns['3M'],

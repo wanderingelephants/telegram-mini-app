@@ -1,8 +1,8 @@
 const axios = require('axios');
 const model = process.env.OLLAMA_MODEL || 'llama3.2';
 const OLLAMA_URL = process.env.OLLAMA_URL;;  // Adjust this to your Ollama container URL
-const { initializeOllama } = require('./initOllama');
-
+//const { initializeOllama } = require('./initOllama');
+const nlp_to_query = require('./stock_holdings_nlp')
 const classifyQuery = async function(query) {
   console.log('classifyQuery', query)
   const classificationPrompt = `
@@ -25,6 +25,8 @@ Examples:
 - "Which Funds have exposure to IT sector" → STOCK_HOLDING_QUERY
 - "Show me large cap funds with 5-star rating" → FUND_DISCOVERY
 - "What are the benefits of SIP?" → GENERAL_KNOWLEDGE
+
+VALIDATE: Ensure that your output is always only one among these : [STOCK_HOLDING_QUERY, FUND_DISCOVERY, GENERAL_KNOWLEDGE]
 
 Query: "${query}"
 
@@ -51,9 +53,40 @@ const fundDiscovery = async function(res, messages){
   
   res.end();
 }
-const stockHoldingQuery = async function(res, messages){
-  let json  = {"response": "The Stock Holding Discovery is Motilal", "done": false}
+/*mutual_fund_name (TEXT): Full name of the mutual fund
+mutual_fund_category (TEXT): Category of the mutual fund (e.g., Large Cap, Mid Cap, Small Cap)
+mutual_fund_returns (NUMERIC): Returns percentage of the mutual fund
+company_stock_name (TEXT): Name of the stock held in the fund
+stock_sector (TEXT): Industry sector of the stock
+stock_holding_in_percentage (NUMERIC): Percentage holding of the stock in the fund
+reporting_date (DATE) : The date on which mutual fund reported its stock holdings. IMPORTANT - if the user does not mention any dates, or time periods, then you need to constrain the date clause, so that records whose reporting_date > '30-Nov-2024' are only filtered, otherwise whole database will get returned.
+*/
+const stockHoldingQuery = async function(res, query){
+  let queryRespStr = await nlp_to_query(query)
+  const queryResp = JSON.parse(queryRespStr)
+  console.log("DB Resp", queryResp)
+  let headerLine, json;
+  let empty_line = {"response": "\n\n", "done": false}
+  if (queryResp.length == 0) headerLine = "No Results"
+  else headerLine = Object.keys(queryResp[0]).join()
+  headerLine = headerLine.replace("mutual_fund_name", "FUND")
+  headerLine = headerLine.replace("mutual_fund_category", "CATEGORY")
+  headerLine = headerLine.replace("company_stock_name", "STOCK")
+  headerLine = headerLine.replace("stock_sector", "SECTOR")
+  headerLine = headerLine.replace("stock_holding_in_percentage", "HOLDING")
+  headerLine = headerLine.replace("mutual_fund_returns", "RETURNS")
+  headerLine = headerLine.replace("mutual_fund_star_rating", "RATING")
+  
+  json = {"response": headerLine, "done": false}
   res.write(`data: ${JSON.stringify(json)}\n\n`);
+  res.write(`data: ${JSON.stringify(empty_line)}\n\n`);
+  for (let i=0; i<queryResp.length; i++){
+    let data = Object.values(queryResp[i])
+    if (typeof(data) === 'number') data = data.toFixed(2)
+    json = {"response": data, "done": false}
+    res.write(`data: ${JSON.stringify(json)}\n\n`);
+    res.write(`data: ${JSON.stringify(empty_line)}\n\n`);
+  }
   json  = {"response": "", "done": true}
   res.write(`data: ${JSON.stringify(json)}\n\n`);
   res.end();
@@ -64,8 +97,15 @@ const generalQuery = async function(res, messages){
   let prompt = `You are a financial advisor specializing in Indian Financial markets like Stock market, Mutual Funds and ETFs. Your audience consists exclusively of Indian retail investors.
       If user requests Tips of any kind, politely refuse and explain that you can explain investment principles but not give specific tips. 
       Provide explanation suitable for an Indian retail investor, using only Indian market examples and context.
+      Include this information about SIP and if query is about DipSIP then use this for context :
+      What is DipSIP : While SIP (System Investment Plan) have long been touted as disciplined way to invest, because they do Rupee Cost Averaging, there 
+are more efficient ways of investing in a disciplined way.
+A powerful variant of SIP is DipSIP, basically Systematic Investment Plans around DIPs in the market. 
+i.e. you invest when market corrects. And if market correction is bigger, you increase the allocation further.
+This works really well for Index strategies and ETFs that are traded on the exchanges, offering investors volatile periods where dips can be purchased.
+In the long run for a growing economy like India, Indexes like NIFTY, Bank Nifty or Nifty Small Cap, will continue to grow over 3-5 years period.
+So, whenever there is a dip, go ahead and buy.
       Do not use personal salutations, keep it professional, since you are a Financial Advisor and not a pal chilling with friends. 
-      Answer in the Indian language you are spoken to, e.g. if user asks question in Hindi, then respond in hindi.
       \n`
       ;
   prompt += messages.map(msg => 
@@ -98,7 +138,6 @@ const generalQuery = async function(res, messages){
         try {
           const json = JSON.parse(line);
           res.write(`data: ${JSON.stringify(json)}\n\n`);
-          console.log('general write', `data: ${JSON.stringify(json)}\n\n`)
           if (json.done) {
             res.end();
             return;
@@ -124,7 +163,7 @@ const route = async (req, res) => {
     'Connection': 'keep-alive'
   });
     try{
-      await initializeOllama();
+      //await initializeOllama(model);
     const { messages } = req.body;
     console.log("Messages", messages)
     // Set up SSE headers
@@ -139,9 +178,9 @@ const route = async (req, res) => {
     console.log("QUERY CLASSIFICATION", queryClassification)
     switch (queryClassification) {
       case 'FUND_DISCOVERY':
-          return fundDiscovery(res, messages); 
+        return stockHoldingQuery(res, userQuery); 
       case 'STOCK_HOLDING_QUERY':
-          return stockHoldingQuery(res, messages);  
+          return stockHoldingQuery(res, userQuery);  
       default:
         return generalQuery(res, messages);
     }

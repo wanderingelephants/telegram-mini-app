@@ -4,14 +4,18 @@
       <v-col
             cols="12"
             md="6"
-            order="last"
+            order="first"
             order-md="first"
             class="fill-height"
           >
             <v-card class="ma-2">
-              <v-card-title>Mutual Fund Analysis</v-card-title>
+              <v-card-title>Mutual Fund Overlap Analysis</v-card-title>
               <v-card-subtitle class="text-subtitle-2">
-                Compare Mutual Funds to gain insights.
+                Reduce Overlap, for Cleaner and Efficient Portfolio.
+              </v-card-subtitle>
+              <v-card-subtitle class="text-subtitle-2">
+                Fee of ETFs is 10X lower than Mutual Funds. 
+                <a href="/etfList">See ETFs</a>
               </v-card-subtitle>
               <!-- Analysis Type Chips -->
               <v-card-text class="pb-0">
@@ -32,13 +36,14 @@
                   v-model="selectedFunds"
                   :items="fundList"
                   item-title="displayName"
+                  :custom-filter="customFilter"
                   item-value="name"
                   :label="'Select Mutual Funds ' + (selectedFunds.length ? `(${selectedFunds.length} selected)` : '')"
                   multiple
                   chips
                   closable-chips
                   persistent-hint
-                  :hint="getSelectionHint(selectedFunds.length)"
+                  hint="Partial match works while typing e.g. 'Motilal Small'"
                   @update:model-value="handleFundSelection"
                 >
                   <template v-slot:chip="{ props, item }">
@@ -54,12 +59,13 @@
                 </v-autocomplete>
                 <v-btn v-if="selectedFunds.length > 1" @click="sendCompare(selectedFunds)">Compare</v-btn>
               </v-card-text>
+              <overlap-analysis :compare-data="compareData" v-if="compareData.overlaps"></overlap-analysis>
             </v-card>
       </v-col>
       <v-col
             cols="12"
             md="6"
-            order="first"
+            order="last"
             order-md="last"
             class="fill-height"
           >
@@ -151,7 +157,9 @@
 </template>
 
 <script>
+
 import api from './api'
+import OverlapAnalysisVue from '../components/OverlapAnalysis.vue'
 export default {
   name: 'ChatApp',
   
@@ -168,23 +176,39 @@ export default {
       compareData: {}
     }
   },
-
+  components:{
+    OverlapAnalysisVue
+  },
   methods: {
+    customFilter(item, queryText) {
+      //console.log("customFilter", item, queryText)
+    // Convert both strings to lowercase for case-insensitive matching
+    const itemText = item.toLowerCase()
+    const searchText = queryText.toLowerCase()
+    
+    // Split search text into words
+    const searchWords = searchText.split(/\s+/)
+    console.log("customFilter", itemText, searchWords)
+    // Check if all search words exist in the item text
+    return searchWords.every(word => itemText.includes(word))
+  },
     async fetchFundList(){
       try {
         const response = await api.get('/api/mutualfunds/list')
         this.fundList = response.data.map(m => {
-          const returnsLabel = m.Returns_3Y ? " (3 Y Returns " +m.Returns_3Y + " %)" : ""
+          let returnsLabel = m.Returns_3Y ? " (3 Y Returns " +m.Returns_3Y + " %)" : ""
+          for (let i=1; i<=m.star_rating; i++) returnsLabel += "⭐";
           return {
             "name": m.name,
             "displayName": m.name +  returnsLabel
           }
         })
-        console.log(this.fundList)
+        //console.log(this.fundList)
       } catch (error) {
         console.error('Error fetching fund list:', error)
       }
     },
+    
     async sendCompare(){
       try {
         const response = await api.post('/api/mutualfunds/compare', {

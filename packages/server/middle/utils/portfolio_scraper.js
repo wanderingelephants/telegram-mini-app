@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
-
+const baseFolder = process.env.DATA_ROOT_FOLDER
 // Utility function for delays
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -35,7 +35,7 @@ async function setupPage(browser) {
 
 // Function to check if fund holdings already exist
 async function checkExistingHoldings(category, schemeCode) {
-    const holdingsBasePath = path.join('../../downloads/moneycontrol', category, schemeCode, 'holdings');
+    const holdingsBasePath = path.join(baseFolder, category, schemeCode, 'holdings');
     
     try {
         // Check if holdings directory exists
@@ -130,7 +130,7 @@ async function scrapePortfolioHoldings(page, fund, category) {
         }
 
         // Create directory structure
-        const holdingsDir = path.join('../../downloads/moneycontrol', category, fund.schemeCode, 'holdings', holdingsReportingDate);
+        const holdingsDir = path.join(baseFolder, category, fund.schemeCode, 'holdings', holdingsReportingDate);
         if (!fs.existsSync(holdingsDir)) fs.mkdirSync(holdingsDir, { recursive: true });
 
         // Extract holdings data
@@ -210,7 +210,7 @@ async function scrapePortfolioHoldings(page, fund, category) {
 async function processCategory(category, specificSchemeCodes = null) {
     console.log('processCategory', category)
     try {
-        const categoryFile = path.join('../../downloads/moneycontrol', category, 'mutual_funds_data.json');
+        const categoryFile = path.join(baseFolder, category, 'mutual_funds_data.json');
         let fundsData = JSON.parse(fs.readFileSync(categoryFile, 'utf8'));
 
         // Filter funds if specific scheme codes are provided
@@ -288,7 +288,7 @@ async function processCategory(category, specificSchemeCodes = null) {
             // Save enhanced summary
             const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
             const summaryFile = path.join(
-                '../../downloads/moneycontrol', 
+                baseFolder, 
                 category, 
                 `holdings_summary_${specificSchemeCodes ? 'partial_' : ''}${timestamp}.json`
             );
@@ -322,8 +322,8 @@ async function main() {
     
     if (args.length === 0) {
         // No arguments: process all categories
-        const categories = fs.readdirSync('../../downloads/moneycontrol')
-            .filter(dir => fs.statSync(path.join('../../downloads/moneycontrol', dir)).isDirectory());
+        const categories = fs.readdirSync(baseFolder)
+            .filter(dir => fs.statSync(path.join(baseFolder, dir)).isDirectory());
         console.log(`Processing all funds in categories: ${categories.join(', ')}`);
         
         for (const category of categories) {

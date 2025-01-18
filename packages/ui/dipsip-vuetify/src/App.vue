@@ -32,10 +32,6 @@
         </router-view>
       </v-container>
 
-      <!-- Disclaimer Section -->
-      <v-container fluid class="disclaimer-section py-4 bg-grey-lighten-4">
-        
-      </v-container>
     </v-main>
 
     <!-- Footer -->
@@ -43,7 +39,7 @@
       <v-container fluid>
         <v-row justify="center">
           <!-- Footer Links -->
-          <v-col cols="12" sm="9" md="6">
+          <!--<v-col cols="12" sm="9" md="6">
             <v-row justify="center" class="text-center">
               <v-col cols="6" sm="3">
                 <router-link to="/privacy" class="text-white text-decoration-none">Privacy Policy</router-link>
@@ -53,12 +49,12 @@
               </v-col>
               <v-col cols="6" sm="3">
                 <router-link to="/contact" class="text-white text-decoration-none">Contact Us</router-link>
-              </v-col>
+              </v-col> 
             </v-row>
-          </v-col>
+          </v-col> -->
 
           <!-- Social Media Links -->
-          <v-col cols="12" class="text-center mt-4">
+          <!--<v-col cols="12" class="text-center mt-4">
             <v-btn
               v-for="icon in socialIcons"
               :key="icon.icon"
@@ -71,7 +67,7 @@
             >
               <v-icon>{{ icon.icon }}</v-icon>
             </v-btn>
-          </v-col>
+          </v-col> -->
 
           <!-- Copyright -->
           <v-col cols="12" class="text-center mt-4 text-white">

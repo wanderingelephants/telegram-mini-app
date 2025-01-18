@@ -3,7 +3,7 @@ const fs = require('fs');
 // Utility function for delays
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-const outputFolder = '../../downloads/moneycontrol'
+const outputFolder = process.env.DATA_ROOT_FOLDER
 // List of mutual fund categories to scrape
 const FUND_CATEGORIES = [
     /*
@@ -19,6 +19,17 @@ const FUND_CATEGORIES = [
     'value-fund',
     'flexi-cap-fund',
     */
+    /*'aggressive-hybrid-fund',
+    'conservative-hybrid-fund',
+    'arbitrage-fund',
+    'equity-savings',
+    'dynamic-asset-allocation-or-balanced-advantage',
+    'multi-asset-allocation'*/
+    /*'childrens-fund',
+    'retirement-fund',
+    'investment-cum-insurance'*/
+    'index-fundsetfs',
+    'fund-of-funds',
 ];
 
 async function setupPage(browser) {
@@ -187,8 +198,8 @@ async function getAllMutualFunds() {
         for (const category of FUND_CATEGORIES) {
             const categoryFunds = await scrapeCategoryPage(page, category);
             allFunds.push(...categoryFunds);
-            const outputFile = `outputFolder/${category}/mutual_funds_data.json`;
-            fs.mkdirSync(`outputFolder/${category}`);
+            const outputFile = `${outputFolder}/${category}/mutual_funds_data.json`;
+            fs.mkdirSync(`${outputFolder}/${category}`);
             fs.writeFileSync(outputFile, JSON.stringify(categoryFunds, null, 2));
             // Add longer delay between categories
             await delay(3000 + Math.random() * 2000); // Random delay 3-5 seconds
