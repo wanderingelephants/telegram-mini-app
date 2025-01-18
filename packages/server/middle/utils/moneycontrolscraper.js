@@ -61,7 +61,9 @@ async function setupPage(browser) {
 }
 
 async function scrapeCategoryPage(page, category) {
-    const url = `https://www.moneycontrol.com/mutual-funds/performance-tracker/returns/${category}.html`;
+    let url = `https://www.moneycontrol.com/mutual-funds/performance-tracker/returns/${category}.html`;
+    if ('index-fundsetfs' === category)
+        url = `https://www.moneycontrol.com/mutual-funds/performance-tracker/portfolioassets/${category}.html`;
     console.log(`Scraping category: ${category}`);
     
     try {
@@ -199,7 +201,7 @@ async function getAllMutualFunds() {
             const categoryFunds = await scrapeCategoryPage(page, category);
             allFunds.push(...categoryFunds);
             const outputFile = `${outputFolder}/${category}/mutual_funds_data.json`;
-            fs.mkdirSync(`${outputFolder}/${category}`);
+            if (!fs.existsSync(`${outputFolder}/${category}`)) fs.mkdirSync(`${outputFolder}/${category}`);
             fs.writeFileSync(outputFile, JSON.stringify(categoryFunds, null, 2));
             // Add longer delay between categories
             await delay(3000 + Math.random() * 2000); // Random delay 3-5 seconds

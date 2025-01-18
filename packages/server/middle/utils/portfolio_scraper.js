@@ -265,6 +265,10 @@ async function processCategory(category, specificSchemeCodes = null) {
             for (const fund of fundsToProcess) {
                 console.log(`Processing fund: ${fund.name} (${fund.schemeCode})`);
                 try {
+                    if (fund.url.endsWith(".html")) {
+                        console.log("Skipping", fund.name, fund.url)
+                        continue;
+                    }
                     const result = await scrapePortfolioHoldings(page, fund, category);
                     if (result) {
                         results.success.push(result);

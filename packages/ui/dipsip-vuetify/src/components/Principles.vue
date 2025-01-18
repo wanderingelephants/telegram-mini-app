@@ -32,7 +32,7 @@ import WarrenBuffetIcon from './icons/IconWarrenBuffet.vue'
     </template>
     <template #heading>Cost</template>
     Mutual Funds and PMS can charge between 1.5 to 2 % of corpus. Which means, for corpus of say 25 Lakhs, you may pay every year around 50,000.
-    The fee for an ETF like Nifty Bank is only ~0.15 %. Besides cost, there is bigger risk of Mutual Fund underperformance (which is much more common than people think.
+    The fee for an ETF like Nifty Bank is only ~0.15 %. Besides cost, there is bigger risk of cyclical Mutual Fund underperformance (which is much more common than people think.
     <a href="https://economictimes.indiatimes.com/mf/analysis/63-equity-mutual-funds-fail-to-beat-benchmarks-in-3-years/articleshow/112729472.cms" target="_blank">Reference</a>) 
   </WelcomeItem>
 

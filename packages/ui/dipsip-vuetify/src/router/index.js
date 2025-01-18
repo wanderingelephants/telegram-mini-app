@@ -6,7 +6,7 @@ import ContactUs from '@/views/ContactUs.vue'
 import AboutUs from '@/views/AboutUs.vue'
 
 import RiskProfile from '@/views/RiskProfile.vue'
-import TheWelcome from '../components/TheWelcome'
+import Principles from '../components/Principles'
 import ChatApp from '@/views/ChatApp'
 import SettingsPage from '@/views/SettingsPage.vue'
 import DipSip from '@/views/DipSip.vue'
@@ -24,7 +24,7 @@ const routes = [
   {
     path: '/principles',
     name: 'Principles',
-    component: TheWelcome
+    component: Principles
   },
   {
     path: '/settings',

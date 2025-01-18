@@ -68,12 +68,12 @@
             <v-row>
               <v-col cols="12">
                 <div class="mb-6">
-                  <h3 class="text-h6 mb-2">Risk Profile: {{ riskProfile.title }}</h3>
+                  <h3 class="text-h6 mb-2">Risk Score: {{ riskProfile.title }}</h3>
                   <p class="mb-4">{{ riskProfile.description }}</p>
                   <v-progress-linear
                     :model-value="riskScore"
                     height="20"
-                    color="primary"
+                    color="amber"
                     rounded
                   >
                     <template v-slot:default="{ value }">

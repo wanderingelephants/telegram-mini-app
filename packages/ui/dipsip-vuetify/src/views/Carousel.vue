@@ -134,6 +134,12 @@ const cards = ref([
     subtitle: "Volatility is a Feature, Not a Bug",
     description: "Automate to buy the dips, to maximize returns. Try <a href='/dipsip'>DipSip</a>.",
     hasHtml: true
+  },
+  {
+    title: "Mutual Funds",
+    subtitle: "Portfolio Cleanup",
+    description: "Clean up the Portfolio Garbage, for Efficiency. <a href='/mutualfunds'>Mutual Fund Overlaps</a>.",
+    hasHtml: true
   }
 ])
 </script>
