@@ -136,6 +136,7 @@ So, whenever there is a dip, go ahead and buy.
       
       for (const line of lines) {
         try {
+          console.log('line', line)
           const json = JSON.parse(line);
           res.write(`data: ${JSON.stringify(json)}\n\n`);
           if (json.done) {
@@ -144,15 +145,21 @@ So, whenever there is a dip, go ahead and buy.
           }
         } catch (e) {
           console.error('Error parsing JSON:', e);
-          res.end();
-          return;
+          if (line.indexOf('"done":true') > -1)
+          {
+            let json = {"response": "", "done":  true}
+            res.write(`data: ${JSON.stringify(json)}\n\n`);
+            res.end();
+          }
+          //res.end();
+          //return;
         }
       }
     }
 
   } catch (error) {
     console.error('Error:', error);
-    res.write(`data: ${JSON.stringify({ error: 'Stream error' })}\n\n`);
+    res.write(`data: ${JSON.stringify({ error: 'error' })}\n\n`);
     res.end();
   }
 }

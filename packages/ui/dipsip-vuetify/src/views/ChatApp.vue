@@ -72,9 +72,9 @@
         <v-card class="fill-height d-flex flex-column ma-2">
           <!-- Chat Header -->
           <v-card-title class="primary white--text">
-            <v-icon left color="white">mdi-chat</v-icon>
-            Your Assistant
+            Your Assistant (Learn about Investing)
           </v-card-title>
+          <v-card-subtitle>You can also query for MF details e.g. "Which funds have holdings in stock Reliance"</v-card-subtitle>
 
           <!-- Messages Area -->
           <v-card-text class="flex-grow-1 overflow-y-auto" ref="messagesContainer">
