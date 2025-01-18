@@ -106,7 +106,8 @@ const menuItems = [
   { title: 'Risk  Profile', path: '/riskProfile' },
   { title: 'Mutual Funds', path: '/mutualfunds' },
   { title: 'ETFs', path: '/etfList' },
-  { title: 'Stocks', path: '/stocks' }
+  { title: 'Stocks', path: '/stocks' },
+  { title: 'Pricing', path: '/pricing' }
 ]
 
 const socialIcons = [

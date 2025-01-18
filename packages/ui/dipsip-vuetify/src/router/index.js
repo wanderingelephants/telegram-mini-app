@@ -12,6 +12,7 @@ import SettingsPage from '@/views/SettingsPage.vue'
 import DipSip from '@/views/DipSip.vue'
 import Postman from '@/views/Postman.vue'
 import Stocks from '@/views/Stocks.vue'
+import Pricing from '@/views/Pricing.vue'
 import KiteConnectApp from '../components/KiteConnectApp'
 
 const routes = [
@@ -44,6 +45,11 @@ const routes = [
     path: '/mutualfunds',
     name: 'MutualFunds',
     component: ChatApp
+  },
+  {
+    path: '/pricing',
+    name: 'Pricing',
+    component: Pricing
   },
   {
     path: '/riskProfile',
