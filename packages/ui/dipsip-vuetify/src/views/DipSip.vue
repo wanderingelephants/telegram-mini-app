@@ -268,7 +268,7 @@
         </v-col>
       </v-row>
       <v-row no-gutters class="mt-2">
-        <v-col v-if="loggedIn == true" >
+        <v-col v-if="loggedInTG == true" >
           <button
             @click="saveConfig"
             class="v-btn v-theme--light text-primary v-btn--density-default v-btn--size-default v-btn--variant-outlined"
@@ -276,7 +276,7 @@
             Save
           </button>
         </v-col>
-        <v-col v-if="loggedIn == true" >
+        <v-col v-if="loggedInTG == true" >
           <button
             @click="deleteConfig"
             class="v-btn v-theme--light text-primary v-btn--density-default v-btn--size-default v-btn--variant-outlined"
@@ -285,10 +285,7 @@
           </button>
         </v-col>
         
-        <v-col v-if="loggedIn == false" >
-          <google-sign-in/>
-          <v-card-text>Login with Telegram, to Save and Subscribe</v-card-text>
-        </v-col>
+       
         <!--<v-col cols="8">
           Expiry
           {{
@@ -304,7 +301,7 @@
         <!--<v-col cols="6">
           <h2 class="green">Smart ETF SIPs</h2>
         </v-col> -->
-        <v-col cols="12" v-if="loggedIn == false">
+        <v-col cols="12" v-if="loggedInTG == false">
           <v-tooltip
             v-model="showTooltip_tg"
             location="top"
@@ -325,7 +322,7 @@
             <span >{{ tooltip_tg }}</span>
           </v-tooltip>
         </v-col>
-        <v-col cols="6" v-if="loggedIn == true">
+        <v-col cols="6" v-if="loggedInTG == true">
           <div><b>Welcome {{user.username}}</b></div>
         </v-col> 
       </v-row>
@@ -462,23 +459,22 @@ if (import.meta.env.MODE == 'development') botName = 'Dev_DipSip_bot'
 import { mapState } from "vuex";
 import api from "./api";
 import TelegramLogin from "../components/TelegramLogin.vue";
-import GoogleSignIn from '../components/GoogleSignIn'
 import axios from "axios";
 import market_data from "./indices.json";
 export default {
   components: {
-    TelegramLogin,  GoogleSignIn
+    TelegramLogin
   },
   computed: mapState([
     // map this.count to store.state.count
-    "loggedIn",
-    "user",
+    "loggedInTG",
+    "userTG",
   ]),
   methods: {
-    async handleTelegramAuth(user) {
+    async handleTelegramAuth(userTG) {
       try {
         const response = await axios.get("/api/telegram/auth", {
-          params: user,
+          params: userTG,
         });
         const { token, userRecord, configRecord } = response.data;
         this.accountExpiry = new Date(userRecord.expiry_date);
@@ -508,8 +504,8 @@ export default {
         // Store the JWT in localStorage or a secure cookie
         localStorage.setItem("jwt", token);
         // You might want to update your app's state here
-        this.$store.commit("setLoggedIn", true);
-        this.$store.commit("setUser", user);
+        this.$store.commit("setloggedInTG", true);
+        this.$store.commit("setUserTG", userTG);
       } catch (error) {
         console.error("Authentication failed:", error);
       }
@@ -633,7 +629,7 @@ export default {
       //console.log(this.etfSelected);
       try {
         const resp = await api.post("/api/db/saveconfig", {
-          tg_id: this.$store.state.user.id,
+          tg_id: this.$store.state.userTG.id,
           unsubscribe: true
         });
         if (resp.status == 200) {
@@ -655,8 +651,8 @@ export default {
       this.showSaveConfigDialog = false;
       try {
         const resp = await api.post("/api/db/saveconfig", {
-          tg_id: this.$store.state.user.id,
-          tg_username: this.$store.state.user.username,
+          tg_id: this.$store.state.userTG.id,
+          tg_username: this.$store.state.userTG.username,
           trigger: this.trigger,
           base_amt: this.base_amt,
           buy_factor: this.buy_factor,

@@ -5,7 +5,7 @@ const api = axios.create({
 })
 
 api.interceptors.request.use(config => {
-  const token = localStorage.getItem('jwt')
+  const token = localStorage.getItem('jwtGoogle')
   if (token) {
     config.headers['Authorization'] = `Bearer ${token}`
   }

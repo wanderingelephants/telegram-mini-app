@@ -9,7 +9,7 @@
         <!-- Pricing Section -->
         <div class="pricing-section mb-6">
           <div class="text-decoration-line-through text-grey">
-            <span class="text-h5">₹499</span>/month
+            <span class="text-h5">₹599</span>/month
           </div>
           <div class="text-h3 primary--text font-weight-bold">
             ₹299<span class="text-h5">/month</span>
@@ -51,6 +51,7 @@
           color="primary"
           rounded
           @click="subscribe"
+          v-if="false"
         >
           Subscribe Now
         </v-btn>
@@ -65,8 +66,8 @@ export default {
   data() {
     return {
       features: [
-        'Most Comprehensive Mutual Fund Analysis',
-        'Daily DipSIP alerts',
+        'Smart Mutual Fund Analysis',
+        'DipSIP alerts',
         'Quarterly Portfolio Health Check-up',
         'Yearly rebalancing recommendations, based on Risk Profile',
         'Research on REITs, InvITs, Crypto',

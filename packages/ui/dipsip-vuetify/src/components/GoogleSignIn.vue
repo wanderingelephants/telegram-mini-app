@@ -1,18 +1,25 @@
 <template>
+<div v-show="loggedInGoogle !== true">
   <v-btn @click="signInWithGoogle" color="primary">
     Sign in with Google
   </v-btn>
+  <v-card-subtitle>Better Analytics with Sign-in</v-card-subtitle>
+</div>
 </template>
 
-<script setup>
+<script>
+import { mapState } from "vuex";
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from '@/plugins/firebase';
-import { ref } from 'vue';
 
-const user = ref(null);
-
-const signInWithGoogle = async () => {
-  try {
+export default {
+  computed: mapState([
+    "loggedInGoogle",
+    "userGoogle",
+  ]),
+  methods: {
+    async signInWithGoogle(){
+      try {
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(auth, provider);
     const idToken = await result.user.getIdToken();
@@ -25,14 +32,16 @@ const signInWithGoogle = async () => {
       },
       body: JSON.stringify({ idToken }),
     });
-    
+    localStorage.setItem("jwtGoogle", idToken);
     if (response.ok) {
-      user.value = result.user;
-      console.log('Login success', user.value)
-      // Handle successful sign-in
+        this.$store.commit("setloggedInGoogle", true);
+        this.$store.commit("setUserGoogle", result.user);
     }
   } catch (error) {
     console.error('Google sign-in error:', error);
   }
-};
+    }
+  }
+}
+
 </script>

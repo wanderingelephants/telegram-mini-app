@@ -61,6 +61,13 @@
               </v-card-text>
               <overlap-analysis :compare-data="compareData" v-if="compareData.overlaps"></overlap-analysis>
             </v-card>
+             <v-col>
+              <google-sign-in/>
+              </v-col>
+              <v-col v-if="loggedInGoogle === true" >
+              <google-sign-in/>
+              <v-card-text>Welcome {{userGoogle.displayName}}</v-card-text>
+              </v-col>
       </v-col>
       <v-col
             cols="12"
@@ -72,7 +79,7 @@
         <v-card class="fill-height d-flex flex-column ma-2">
           <!-- Chat Header -->
           <v-card-title class="primary white--text">
-            Your Assistant (Learn about Investing)
+            Your Assistant
           </v-card-title>
           <v-card-subtitle>You can also query for MF details e.g. "Which funds have holdings in stock Reliance"</v-card-subtitle>
 
@@ -122,7 +129,7 @@
           <v-card-actions class="pa-4">
             <v-text-field
               v-model="userInput"
-              label="Ask Questions in your language"
+              label="Get info about products like MFs, ETFs, REITs, InvITs. No Trading tips."
               :disabled="isLoading"
               variant="outlined"
                   density="comfortable"
@@ -157,7 +164,9 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 
+import GoogleSignIn from '../components/GoogleSignIn'
 import api from './api'
 import OverlapAnalysisVue from '../components/OverlapAnalysis.vue'
 export default {
@@ -173,12 +182,17 @@ export default {
       fundList: [],
       selectedFunds: [],
       portfolio: [],
-      compareData: {}
+      compareData: {},
     }
   },
   components:{
-    OverlapAnalysisVue
+    OverlapAnalysisVue, GoogleSignIn
   },
+  computed: mapState([
+    // map this.count to store.state.count
+    "loggedInGoogle",
+    "userGoogle",
+  ]),
   methods: {
     customFilter(item, queryText) {
       //console.log("customFilter", item, queryText)
@@ -370,7 +384,7 @@ export default {
   },
 
   async mounted() {
-	  console.log('mounted')
+	  console.log('mounted', this.loggedInGoogle, this.userGoogle)
     await this.fetchFundList()
     // Initial scroll to bottom
     //this.scrollToBottom();

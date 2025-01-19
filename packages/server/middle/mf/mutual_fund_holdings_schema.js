@@ -75,7 +75,7 @@ const createIndexes = `
 CREATE INDEX IF NOT EXISTS idx_holdings_scheme_code ON mutual_fund_holdings(scheme_code);
 CREATE INDEX IF NOT EXISTS idx_holdings_reporting_date ON mutual_fund_holdings(reporting_date);
 CREATE INDEX IF NOT EXISTS idx_holdings_stock ON mutual_fund_holdings(stock_name);
-CREATE UNIQUE INDEX IF NOT EXISTS idx_holdings_scheme_stock ON mutual_fund_holdings(scheme_code, stock_name);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_holdings_scheme_stock_reportingdate ON mutual_fund_holdings(scheme_code, stock_name, reporting_date);
 `;
 
 // Initialize tables and indexes

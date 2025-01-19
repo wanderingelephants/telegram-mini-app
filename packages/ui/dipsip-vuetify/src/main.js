@@ -15,23 +15,39 @@ import { createApp } from 'vue'
 import { createStore } from 'vuex'
 const store = createStore({
     state: {
-        user: {},
-        loggedIn: false
+        userTG: {},
+        loggedInTG: false,
+        userGoogle: {},
+        loggedInGoogle: false
     },
     mutations: {
-      setUser (state, user) {
-        state.user = user
+      setUserTG (state, userTG) {
+        state.userTG = userTG
       },
-      setLoggedIn(state, loggedIn){
-        state.loggedIn = loggedIn
+      setloggedInTG(state, loggedInTG){
+        state.loggedInTG = loggedInTG
+      },
+      setUserGoogle (state, userGoogle) {
+        state.userGoogle = userGoogle
+      },
+      setloggedInGoogle(state, loggedInGoogle){
+        console.log("vuexStore set userGoogle", loggedInGoogle)
+        state.loggedInGoogle = loggedInGoogle
       }
     },
     getters:{
-        user: function(state){
-            return state.user
+        userTG: function(state){
+            return state.userTG
         },
-        loggedIn: function(state){
-            return state.loggedIn
+        loggedInTG: function(state){
+            return state.loggedInTG
+        },
+        userGoogle: function(state){
+          console.log("vuexStore get userGoogle", state.userGoogle)
+          return state.userGoogle
+        },
+        loggedInGoogle: function(state){
+          return state.loggedInGoogle
         }
     }
 })

@@ -7,7 +7,7 @@ import AboutUs from '@/views/AboutUs.vue'
 
 import RiskProfile from '@/views/RiskProfile.vue'
 import Principles from '../components/Principles'
-import ChatApp from '@/views/ChatApp'
+import MutualFund from '@/views/MutualFund.vue'
 import SettingsPage from '@/views/SettingsPage.vue'
 import DipSip from '@/views/DipSip.vue'
 import Postman from '@/views/Postman.vue'
@@ -44,7 +44,7 @@ const routes = [
   {
     path: '/mutualfunds',
     name: 'MutualFunds',
-    component: ChatApp
+    component: MutualFund
   },
   {
     path: '/pricing',

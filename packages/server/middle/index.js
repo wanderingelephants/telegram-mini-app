@@ -75,13 +75,13 @@ app.post('/api/auth/google', async (req, res) => {
 
     // Generate session token or use Firebase token
     res.json({ 
-      token: idToken,
-      user: {
+      tokenGoogle: idToken,
+      userGoogle: {
         email: decodedToken.email,
         name: decodedToken.name,
         picture: decodedToken.picture
       }
-    });
+    }).status(200);
   } catch (error) {
     console.error('Authentication error:', error);
     res.status(401).json({ error: 'Authentication failed' });
