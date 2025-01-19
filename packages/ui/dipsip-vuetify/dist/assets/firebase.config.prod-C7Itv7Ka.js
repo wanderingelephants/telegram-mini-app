@@ -1,1 +1,0 @@
-const o="AIzaSyB0V1DLL_ry9pMKxvV_hHQje09J7-2KMQo",p="productiondipsip.firebaseapp.com",e="productionDipSip",t="764195462908-1ikt9j2sprusmseeiov5sn7k1pb1dj37.apps.googleusercontent.com",i={apiKey:o,authDomain:p,projectId:e,clientId:t};export{o as apiKey,p as authDomain,t as clientId,i as default,e as projectId};
