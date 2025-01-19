@@ -31,6 +31,7 @@ services:
       - OLLAMA_URL=http://ollama:11434
     volumes:
       - ./.env:/.env
+      - ${CONFIG:-/home/ec2-user/data/config}:/app/data/config
       - ${DOWNLOADS:-/home/ec2-user/data/downloads}:/app/downloads    
       - ${SQLITE_DB:-/home/ec2-user/data/sqlite_db}:/app/sqlite_db  
       - ${NSE_ANNOUNCEMENTS_DOWNLOAD:-/home/ec2-user/data/nse_announcements/pdf}:/app/downloads/nse_announcements/pdf
