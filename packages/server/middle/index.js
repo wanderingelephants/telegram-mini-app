@@ -16,9 +16,11 @@ cron.schedule('0 12 * * 1-5', async () => {
   await processor.process()
 }, {timezone: "Asia/Kolkata"});
 
-const serviceAccount = process.env.NODE_ENV === 'production'
+/*const serviceAccount = process.env.NODE_ENV === 'production'
   ? require('./config/firebase-admin-prod.json')
-  : require('./config/dipsip2025-firebase-admin-dev.json');
+  : require('./config/dipsip2025-firebase-admin-dev.json');*/
+  const config = process.env.CONFIG
+  const serviceAccount = require(`${config}/firebase-admin.json`)
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
