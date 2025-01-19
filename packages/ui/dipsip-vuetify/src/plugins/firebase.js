@@ -1,7 +1,7 @@
 // src/plugins/firebase.js
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-//import firebaseConfig from '../config/firebase.config.dev.json'
+console.log(process.env.NODE_ENV)
 const firebaseConfig = process.env.NODE_ENV === 'production' 
   ? import('../config/firebase.config.prod.json')
   : import('../config/firebase.config.dev.json');
