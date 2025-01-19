@@ -4,7 +4,7 @@ const TG_ADMIN_ID = process.env.TG_ADMIN_ID
 const etfList = require('./etfList.json')
 const Puppet = require('./puppet.js')
 
-const downloadPath = process.env.DOWNLOADS
+const downloadPath = process.env.DOWNLOADS + '/etf_quotes'
     
 class ProcessETFQuotes{
     constructor(baseUrl, urlSuffix, etfQuoteFileName){
@@ -30,12 +30,12 @@ class ProcessETFQuotes{
         return querystring
     }
     async process(){
+        if (!fs.existsSync(downloadPath)) fs.mkdirSync(downloadPath)
         console.log('ETF Processor', this.baseUrl, this.urlSuffix, downloadPath, this.etfQuoteFileName)
         if (this.baseUrl && this.baseUrl != null && this.baseUrl != ""){
             const puppet = new Puppet(this.baseUrl, this.urlSuffix, downloadPath, this.etfQuoteFileName)
             await puppet.downloadFile()
         }
-        
         
         const etfQuoteFile = downloadPath + '/' +  this.etfQuoteFileName
         console.log('etfQuoteFile', etfQuoteFile)
@@ -91,11 +91,7 @@ class ProcessETFQuotes{
             await tgNotify.sendTelegramMessage(user.tg_id,  'DipSip Opporunities : ' + process.env.WEB_APP_HOST + 'trade' + querystring)    
         console.log("done loop")
         }
-        //console.log('deleting etf quotes file')
-        //fs.unlinkSync(etfQuoteFile)
-        //console.log("deleted file")
         console.log("processing done")
-        
     }
 }
 module.exports = ProcessETFQuotes
