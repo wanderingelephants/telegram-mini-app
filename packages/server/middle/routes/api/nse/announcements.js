@@ -1,5 +1,5 @@
 const Puppet = require('./puppet.js')
-const downloadFolder = process.env.DOWNLOADS
+const downloadFolder = process.env.NSE_ANNOUNCEMENTS_DOWNLOADS
 const axios = require('axios');
 const fs = require('fs');
 const { parse } = require('csv-parse');

@@ -33,7 +33,7 @@ services:
       - ./.env:/.env
       - ${DOWNLOADS:-/home/ec2-user/data/downloads}:/app/downloads    
       - ${SQLITE_DB:-/home/ec2-user/data/sqlite_db}:/app/sqlite_db  
-      - ${NSE_ANNOUNCEMENTS_DOWNLOAD:-/home/ec2-user/data/nse_announcements/pdf}:/app/downloads
+      - ${NSE_ANNOUNCEMENTS_DOWNLOAD:-/home/ec2-user/data/nse_announcements/pdf}:/app/downloads/nse_announcements/pdf
   pdf-to-text:
     build:
       context: ./server/pdf_to_text
