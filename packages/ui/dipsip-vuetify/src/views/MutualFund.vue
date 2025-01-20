@@ -79,7 +79,7 @@
         <v-card class="fill-height d-flex flex-column ma-2">
           <!-- Chat Header -->
           <v-card-title class="primary white--text">
-            Your Assistant
+            Your Assistant (Free version, slow performance)
           </v-card-title>
           <v-card-subtitle>You can also query for MF details e.g. "Which funds have holdings in stock Reliance"</v-card-subtitle>
 
@@ -312,27 +312,25 @@ export default {
     // Read the stream
     while (true) {
       const { done, value } = await reader.read();
-      console.log("while true", done, value)
+      console.log("while loop", done, value)
       if (done) break;
 
       // Decode the chunk and split into lines
       const chunk = decoder.decode(value);
       const lines = chunk.split('\n');
-
+      console.log('lines', lines)
       for (const line of lines) {
         if (line.startsWith('data: ')) {
           try {
+            console.log(line, line.slice(5))
             const data = JSON.parse(line.slice(5));
-
+             console.log(data) 
             if (data.error) {
               this.showError = true;
               this.errorMessage = data.error;
               break;
             }
 
-            if (data.done) {
-              break;
-            }
 
             currentResponse += data.response;
             // Update the UI with the streaming response
@@ -343,6 +341,10 @@ export default {
                 role: 'assistant',
                 content: currentResponse
               });
+            }
+
+            if (data.done) {
+              break;
             }
           } catch (e) {
             console.error('Error parsing JSON:', e);

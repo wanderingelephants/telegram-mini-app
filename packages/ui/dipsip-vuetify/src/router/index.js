@@ -12,6 +12,7 @@ import SettingsPage from '@/views/SettingsPage.vue'
 import DipSip from '@/views/DipSip.vue'
 import Postman from '@/views/Postman.vue'
 import Stocks from '@/views/Stocks.vue'
+import Prompt from '@/views/Prompt.vue'
 import Pricing from '@/views/Pricing.vue'
 import KiteConnectApp from '../components/KiteConnectApp'
 
@@ -30,6 +31,11 @@ const routes = [
     path: '/settings',
     name: 'Settings',
     component: SettingsPage
+  },
+  {
+    path: '/prompt',
+    name: 'Prompt',
+    component: Prompt
   },
   {
     path: '/dipsip',

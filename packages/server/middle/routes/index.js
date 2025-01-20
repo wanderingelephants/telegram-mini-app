@@ -33,8 +33,8 @@ const routes = {
             instruments: require('./api/nse/instruments')
         },
         ollama:{
-            chat: require('./api/ollama/chat'),
-            chatStream: require('./api/ollama/chatStream')
+            singleShotStream: require('./api/ollama/singleShotStream'),
+            prompt: require('./api/ollama/prompt'),
         },
         telegram:{
             auth: require('./api/telegram/auth')
@@ -44,8 +44,6 @@ const routes = {
     }
 };
 router.get('/api/telegram/auth', routes.api.telegram.auth)
-router.post('/api/chat', routes.api.ollama.chat)
-router.post('/api/chat/stream', routes.api.ollama.chatStream)
 router.get('/api/db/create', routes.api.db.create)
 router.post('/api/db/import', routes.api.db.import)
 router.get('/api/db/getuser', routes.api.db.getuser)
@@ -56,11 +54,12 @@ router.get('/api/kite/login/success', routes.api.kite.login.success)
 router.get('/api/kite/instrument/quote', routes.api.kite.instrument.quote)
 router.post ('/api/mutualfunds/compare', routes.api.mutualfunds.compare)
 router.get('/api/mutualfunds/list', routes.api.mutualfunds.list)
-router.post('/api/mutualfunds/chatStream', routes.api.ollama.chatStream)
+router.post('/api/mutualfunds/chatStream', routes.api.ollama.singleShotStream)
 router.post('/api/nse/receive', routes.api.nse.receive)
 router.post('/api/nse/announcements', routes.api.nse.announcements)
 router.get('/api/nse/process', routes.api.nse.process)
 router.get('/api/nse/instruments', routes.api.nse.instruments)
+router.post('/api/ollama/prompt', routes.api.ollama.prompt)
 
 
 module.exports = router

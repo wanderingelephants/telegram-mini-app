@@ -35,7 +35,7 @@
     </v-main>
 
     <!-- Footer -->
-    <v-footer class="bg-grey-darken-4">
+    <v-footer class="bg-grey-darken-4" v-if="false">
       <v-container fluid>
         <v-row justify="center">
           <!-- Footer Links -->
