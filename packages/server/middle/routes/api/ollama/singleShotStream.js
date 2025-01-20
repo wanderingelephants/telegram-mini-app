@@ -19,7 +19,7 @@ const route = async (req, res) => {
             const response = await sendPrompt(model, "mutual_funds_prompt.txt", userQuery)
             obj = JSON.parse(response);
             let json
-            if (obj.SQL_Can_Answer === "YES") {
+            if (obj && obj.SQL_Can_Answer === "YES") {
                 let sqlQuery = obj.SQL
                 sqlQuery = sqlQuery.replaceAll("```sql", "")
                 sqlQuery = sqlQuery.replaceAll("```", "")
@@ -61,7 +61,8 @@ const route = async (req, res) => {
                 return;
                 //json = {"response": obj.SQL, "done": true}
             }
-            else json = { "response": obj.General_Answer, "done": true }
+            else if (obj && obj.General_Answer) json = { "response": obj.General_Answer, "done": true }
+            else json = { "response": "Sorry, No Response", "done": true }
             console.log("json sending", json)
             res.write(`data: ${JSON.stringify(json)}\n\n`);
             res.end();
