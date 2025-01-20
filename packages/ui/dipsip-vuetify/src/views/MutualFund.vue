@@ -8,6 +8,12 @@
             order-md="first"
             class="fill-height"
           >
+          <v-col>
+              <google-sign-in/>
+              </v-col>
+              <v-col v-if="loggedInGoogle === true" >
+              <v-card-text>Welcome {{userGoogle.displayName}}</v-card-text>
+              </v-col>
             <v-card class="ma-2">
               <v-card-title>Mutual Fund Overlap Analysis</v-card-title>
               <v-card-subtitle class="text-subtitle-2">
@@ -57,17 +63,11 @@
                     </v-chip>
                   </template>
                 </v-autocomplete>
-                <v-btn v-if="selectedFunds.length > 1" @click="sendCompare(selectedFunds)">Compare</v-btn>
+                <v-btn v-if="selectedFunds.length > 1" @click="sendCompare(selectedFunds)" color="amber">Compare</v-btn>
               </v-card-text>
               <overlap-analysis :compare-data="compareData" v-if="compareData.overlaps"></overlap-analysis>
             </v-card>
-             <v-col>
-              <google-sign-in/>
-              </v-col>
-              <v-col v-if="loggedInGoogle === true" >
-              <google-sign-in/>
-              <v-card-text>Welcome {{userGoogle.displayName}}</v-card-text>
-              </v-col>
+             
       </v-col>
       <v-col
             cols="12"
