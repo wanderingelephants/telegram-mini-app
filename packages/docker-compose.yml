@@ -50,12 +50,12 @@ services:
       - PORT=3500
       - HOST=0.0.0.0
     restart: unless-stopped
-  ollama:
-    image: ollama/ollama
-    ports:
-      - "11434:11434"
-    volumes:
-      - ${OLLAMA_MODELS:-/home/ec2-user/data/ollama/ollama_models}:/root/.ollama/models
+  #ollama:
+  #  image: ollama/ollama
+  #  ports:
+  #    - "11434:11434"
+  #  volumes:
+  #    - ${OLLAMA_MODELS:-/home/ec2-user/data/ollama/ollama_models}:/root/.ollama/models
   sqlite-web:
     image: coleifer/sqlite-web
     ports:
