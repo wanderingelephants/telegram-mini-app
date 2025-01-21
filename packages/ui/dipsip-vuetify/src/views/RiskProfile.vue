@@ -68,18 +68,16 @@
             <v-row>
               <v-col cols="12">
                 <div class="mb-6">
-                  <h3 class="text-h6 mb-2">Risk Score: {{ riskProfile.title }}</h3>
-                  <p class="mb-4">{{ riskProfile.description }}</p>
-                  <v-progress-linear
-                    :model-value="riskScore"
-                    height="20"
-                    color="amber"
-                    rounded
-                  >
-                    <template v-slot:default="{ value }">
-                      <strong>{{ Math.ceil(value) }}%</strong>
-                    </template>
-                  </v-progress-linear>
+                  <!--<h3 class="text-h6 mb-2">Risk Score: {{ riskProfile.title }}</h3>
+                  <p class="mb-4">{{ riskProfile.description }}</p> -->
+                  <div class="mb-6">
+    <h3 class="text-h6 mb-2">Risk Profile: {{ riskProfile.title }}</h3>
+    <p class="mb-4">{{ riskProfile.description }}</p>
+    <RiskRadarChart 
+      :category-scores="categoryScores"
+      class="mt-4"
+    />
+  </div>
                 </div>
 
                 <!-- Recommendations Section -->
@@ -140,6 +138,11 @@
   flex-direction: column;
   gap: 8px;
 }
+.risk-radar-chart {
+  position: relative;
+  min-height: 400px;
+  width: 100%;
+}
 
 .option-button {
   white-space: normal !important;
@@ -168,7 +171,46 @@
 </style>
 
 <script setup>
+import VueApexCharts from "vue3-apexcharts";
+import RiskRadarChart from '../components/RiskRadarChart.vue'; 
 import { ref, computed } from 'vue'
+
+components: {
+  apexcharts: VueApexCharts,
+  RiskRadarChart
+}
+// Add this to your existing script setup section
+const categoryScores = computed(() => {
+  const scores = new Map();
+  const counts = new Map();
+  
+  // Initialize maps for all sections
+  sections.forEach(section => {
+    scores.set(section.title, 0);
+    counts.set(section.title, 0);
+  });
+
+  // Calculate scores for each section
+  Object.entries(answers.value).forEach(([questionId, answer]) => {
+    for (const section of sections) {
+      const question = section.questions.find(q => q.id === questionId);
+      if (question && answer.risk_score) {
+        const currentScore = scores.get(section.title) || 0;
+        const currentCount = counts.get(section.title) || 0;
+        
+        scores.set(section.title, currentScore + ((answer.risk_score / 4) * 100));
+        counts.set(section.title, currentCount + 1);
+        break;
+      }
+    }
+  });
+
+  // Calculate averages and format for the chart
+  return Array.from(scores.entries()).map(([category, score]) => ({
+    category,
+    score: counts.get(category) ? Math.round(score / counts.get(category)) : 0
+  }));
+});
 
 const sections = [
   {
@@ -367,7 +409,7 @@ const sections = [
       }
     ]
   },
-  {
+  /*{
     id: 'market_cap_preferences',
     title: 'Market Capitalization Preferences',
     questions: [
@@ -414,7 +456,7 @@ const sections = [
         ]
       }
     ]
-  },
+  },*/
   {
     id: 'risk_assessment',
     title: 'Risk Assessment',

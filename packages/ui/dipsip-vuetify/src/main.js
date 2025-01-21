@@ -9,10 +9,13 @@ import { registerPlugins } from '@/plugins'
 
 // Components
 import App from './App.vue'
+import Vue3ApexCharts from "vue3-apexcharts";
 
 // Composables
 import { createApp } from 'vue'
 import { createStore } from 'vuex'
+
+
 const store = createStore({
     state: {
         userTG: {},
@@ -54,6 +57,8 @@ const store = createStore({
 
 
 const app = createApp(App)
+app.component('apexcharts', Vue3ApexCharts)
+
 app.use(store)
 
 registerPlugins(app)
