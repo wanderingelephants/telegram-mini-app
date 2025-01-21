@@ -8,8 +8,8 @@ source .env
 CMD="docker-compose -f docker-compose.local.yml"
 
 if [ "$ENVIRONMENT" = "production" ]; then
-    CMD="$CMD -f docker-compose.yml"
+    CMD="docker-compose -f docker-compose.yml"
 fi
-
+echo $CMD
 # Start the services
-$CMD up -d
+$CMD up -d --build

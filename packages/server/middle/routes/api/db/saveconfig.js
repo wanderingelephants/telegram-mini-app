@@ -9,7 +9,7 @@ function persistConfig(req){
         db.pragma('journal_mode = WAL')
 
         const {tg_id, tg_username, trigger, base_amt, buy_factor, instrument, unsubscribe} = req.body
-        console.log('unsubcribe', {tg_id, tg_username, trigger, base_amt, buy_factor, instrument, unsubscribe})
+        console.log('persistConfig', {tg_id, tg_username, trigger, base_amt, buy_factor, instrument, unsubscribe})
         console.log('select id from user_profile where tg_id=' + tg_id)
         const user_pk_records = db.prepare('select id from user_profile where tg_id=' + tg_id).all()
         const user_pk = user_pk_records[0].id
@@ -36,7 +36,7 @@ const route = async (req, res) => {
     try {
         const authHeader = req.headers['authorization'];
         const token = authHeader && authHeader.split(' ')[1]; 
-       
+       console.log('saveconfig token', token)
         jwt.verify(token, JWT_SECRET, (err, user) => {
             if (err) return res.sendStatus(403); 
             req.user = user;

@@ -43,7 +43,7 @@ const routes = {
         
     }
 };
-router.get('/api/telegram/auth', routes.api.telegram.auth)
+router.post('/api/telegram/auth', routes.api.telegram.auth)
 router.get('/api/db/create', routes.api.db.create)
 router.post('/api/db/import', routes.api.db.import)
 router.get('/api/db/getuser', routes.api.db.getuser)

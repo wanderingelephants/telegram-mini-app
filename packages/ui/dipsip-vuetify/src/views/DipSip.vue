@@ -298,10 +298,10 @@
         </v-col> -->
       </v-row>
       <v-row no-gutters>
-        <!--<v-col cols="6">
-          <h2 class="green">Smart ETF SIPs</h2>
-        </v-col> -->
-        <v-col cols="12" v-if="loggedInTG == false">
+       <v-col cols="6">
+              <google-sign-in/>
+              </v-col>
+        <v-col cols="6" v-if="loggedInGoogle == true && loggedInTG == false">
           <v-tooltip
             v-model="showTooltip_tg"
             location="top"
@@ -323,7 +323,7 @@
           </v-tooltip>
         </v-col>
         <v-col cols="6" v-if="loggedInTG == true">
-          <div><b>Welcome {{user.username}}</b></div>
+          <div><b>Welcome {{userTG.username}}</b></div>
         </v-col> 
       </v-row>
 
@@ -469,16 +469,23 @@ export default {
     // map this.count to store.state.count
     "loggedInTG",
     "userTG",
+    "loggedInGoogle",
+    "userGoogle",
   ]),
   methods: {
     async handleTelegramAuth(userTG) {
       try {
-        const response = await axios.get("/api/telegram/auth", {
+        console.log("POST", userTG, this.userGoogle, this.loggedInGoogle)
+        /*const response = await axios.get("/api/telegram/auth", {
           params: userTG,
-        });
+        });*/
+        const response = await api.post("/api/telegram/auth", {
+          "userTG": userTG,
+          "userGoogle": this.userGoogle
+        })
         const { token, userRecord, configRecord } = response.data;
+        console.log("token", token)
         this.accountExpiry = new Date(userRecord.expiry_date);
-        console.log("handleTelegramAuth config", configRecord);
         if (configRecord) {
           if (configRecord.base_amt) {
             this.base_amt = configRecord.base_amt;
@@ -650,14 +657,21 @@ export default {
     async saveConfigApi() {
       this.showSaveConfigDialog = false;
       try {
-        const resp = await api.post("/api/db/saveconfig", {
-          tg_id: this.$store.state.userTG.id,
-          tg_username: this.$store.state.userTG.username,
+        const token = localStorage.getItem('jwt')
+        console.log("token", token)
+        const resp = await axios.post("/api/db/saveconfig", 
+        {
+          tg_id: this.userTG.id,
+          tg_username: this.userTG.username,
           trigger: this.trigger,
           base_amt: this.base_amt,
           buy_factor: this.buy_factor,
-          instrument: this.etfSelected.map((e) => e.value).join(", "),
-        });
+          instrument: this.etfSelected.map((e) => e.value).join(", ")
+        },{
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }});
         if (resp.status == 200) {
           this.snackbar.show = true;
           this.snackbar.message = "Params Saved";

@@ -19,7 +19,7 @@ services:
     environment:
       - NODE_ENV=production
     volumes:
-      - ./sqlite_db:/app/sqlite_db  
+      - ${SQLITE_DB:-/Users/sachetsingh1/telegram-mini-app/packages/data/sqlite_db}:/app/data/sqlite_db  
       - ./server/middle/docker.env:/app/.env
       - ./server/downloads:/app/downloads
   sqlite-web:

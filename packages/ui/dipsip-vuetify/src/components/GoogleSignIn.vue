@@ -3,7 +3,7 @@
   <v-btn @click="signInWithGoogle" color="primary">
     Sign in with Google
   </v-btn>
-  <v-card-subtitle>Better Analytics with Sign-in</v-card-subtitle>
+  <v-card-subtitle v-if="false">Better Analytics with Sign-in</v-card-subtitle>
 </div>
 </template>
 

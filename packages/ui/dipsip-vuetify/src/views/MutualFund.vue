@@ -15,7 +15,7 @@
               <v-card-text>Welcome {{userGoogle.displayName}}</v-card-text>
               </v-col>
             <v-card class="ma-2">
-              <v-card-title>Mutual Fund Overlap Analysis</v-card-title>
+              <v-card-title>Mutual Fund Overlap Analysis (Select 2 or more)</v-card-title>
               <v-card-subtitle class="text-subtitle-2">
                 Reduce Overlap, for Cleaner and Efficient Portfolio.
               </v-card-subtitle>
