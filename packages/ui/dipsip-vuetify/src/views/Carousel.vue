@@ -189,10 +189,10 @@ const cards = ref([
 }
 
 /* Hide navigation buttons */
-:deep(.v-window__left),
+/*:deep(.v-window__left),
 :deep(.v-window__right) {
   display: none !important;
-}
+}*/
 .wealth-carousel :deep(.v-carousel__controls) {
   top: 0;
   bottom: unset;

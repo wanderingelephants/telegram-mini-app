@@ -8,23 +8,71 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { mapState, useStore } from "vuex";
+import { GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from 'firebase/auth';
 import { initializeFirebase } from '@/plugins/firebase';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 
 export default {
   setup() {
+    const store = useStore(); 
     const isInitialized = ref(false);
     const authInstance = ref(null);
+    let unsubscribeAuth = null;
 
     onMounted(async () => {
       try {
         const { auth } = await initializeFirebase();
         authInstance.value = auth;
         isInitialized.value = true;
+
+        // Set up auth state listener
+        unsubscribeAuth = onAuthStateChanged(auth, async (user) => {
+          if (user) {
+            // User is signed in
+            const idToken = await user.getIdToken();
+            localStorage.setItem("jwtGoogle", idToken);
+            store.commit("setloggedInGoogle", true);
+            store.commit("setUserGoogle", user);
+          } else {
+            // User is signed out
+            localStorage.removeItem("jwtGoogle");
+            store.commit("setloggedInGoogle", false);
+            store.commit("setUserGoogle", null);
+          }
+        });
+
+        // Check for existing token and validate it
+        const existingToken = localStorage.getItem("jwtGoogle");
+        if (existingToken) {
+          try {
+            // Verify token with your backend
+            const response = await fetch('/api/auth/google', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ idToken: existingToken }),
+            });
+            
+            if (!response.ok) {
+              // Token invalid - clear storage
+              localStorage.removeItem("jwtGoogle");
+              this.$store.commit("setloggedInGoogle", false);
+            }
+          } catch (error) {
+            console.error('Token verification error:', error);
+          }
+        }
       } catch (error) {
         console.error('Failed to initialize Firebase:', error);
+      }
+    });
+
+    onUnmounted(() => {
+      // Clean up auth listener
+      if (unsubscribeAuth) {
+        unsubscribeAuth();
       }
     });
 
