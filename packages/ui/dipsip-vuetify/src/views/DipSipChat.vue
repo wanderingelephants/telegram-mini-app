@@ -10,7 +10,7 @@
         class="fill-height"
       >
         <v-card class="fill-height d-flex flex-column ma-2">
-          <v-card-title  class="text-wrap">Regret Buying on Rising Markets ?</v-card-title>
+          <v-card-title  class="text-wrap">Regret Buying on Highs ?</v-card-title>
           <v-card-subtitle
             >Try DipSIP. A proven contra strategy.</v-card-subtitle
           >
