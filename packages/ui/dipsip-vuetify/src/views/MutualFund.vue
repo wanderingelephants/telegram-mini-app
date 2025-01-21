@@ -382,11 +382,20 @@ export default {
         });
       },
       deep: true
-    }
+    },
+    '$store.state.loggedInGoogle': {
+    async handler(newValue) {
+      if (newValue === true) {
+        await this.fetchFundList();
+      }
+    },
+    immediate: true  // This will check the value when component is created
+  }
   },
 
   async mounted() {
 	  console.log('mounted', this.loggedInGoogle, this.userGoogle)
+    if  (this.loggedInGoogle == true)
     await this.fetchFundList()
     // Initial scroll to bottom
     //this.scrollToBottom();
