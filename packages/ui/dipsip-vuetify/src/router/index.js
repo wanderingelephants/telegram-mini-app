@@ -10,7 +10,7 @@ import Principles from '../components/Principles'
 import MutualFund from '@/views/MutualFund.vue'
 import SettingsPage from '@/views/SettingsPage.vue'
 import DipSip from '@/views/DipSip.vue'
-import Postman from '@/views/Postman.vue'
+import Utils from '@/views/Utils.vue'
 import Stocks from '@/views/Stocks.vue'
 import Prompt from '@/views/Prompt.vue'
 import Pricing from '@/views/Pricing.vue'
@@ -63,9 +63,9 @@ const routes = [
     component: RiskProfile
   },
   {
-    path: '/postman',
-    name: 'Postman',
-    component: Postman
+    path: '/utils',
+    name: 'Utils',
+    component: Utils
   },
   {
     path: '/stocks',

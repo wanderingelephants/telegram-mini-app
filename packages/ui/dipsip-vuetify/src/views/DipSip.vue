@@ -659,7 +659,8 @@ export default {
       try {
         const token = localStorage.getItem('jwt')
         console.log("token", token)
-        const resp = await axios.post("/api/db/saveconfig", 
+        //const resp = await axios.post("/api/db/saveconfig", 
+        const resp = await api.post("/api/db/saveconfig",
         {
           tg_id: this.userTG.id,
           tg_username: this.userTG.username,

@@ -2,7 +2,7 @@
   <v-container fluid theme="light">
     <v-row>
         
-    <v-col cols="6" v-if="loggedIn == false">
+    <!--<v-col cols="6" v-if="loggedIn == false">
           <v-tooltip
             v-model="showTooltip_tg"
             location="top"
@@ -22,7 +22,7 @@
             </template>
             
           </v-tooltip>
-        </v-col>
+        </v-col> -->
     <v-col cols="3"  v-if="showSubmit == true">
           <v-select
             max-width="150px"
@@ -30,7 +30,7 @@
             theme="light"
             v-model="postUrl"
             :items="[
-              '/api/nse/receive', '/api/db/import'
+              '/api/nse/receive', '/api/db/import', '/api/db/create'
             ]"
             variant="underlined"
           ></v-select>
