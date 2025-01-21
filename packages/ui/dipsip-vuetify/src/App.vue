@@ -82,19 +82,6 @@
 </template>
 
 <script setup lang="ts">
-import { useAnalytics } from '../src/components/useAnalytics'
-
-const { trackButtonClick, trackMenuClick } = useAnalytics()
-
-const handleButtonClick = () => {
-  trackButtonClick('submit-form', 'RegisterForm')
-  // your existing button logic
-}
-
-const handleMenuNavigation = (menuItem) => {
-  trackMenuClick(menuItem)
-  // your existing navigation logic
-}
 import { ref } from 'vue'
 
 const drawer = ref(false)
