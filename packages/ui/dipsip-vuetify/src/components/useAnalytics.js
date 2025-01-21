@@ -1,4 +1,4 @@
-export function useAnalytics() {
+/*export function useAnalytics() {
     const trackEvent = (eventName, parameters = {}) => {
       gtag('event', eventName, {
         ...parameters,
@@ -35,4 +35,4 @@ export function useAnalytics() {
       trackMenuClick,
       trackUserEngagement
     }
-  }
+  }*/
