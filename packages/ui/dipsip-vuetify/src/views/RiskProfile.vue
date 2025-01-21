@@ -123,6 +123,17 @@
                     </v-btn>
                   </v-col>
                 </v-row>
+                <v-row class="mt-6">
+                  <v-col cols="12" sm="8" md="6" class="mx-auto">
+                    <v-btn
+                      block
+                      color="primary"
+                      @click="getLLMPrompt"
+                    >
+                      Generate LLM
+                    </v-btn>
+                  </v-col>
+                </v-row>
               </v-col>
             </v-row>
           </v-card-text>
@@ -221,6 +232,7 @@ const sections = [
         id: 'age_group',
         text: 'Which age group do you belong to?',
         type: 'demographics',
+        user_answer: null,
         options: [
           { 
             value: '18_25', 
@@ -270,6 +282,7 @@ const sections = [
         id: 'employment_status',
         text: 'What is your current employment status?',
         type: 'demographics',
+        user_answer: null,
         options: [
           { 
             value: 'salaried', 
@@ -313,6 +326,7 @@ const sections = [
         id: 'income_source',
         text: 'How would you describe your income stream?',
         type: 'demographics',
+        user_answer: null,
         options: [
           { 
             value: 'very_stable', 
@@ -350,6 +364,7 @@ const sections = [
         id: 'monthly_savings',
         text: 'What percentage of your monthly income do you save/invest?',
         type: 'savings_capacity',
+        user_answer: null,
         options: [
           { value: 1, text: 'Less than 10%', weight: 1, risk_score: 1 },
           { value: 2, text: '10% to 20%', weight: 2, risk_score: 2 },
@@ -361,6 +376,7 @@ const sections = [
         id: 'emergency_fund',
         text: 'Do you have an emergency fund covering your expenses?',
         type: 'financial_security',
+        user_answer: null,
         options: [
           { value: 1, text: 'No emergency fund', weight: 0, risk_score: 1 },
           { value: 2, text: '1-3 months of expenses', weight: 2, risk_score: 2 },
@@ -372,6 +388,7 @@ const sections = [
         id: 'debt_obligations',
         text: 'What percentage of your monthly income goes towards EMIs/debt payments?',
         type: 'financial_security',
+        user_answer: null,
         options: [
           { value: 1, text: 'More than 50%', weight: 1, risk_score: 1 },
           { value: 2, text: '30% to 50%', weight: 2, risk_score: 2 },
@@ -389,6 +406,7 @@ const sections = [
         id: 'market_experience',
         text: 'How long have you been investing in stock markets?',
         type: 'experience',
+        user_answer: null,
         options: [
           { value: 1, text: 'Never invested before', weight: 1, risk_score: 1 },
           { value: 2, text: 'Less than 2 years', weight: 2, risk_score: 2 },
@@ -400,6 +418,7 @@ const sections = [
         id: 'volatility_understanding',
         text: 'How well do you understand market volatility and its impact on different sized companies?',
         type: 'experience',
+        user_answer: null,
         options: [
           { value: 1, text: 'Limited understanding', weight: 1, risk_score: 1 },
           { value: 2, text: 'Basic understanding of large companies', weight: 2, risk_score: 2 },
@@ -465,6 +484,7 @@ const sections = [
         id: 'investment_horizon',
         text: 'What is your primary investment time horizon?',
         type: 'time_horizon',
+        user_answer: null,
         options: [
           { value: 1, text: 'Less than 1 year', weight: 1, risk_score: 1 },
           { value: 2, text: '1-3 years', weight: 2, risk_score: 2 },
@@ -476,6 +496,7 @@ const sections = [
         id: 'loss_tolerance',
         text: 'If your portfolio dropped 20% in a month, what would you do?',
         type: 'risk_tolerance',
+        user_answer: null,
         options: [
           { value: 1, text: 'Sell everything immediately', weight: 1, risk_score: 1 },
           { value: 2, text: 'Sell some investments', weight: 2, risk_score: 2 },
@@ -798,13 +819,65 @@ function adjustAllocationForSmallCap(allocation) {
   // Implement logic to increase small cap allocation
   return allocation
 }
+const prepareLLMData = computed(() => {
+  const userResponses = []
+  let totalRiskScore = 0
+  let questionCount = 0
 
+  sections.forEach(section => {
+    section.questions.forEach(question => {
+      const answer = answers.value[question.id]
+      if (answer) {
+        userResponses.push({
+          section: section.title,
+          question: question.text,
+          answer: answer.text,
+          risk_score: answer.risk_score || null
+        })
+        
+        if (answer.risk_score) {
+          totalRiskScore += answer.risk_score
+          questionCount++
+        }
+      }
+    })
+  })
+
+  const avgRiskScore = questionCount > 0 ? (totalRiskScore / (questionCount * 4)) * 100 : 0
+  
+  return {
+    user_responses: userResponses,
+    risk_profile: {
+      score: avgRiskScore,
+      category: riskProfile.value.title,
+      description: riskProfile.value.description
+    },
+    category_scores: categoryScores.value,
+    demographics: {
+      age_group: answers.value.age_group?.text || null,
+      employment: answers.value.employment_status?.text || null,
+      income_stability: answers.value.income_source?.text || null
+    },
+    financial_health: {
+      monthly_savings: answers.value.monthly_savings?.text || null,
+      emergency_fund: answers.value.emergency_fund?.text || null,
+      debt_obligations: answers.value.debt_obligations?.text || null
+    }
+  }
+})
 const handleAnswer = (option) => {
   answers.value = {
     ...answers.value,
     [currentQuestion.value.id]: option
   }
-  
+  const currentQuestionId = currentQuestion.value.id
+  sections.forEach(section => {
+    section.questions.forEach(question => {
+      if (question.id === currentQuestionId) {
+        question.user_answer = option
+      }
+    })
+  })
   if (currentQuestionIndex.value < currentSection.value.questions.length - 1) {
     currentQuestionIndex.value++
   } else if (currentSectionIndex.value < sections.length - 1) {
@@ -814,7 +887,31 @@ const handleAnswer = (option) => {
     showResults.value = true
   }
 }
+const getLLMPrompt = () => {
+  const data = prepareLLMData.value
+  
+  const prompt =  `In the context of the Indian Financial markets, g  iven the following user profile and risk assessment:
 
+Demographics:
+- Age Group: ${data.demographics.age_group}
+- Employment: ${data.demographics.employment}
+- Income Stability: ${data.demographics.income_stability}
+
+Financial Health:
+- Monthly Savings: ${data.financial_health.monthly_savings}
+- Emergency Fund: ${data.financial_health.emergency_fund}
+- Debt Obligations: ${data.financial_health.debt_obligations}
+
+Based on this profile, please provide:
+1. Specific mutual fund recommendations (including debt, equity, and hybrid funds) with allocation percentages
+2. Emergency fund recommendations considering the user's current situation
+3. Insurance recommendations (life, health, and other relevant insurance products)
+4. Any other financial planning advice specific to this user's profile
+
+Please provide detailed explanations for each recommendation, considering the user's risk profile, age, employment stability, and current financial health.`
+
+console.log(prompt)
+}
 const resetQuiz = () => {
   currentSectionIndex.value = 0
   currentQuestionIndex.value = 0

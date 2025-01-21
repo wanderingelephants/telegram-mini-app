@@ -11,9 +11,9 @@ const sendPrompt = async (model, prompt_file_name, query) => {
       encoding: 'utf8',
       flag: 'r'
     });
-    console.log(promptTemplate);
     const prompt = promptTemplate.replace("{{}}", query);
-
+    console.log(prompt);
+    
     await initializeOllama(model)
     const startTime = new Date()
     const response = await axios.post(`${OLLAMA_URL}/api/generate`, {
