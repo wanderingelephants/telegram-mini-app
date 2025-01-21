@@ -11,7 +11,7 @@
           v-for="item in menuItems" 
           :key="item.path"
           :to="item.path"
-          @click="drawer = false; handleMenuNavigation(item.path)"
+          @click="drawer = false;"
         >
           <v-list-item-title>{{ item.title }}</v-list-item-title>
         </v-list-item>
