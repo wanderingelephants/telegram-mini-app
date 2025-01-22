@@ -14,9 +14,8 @@
           <v-card-subtitle
             >Try DipSIP. A proven contra strategy.</v-card-subtitle
           >
-
           <v-card-text class="d-flex align-center flex-wrap">
-            <span>Invest Rs.</span>
+            <span>Select ETFs below, Invest Rs.</span>
             <v-select
               theme="light"
               @update:menu="frameworkParamsChanged"
@@ -32,24 +31,22 @@
               ]"
               variant="underlined"
               label=""
-              class="mx-1"
-              style="max-width: 100px; min-width: 80px"
+              class="mx-1 mb-4"
+              style="max-width: 70px; min-width: 50px"
               density="compact"
               hide-details
             />
             <span
-              >in each of the ETFs selected below, whenever they correct by more
-              than</span
-            >
+              >in each, whenever they dip by more than</span>
             <v-select
               theme="light"
               label=""
-              max-width="70px"
+              max-width="40px"
               @update:menu="frameworkParamsChanged"
               v-model="trigger"
               :items="['1', '2', '3', '4', '5']"
               variant="underlined"
-              class="mx-1"
+              class="mx-1 mb-4"
               density="compact"
               hide-details
             />
@@ -185,7 +182,7 @@
       </v-row>
         </v-card>
       </v-col>
-      <v-col cols="12" md="6" order="last" order-md="last" class="fill-height">
+      <v-col v-if="false" cols="12" md="6" order="last" order-md="last" class="fill-height">
         <v-card class="fill-height d-flex flex-column ma-2">
           <!-- Chat Header -->
           <v-card-title class="primary white--text">

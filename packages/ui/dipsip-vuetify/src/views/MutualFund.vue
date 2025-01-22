@@ -1,4 +1,5 @@
 <template>
+<v-responsive>
   <v-container fluid class="fill-height pa-0">
     <v-row no-gutters class="fill-height">
       <v-col
@@ -161,6 +162,7 @@
       </template>
     </v-snackbar>
   </v-container>
+</v-responsive>
 </template>
 
 <script>
