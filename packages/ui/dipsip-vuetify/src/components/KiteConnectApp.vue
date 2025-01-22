@@ -20,9 +20,9 @@
         <v-col cols="3"><th><b>Amount</b></th></v-col>
     </v-row> -->
   <v-row v-for="b of basket" :key="b.instrument">
-    <v-col cols="3"><h3>{{instrumentDisplay(b.instrument)}}</h3></v-col>
-    <v-col cols="4"><v-text-field type="number" label="price" v-model="b.price" @update:modelValue="showConfirm=true; showKiteBtn=false"></v-text-field></v-col>
-    <v-col cols="3"><v-text-field type="number"  label="qty" v-model="b.quantity"  @update:modelValue="showConfirm=true; showKiteBtn=false"></v-text-field></v-col>
+    <v-col cols="3"><h3>{{instrumentDisplay(b)}}</h3></v-col>
+    <v-col cols="4"><v-text-field type="number" label="Trigger Price" v-model="b.price" @update:modelValue="showConfirm=true; showKiteBtn=false"></v-text-field></v-col>
+    <v-col cols="3"><v-text-field type="number"  label="Quantity" v-model="b.quantity"  @update:modelValue="showConfirm=true; showKiteBtn=false"></v-text-field></v-col>
     <v-col cols="2" label="Amt"><v-card-text>{{(Math.round(b.price * b.quantity)).toLocaleString()}}</v-card-text></v-col>
   </v-row>
 
@@ -49,16 +49,17 @@ export default {
   mounted(){
     this.basket = []
     const exchange = 'NSE'
-    let instrument, price, quantity; 
+    let instrument, price, quantity, reportedPrice; 
     instrument = this.$route.query.i
     price = this.$route.query.price
     quantity = this.$route.query.quantity
+    reportedPrice = this.$route.query.reportedPrice
     if (!Array.isArray(instrument)){
-        this.basket.push({exchange, instrument, price, quantity})
+        this.basket.push({exchange, instrument, price, quantity, reportedPrice})
     }
     else {
         for (let i=0; i<instrument.length; i++){
-            this.basket.push({exchange, 'instrument': instrument[i], 'price': price[i], 'quantity' : quantity[i]})
+            this.basket.push({exchange, 'instrument': instrument[i], 'price': price[i], 'quantity' : quantity[i], 'reportedPrice': reportedPrice[i]})
         }
     }
     console.log('kite basket', this.basket)
@@ -68,12 +69,16 @@ export default {
         this.showKiteBtn = true
         this.showConfirm = false
     },
-    instrumentDisplay(instr){
+    instrumentDisplay(b){
+      const instr = b.instrument
+      let display = ''
         console.log('instrDisplay', instr)
         if (instr.indexOf(':') > -1){
-            return instr.split(':')[1]
+            display = instr.split(':')[1]
         }
-        return instr
+        else display = instr
+        display += ' Current Price:' + b.reportedPrice
+        return display
     }
   },
   computed:{
