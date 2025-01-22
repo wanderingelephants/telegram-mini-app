@@ -38,6 +38,8 @@
                 </v-chip>
               </v-card-text>
               <v-card-text>
+                <v-btn :disabled="selectedFunds.length <= 1" @click="sendCompare(selectedFunds)" color="amber">Compare</v-btn>
+              
                 <!-- Fund Selector -->
                 <v-autocomplete
                   v-model="selectedFunds"
@@ -52,6 +54,8 @@
                   persistent-hint
                   hint="Partial match works while typing e.g. 'Motilal Small'"
                   @update:model-value="handleFundSelection"
+                  :search="searchText"
+                  @update:search="handleSearch"
                 >
                   <template v-slot:chip="{ props, item }">
                     <v-chip
@@ -64,8 +68,7 @@
                     </v-chip>
                   </template>
                 </v-autocomplete>
-                <v-btn v-if="selectedFunds.length > 1" @click="sendCompare(selectedFunds)" color="amber">Compare</v-btn>
-              </v-card-text>
+                </v-card-text>
               <overlap-analysis :compare-data="compareData" v-if="compareData.overlaps"></overlap-analysis>
             </v-card>
              
@@ -185,6 +188,7 @@ export default {
       selectedFunds: [],
       portfolio: [],
       compareData: {},
+      searchText: ''
     }
   },
   components:{
@@ -229,7 +233,12 @@ export default {
         console.error('Error in sendCompare:', error)
       }
     },
+    handleSearch(val) {
+      // The search text will be available in 'val'
+      this.searchText = val;
+    },
     handleFundSelection(value){
+      this.searchText = ""
       this.portfolio.value = value.map(name => {
         const fund = this.fundList.find(f => f.name === name)
         return {
