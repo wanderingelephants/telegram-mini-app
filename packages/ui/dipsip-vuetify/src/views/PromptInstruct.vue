@@ -44,7 +44,7 @@ export default{
             console.log('sending', this.model, this.prompt)
             try{
                 const startTime = new Date()
-                const resp = await api.post('/api/ollama/prompt', {
+                const resp = await api.post('/api/ollama/promptInstruct', {
                     model: this.model,
                     promptTemplate: this.promptTemplate,
                     query: this.query,

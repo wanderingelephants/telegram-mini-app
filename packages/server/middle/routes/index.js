@@ -74,7 +74,8 @@ const routes = {
         },
         ollama:{
             singleShotStream: require('./api/ollama/singleShotStream'),
-            prompt: require('./api/ollama/prompt'),
+            promptInstruct: require('./api/ollama/promptInstruct'),
+            promptChat: require('./api/ollama/promptChat'),
         },
         telegram:{
             auth: require('./api/telegram/auth')
@@ -100,7 +101,8 @@ router.post('/api/nse/receive', routes.api.nse.receive)
 router.post('/api/nse/announcements', routes.api.nse.announcements)
 router.get('/api/nse/process', routes.api.nse.process)
 router.get('/api/nse/instruments', routes.api.nse.instruments)
-router.post('/api/ollama/prompt', routes.api.ollama.prompt)
+router.post('/api/ollama/promptInstruct', routes.api.ollama.promptInstruct)
+router.post('/api/ollama/promptChat', routes.api.ollama.promptChat)
 
 
 module.exports = router

@@ -10,7 +10,7 @@
         md="6"
         order="first"
         order-md="first"
-        class="fill-height"
+        class="left-panel"
       >
         <v-card class="fill-height d-flex flex-column ma-2">
           <v-card-title  class="text-wrap">Regret Buying on Highs ?</v-card-title>
@@ -121,6 +121,20 @@
                     </v-card-text>
                   </v-card>
                 </v-dialog>
+                <v-card-actions>
+                  <button v-if="loggedInGoogle == true && userGoogle.tg_id !== ''"
+            @click="saveConfig"
+            class="v-btn v-theme--light text-primary v-btn--density-default v-btn--size-default v-btn--variant-outlined"
+          >
+            Save
+          </button>
+          <button v-if="loggedInGoogle == true && userGoogle.tg_id !== ''"
+            @click="deleteConfig"
+            class="v-btn v-theme--light text-primary v-btn--density-default v-btn--size-default v-btn--variant-outlined"
+          >
+            Unsubscribe
+          </button>
+                </v-card-actions>
               </v-card>
             </v-col>
           </v-row>
@@ -135,8 +149,8 @@
                 </v-card>
             </v-col>
           </v-row>
-          <v-row no-gutters class="mb-1">
-        <v-col v-if="loggedInGoogle == true && userGoogle.tg_id !== ''" >
+        <v-row no-gutters class="mt-1">
+        <!--<v-col v-if="loggedInGoogle == true && userGoogle.tg_id !== ''" >
           <button
             @click="saveConfig"
             class="v-btn v-theme--light text-primary v-btn--density-default v-btn--size-default v-btn--variant-outlined"
@@ -151,7 +165,7 @@
           >
             Unsubscribe
           </button>
-        </v-col>
+        </v-col> -->
         <v-dialog v-model="showSaveConfigDialog" max-width="430px">
         <v-card theme="light" color="secondary" dense>
           <v-card-title class="d-flex justify-space-between align-center">
@@ -185,78 +199,8 @@
       </v-row>
         </v-card>
       </v-col>
-      <v-col v-if="false" cols="12" md="6" order="last" order-md="last" class="fill-height">
-        <v-card class="fill-height d-flex flex-column ma-2">
-          <!-- Chat Header -->
-          <v-card-title class="primary white--text">
-            Your DipSip Assistant (Free version, slow performance)
-          </v-card-title>
-          <v-card-subtitle
-            >Ask Questions about how DipSIP works</v-card-subtitle
-          >
-
-          <!-- Messages Area -->
-          <v-card-text
-            class="flex-grow-1 overflow-y-auto"
-            ref="messagesContainer"
-          >
-            <v-list two-line>
-              <template v-for="(message, index) in messages" :key="index">
-                <v-list-item
-                  :class="message.role === 'user' ? 'justify-end' : ''"
-                >
-                  <v-list-item-content
-                    :class="[
-                      'rounded-lg pa-3 ma-2',
-                      message.role === 'user'
-                        ? 'blue lighten-4 ml-auto'
-                        : 'grey lighten-3',
-                      'max-width-75',
-                    ]"
-                  >
-                    <v-list-item-title class="mb-2">
-                      {{ message.role === "user" ? "You" : "Assistant" }}
-                    </v-list-item-title>
-                    <div class="message-content">
-                      {{ message.content }}
-                    </div>
-                  </v-list-item-content>
-                </v-list-item>
-              </template>
-              <!-- Loading indicator -->
-              <v-list-item v-if="isLoading">
-                <v-list-item-content
-                  class="grey lighten-3 rounded-lg pa-3 ma-2"
-                >
-                  <v-list-item-subtitle>
-                    <v-progress-circular
-                      indeterminate
-                      color="primary"
-                      size="24"
-                      class="mr-2"
-                    ></v-progress-circular>
-                    Fetching Your Response...
-                  </v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
-          </v-card-text>
-
-          <!-- Input Area -->
-          <v-card-actions class="pa-4">
-            <v-text-field
-              v-model="userInput"
-              label="Learn how to maximize Returns with SIP principles"
-              :disabled="isLoading"
-              variant="outlined"
-              density="comfortable"
-              hide-details
-              @keyup.enter="sendMessage"
-              append-inner-icon="mdi-send"
-              @click:append-inner="sendMessage"
-            ></v-text-field>
-          </v-card-actions>
-        </v-card>
+      <v-col cols="12" md="6" order="last" order-md="last" class="right-panel">
+        <prompt-chat :systemPrompt="systemPrompt" :title="title" :subTitle="subTitle" :userInputLabel="userInputLabel" :debug="debug"></prompt-chat>
       </v-col>
     </v-row>
     </v-responsive>
@@ -266,24 +210,25 @@
 import { mapState } from "vuex";
 import api from "./api";
 import TelegramLogin from "../components/TelegramLogin.vue";
+import PromptChat from "./PromptChat.vue"
 
 export default {
   components: {
-    TelegramLogin
+    TelegramLogin, PromptChat
   },
   computed: mapState([
     "loggedInGoogle",
     "userGoogle",
   ]),
   watch: {
-    messages: {
+    /*messages: {
       handler() {
         this.$nextTick(() => {
           this.scrollToBottom();
         });
       },
       deep: true
-    },
+    },*/
     
   },
   async mounted() {
@@ -315,7 +260,12 @@ export default {
         timeout: 3000,
         color: "orange",
       },
-      showSaveConfigDialog: false
+      showSaveConfigDialog: false,
+      title: 'Your Financial Assistant',
+      subTitle: 'Ask about DipSIP and how it is useful',
+      userInputLabel: "Ask about DipSIP. No Trading tips.",
+      debug: false,
+      systemPrompt: "dipsip",
     };
   },
   methods: {
@@ -421,3 +371,23 @@ export default {
   },
 };
 </script>
+<style scoped>
+.left-panel {
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  overflow-y: auto;
+}
+
+.right-panel {
+  height: 100vh;
+  overflow-y: auto;
+}
+
+@media (max-width: 960px) {
+  .left-panel {
+    height: auto;
+    position: relative;
+  }
+}
+</style>

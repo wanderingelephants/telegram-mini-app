@@ -12,7 +12,8 @@ import SettingsPage from '@/views/SettingsPage.vue'
 import DipSip from '@/views/DipSipChat.vue'
 import Utils from '@/views/Utils.vue'
 import Stocks from '@/views/Stocks.vue'
-import Prompt from '@/views/Prompt.vue'
+import PromptInstruct from '@/views/PromptInstruct.vue'
+import PromptChat from '@/views/PromptChat.vue'
 import Pricing from '@/views/Pricing.vue'
 import KiteConnectApp from '../components/KiteConnectApp'
 
@@ -33,9 +34,14 @@ const routes = [
     component: SettingsPage
   },
   {
-    path: '/prompt',
-    name: 'Prompt',
-    component: Prompt
+    path: '/promptChat',
+    name: 'PromptChat',
+    component: PromptChat
+  },
+  {
+    path: '/promptInstruct',
+    name: 'PromptInstruct',
+    component: PromptInstruct
   },
   {
     path: '/dipsip',
