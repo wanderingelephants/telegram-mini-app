@@ -113,14 +113,14 @@ const cards = ref([
   },
   {
     title: "",
-    subtitle: "DipSIP >> SIP",
-    description: "Buy Aggressively, on Index Dips <a href='/dipsip'>DipSIP</a>",
+    subtitle: "ETF >> MF",
+    description: "ETFs can be traded. MFs cannot be traded. Buy Aggressively, on Index Dips <a href='/dipsip'>DipSIP</a>",
     hasHtml: true
   },
   {
     title: "",
     subtitle: "DipSIP ETF >>>> MF SIP",
-    description: "See Actual Data to believe <a href='/etfList'>DipSIP ETFs</a>",
+    description: "Do you regret Buying at highs ? Try DipSip, the proven Contra strategy.<a href='/etfList'>DipSIP ETFs</a>",
     hasHtml: true
   },
   {
@@ -132,13 +132,13 @@ const cards = ref([
   {
     title: "Ready",
     subtitle: "Volatility is a Feature, Not a Bug",
-    description: "Automate to buy the dips, to maximize returns. Try <a href='/dipsip'>DipSip</a>.",
+    description: "Not many may remember 2024 Election Day counting day dip. DipSip makes sense.<a href='/dipsip'>DipSip</a>.",
     hasHtml: true
   },
   {
     title: "Mutual Funds",
     subtitle: "Portfolio Cleanup",
-    description: "Clean up the Portfolio Garbage, for Efficiency. <a href='/mutualfunds'>Mutual Fund Overlaps</a>.",
+    description: "Do you have more than 3-4 Mutual Funds ? Chances are there is massive overlap. MF Portfolios need regular checkups <a href='/mutualfunds'>Mutual Fund Overlaps</a>.",
     hasHtml: true
   }
 ])
