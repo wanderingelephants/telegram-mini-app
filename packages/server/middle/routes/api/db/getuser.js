@@ -5,7 +5,7 @@ const route = async (req, res) => {
         const db = require('better-sqlite3')(db_path, options)
         db.pragma('journal_mode = WAL')
         
-        let result = db.prepare('select * from users').all()
+        let result = db.prepare('select * from user_config').all()
         
         //result = db.prepare('select user_profile.tg_id, user_profile.tg_firstname, user_profile.tg_lastname, user_profile.tg_username,  user_profile.expiry_date,  user_profile.last_notification, user_config.user_id, user_config.trigger, user_config.base_amt, user_config.buy_factor, user_config.instrument from user_profile left outer join user_config on user_profile.id=user_config.user_id').all()
         console.log(result)

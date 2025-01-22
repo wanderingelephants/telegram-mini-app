@@ -9,17 +9,17 @@ credential: admin.credential.cert(serviceAccount)
 });*/
 
 const route = async(req, res) => {
-    console.log("API  AUTH GOOGLE", req.body)
   try {
     const { idToken } = req.body;
     const decodedToken = await admin.auth().verifyIdToken(idToken);
-    console.log('decodedToken', decodedToken)
     // Check if user exists in Database, else create
-    const user = db.prepare('SELECT * FROM users WHERE google_id = ?')
+    const user = db.prepare('SELECT users.email, user_profile.tg_id FROM users left outer join user_profile on users.google_id=user_profile.google_id WHERE users.google_id = ?')
                   .get(decodedToken.sub);
-    
+    let tg_id = "";
+    let email = ""
     if (!user) {
       // Create new user
+      email = decodedToken.email
       db.prepare(`
         INSERT INTO users (google_id, email, display_name, photo_url) 
         VALUES (?, ?, ?, ?)
@@ -36,15 +36,19 @@ const route = async(req, res) => {
         SET last_login = CURRENT_TIMESTAMP 
         WHERE google_id = ?
       `).run(decodedToken.sub);
+      tg_id = user.tg_id ? user.tg_id : ""
+      email = user.email
     }
 
     // Generate session token or use Firebase token
     res.json({ 
       tokenGoogle: idToken,
       userGoogle: {
+        uid: decodedToken.sub,
         email: decodedToken.email,
         name: decodedToken.name,
-        picture: decodedToken.picture
+        picture: decodedToken.picture,
+        tg_id
       }
     }).status(200);
   } catch (error) {

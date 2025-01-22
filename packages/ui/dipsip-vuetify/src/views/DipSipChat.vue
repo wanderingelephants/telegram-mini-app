@@ -2,6 +2,9 @@
   <v-container fluid class="fill-height pa-0">
     <v-responsive>
     <v-row no-gutters class="fill-height">
+        <v-col>
+              <google-sign-in/>
+              </v-col>
       <v-col
         cols="12"
         md="6"
@@ -122,9 +125,9 @@
             </v-col>
           </v-row>
           <v-row v-if="loggedInGoogle">
-            <v-col v-if="loggedInTG == false">
+            <v-col v-if="userGoogle.tg_id == ''">
                 <v-card>
-                    <v-card-text>This service sends notification using Telegram, being more reliable and performant than e-mail.</v-card-text>
+                    <v-card-text>This service sends notification using Telegram, being more reliable and performant than e-mail. One time setup</v-card-text>
                     <TelegramLogin
                   :botName="botName"
                   @telegram-auth="handleTelegramAuth"
@@ -133,7 +136,7 @@
             </v-col>
           </v-row>
           <v-row no-gutters class="mb-1">
-        <v-col v-if="loggedInTG == true" >
+        <v-col v-if="loggedInGoogle == true && userGoogle.tg_id !== ''" >
           <button
             @click="saveConfig"
             class="v-btn v-theme--light text-primary v-btn--density-default v-btn--size-default v-btn--variant-outlined"
@@ -141,7 +144,7 @@
             Save
           </button>
         </v-col>
-        <v-col v-if="loggedInTG == true" >
+        <v-col v-if="loggedInGoogle == true && userGoogle.tg_id !== ''" >
           <button
             @click="deleteConfig"
             class="v-btn v-theme--light text-primary v-btn--density-default v-btn--size-default v-btn--variant-outlined"
@@ -269,8 +272,6 @@ export default {
     TelegramLogin
   },
   computed: mapState([
-    "loggedInTG",
-    "userTG",
     "loggedInGoogle",
     "userGoogle",
   ]),
@@ -283,14 +284,7 @@ export default {
       },
       deep: true
     },
-    '$store.state.loggedInGoogle': {
-    async handler(newValue) {
-      if (newValue === true) {
-        await this.fetchFundList();
-      }
-    },
-    immediate: true  // This will check the value when component is created
-  }
+    
   },
   async mounted() {
     try {
@@ -299,7 +293,6 @@ export default {
       this.etfList = resp.data.map((_) => {
         return { value: _.symbol, title: "(" + _.symbol + ") " + _.underlying };
       });
-      console.log(this.etfList);
     } catch (e) {
       console.log(e);
     }
@@ -328,7 +321,6 @@ export default {
   methods: {
     async sendMessage() {},
     async saveConfig() {
-      console.log(this.etfSelected);
       this.showSaveConfigDialog = true;
     },
     frameworkParamsChanged(){
@@ -339,7 +331,7 @@ export default {
     async deleteConfig() {
       try {
         const resp = await api.post("/api/db/saveconfig", {
-          tg_id: this.$store.state.userTG.id,
+          tg_id: this.$store.state.userGoogle.tg_id,
           unsubscribe: true
         });
         if (resp.status == 200) {
@@ -359,16 +351,11 @@ export default {
     },
     async handleTelegramAuth(userTG) {
       try {
-        console.log("POST", userTG, this.userGoogle, this.loggedInGoogle)
-        /*const response = await axios.get("/api/telegram/auth", {
-          params: userTG,
-        });*/
         const response = await api.post("/api/telegram/auth", {
           "userTG": userTG,
           "userGoogle": this.userGoogle
         })
         const { token, userRecord, configRecord } = response.data;
-        console.log("token", token)
         this.accountExpiry = new Date(userRecord.expiry_date);
         if (configRecord) {
           if (configRecord.base_amt) {
@@ -382,8 +369,6 @@ export default {
             this.etfSelected = [];
             const userEtfs = configRecord.instrument.split(",");
             for (const e of userEtfs) {
-              console.log("userEtf", e);
-              console.log(this.etfList.find((et) => et.value === e.trim()));
               this.etfSelected.push(
                 this.etfList.find((et) => et.value === e.trim())
               );
@@ -392,11 +377,6 @@ export default {
           //this.etfSelected = configRecord.instrument.split(",");
         } else console.log("No User Config Saved so far");
 
-        // Store the JWT in localStorage or a secure cookie
-        localStorage.setItem("jwt", token);
-        // You might want to update your app's state here
-        this.$store.commit("setloggedInTG", true);
-        this.$store.commit("setUserTG", userTG);
       } catch (error) {
         console.error("Authentication failed:", error);
       }
@@ -405,12 +385,9 @@ export default {
       this.showSaveConfigDialog = false;
       try {
         const token = localStorage.getItem('jwt')
-        console.log("token", token)
-        //const resp = await axios.post("/api/db/saveconfig", 
         const resp = await api.post("/api/db/saveconfig",
         {
-          tg_id: this.userTG.id,
-          tg_username: this.userTG.username,
+          tg_id: this.userGoogle.tg_id,
           trigger: this.trigger,
           base_amt: this.base_amt,
           buy_factor: this.buy_factor,

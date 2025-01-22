@@ -197,16 +197,10 @@ export default {
   ]),
   methods: {
     customFilter(item, queryText) {
-      //console.log("customFilter", item, queryText)
-    // Convert both strings to lowercase for case-insensitive matching
-    const itemText = item.toLowerCase()
-    const searchText = queryText.toLowerCase()
-    
-    // Split search text into words
-    const searchWords = searchText.split(/\s+/)
-    console.log("customFilter", itemText, searchWords)
-    // Check if all search words exist in the item text
-    return searchWords.every(word => itemText.includes(word))
+      const itemText = item.toLowerCase()
+      const searchText = queryText.toLowerCase()
+      const searchWords = searchText.split(/\s+/)
+      return searchWords.every(word => itemText.includes(word))
   },
     async fetchFundList(){
       try {
@@ -219,7 +213,6 @@ export default {
             "displayName": m.name +  returnsLabel
           }
         })
-        //console.log(this.fundList)
       } catch (error) {
         console.error('Error fetching fund list:', error)
       }
@@ -230,14 +223,13 @@ export default {
         const response = await api.post('/api/mutualfunds/compare', {
          "fundList": this.selectedFunds
         })
-        console.log("sendCompare response",response)
+        
         this.compareData = response.data
       } catch (error) {
         console.error('Error in sendCompare:', error)
       }
     },
     handleFundSelection(value){
-      console.log('handleFuncSelection', value)
       this.portfolio.value = value.map(name => {
         const fund = this.fundList.find(f => f.name === name)
         return {
@@ -247,7 +239,7 @@ export default {
           investedAmount: ''
         }
       })
-      console.log(this.portfolio)
+      
     },
     getSelectionHint(count){
       /*if (count === 0) return 'Select funds to compare or analyze'
@@ -314,19 +306,16 @@ export default {
     // Read the stream
     while (true) {
       const { done, value } = await reader.read();
-      console.log("while loop", done, value)
+      
       if (done) break;
 
       // Decode the chunk and split into lines
       const chunk = decoder.decode(value);
       const lines = chunk.split('\n');
-      console.log('lines', lines)
       for (const line of lines) {
         if (line.startsWith('data: ')) {
           try {
-            console.log(line, line.slice(5))
             const data = JSON.parse(line.slice(5));
-             console.log(data) 
             if (data.error) {
               this.showError = true;
               this.errorMessage = data.error;
@@ -396,8 +385,7 @@ export default {
   },
 
   async mounted() {
-	  console.log('mounted', this.loggedInGoogle, this.userGoogle)
-    if  (this.loggedInGoogle == true)
+	  if  (this.loggedInGoogle == true)
     await this.fetchFundList()
     // Initial scroll to bottom
     //this.scrollToBottom();

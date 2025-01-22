@@ -18,8 +18,8 @@ import { createStore } from 'vuex'
 
 const store = createStore({
     state: {
-        userTG: {},
-        loggedInTG: false,
+        //userTG: {},
+        //loggedInTG: false,
         userGoogle: {},
         loggedInGoogle: false
     },
