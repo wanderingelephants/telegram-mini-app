@@ -9,6 +9,7 @@ import RiskProfile from '@/views/RiskProfile.vue'
 import Principles from '../components/Principles'
 import MutualFund from '@/views/MutualFund.vue'
 import SettingsPage from '@/views/SettingsPage.vue'
+import WebScraper from '@/views/WebScraper.vue'
 import DipSip from '@/views/DipSipChat.vue'
 import Utils from '@/views/Utils.vue'
 import Stocks from '@/views/Stocks.vue'
@@ -32,6 +33,11 @@ const routes = [
     path: '/settings',
     name: 'Settings',
     component: SettingsPage
+  },
+  {
+    path: '/scraper',
+    name: 'Scraper',
+    component: WebScraper
   },
   {
     path: '/promptChat',
