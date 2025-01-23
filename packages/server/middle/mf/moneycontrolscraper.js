@@ -199,7 +199,7 @@ async function getAllMutualFunds(categories) {
     try {
         const page = await setupPage(browser);
         // Scrape each category
-        for (const category of FUND_CATEGORIES) {
+        for (const category of filteredFunds) {
             const categoryFunds = await scrapeCategoryPage(page, category);
             allFunds.push(...categoryFunds);
             const outputFile = `${outputFolder}/${category}/mutual_funds_data.json`;
