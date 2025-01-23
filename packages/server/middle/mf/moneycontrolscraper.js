@@ -238,5 +238,7 @@ async function main() {
         console.error('Main error:', error);
     }
 }
-
-main();
+module.exports = {
+    getAllMutualFunds
+}
+//main();
