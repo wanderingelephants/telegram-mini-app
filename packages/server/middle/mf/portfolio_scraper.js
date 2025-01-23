@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
-const baseFolder = process.env.DATA_ROOT_FOLDER
+const baseFolder = process.env.DOWNLOADS + '/moneycontrol'
 const Database = require('better-sqlite3');
 const db = new Database(process.env.SQLITE_DB + '/dipsip.db', { verbose: console.log });
 const {upsertHoldings, isValidHolding} = require('./data-loader')
@@ -348,7 +348,7 @@ async function processCategory(category, specificSchemeCodes = null) {
 // Main function
 async function main() {
     const args = process.argv.slice(2);
-    
+    if (!fs.existsSync(baseFolder)) fs.mkdirSync(baseFolder)
     if (args.length === 0) {
         // No arguments: process all categories
         const categories = fs.readdirSync(baseFolder)
