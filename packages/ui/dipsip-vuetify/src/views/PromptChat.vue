@@ -73,6 +73,7 @@
 <script>
 
 export default{
+  name: 'PromptChat',
     props:{
         systemPrompt: {
             required: true,
@@ -95,6 +96,9 @@ export default{
             type: Boolean,
             default: true
         }
+    },
+    mounted(){
+      console.log("PromptCHAT mounted")
     },
     methods: {
         async sendMessage() {
@@ -119,8 +123,7 @@ export default{
       body: JSON.stringify({
         model: this.model,
         operation: this.operation,
-        //systemPrompt: this.systemPrompt,
-        promptName: 'dipsip',
+        promptName: this.systemPrompt,
         messages: [...this.messages]
       })
     });
@@ -183,6 +186,12 @@ export default{
         });
       }
     },
+    scrollToBottom() {
+      const container = this.$refs.messagesContainer;
+      if (container) {
+        container.scrollTop = container.scrollHeight;
+      }
+    }
     },
     data(){
         return {

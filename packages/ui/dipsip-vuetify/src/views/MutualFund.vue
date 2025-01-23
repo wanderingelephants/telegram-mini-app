@@ -7,14 +7,10 @@
             md="6"
             order="first"
             order-md="first"
-            class="fill-height"
+            class="left-panel"
           >
-          <v-col>
               <google-sign-in/>
-              </v-col>
-              <v-col v-if="loggedInGoogle === true" >
-              <v-card-text>Welcome {{userGoogle.displayName}}</v-card-text>
-              </v-col>
+              <v-card-text v-if="loggedInGoogle === true">Welcome {{userGoogle.displayName}}</v-card-text>
             <v-card class="ma-2">
               <v-card-title>Mutual Fund Overlap Analysis (Select 2 or more)</v-card-title>
               <v-card-subtitle class="text-subtitle-2">
@@ -71,79 +67,9 @@
                 </v-card-text>
               <overlap-analysis :compare-data="compareData" v-if="compareData.overlaps"></overlap-analysis>
             </v-card>
-             
       </v-col>
-      <v-col
-            cols="12"
-            md="6"
-            order="last"
-            order-md="last"
-            class="fill-height"
-          >
-        <v-card class="fill-height d-flex flex-column ma-2">
-          <!-- Chat Header -->
-          <v-card-title class="primary white--text">
-            Your Assistant (Free version, slow performance)
-          </v-card-title>
-          <v-card-subtitle>You can also query for MF details e.g. "Which funds have holdings in stock Reliance"</v-card-subtitle>
-
-          <!-- Messages Area -->
-          <v-card-text class="flex-grow-1 overflow-y-auto" ref="messagesContainer">
-            <v-list two-line>
-              <template v-for="(message, index) in messages" :key="index">
-                <v-list-item
-                  :class="message.role === 'user' ? 'justify-end' : ''"
-                >
-                  <v-list-item-content
-                    :class="[
-                      'rounded-lg pa-3 ma-2',
-                      message.role === 'user'
-                        ? 'blue lighten-4 ml-auto'
-                        : 'grey lighten-3',
-                      'max-width-75'
-                    ]"
-                  >
-                    <v-list-item-title class="mb-2">
-                      {{ message.role === 'user' ? 'You' : 'Assistant' }}
-                    </v-list-item-title>
-                    <div class="message-content">
-                      {{ message.content }}
-                    </div>
-                  </v-list-item-content>
-                </v-list-item>
-              </template>
-              <!-- Loading indicator -->
-              <v-list-item v-if="isLoading">
-                <v-list-item-content class="grey lighten-3 rounded-lg pa-3 ma-2">
-                  <v-list-item-subtitle>
-                    <v-progress-circular
-                      indeterminate
-                      color="primary"
-                      size="24"
-                      class="mr-2"
-                    ></v-progress-circular>
-                    Fetching Your Response...
-                  </v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
-          </v-card-text>
-
-          <!-- Input Area -->
-          <v-card-actions class="pa-4">
-            <v-text-field
-              v-model="userInput"
-              label="Get info about products like MFs, ETFs, REITs, InvITs. No Trading tips."
-              :disabled="isLoading"
-              variant="outlined"
-                  density="comfortable"
-                  hide-details
-                  @keyup.enter="sendMessage"
-                  append-inner-icon="mdi-send"
-                  @click:append-inner="sendMessage"
-              ></v-text-field>
-          </v-card-actions>
-        </v-card>
+      <v-col cols="12" md="6" order="last" order-md="last" class="right-panel">
+        <prompt-chat :systemPrompt="systemPrompt" :title="title" :subTitle="subTitle" :userInputLabel="userInputLabel" :debug="debug"></prompt-chat>
       </v-col>
     </v-row>
 
@@ -174,9 +100,13 @@ import { mapState } from "vuex";
 import GoogleSignIn from '../components/GoogleSignIn'
 import api from './api'
 import OverlapAnalysisVue from '../components/OverlapAnalysis.vue'
+import PromptChat from "./PromptChat.vue"
+
 export default {
   name: 'ChatApp',
-  
+  components: {
+    OverlapAnalysisVue, GoogleSignIn, PromptChat
+  },  
   data() {
     return {
       messages: [],
@@ -188,11 +118,14 @@ export default {
       selectedFunds: [],
       portfolio: [],
       compareData: {},
-      searchText: ''
+      searchText: '',
+      title: 'Your Financial Assistant',
+      subTitle: 'Ask about Mutual Funds',
+      userInputLabel: "Ask about Mutual Funds. No Trading tips.",
+      debug: false,
+      systemPrompt: "mutual_funds",
+    
     }
-  },
-  components:{
-    OverlapAnalysisVue, GoogleSignIn
   },
   computed: mapState([
     // map this.count to store.state.count
@@ -449,5 +382,23 @@ export default {
 .overflow-y-auto::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.2);
   border-radius: 3px;
+}
+.left-panel {
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  overflow-y: auto;
+}
+
+.right-panel {
+  height: 100vh;
+  overflow-y: auto;
+}
+
+@media (max-width: 960px) {
+  .left-panel {
+    height: auto;
+    position: relative;
+  }
 }
 </style>
