@@ -27,9 +27,9 @@ const FUND_CATEGORIES = [
     'multi-asset-allocation'*/
     /*'childrens-fund',
     'retirement-fund',
-    'investment-cum-insurance'*/
+    'investment-cum-insurance'
     'index-fundsetfs',
-    'fund-of-funds',
+    'fund-of-funds',*/
 ];
 
 async function setupPage(browser) {

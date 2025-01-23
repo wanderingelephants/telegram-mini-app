@@ -4,7 +4,7 @@ const path = require('path');
 const baseFolder = process.env.DATA_ROOT_FOLDER
 const Database = require('better-sqlite3');
 const db = new Database(process.env.SQLITE_DB + '/dipsip.db', { verbose: console.log });
-
+const {upsertHoldings, isValidHolding} = require('./data-loader')
 // Utility function for delays
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -207,10 +207,18 @@ async function scrapePortfolioHoldings(page, fund, category) {
             portfolioUrl,
             holdings: holdingsData.holdings
         };
+        const validHoldings = holdingsData.holdings.filter(isValidHolding);
 
-        fs.writeFileSync(outputFile, JSON.stringify(outputData, null, 2));
-        console.log(`Saved holdings for ${fund.name} as of ${holdingsReportingDate}`);
-
+                    if (validHoldings.length === 0) {
+                        console.warn(`No valid holdings found for ${schemeCode} on ${holdingsReportingDate}`);
+                        
+                    }
+                    else {
+                        upsertHoldings(fund.schemeCode, validHoldings, holdingsReportingDate)
+                        fs.writeFileSync(outputFile, JSON.stringify(outputData, null, 2));
+                        console.log(`Saved holdings for ${fund.name} as of ${holdingsReportingDate}`);
+                    }
+        
         return {
             schemeCode: fund.schemeCode,
             holdingsReportingDate,
@@ -243,7 +251,7 @@ async function processCategory(category, specificSchemeCodes = null) {
         // Filter out funds that already have holdings
         const fundsToProcess = [];
         for (const fund of fundsData) {
-            const latestHoldingDate = await checkExistingHoldings(category, fund.schemeCode);
+            const latestHoldingDate = getHoldingDateFromDB(category, fund.schemeCode);
             fund.latestHoldingDate = latestHoldingDate
             fundsToProcess.push(fund)
            

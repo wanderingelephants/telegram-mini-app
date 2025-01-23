@@ -308,5 +308,7 @@ if (require.main === module) {
 module.exports = {
     loadMutualFundsData,
     loadMutualFundHoldings,
-    runDataLoader
+    runDataLoader,
+    upsertHoldings,
+    isValidHolding
 };

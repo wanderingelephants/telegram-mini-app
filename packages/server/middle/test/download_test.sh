@@ -10,6 +10,14 @@ curl -X POST http://51.158.62.147/api/nse/announcements \
   "toDate": "08-01-2025",
   "index": "sme"
 }'
+#baseUrl, urlSuffix, etfFileName
+curl -X POST http://localhost:3000/api/nse/process \
+-H "Content-Type: application/json" \
+-d '{
+  "baseUrl": "https://www.nseindia.com",
+  "urlSuffix": "/api/etf",
+  "etfFileName": "2025-01-23.json"
+}'
 
 #/api/etf
 #/api/corporate-announcements?index=sme&from_date=02-01-2025&to_date=03-01-2025&csv=true

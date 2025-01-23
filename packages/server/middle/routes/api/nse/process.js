@@ -1,8 +1,8 @@
 const ProcessETFQuotes = require('./processETFQuotes')
 const route = async(req, res) => {
     try{
-        const etfFileName = req.query.etfFileName
-        const processor = new ProcessETFQuotes("", "", etfFileName)
+        const {baseUrl, urlSuffix, etfFileName} = req.body
+        const processor = new ProcessETFQuotes(baseUrl, urlSuffix, etfFileName)
         await processor.process()
         res.status(200).json("OK")
     }

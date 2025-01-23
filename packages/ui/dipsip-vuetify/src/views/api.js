@@ -13,5 +13,35 @@ api.interceptors.request.use(config => {
 }, error => {
   return Promise.reject(error)
 })
+// api.js
+api.interceptors.response.use(
+  response => response,
+  async error => {
+    const originalRequest = error.config;
+    
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      
+      try {
+        // Get current Firebase user
+        const auth = getAuth();
+        const user = auth.currentUser;
+        
+        if (user) {
+          // Force refresh token
+          const newToken = await user.getIdToken(true);
+          localStorage.setItem('jwtGoogle', newToken);
+          originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
+          return api(originalRequest);
+        }
+      } catch (err) {
+        // Handle refresh failure
+        localStorage.removeItem('jwtGoogle');
+        window.location.reload();
+      }
+    }
+    return Promise.reject(error);
+  }
+);
 
 export default api

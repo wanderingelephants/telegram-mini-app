@@ -1,17 +1,13 @@
 <template>
   <div>
-    <v-dialog 
-      v-if="!loggedInGoogle"
-      v-model="showDialog" 
-      max-width="400"
-    >
+    <v-dialog v-if="!loggedInGoogle" v-model="showDialog" max-width="400">
       <v-card class="rounded-lg">
         <!-- Header with Google-style typography -->
         <v-card-title class="text-h5 pt-6 px-6 font-weight-medium">
           <v-icon color="primary" class="mr-2">mdi-google</v-icon>
           Sign in with Google
         </v-card-title>
-        
+
         <!-- Subtext with Google's product sans font -->
         <v-card-text class="px-6 pt-4 pb-4 text-body-1 text-grey-darken-1">
           Sign in to access enhanced features
@@ -45,8 +41,12 @@
 
 <script>
 import { mapState } from "vuex";
-import { GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from 'firebase/auth';
-import { initializeFirebase } from '@/plugins/firebase';
+import {
+  GoogleAuthProvider,
+  signInWithPopup,
+  onAuthStateChanged,
+} from "firebase/auth";
+import { initializeFirebase } from "@/plugins/firebase";
 
 export default {
   data() {
@@ -54,24 +54,21 @@ export default {
       isInitialized: false,
       authInstance: null,
       unsubscribeAuth: null,
-      showDialog: false
+      showDialog: false,
     };
   },
   created() {
-    this.showDialog = !this.loggedInGoogle
+    this.showDialog = !this.loggedInGoogle;
   },
   watch: {
     loggedInGoogle(newVal) {
       if (newVal) {
-        this.showDialog = false
+        this.showDialog = false;
       }
-    }
+    },
   },
   computed: {
-    ...mapState([
-      "loggedInGoogle",
-      "userGoogle",
-    ])
+    ...mapState(["loggedInGoogle", "userGoogle"]),
   },
 
   async mounted() {
@@ -101,29 +98,35 @@ export default {
       if (existingToken) {
         try {
           // Verify token with your backend
-          const response = await fetch('/api/auth/google', {
-            method: 'POST',
+          const response = await fetch("/api/auth/google", {
+            method: "POST",
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
             },
             body: JSON.stringify({ idToken: existingToken }),
           });
-          const json = await response.json()
+          const json = await response.json();
           if (!response.ok) {
             // Token invalid - clear storage
             localStorage.removeItem("jwtGoogle");
             this.$store.commit("setloggedInGoogle", false);
-          }
-          else {
+          } else {
             this.$store.commit("setloggedInGoogle", true);
             this.$store.commit("setUserGoogle", json.userGoogle);
           }
         } catch (error) {
-          console.error('Token verification error:', error);
+          console.error("Token verification error:", error);
         }
       }
+      if (this.authInstance?.currentUser) {
+        // Refresh token every 45 minutes
+        setInterval(async () => {
+          const token = await this.authInstance.currentUser.getIdToken(true);
+          localStorage.setItem("jwtGoogle", token);
+        }, 45 * 60 * 1000);
+      }
     } catch (error) {
-      console.error('Failed to initialize Firebase:', error);
+      console.error("Failed to initialize Firebase:", error);
     }
   },
 
@@ -136,11 +139,11 @@ export default {
 
   methods: {
     closeDialog() {
-      this.showDialog = false
+      this.showDialog = false;
     },
     async signInWithGoogle() {
       if (!this.isInitialized || !this.authInstance) {
-        console.error('Firebase not yet initialized');
+        console.error("Firebase not yet initialized");
         return;
       }
 
@@ -148,29 +151,29 @@ export default {
         const provider = new GoogleAuthProvider();
         const result = await signInWithPopup(this.authInstance, provider);
         const idToken = await result.user.getIdToken();
-        
+
         // Send token to your backend
-        const response = await fetch('/api/auth/google', {
-          method: 'POST',
+        const response = await fetch("/api/auth/google", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({ idToken }),
         });
 
         if (response.ok) {
-          const json = await response.json()
-          this.showDialog = false
+          const json = await response.json();
+          this.showDialog = false;
           localStorage.setItem("jwtGoogle", idToken);
           this.$store.commit("setloggedInGoogle", true);
           this.$store.commit("setUserGoogle", json.userGoogle);
         }
       } catch (error) {
-        console.error('Google sign-in error:', error);
+        console.error("Google sign-in error:", error);
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 <style scoped>
 /* Google-style button hover effect */
@@ -179,7 +182,8 @@ export default {
 }
 
 .v-btn.v-btn--variant-elevated:hover {
-  box-shadow: 0 1px 3px rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15);
+  box-shadow: 0 1px 3px rgba(60, 64, 67, 0.3),
+    0 4px 8px 3px rgba(60, 64, 67, 0.15);
 }
 
 /* Optional: Add Google's product sans font if available */

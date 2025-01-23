@@ -31,7 +31,15 @@ app.use([
   bodyParser.urlencoded({extended: true}),
   express.json({limit: '1mb'})
   ]);
-  
+  app.use(async (err, req, res, next) => {
+    if (err.code === 'auth/id-token-expired') {
+      return res.status(401).json({ 
+        error: 'Token expired', 
+        code: 'TOKEN_EXPIRED'
+      })
+    }
+    next(err)
+  })  
 app.use('/', require('./routes'));
 
 app.listen(port, () => {
