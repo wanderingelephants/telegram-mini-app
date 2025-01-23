@@ -1,7 +1,5 @@
-const axios = require('axios');
-const OLLAMA_URL = process.env.OLLAMA_URL;
-const {initializeOllama} = require('./initOllama')
-const PROMPTS_FOLDER = process.env.PROMPTS_FOLDER;
+const path = require('path')
+const PROMPTS_FOLDER = path.join(__dirname, "prompts")
 const fs = require('fs')
 const sendPrompt = require('./send_prompt.js')
 

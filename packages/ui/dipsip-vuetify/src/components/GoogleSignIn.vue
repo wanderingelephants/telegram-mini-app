@@ -5,26 +5,34 @@
       v-model="showDialog" 
       max-width="400"
     >
-      <v-card>
-        <v-card-title class="text-h5">
+      <v-card class="rounded-lg">
+        <!-- Header with Google-style typography -->
+        <v-card-title class="text-h5 pt-6 px-6 font-weight-medium">
+          <v-icon color="primary" class="mr-2">mdi-google</v-icon>
           Sign in with Google
         </v-card-title>
         
-        <v-card-text>
-          Sign in to access enhanced features and analytics
+        <!-- Subtext with Google's product sans font -->
+        <v-card-text class="px-6 pt-4 pb-4 text-body-1 text-grey-darken-1">
+          Sign in to access enhanced features
         </v-card-text>
 
-        <v-card-actions>
+        <v-divider></v-divider>
+
+        <!-- Actions with Google-styled buttons -->
+        <v-card-actions class="pa-4">
           <v-spacer></v-spacer>
           <v-btn
-            color="grey-darken-1"
             variant="text"
+            class="text-caption text-grey-darken-1 font-weight-medium mr-2"
             @click="closeDialog"
           >
-            Close
+            Cancel
           </v-btn>
           <v-btn
             color="primary"
+            class="text-none px-6 rounded-lg elevation-0"
+            prepend-icon="mdi-google"
             @click="signInWithGoogle"
           >
             Sign in with Google
@@ -164,3 +172,19 @@ export default {
   }
 }
 </script>
+<style scoped>
+/* Google-style button hover effect */
+.v-btn.v-btn--variant-elevated {
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.v-btn.v-btn--variant-elevated:hover {
+  box-shadow: 0 1px 3px rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15);
+}
+
+/* Optional: Add Google's product sans font if available */
+.v-card-title,
+.v-btn {
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+}
+</style>

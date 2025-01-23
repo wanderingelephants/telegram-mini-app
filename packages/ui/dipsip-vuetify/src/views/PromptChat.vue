@@ -99,7 +99,6 @@ export default{
     methods: {
         async sendMessage() {
       if (!this.userInput.trim()) return;
-console.log('sendMessage')
       const userMessage = {
         role: 'user',
         content: this.userInput.trim()

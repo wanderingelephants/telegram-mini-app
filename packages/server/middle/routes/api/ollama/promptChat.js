@@ -1,10 +1,11 @@
 const axios = require('axios');
 const OLLAMA_URL = process.env.OLLAMA_URL;
 const {initializeOllama} = require('./initOllama')
-const PROMPTS_FOLDER = process.env.PROMPTS_FOLDER;
 const fs = require('fs')
 const path = require('path')
-const sendPrompt = require('./send_prompt.js')
+const PROMPTS_FOLDER = path.join(__dirname, 'prompts');
+
+//const sendPrompt = require('./send_prompt.js')
 
 const route = async (req, res) => {
   try{
@@ -59,7 +60,6 @@ const route = async (req, res) => {
             
             for (const line of lines) {
               try {
-                console.log('line', line)
                 const json = JSON.parse(line);
                 res.write(`data: ${JSON.stringify(json)}\n\n`);
                 if (json.done) {
