@@ -102,7 +102,7 @@ const cards = ref([
   {
     title: "",
     subtitle: "Mutual Fund Sahi Hai ??",
-    description: "MFs vastly underperform the market, and charge hefty fees. You can do much better, yourself. See <a href='/principles'>Principles</a>.",
+    description: "MFs vastly underperform the market, and charge hefty fees. You can do much better, yourself. See <a href='/etfList'>ETFs</a>.",
     hasHtml: true
   },
   {
