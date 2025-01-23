@@ -4,6 +4,7 @@ const fs = require('fs');
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 const outputFolder =  process.env.DOWNLOADS + '/moneycontrol'
+if (!fs.existsSync(outputFolder)) fs.mkdirSync(outputFolder)
 // List of mutual fund categories to scrape
 const FUND_CATEGORIES = [
     
