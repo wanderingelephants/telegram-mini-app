@@ -3,8 +3,7 @@ let route = async (req, res) => {
         const db_path = process.env.SQLITE_DB + '/dipsip.db'
         const options =  {}
         const db = require('better-sqlite3')(db_path, options)
-        db.pragma('journal_mode = WAL')
-
+    
         //db.prepare('create table users(id INTEGER PRIMARY KEY AUTOINCREMENT, google_id text, email text, display_name text, photo_url text, last_login timestamp)').run()
         
         db.prepare('create table user_profile(id INTEGER PRIMARY KEY AUTOINCREMENT, tg_id text, tg_firstname text, tg_lastname text,tg_username text, google_id text, expiry_date date, last_notification date)').run()

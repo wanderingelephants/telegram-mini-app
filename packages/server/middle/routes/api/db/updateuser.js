@@ -3,7 +3,7 @@ let route = async (req, res) => {
         const db_path = process.env.SQLITE_DB + '/dipsip.db'
         const options =  {fileMustExist: true}
         const db = require('better-sqlite3')(db_path, options)
-        db.pragma('journal_mode = WAL')
+        
         console.log(req.body)
         let {expiry_days, expiry_date, last_notification, tg_id} = req.body
         console.log({expiry_date, last_notification})

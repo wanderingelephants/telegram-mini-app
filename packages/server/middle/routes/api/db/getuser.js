@@ -3,7 +3,6 @@ const route = async (req, res) => {
         const db_path = process.env.SQLITE_DB + '/dipsip.db'
         const options =  {fileMustExist: true}
         const db = require('better-sqlite3')(db_path, options)
-        db.pragma('journal_mode = WAL')
         
         let result = db.prepare('select * from user_config').all()
         

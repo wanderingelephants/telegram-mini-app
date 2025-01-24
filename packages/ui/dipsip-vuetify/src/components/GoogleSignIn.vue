@@ -150,7 +150,7 @@ export default {
       try {
         const provider = new GoogleAuthProvider();
         const result = await signInWithPopup(this.authInstance, provider);
-        const idToken = await result.user.getIdToken();
+        const idToken = await result.user.getIdToken(true);
 
         // Send token to your backend
         const response = await fetch("/api/auth/google", {

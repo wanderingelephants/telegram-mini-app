@@ -3,8 +3,7 @@ const route = async (req, res) => {
         const db_path = process.env.SQLITE_DB + '/dipsip.db'
         const options =  {fileMustExist: true}
         const db = require('better-sqlite3')(db_path, options)
-        db.pragma('journal_mode = WAL')
-
+       
         const data = req.body
         console.log('import', data)
         for (user of data){

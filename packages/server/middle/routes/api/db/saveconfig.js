@@ -6,8 +6,7 @@ function persistConfig(req){
         const db_path = process.env.SQLITE_DB + '/dipsip.db'
         const options =  {fileMustExist: true}
         const db = require('better-sqlite3')(db_path, options)
-        db.pragma('journal_mode = WAL')
-
+        
         const {tg_id, trigger, base_amt, buy_factor, instrument, unsubscribe} = req.body
         const user_pk_records = db.prepare('select id from user_profile where tg_id=' + tg_id).all()
         const user_id = user_pk_records[0].id

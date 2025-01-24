@@ -25,7 +25,7 @@ function persistUser(userTG, google_id) {
     const db_path = process.env.SQLITE_DB + '/dipsip.db'
     const options = { fileMustExist: true }
     const db = require('better-sqlite3')(db_path, options)
-    db.pragma('journal_mode = WAL')
+    
     const { id, first_name, last_name, username } = userTG
     let expiry_date = new Date(); expiry_date.setHours(0, 0, 0, 0);
     expiry_date = new Date(expiry_date.getTime() + 30 * 24 * 3600 * 1000)
@@ -58,7 +58,7 @@ let route = async (req, res) => {
             const db_path = process.env.SQLITE_DB + '/dipsip.db'
             const options = { fileMustExist: true }
             const db = require('better-sqlite3')(db_path, options)
-            db.pragma('journal_mode = WAL')
+            
             const configRecord = db.prepare('select base_amt, trigger, buy_factor, instrument from user_config where user_id=@user_id').get({ user_id: userTG.id+"" })
             console.log('tg auth returning res', { token, configRecord })
             res.status(200).json({ token, userRecord, configRecord })

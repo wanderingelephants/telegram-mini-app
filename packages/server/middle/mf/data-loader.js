@@ -30,17 +30,17 @@ const isValidHolding = (holding) => {
 };
 // Load a single mutual fund
 const loadMutualFund = db.prepare(`
-    INSERT OR REPLACE INTO mutual_fund (
-        mutual_fund_name, url, scheme_code, url_category, plan, mutual_fund_category, mutual_fund_star_rating, mutual_fund_assets_under_management,
+    INSERT INTO mutual_fund (
+    name, url, scheme_code, url_category, plan, category_key, category, star_rating, aum, expenses_ratio, expenses_ratio_cat_avg,
     return_1w, return_1m, return_3m, return_6m, return_ytd,
     percentage_annualized_returns_for_1_year_period, percentage_annualized_returns_for_2_year_period, percentage_annualized_returns_for_3_year_period, percentage_annualized_returns_for_5_year_period, percentage_annualized_returns_for_10_year_period,
     created_at, updated_at
-    ) VALUES (
-        ?, ?, ?, ?, ?, ?, ?, ?,
+) VALUES (
+    ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
     ?, ?, ?, ?, ?,
     ?, ?, ?, ?, ?,
     CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
-    )
+)
 `);
 
 const helpers = {
@@ -310,5 +310,7 @@ module.exports = {
     loadMutualFundHoldings,
     runDataLoader,
     upsertHoldings,
-    isValidHolding
+    isValidHolding,
+    loadMutualFund,
+    parseReturns
 };

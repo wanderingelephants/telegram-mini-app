@@ -41,7 +41,7 @@ let getquote = async (instrumentList, sendNotification) => {
     const db_path = process.env.SQLITE_DB + '/dipsip.db'
     const options = { fileMustExist: true }
     const db = require('better-sqlite3')(db_path, options)
-    db.pragma('journal_mode = WAL')
+    
     const users = db.prepare('select profile.tg_id, cfg.trigger, cfg.base_amt, cfg.buy_factor, cfg.instrument from user_config cfg, user_profile profile where cfg.user_id=profile.id').all()
     console.log("users ", users)
     console.log(resp.data)

@@ -67,26 +67,42 @@ export default{
             promptResponse: '',
             query: '',
             model: 'llama3.2:latest',
-            models: ['llama3.2:latest', 'gemma:7b', 'tinyllama:latest', 'phi3:mini', 'mistral:latest', 'phi4:latest'],
+            models: ['llama3.2:latest', 'gemma:7b', 'tinyllama:latest', 'phi3:mini', 'mistral:latest', 'phi4:latest', 'deepseek-v2'],
             timeTaken: 0,
             operation: 'savePrompt',
             operations: ['savePrompt', 'testPrompt'],
-            promptTemplate: `In the context of Indian Financial Markets, 
-Given the following user profile and risk assessment:
-Demographics:
-- Age Group: Above 65 years
-- Employment: Other/Not Currently Employed
-- Income Stability: Highly variable/uncertain
-Financial Health:
-- Monthly Savings: Less than 10%
-- Emergency Fund: 1-3 months of expenses
-- Debt Obligations: More than 50%
-Based on this profile, please provide:
-1. Specific mutual fund recommendations (including debt, equity, and hybrid funds) with allocation percentages
-2. Emergency fund recommendations considering the user's current situation
-3. Insurance recommendations (life, health, and other relevant insurance products)
-4. Any other financial planning advice specific to this user's profile
-Please provide detailed explanations for each recommendation, considering the user's risk profile, age, employment stability, and current financial health.`,
+            promptTemplate: `You  are an SQL Query Generator in SQLite DB. You have to generate a SQL query to answer a user's Question.
+Create a SQL Query using Table : mutual_fund_stock_holdings 
+Columns : mutual_fund_name, mutual_fund_category, mutual_fund_star_rating, holding_stock_name, holding_stock_sector,
+holding_reporting_date, holding_stock_percentage, mutual_fund_returns_3_Years, mutual_fund_returns_1_Years, mutual_fund_returns_5_Years,
+mutual_fund_returns_10_Years
+
+Rules to construct SQL
+When matching Named Entities like holding_stock_name or mutual_fund_category, do  not use  "=" operator, but use LIKE with wild-cards
+When matching Named Entities like holding_stock_name or mutual_fund_category, use UPPER() on both sides to  make it case-insensitive search
+
+Output a JSON, and nothing else.
+
+Output JSON should have only 2 fields - SQL and Reasoning. SQL contains the SQL Query you generated, and "Reasoning" will have the reasons and steps you took.
+Do not output anything other than JSON.
+
+Examples
+
+Question: Which mutual funds have star rating above 3
+Output: 
+{
+    "SQL": "Select mutual_fund_name, mutual_fund_category from mutual_fund_stock_holdings where mutual_fund_category > 3",
+    "Reasoning": "Identified filter column for WHERE clause to be mutual_fund_category. Since it is numerical, used operator >"
+}
+
+Question: Which mutual funds have stock holdings of company 'V2 Retail'
+Output: 
+{
+    "SQL": "Select mutual_fund_name, holding_stock_percentage from mutual_fund_stock_holdings where  UPPER(holding_stock_name) LIKE UPPER('%V2 Retail%')",
+    "Reasoning": "Identified filter column for WHERE clause to be holding_stock_name. Since it is named entity, used UPPER and LIKE operators"
+}
+
+Here is the Question: {{}}`,
         }
     }
 }

@@ -28,8 +28,8 @@ app.get('/api/protected', verifyToken, (req, res) => {
   res.json({ message: 'Access granted', user: req.user });
 });*/
 app.use([
-  bodyParser.urlencoded({extended: true}),
-  express.json({limit: '1mb'})
+  bodyParser.urlencoded({limit: '50mb', extended: true}),
+  express.json({limit: '50mb'})
   ]);
   app.use(async (err, req, res, next) => {
     if (err.code === 'auth/id-token-expired') {

@@ -221,7 +221,7 @@ holdings = [
       },
 ]
 try {
-    upsertHoldings("MMO003", holdings, "2024-03-31");
+    //upsertHoldings("MMO003", holdings, "2024-03-31");
 } catch (error) {
     console.error('Failed to update holdings:', error);
 }

@@ -143,7 +143,7 @@ export default {
       try {
         const response = await api.get('/api/mutualfunds/list')
         this.fundList = response.data.map(m => {
-          let returnsLabel = m.Returns_3Y ? " (3 Y Returns " +m.Returns_3Y + " %)" : ""
+          let returnsLabel = m.return_3Y ? " (3 Y Returns " +m.return_3Y + " %)" : ""
           for (let i=1; i<=m.star_rating; i++) returnsLabel += "⭐";
           return {
             "name": m.name,
