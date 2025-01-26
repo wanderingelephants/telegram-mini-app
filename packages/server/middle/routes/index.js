@@ -75,7 +75,7 @@ const routes = {
         },
         ollama:{
             singleShotStream: require('./api/ollama/singleShotStream'),
-            promptInstruct: require('./api/ollama/promptInstruct'),
+            promptInstruct: require('./api/ollama/question'),
             promptChat: require('./api/ollama/promptChat'),
         },
         telegram:{

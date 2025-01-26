@@ -45,16 +45,16 @@ export default{
             try{
                 const startTime = new Date()
                 const resp = await api.post('/api/ollama/promptInstruct', {
-                    model: this.model,
-                    promptTemplate: this.promptTemplate,
-                    query: this.query,
+                    ollamaModel: this.model,
+                    base_prompt: this.promptTemplate,
+                    userQuestion: this.query,
                     operation: this.operation,
                     promptName: this.promptName                    
                 })
                 const endTime = new Date()
                 this.timeTaken = endTime - startTime
                 console.log("Time Taken", this.timeTaken)
-                this.promptResponse = resp.data
+                this.promptResponse = JSON.stringify(resp.data)
             }
             catch(e){
                 console.log(e)
@@ -65,44 +65,44 @@ export default{
         return {
             promptName: 'risk_profile',
             promptResponse: '',
-            query: '',
+            query: 'which stock is present in only small cap funds',
             model: 'llama3.2:latest',
-            models: ['llama3.2:latest', 'gemma:7b', 'tinyllama:latest', 'phi3:mini', 'mistral:latest', 'phi4:latest', 'deepseek-v2'],
+            models: ['llama3.2:latest', 'gemma:7b', 'tinyllama:latest', 'phi3:mini', 'mistral:latest', 'phi4:latest', 'deepseek-v2', 'incept5/llama3.1-claude'],
             timeTaken: 0,
-            operation: 'savePrompt',
+            operation: 'testPrompt',
             operations: ['savePrompt', 'testPrompt'],
-            promptTemplate: `You  are an SQL Query Generator in SQLite DB. You have to generate a SQL query to answer a user's Question.
-Create a SQL Query using Table : mutual_fund_stock_holdings 
-Columns : mutual_fund_name, mutual_fund_category, mutual_fund_star_rating, holding_stock_name, holding_stock_sector,
-holding_reporting_date, holding_stock_percentage, mutual_fund_returns_3_Years, mutual_fund_returns_1_Years, mutual_fund_returns_5_Years,
-mutual_fund_returns_10_Years
+            promptTemplate: `You are a javascript programmer who anayzes mutual funds holdings data. I will give you a question about mutual fund holdings analysis. 
+Your task is to output a JavaScript function named 'analyze' that takes argument named mutual_funds_holdings, which is an array of mutual fund holdings data
+Output only the function string and nothing else. 
 
-Rules to construct SQL
-When matching Named Entities like holding_stock_name or mutual_fund_category, do  not use  "=" operator, but use LIKE with wild-cards
-When matching Named Entities like holding_stock_name or mutual_fund_category, use UPPER() on both sides to  make it case-insensitive search
+The input array format is:
+[{
+  "mutual_fund_name": string,
+  "mutual_fund_category": string,
+  "stock_name": string,
+  "stock_holding_in_percentage": string,
+  "holding_reporting_date": string (YYYY-MM-DD) e.g. 2024-12-31
+}]
 
-Output a JSON, and nothing else.
+Some fields have only a fixed set of values. e.g. mutual_fund_category can only be one of ["Small Cap Fund", "Large Cap Fund", "Mid Cap Fund"]
 
-Output JSON should have only 2 fields - SQL and Reasoning. SQL contains the SQL Query you generated, and "Reasoning" will have the reasons and steps you took.
-Do not output anything other than JSON.
+Each record in the array represents a stock's percentage holding in the mutual fund, on the given holding_reporting_date. 
+Remember, when using filter on stock_name or mutual_fund_name, then do not do exact match (===), do a case-insensitive filter by doing toLowerCase and using indexOf
+e.g. to filter holdings for stock_name Fictitious, mutual_fund_holdings_array.filter(holding => holding.stock_name.toLowerCase().indexOf('Fictitious'.toLowerCase() > -1))
+If the Question is about comparing holdngs between 2 periods like current and previous then use the holding_reporting_date field. 
+e.g. latest holding will be the record with maximum holding_reporting_date. 
+e.g. previous holding will be the record with date immediately preceding holding_reporting_date. so, if one were to sort the  array om date DESCENDING, then latest holding date will be
+the first record, previous holding date will be second record and earliest holding date will be the last record.
 
-Examples
+Coding Guideline : Avoid nested functions e.g. set.map().sort().filter(). Instead follow a "verbose" approach, where each operation like filter, sort, map, reduce is done in a separate line with separate variables. 
+This reduces the likelihood of syntax errors in your code. Syntax validation and checking is easier with simple to follow code.
 
-Question: Which mutual funds have star rating above 3
-Output: 
-{
-    "SQL": "Select mutual_fund_name, mutual_fund_category from mutual_fund_stock_holdings where mutual_fund_category > 3",
-    "Reasoning": "Identified filter column for WHERE clause to be mutual_fund_category. Since it is numerical, used operator >"
-}
+Validation: Make sure the Javascript syntax is correct, and it "compiles". i.e. stuff like opening and closing brackets are matching everywhere. e.g. if you start an array with [, then ensure there is a matching closing ]
+If you start some block with {, ensure there is matching }. 
+Try to execute the function with an empty array, so that compilation and syntax errors you can find yourself, before sending back the output.
 
-Question: Which mutual funds have stock holdings of company 'V2 Retail'
-Output: 
-{
-    "SQL": "Select mutual_fund_name, holding_stock_percentage from mutual_fund_stock_holdings where  UPPER(holding_stock_name) LIKE UPPER('%V2 Retail%')",
-    "Reasoning": "Identified filter column for WHERE clause to be holding_stock_name. Since it is named entity, used UPPER and LIKE operators"
-}
-
-Here is the Question: {{}}`,
+If the output array length is more than 20, slice and return the first 20 objects.
+`,
         }
     }
 }

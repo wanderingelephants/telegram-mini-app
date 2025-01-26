@@ -1,5 +1,5 @@
 const Database = require('better-sqlite3');
-const db = new Database(process.env.SQLITE_DB + '/dipsip.db', { verbose: console.log });
+const db = new Database(process.env.SQLITE_DB + '/dipsip.db', {  });
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 const helpers = {
@@ -161,6 +161,7 @@ const upsertHoldings = db.transaction(async (schemeCode, holdings, reportingDate
                 reportingDate
             );
         } catch (error) {
+            console.log("error in insertHolding", error)
             if (error.code === 'SQLITE_CONSTRAINT_UNIQUE') {
                 // Update existing record
                 updateHolding.run(

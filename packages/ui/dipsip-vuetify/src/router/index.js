@@ -35,7 +35,7 @@ const routes = [
     component: SettingsPage
   },
   {
-    path: '/scraper',
+    path: '/info',
     name: 'Scraper',
     component: WebScraper
   },

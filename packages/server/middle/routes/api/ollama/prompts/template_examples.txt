@@ -1,0 +1,120 @@
+Example
+Question: Which mutual funds have holdings in XYZ stock
+Response:
+
+function analyze(mutual_funds_holdings){
+    //Identify "XYZ" as a Named entity corresponding to field stock_name. Applied case-insensitive wild-card filter logic.
+    const holdings_in_reliance = mutual_funds_holdings.filter(mfh => mfh.stock_name.toLowerCase().indexOf('XYZ'.toLowerCase() > -1))
+    return holdings_in_reliance
+}
+
+Example
+Question: which stock is present in only small cap funds
+Response:
+
+function analyze(mutual_funds_holdings) {
+    const smallCapFunds = mutual_funds_holdings.filter(mfh => 
+        mfh.mutual_fund_category.toLowerCase() === 'small cap fund'
+    );
+
+    return smallCapFunds.map(mfh => ({
+        stock_name: mfh.stock_name,
+        mutual_fund_name: mfh.mutual_fund_name
+    }));
+}
+
+
+
+Example
+Question: Which mutual funds have increased their  holdings in XYZ stock
+Response:
+
+function analyze(mutual_funds_holdings) {
+    //Since Question is about increase in holdings, it means comparison of latest_reporting_date and preceding_reporting_date. 
+    //Therefore, first calculate latest_reporting_date and preceding_reporting_date. Parse the Date() in order to do sorting.
+let sorted_holdings = mutual_funds_holdings.sort((a, b) => new Date(b.holding_reporting_date) - new Date(a.holding_reporting_date));
+const latest_reporting_date = sorted_holdings[0].holding_reporting_date;
+const dates = [...new Set(sorted_holdings.map(h => h.holding_reporting_date))].sort((a,b) => new Date(b) - new Date(a));
+
+const latest_holdings = sorted_holdings.filter(h => 
+    h.holding_reporting_date === latest_reporting_date && 
+    h.stock_name.toLowerCase().indexOf('XYZ'.toLowerCase()) > -1
+);
+
+const preceding_reporting_date = dates[1];
+//Identify "XYZ" as a Named entity corresponding to field stock_name. Applied case-insensitive wild-card filter logic.
+const previous_holdings = sorted_holdings.filter(h => 
+    h.holding_reporting_date === preceding_reporting_date && 
+    h.stock_name.toLowerCase().indexOf('XYZ'.toLowerCase()) > -1 
+);
+//filter the holdings based on latest_reporting_date and preceding_reporting_date, and compare based on stock_holding_in_percentage
+return latest_holdings.filter(latest => {
+    const previous = previous_holdings.find(prev => 
+        prev.mutual_fund_name.toLowerCase() === latest.mutual_fund_name.toLowerCase()
+    );
+    return !previous || 
+        parseFloat(latest.stock_holding_in_percentage) > parseFloat(previous?.stock_holding_in_percentage || '0');
+});
+}
+
+Example
+Question: which stock is present in only one fund, output the stock name and fund name
+Response:
+
+function analyze(mutual_funds_holdings) {
+    // find latest date
+    const latest_date = [...new Set(mutual_funds_holdings.map(h => h.holding_reporting_date))]
+    .sort((a,b) => new Date(b) - new Date(a))[0];
+    //Filter holdings to get only latest holdings
+    const latest_holdings = mutual_funds_holdings.filter(h => h.holding_reporting_date === latest_date);
+
+//For each holding, find all funds that have same stock (case-insensitive match)
+//If count of funds for that stock is 1, include in results
+//Map results to return only required fields (stock name and fund name)
+return latest_holdings.filter(holding => {
+    const funds_with_stock = latest_holdings.filter(h => 
+        h.stock_name.toLowerCase() === holding.stock_name.toLowerCase()
+    );
+    return funds_with_stock.length === 1;
+}).map(h => ({
+    stock_name: h.stock_name,
+    mutual_fund_name: h.mutual_fund_name
+}));
+}
+
+
+Question: which stock is present in exactly 3 funds. output the stock name and fund name
+Response:
+function analyze(mutual_funds_holdings) {
+    //Get latest date
+const dates_set = [...new Set(mutual_funds_holdings.map(h => h.holding_reporting_date))]
+const dates_set_sorted = dates_set.sort((a,b) => new Date(b) - new Date(a))
+const latest_date = dates_set_sorted[0];
+//Filter for latest holdings
+const latest_holdings = mutual_funds_holdings.filter(h => h.holding_reporting_date === latest_date);
+
+//Group holdings by stock name (case-insensitive)
+const stock_groups = new Map();
+latest_holdings.forEach(h => {
+    const stock_key = h.stock_name.toLowerCase();
+    if (!stock_groups.has(stock_key)) {
+        stock_groups.set(stock_key, {
+            stock_name: h.stock_name,
+            funds: []
+        });
+    }
+    stock_groups.get(stock_key).funds.push(h.mutual_fund_name);
+});
+//Return stocks present in exactly 3 funds with their fund names
+return Array.from(stock_groups.values())
+    .filter(group => group.funds.length === 3)
+    .map(group => ({
+        stock_name: group.stock_name,
+        mutual_fund_names: group.funds
+    }));
+}
+
+
+
+
+

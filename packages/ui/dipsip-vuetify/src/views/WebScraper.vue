@@ -115,7 +115,10 @@ export default {
           headers: {
             'User-Agent': navigator.userAgent,
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-            'Accept-Language': 'en-US,en;q=0.5'
+            'Accept-Language': 'en-US,en;q=0.5',
+            'Cookie': '', // Empty cookie
+            'Accept-Encoding': 'gzip, deflate',
+            'Connection': 'keep-alive'
           }
         });
         
@@ -252,9 +255,9 @@ export default {
       
       await this.sleep(this.delay);
       const portfolioDoc = await this.fetchWithRetry(portfolioUrl);
-      const dateSpan = document.querySelector('h2.title_24px span.subtext');
+      const dateSpan = portfolioDoc.querySelector('h2.title_24px span.subtext');
       const holdingsDateSpan  = dateSpan ? dateSpan.textContent : null;
-      let holdingsDateText = holdingsDateSpan == null ? '1970-01-01' : this.parseHoldingsDate(holdingsDateSpan)
+      let holdingsDateText = holdingsDateSpan == null ? null : this.parseHoldingsDate(holdingsDateSpan)
       fund.reportingDate = holdingsDateText
       const table = portfolioDoc.querySelector('#equityCompleteHoldingTable');
             if (!table) return null;

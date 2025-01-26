@@ -5,7 +5,7 @@ const OLLAMA_URL = process.env.OLLAMA_URL;
 const PROMPTS_FOLDER = path.join(__dirname, "prompts")
 const fs = require('fs')
 const sendPrompt = require('./send_prompt.js')
-
+const mutual_fund_data = require('./mf_holdings.json')
 const route = async (req, res) => {
   try{
     const {model, promptTemplate, query, promptName, operation = 'savePrompt'} = req.body
@@ -26,10 +26,24 @@ const route = async (req, res) => {
         stream: false
       });
       const endTime = new Date()
-      console.log(response.data.response.trim())
+      let resp = response.data.response.trim()
+      if (resp.startsWith("```javascript")){
+        resp = resp.substring("```javascript".length, resp.length)
+        if (resp.endsWith("```")) resp = resp.substring(0, resp.length-3)
+      }
+    console.log(resp)
+      const parsedResponse = resp; //.replaceAll("\n", "")
       console.log("Time Taken", (endTime - startTime))
-      return (response.data.response.trim())
-      
+      console.log(parsedResponse)
+      //const parsedResponse = JSON.parse(resp);
+        //console.log(parsedResponse)
+        // Extract and evaluate the JS code
+        const analyzeFunction = eval(`(${parsedResponse})`);
+        
+        // Execute analysis
+      const result = analyzeFunction(mutual_fund_data);
+      console.log(result)
+      res.status(200).json(result)
     }
     
   }

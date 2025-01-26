@@ -36,7 +36,7 @@ db.exec(createTableSchema);
 db.prepare('create unique index mutual_fund_scheme_code on mutual_fund(scheme_code)').run()
 
 // Optional: Create an index on scheme_code for faster lookups
-db.exec('CREATE INDEX IF NOT EXISTS idx_scheme_code ON mutual_fund(scheme_code)');
+//db.exec('CREATE INDEX IF NOT EXISTS idx_scheme_code ON mutual_fund(scheme_code)');
 
 // Helper function to convert percentage string to float
 function percentToFloat(percentStr) {

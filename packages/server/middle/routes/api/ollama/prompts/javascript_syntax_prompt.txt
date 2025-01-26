@@ -1,0 +1,38 @@
+you are javascript syntax checker. For the function string given below, fix the syntax and output the corrected function. 
+ Output only the function, and nothing else.
+ The input array mutual_funds_holdings has these fields. Use this for checking property names on objects being filtered, sorted, grouped
+  
+  [{
+  "mutual_fund_name": string,
+  "mutual_fund_category": string,
+  "stock_name": string,
+  "stock_holding_in_percentage": string,
+  "holding_reporting_date": string (YYYY-MM-DD) e.g. 2024-12-31
+}]
+
+Here is the function, having an error on invocation:
+
+function analyze(mutual_funds_holdings){
+    const latest_date = [...new Set(mutual_funds_holdings.map(h => h.holding_reporting_date))
+    .sort((a,b) => new Date(b) - new Date(a))[0];
+    const latest_holdings = mutual_funds_holdings.filter(h => h.holding_reporting_date === latest_date);
+
+    const stock_groups = new Map();
+    latest_holdings.forEach(h => {
+        const stock_key = h.stock_name.toLowerCase();
+        if (!stock_groups.has(stock_key)) {
+            stock_groups.set(stock_key, {
+                stock_name: h.stock_name,
+                funds: []
+            });
+        }
+        stock_groups.get(stock_key).funds.push(h.mutual_fund_name);
+    });
+
+    return Array.from(stock_groups.values())
+        .filter(group => group.funds.length === 3)
+        .map(group => ({
+            stock_name: group.stock_name,
+            mutual_fund_names: group.funds
+        }));
+}
