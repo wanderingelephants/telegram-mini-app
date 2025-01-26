@@ -53,16 +53,27 @@
       <!-- Input Area - Sticky Bottom -->
       <div class="chat-input">
         <v-card-actions class="pa-4">
-          <v-text-field
+          <v-autocomplete
+          ref="autocomplete"
             v-model="userInput"
+            :items="suggestions"
             :label="userInputLabel"
             :disabled="isLoading"
             variant="outlined"
             density="comfortable"
             hide-details
-            @keyup.enter="sendMessage"
+            :hide-no-data="hideNoData"
+            @keydown.enter.prevent="handleEnter"
+            @update:search="onInputChange"
             append-inner-icon="mdi-send"
             @click:append-inner="sendMessage"
+            :menu-props="{ 
+         maxHeight: 200,
+         openOnClick: false,
+         closeOnClick: true,
+         closeOnContentClick: true
+       }"
+        no-data-text=""
           />
         </v-card-actions>
       </div>
@@ -101,8 +112,16 @@ export default{
       console.log("PromptCHAT mounted")
     },
     methods: {
+      handleEnter(e) {
+   if (this.suggestions.length && this.$refs.autocomplete.isMenuActive) {
+     // Let v-autocomplete handle selection
+     return;
+   }
+   this.sendMessage();
+ },
         async sendMessage() {
       if (!this.userInput.trim()) return;
+      this.suggestions = [];
       const userMessage = {
         role: 'user',
         content: this.userInput.trim()
@@ -186,6 +205,25 @@ export default{
         });
       }
     },
+    onInputChange(text) {
+  if (!text) return;
+  
+  const words = text.split(/\s+/);
+  const lastWord = words[words.length - 1].toLowerCase();
+  
+  if (lastWord.length > 4) {
+    const matchedCompanies = this.company_names_list
+      .filter(name => name.toLowerCase().includes(lastWord));
+      
+    this.suggestions = matchedCompanies.length > 0 ? 
+      matchedCompanies.map(name => {
+        const newWords = [...words];
+        newWords[newWords.length - 1] = name;
+        return newWords.join(' ');
+      }).slice(0, 5) : 
+      [text]; // Keep original text if no matches
+  }
+},
     scrollToBottom() {
       const container = this.$refs.messagesContainer;
       if (container) {
@@ -202,6 +240,10 @@ export default{
             operations: ['savePrompt', 'testPrompt'],
             messages: [],
             isLoading: false,
+            userInput: '',
+            suggestions: [],
+            company_names_list: [],
+            hideNoData: true
             
         }
     }
