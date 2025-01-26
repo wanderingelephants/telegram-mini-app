@@ -1,7 +1,7 @@
 const Database = require('better-sqlite3');
 const db = new Database(process.env.SQLITE_DB + '/dipsip.db', {  });
 const { Pinecone } = require('@pinecone-database/pinecone');
-const { Claude } = require('@anthropic-ai/sdk');
+const { Anthropic } = require('@anthropic-ai/sdk');
 const OpenAI = require('openai');
 const axios = require('axios');
 const fs = require('fs')
@@ -15,7 +15,7 @@ const pinecone = new Pinecone({
  //environment: process.env.PINECONE_ENVIRONMENT
 });
 const getMutualFundHoldingsJSONArray = function(){
-    const sql = `SELECT mf.name as mutual_fund_name, mfh.stock_name, mfh.stock_holding_in_percentage as stock_holding_in_percentage,
+    const sql = `SELECT mf.name as mutual_fund_name, mf.category as mutual_fund_category, mfh.stock_name, mfh.stock_holding_in_percentage as stock_holding_in_percentage,
 mfh.reporting_date as holding_reporting_date
 FROM "mutual_fund_holdings" mfh, mutual_fund mf
 where mf.scheme_code=mfh.scheme_code`
@@ -63,9 +63,14 @@ const route = async (req, res) => {
          });
          return data.response;
        } else if (process.env.LLM_TO_USE === 'Claude') {
-         const claude = new Claude({ apiKey: process.env.CLAUDE_API_KEY });
-         const response = await claude.complete({ prompt });
-         return response.completion;
+         const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_API_KEY });
+         const resp = await anthropic.messages.create({
+            model: "claude-3-5-sonnet-20241022",
+            max_tokens: 1024,
+            messages: [{ role: "user", content: prompt }],
+          });
+        console.log(resp)  
+         return resp.content[0].text;
        } else {
         const openai = new OpenAI({
             apiKey: process.env.OPENAI_API_KEY
@@ -89,7 +94,6 @@ const route = async (req, res) => {
        functionText = functionText.substring(0, functionText.length - 3);
      }
    }
-   console.log("Function Text Recd", functionText)
    let analyzeFunction;
    try {
      analyzeFunction = eval(`(${functionText})`);
