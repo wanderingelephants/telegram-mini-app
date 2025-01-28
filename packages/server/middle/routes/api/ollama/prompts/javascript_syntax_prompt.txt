@@ -1,38 +1,25 @@
 you are javascript syntax checker. For the function string given below, fix the syntax and output the corrected function. 
- Output only the function, and nothing else.
+Do not change the function signature i.e. function name and arguments must not change. No logic change. Only fix syntax.
  The input array mutual_funds_holdings has these fields. Use this for checking property names on objects being filtered, sorted, grouped
   
-  [{
+Function name : analyze
+Function arguments : 
+
+1. mutual_funds_holdings :  an array of mutual fund holdings data
+2. reporting_dates : an array of reporting dates, corresponding to mutual_fund_holdings. The dates in this array are sorted descending, i.e. latest reporting date is reporting_dates[0], preivous to latest is reporting_dates[1] and so on. Therefore earliest reporting date will be reporting_dates[reporting_dates.length - 1] i.e. the last element of the array. 
+ e.g. [2024-12-31, 2024-09-30, 2024-06-30, 2024-03-31, 2023-12-31] - for this data set, latest reporting date (most current / recent data) is 2024-12-31 and earliest reporting date is 2023-12-31. This array is important in determining time periods and filters on mutual_funds_holdings.holding_reporting_date. When the User Question does not mention any time period, assume it to be
+ the latest reporting period i.e. reporting_dates[0]. If User question is about increase in holdings, then it means they are implcitly asking to compare data for reporting_dates[0] and reporting_dates[1]
+
+The mutual_funds_holdings array schema is:
+[{
   "mutual_fund_name": string,
   "mutual_fund_category": string,
   "stock_name": string,
   "stock_holding_in_percentage": string,
-  "holding_reporting_date": string (YYYY-MM-DD) e.g. 2024-12-31
+  "holding_reporting_date": Date
 }]
 
+Output only the function, and nothing else.
+ 
 Here is the function, having an error on invocation:
 
-function analyze(mutual_funds_holdings){
-    const latest_date = [...new Set(mutual_funds_holdings.map(h => h.holding_reporting_date))
-    .sort((a,b) => new Date(b) - new Date(a))[0];
-    const latest_holdings = mutual_funds_holdings.filter(h => h.holding_reporting_date === latest_date);
-
-    const stock_groups = new Map();
-    latest_holdings.forEach(h => {
-        const stock_key = h.stock_name.toLowerCase();
-        if (!stock_groups.has(stock_key)) {
-            stock_groups.set(stock_key, {
-                stock_name: h.stock_name,
-                funds: []
-            });
-        }
-        stock_groups.get(stock_key).funds.push(h.mutual_fund_name);
-    });
-
-    return Array.from(stock_groups.values())
-        .filter(group => group.funds.length === 3)
-        .map(group => ({
-            stock_name: group.stock_name,
-            mutual_fund_names: group.funds
-        }));
-}
