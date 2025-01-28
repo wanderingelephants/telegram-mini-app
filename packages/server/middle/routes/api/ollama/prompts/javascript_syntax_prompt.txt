@@ -19,6 +19,8 @@ The mutual_funds_holdings array schema is:
   "holding_reporting_date": Date
 }]
 
+Error: {{}}
+
 Output only the function, and nothing else.
  
 Here is the function, having an error on invocation:

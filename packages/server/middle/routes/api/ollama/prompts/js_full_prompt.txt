@@ -21,7 +21,7 @@ The function and its parameters are defined in this JSON:
                     "name": "mutual_fund_category",
                     "type": "string",
                     "description": "mutual fund category. must be one of the enums",
-                    "enum": ["small cap fund", "mid cap fund", "large cap fund", "multi cap fund"]
+                    "enum": ["etf", "small cap fund", "mid cap fund", "large cap fund", "multi cap fund"]
                 },
                 {
                     "name": "mutual_fund_star_rating",
@@ -89,7 +89,6 @@ Coding Guidelines
 - wherever the JSON schema indicates enum (not null), make sure you use one of the enum values only. e.g. if user mentions "small cap funds" then it means "small cap fund" from enum defined in above schema.
 - holding_reporting_dates : this array must always be used. If the User Question does not mention any time period, then it is assumed to be the latest reporting date, i.e. holding_reporting_dates[0]
     If the User Question is about mutual fund stock holdings comparison across time, then latest_date will be holding_reporting_dates[0], preceding_reporting_date will be holding_reporting_dates[1] and so on. Broadly, one date per Quarter in the indian markets.
-- Variable Names : While iterating over arrays or while using arrow functions, use "mfh" for mutual_fund_stock_holdings    
 - Duplicates : If return data is an array, then ensure there are no duplicates. e.g. if there are 3 fields in each object of the array, then use the 3 as key to eliminate duplicates.    
 
 Validation: Make sure the Javascript syntax is correct, and it "compiles". i.e. stuff like opening and closing brackets are matching everywhere. e.g. if you start an array with [, then ensure there is a matching closing ]
@@ -112,12 +111,12 @@ function analyzeMutualFundsHoldings(mutual_funds_stock_holdings, holding_reporti
     //Step 3 : Identify small cap as mutual_fund_category. Filter on the enum value 'small cap fund'
     const smallCapFundsRatedThreeOrAbove = latest_holdings.filter(mfh => 
         mfh.mutual_fund_category.toLowerCase() === 'small cap fund' && 
-        mfh.mutual_fund_star_rating >= 3
+        mfg.mutual_fund_star_rating >= 3
     );
 
 }
 
-Examples of Multi-hop Questions with filters
+Example : Multi-hop Question with filters
 
 Example
 Question: Which mutual funds have increased their  holdings in XYZ stock
@@ -153,84 +152,6 @@ return latest_holdings.filter(latest => {
 });
 }
 
-Example
-Question : which large cap funds have an overlap over 25% compared with etfs. basically, find common stocks in funds belonging to large cap and etfs and then add their percentage holdings, and report pairs that have more than 25 % overlap. 
-Response :
-function analyzeMutualFundsHoldings(mutual_funds_stock_holdings, holding_reporting_dates) {
-    //Since no time period mentioned, use the latest reporting date
-    const latest_reporting_date = holding_reporting_dates[0];
-    //Filter for latest holdings
-const latest_holdings = mutual_funds_stock_holdings.filter(mfh => 
-    mfh.holding_reporting_date.toISOString() === latest_reporting_date.toISOString()
-);
-
-//Get all ETF holdings
-const etf_holdings = latest_holdings.filter(mfh => 
-    mfh.mutual_fund_category.toLowerCase() === 'etf'
-);
-
-//Get all large cap fund holdings
-const large_cap_holdings = latest_holdings.filter(mfh => 
-    mfh.mutual_fund_category.toLowerCase() === 'large cap fund'
-);
-
-//Calculate overlap for each large cap fund with each ETF
-const overlaps = [];
-
-//Get unique large cap fund names
-const large_cap_fund_names = [...new Set(
-    large_cap_holdings.map(mfh => mfh.mutual_fund_name)
-)];
-
-//Get unique ETF names
-const etf_names = [...new Set(
-    etf_holdings.map(mfh => mfh.mutual_fund_name)
-)];
-
-//For each large cap fund, calculate overlap with each ETF
-large_cap_fund_names.forEach(fund_name => {
-    //Get holdings of this large cap fund
-    const fund_holdings = large_cap_holdings.filter(mfh => 
-        mfh.mutual_fund_name.toLowerCase() === fund_name.toLowerCase()
-    );
-
-    etf_names.forEach(etf_name => {
-        //Get holdings of this ETF
-        const etf_fund_holdings = etf_holdings.filter(mfh => 
-            mfh.mutual_fund_name.toLowerCase() === etf_name.toLowerCase()
-        );
-
-        //Initialize overlap percentage
-        let overlap_percentage = 0;
-
-        //For each stock in the large cap fund
-        fund_holdings.forEach(fund_holding => {
-            //Check if this ETF also holds this stock
-            const matching_etf_holding = etf_fund_holdings.find(etf => 
-                etf.stock_name.toLowerCase() === fund_holding.stock_name.toLowerCase()
-            );
-
-            //If match found, add the minimum of the two percentages to overlap
-            if(matching_etf_holding) {
-                overlap_percentage += Math.min(
-                    fund_holding.stock_holding_in_percentage,
-                    matching_etf_holding.stock_holding_in_percentage
-                );
-            }
-        });
-
-        //If overlap is more than 25%, add to results
-        if(overlap_percentage > 25) {
-            overlaps.push({
-                large_cap_fund: fund_name,
-                etf_name: etf_name,
-                overlap_percentage: overlap_percentage
-            });
-        }
-    });
-});
-
-
 Output only the function text, and nothing else.
 
-Here is the User Question: in small cap funds, which stocks got added newly 
+Here is the User Question: which funds had maximum churn compared to previous reporting period. Churn is the change in stock holding percentage. If a stock's holding changes between previous and current period, then count it as 1. List top 10 churners. 

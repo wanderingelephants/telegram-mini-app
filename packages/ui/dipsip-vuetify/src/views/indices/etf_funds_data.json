@@ -1,0 +1,1048 @@
+[
+    {
+      "name": "Motilal Oswal NASDAQ 100 ETF",
+      "url": "/mutual-funds/nav/motilal-oswal-nasdaq-100-etf/MMO003",
+      "schemeCode": "MMO003",
+      "category": "ETF",
+      "aum": "8868.32",
+      "returns": {
+        "1W": "-1.02",
+        "1M": "--",
+        "3M": "4.6",
+        "6M": "5.83",
+        "1Y": "28.44",
+        "2Y": "38.52",
+        "3Y": "16.14"
+      }
+    },
+    {
+      "name": "Nippon ETF Hang Seng BeES",
+      "url": "/mutual-funds/nav/nippon-india-etf-hang-seng-bees/MBM026",
+      "schemeCode": "MBM026",
+      "category": "ETF",
+      "aum": "744.62",
+      "returns": {
+        "1W": "-0.28",
+        "1M": "--",
+        "3M": "-6.08",
+        "6M": "10.19",
+        "1Y": "28.12",
+        "2Y": "0.3",
+        "3Y": "0.22"
+      }
+    },
+    {
+      "name": "Invesco India Gold ETF",
+      "url": "/mutual-funds/nav/invesco-india-gold-exchange-traded-fund/MLI347",
+      "schemeCode": "MLI347",
+      "category": "ETF",
+      "aum": "201.24",
+      "returns": {
+        "1W": "1.67",
+        "1M": "--",
+        "3M": "2.83",
+        "6M": "6.62",
+        "1Y": "24.14",
+        "2Y": "16.25",
+        "3Y": "16.76"
+      }
+    },
+    {
+      "name": "Quantum Gold Fund",
+      "url": "/mutual-funds/nav/quantum-gold-fund/MQU006",
+      "schemeCode": "MQU006",
+      "category": "ETF",
+      "aum": "235.84",
+      "returns": {
+        "1W": "1.2",
+        "1M": "--",
+        "3M": "2.42",
+        "6M": "6.49",
+        "1Y": "23.96",
+        "2Y": "15.75",
+        "3Y": "16.38"
+      }
+    },
+    {
+      "name": "UTI Gold Exchange Traded Fund",
+      "url": "/mutual-funds/nav/uti-gold-exchange-traded-fund/MUT113",
+      "schemeCode": "MUT113",
+      "category": "ETF",
+      "aum": "1473.23",
+      "returns": {
+        "1W": "1.68",
+        "1M": "--",
+        "3M": "2.89",
+        "6M": "6.08",
+        "1Y": "23.88",
+        "2Y": "16.44",
+        "3Y": "16.79"
+      }
+    },
+    {
+      "name": "LIC MF Gold Exchange Traded Fund",
+      "url": "/mutual-funds/nav/lic-mf-gold-exchange-traded-fund/MIB042",
+      "schemeCode": "MIB042",
+      "category": "ETF",
+      "aum": "172.96",
+      "returns": {
+        "1W": "1.68",
+        "1M": "--",
+        "3M": "2.86",
+        "6M": "5.71",
+        "1Y": "23.9",
+        "2Y": "16.61",
+        "3Y": "17.15"
+      }
+    },
+    {
+      "name": "HDFC Gold Exchange Traded Fund",
+      "url": "/mutual-funds/nav/hdfc-gold-exchange-traded-fund/MHD679",
+      "schemeCode": "MHD679",
+      "category": "ETF",
+      "aum": "6528.82",
+      "returns": {
+        "1W": "1.67",
+        "1M": "--",
+        "3M": "2.99",
+        "6M": "5.62",
+        "1Y": "23.8",
+        "2Y": "16.06",
+        "3Y": "16.58"
+      }
+    },
+    {
+      "name": "ICICI Prudential Gold ETF",
+      "url": "/mutual-funds/nav/icici-prudential-gold-etf/MPI753",
+      "schemeCode": "MPI753",
+      "category": "ETF",
+      "aum": "5693.66",
+      "returns": {
+        "1W": "1.13",
+        "1M": "1.19",
+        "3M": "2.4",
+        "6M": "6.43",
+        "1Y": "23.63",
+        "2Y": "15.81",
+        "3Y": "16.45"
+      }
+    },
+    {
+      "name": "Kotak Gold ETF",
+      "url": "/mutual-funds/nav/kotak-gold-etf/MKM103",
+      "schemeCode": "MKM103",
+      "category": "ETF",
+      "aum": "5221.09",
+      "returns": {
+        "1W": "1.12",
+        "1M": "--",
+        "3M": "2.4",
+        "6M": "6.39",
+        "1Y": "23.58",
+        "2Y": "15.78",
+        "3Y": "16.4"
+      }
+    },
+    {
+      "name": "Birla Sun Life Gold ETF (G)",
+      "url": "/mutual-funds/nav/birla-sun-life-gold-exchange-traded-fund/MBS563",
+      "schemeCode": "MBS563",
+      "category": "ETF",
+      "aum": "936.74",
+      "returns": {
+        "1W": "1.15",
+        "1M": "--",
+        "3M": "2.43",
+        "6M": "6.43",
+        "1Y": "23.58",
+        "2Y": "15.75",
+        "3Y": "16.4"
+      }
+    },
+    {
+      "name": "SBI - ETF Gold",
+      "url": "/mutual-funds/nav/sbi-etf-gold/MSB211",
+      "schemeCode": "MSB211",
+      "category": "ETF",
+      "aum": "5969.67",
+      "returns": {
+        "1W": "1.12",
+        "1M": "--",
+        "3M": "2.36",
+        "6M": "6.33",
+        "1Y": "23.49",
+        "2Y": "15.6",
+        "3Y": "16.28"
+      }
+    },
+    {
+      "name": "Nippon ETF Gold BeES",
+      "url": "/mutual-funds/nav/nippon-india-etf-gold-bees/MBM017",
+      "schemeCode": "MBM017",
+      "category": "ETF",
+      "aum": "15189.76",
+      "returns": {
+        "1W": "1.12",
+        "1M": "--",
+        "3M": "2.33",
+        "6M": "6.27",
+        "1Y": "23.39",
+        "2Y": "15.61",
+        "3Y": "16.26"
+      }
+    },
+    {
+      "name": "Axis Gold ETF",
+      "url": "/mutual-funds/nav/axis-gold-etf/MAA093",
+      "schemeCode": "MAA093",
+      "category": "ETF",
+      "aum": "1184.01",
+      "returns": {
+        "1W": "1.12",
+        "1M": "--",
+        "3M": "2.39",
+        "6M": "6.39",
+        "1Y": "22.77",
+        "2Y": "15.84",
+        "3Y": "16.47"
+      }
+    },
+    {
+      "name": "CPSE Exchange Traded Fund",
+      "url": "/mutual-funds/nav/cpse-exchange-traded-fund/MBM040",
+      "schemeCode": "MBM040",
+      "category": "ETF",
+      "aum": "36966.28",
+      "returns": {
+        "1W": "-4.14",
+        "1M": "--",
+        "3M": "-15.8",
+        "6M": "-18.79",
+        "1Y": "20.3",
+        "2Y": "47.47",
+        "3Y": "36.9"
+      }
+    },
+    {
+      "name": "SBI Nifty IT ETF",
+      "url": "/mutual-funds/nav/sbi-nifty-it-etf/MSB1702",
+      "schemeCode": "MSB1702",
+      "category": "ETF",
+      "aum": "86.82",
+      "returns": {
+        "1W": "-0.73",
+        "1M": "--",
+        "3M": "0.92",
+        "6M": "11",
+        "1Y": "19.7",
+        "2Y": "23.85",
+        "3Y": "5.24"
+      }
+    },
+    {
+      "name": "Can Gold Exchange Traded Fund",
+      "url": "/mutual-funds/nav/canara-robeco-gold-exchange-traded-fund/MCA191",
+      "schemeCode": "MCA191",
+      "category": "ETF",
+      "aum": "1.54",
+      "returns": {
+        "1W": "--",
+        "1M": "--",
+        "3M": "--",
+        "6M": "--",
+        "1Y": "--",
+        "2Y": "--",
+        "3Y": "--"
+      }
+    },
+    {
+      "name": "Edelweiss ETS - Banking",
+      "url": "/mutual-funds/nav/edelweiss-etf-nifty-bank/MEW120",
+      "schemeCode": "MEW120",
+      "category": "ETF",
+      "aum": "1.73",
+      "returns": {
+        "1W": "--",
+        "1M": "--",
+        "3M": "--",
+        "6M": "--",
+        "1Y": "--",
+        "2Y": "--",
+        "3Y": "--"
+      }
+    },
+    {
+      "name": "Mirae Asset Nifty Next 50 ETF",
+      "url": "/mutual-funds/nav/mirae-asset-nifty-next-50-etf/MMA184",
+      "schemeCode": "MMA184",
+      "category": "ETF",
+      "aum": "468.26",
+      "returns": {
+        "1W": "-5.76",
+        "1M": "--",
+        "3M": "-16.45",
+        "6M": "-14.14",
+        "1Y": "15.78",
+        "2Y": "22.85",
+        "3Y": "13.78"
+      }
+    },
+    {
+      "name": "SBI - ETF Nifty Next 50",
+      "url": "/mutual-funds/nav/sbi-nifty-next-50-etf/MSB1113",
+      "schemeCode": "MSB1113",
+      "category": "ETF",
+      "aum": "2947.03",
+      "returns": {
+        "1W": "-5.76",
+        "1M": "--",
+        "3M": "-16.47",
+        "6M": "-14.19",
+        "1Y": "15.73",
+        "2Y": "22.91",
+        "3Y": "13.83"
+      }
+    },
+    {
+      "name": "Nippon ETF Junior BeES",
+      "url": "/mutual-funds/nav/nippon-india-etf-nifty-next-50-junior-bees/MBM002",
+      "schemeCode": "MBM002",
+      "category": "ETF",
+      "aum": "5482.11",
+      "returns": {
+        "1W": "-5.76",
+        "1M": "--",
+        "3M": "-16.45",
+        "6M": "-14.19",
+        "1Y": "15.67",
+        "2Y": "22.86",
+        "3Y": "13.79"
+      }
+    },
+    {
+      "name": "Nippon ETF Consumption",
+      "url": "/mutual-funds/nav/nippon-india-etf-nifty-india-consumption/MRC1474",
+      "schemeCode": "MRC1474",
+      "category": "ETF",
+      "aum": "132.78",
+      "returns": {
+        "1W": "-3.79",
+        "1M": "--",
+        "3M": "-11.78",
+        "6M": "-3.2",
+        "1Y": "14.61",
+        "2Y": "21.87",
+        "3Y": "15.77"
+      }
+    },
+    {
+      "name": "Kotak NV 20 ETF",
+      "url": "/mutual-funds/nav/kotak-nifty-50-value-20-etf/MKM956",
+      "schemeCode": "MKM956",
+      "category": "ETF",
+      "aum": "113.16",
+      "returns": {
+        "1W": "-1.49",
+        "1M": "--",
+        "3M": "-6.82",
+        "6M": "-2.67",
+        "1Y": "13.9",
+        "2Y": "21.7",
+        "3Y": "13.62"
+      }
+    },
+    {
+      "name": "Motilal MOSt Oswal Midcap 100 ETF",
+      "url": "/mutual-funds/nav/motilal-oswal-nifty-midcap-100-etf/MMO002",
+      "schemeCode": "MMO002",
+      "category": "ETF",
+      "aum": "555.83",
+      "returns": {
+        "1W": "-5.62",
+        "1M": "--",
+        "3M": "-9.68",
+        "6M": "-5.92",
+        "1Y": "13.45",
+        "2Y": "31.48",
+        "3Y": "19.47"
+      }
+    },
+    {
+      "name": "Nippon ETF Dividend Opportunities",
+      "url": "/mutual-funds/nav/nippon-india-etf-nifty-dividend-opportunities-50/MRC1519",
+      "schemeCode": "MRC1519",
+      "category": "ETF",
+      "aum": "62.12",
+      "returns": {
+        "1W": "-2.38",
+        "1M": "--",
+        "3M": "-10.12",
+        "6M": "-6.49",
+        "1Y": "12.53",
+        "2Y": "27.24",
+        "3Y": "18.33"
+      }
+    },
+    {
+      "name": "LIC G-Sec LTE Fund - RP (G)",
+      "url": "/mutual-funds/nav/lic-mf-g-sec-long-term-exchange-traded-fund/MJB388",
+      "schemeCode": "MJB388",
+      "category": "ETF",
+      "aum": "2401.44",
+      "returns": {
+        "1W": "-0.41",
+        "1M": "--",
+        "3M": "1.1",
+        "6M": "4.35",
+        "1Y": "8.91",
+        "2Y": "8.3",
+        "3Y": "6.25"
+      }
+    },
+    {
+      "name": "Nippon ETF Long Term Gilt",
+      "url": "/mutual-funds/nav/nippon-india-etf-nifty-8-13-yr-g-sec-long-term-gilt/MRC2116",
+      "schemeCode": "MRC2116",
+      "category": "ETF",
+      "aum": "2278.44",
+      "returns": {
+        "1W": "-0.41",
+        "1M": "--",
+        "3M": "1.11",
+        "6M": "4.38",
+        "1Y": "8.97",
+        "2Y": "8.34",
+        "3Y": "6.24"
+      }
+    },
+    {
+      "name": "ICICI Prudential BSE 500 ETF",
+      "url": "/mutual-funds/nav/icici-prudential-bse-500-etf/MPI3647",
+      "schemeCode": "MPI3647",
+      "category": "ETF",
+      "aum": "349.08",
+      "returns": {
+        "1W": "-3.87",
+        "1M": "--",
+        "3M": "-9.54",
+        "6M": "-7.16",
+        "1Y": "8.94",
+        "2Y": "18.56",
+        "3Y": "11.62"
+      }
+    },
+    {
+      "name": "SBI-ETF 10Y Gilt",
+      "url": "/mutual-funds/nav/sbi-nifty-10-yr-benchmark-g-sec-etf/MSB1255",
+      "schemeCode": "MSB1255",
+      "category": "ETF",
+      "aum": "3078.09",
+      "returns": {
+        "1W": "-0.45",
+        "1M": "--",
+        "3M": "1.01",
+        "6M": "4.17",
+        "1Y": "8.81",
+        "2Y": "8.21",
+        "3Y": "5.94"
+      }
+    },
+    {
+      "name": "SBI BSE 100 ETF",
+      "url": "/mutual-funds/nav/sbi-bse-100-etf/MSB1112",
+      "schemeCode": "MSB1112",
+      "category": "ETF",
+      "aum": "9.18",
+      "returns": {
+        "1W": "-3",
+        "1M": "--",
+        "3M": "-8.63",
+        "6M": "-5.98",
+        "1Y": "8.49",
+        "2Y": "16.63",
+        "3Y": "10.75"
+      }
+    },
+    {
+      "name": "LIC MF ETF - Nifty 100",
+      "url": "/mutual-funds/nav/lic-mf-exchange-traded-fund-nifty-100/MJB449",
+      "schemeCode": "MJB449",
+      "category": "ETF",
+      "aum": "704.31",
+      "returns": {
+        "1W": "-2.9",
+        "1M": "--",
+        "3M": "-9.19",
+        "6M": "-6.82",
+        "1Y": "8",
+        "2Y": "15.23",
+        "3Y": "9.61"
+      }
+    },
+    {
+      "name": "Edelweiss ETF - NQ30",
+      "url": "/mutual-funds/nav/edelweiss-etf-nifty-quality-30/MEW121",
+      "schemeCode": "MEW121",
+      "category": "ETF",
+      "aum": "144.83",
+      "returns": {
+        "1W": "-2.08",
+        "1M": "--",
+        "3M": "-11.32",
+        "6M": "-7.53",
+        "1Y": "7.96",
+        "2Y": "19.47",
+        "3Y": "10.92"
+      }
+    },
+    {
+      "name": "Nippon ETF Nifty 100",
+      "url": "/mutual-funds/nav/nippon-india-etf-nifty-100/MRC1048",
+      "schemeCode": "MRC1048",
+      "category": "ETF",
+      "aum": "277.21",
+      "returns": {
+        "1W": "-2.9",
+        "1M": "--",
+        "3M": "-9.23",
+        "6M": "-6.93",
+        "1Y": "7.75",
+        "2Y": "15.04",
+        "3Y": "9.36"
+      }
+    },
+    {
+      "name": "Nippon ETF Infra BeES",
+      "url": "/mutual-funds/nav/nippon-india-etf-nifty-infrastructure-bees/MBM030",
+      "schemeCode": "MBM030",
+      "category": "ETF",
+      "aum": "163.45",
+      "returns": {
+        "1W": "-3.8",
+        "1M": "--",
+        "3M": "-11.73",
+        "6M": "-12.32",
+        "1Y": "7.26",
+        "2Y": "24.19",
+        "3Y": "15.33"
+      }
+    },
+    {
+      "name": "UTI Nifty Exchange Traded Fund",
+      "url": "/mutual-funds/nav/uti-nifty-50-etf/MUT2096",
+      "schemeCode": "MUT2096",
+      "category": "ETF",
+      "aum": "57902.18",
+      "returns": {
+        "1W": "-2.24",
+        "1M": "--",
+        "3M": "-7.63",
+        "6M": "-5.04",
+        "1Y": "6.95",
+        "2Y": "14.76",
+        "3Y": "9.48"
+      }
+    },
+    {
+      "name": "Kotak Nifty ETF",
+      "url": "/mutual-funds/nav/kotak-nifty-50-etf/MKM321",
+      "schemeCode": "MKM321",
+      "category": "ETF",
+      "aum": "2644.05",
+      "returns": {
+        "1W": "-2.24",
+        "1M": "--",
+        "3M": "-7.63",
+        "6M": "-5.05",
+        "1Y": "6.96",
+        "2Y": "14.7",
+        "3Y": "9.42"
+      }
+    },
+    {
+      "name": "LIC MF ETF - CNX Nifty 50",
+      "url": "/mutual-funds/nav/lic-mf-exchange-traded-fund-nifty-50/MJB439",
+      "schemeCode": "MJB439",
+      "category": "ETF",
+      "aum": "815.28",
+      "returns": {
+        "1W": "-2.24",
+        "1M": "--",
+        "3M": "-7.63",
+        "6M": "-5.07",
+        "1Y": "6.89",
+        "2Y": "14.64",
+        "3Y": "9.42"
+      }
+    },
+    {
+      "name": "SBI - ETF Nifty 50",
+      "url": "/mutual-funds/nav/sbi-nifty-50-etf/MSB1174",
+      "schemeCode": "MSB1174",
+      "category": "ETF",
+      "aum": "192978.1",
+      "returns": {
+        "1W": "-2.24",
+        "1M": "--",
+        "3M": "-7.63",
+        "6M": "-5.05",
+        "1Y": "6.95",
+        "2Y": "14.76",
+        "3Y": "9.47"
+      }
+    },
+    {
+      "name": "HDFC Nifty 50 ETF",
+      "url": "/mutual-funds/nav/hdfc-nifty-50-etf/MHD2722",
+      "schemeCode": "MHD2722",
+      "category": "ETF",
+      "aum": "4015.92",
+      "returns": {
+        "1W": "-2.24",
+        "1M": "--",
+        "3M": "-7.63",
+        "6M": "-5.05",
+        "1Y": "6.95",
+        "2Y": "14.76",
+        "3Y": "9.48"
+      }
+    },
+    {
+      "name": "Mirae Asset Nifty 50 ETF",
+      "url": "/mutual-funds/nav/mirae-asset-nifty-50-etf/MMA156",
+      "schemeCode": "MMA156",
+      "category": "ETF",
+      "aum": "3964.25",
+      "returns": {
+        "1W": "-2.24",
+        "1M": "--",
+        "3M": "-7.63",
+        "6M": "-5.05",
+        "1Y": "6.95",
+        "2Y": "14.77",
+        "3Y": "9.48"
+      }
+    },
+    {
+      "name": "Motilal MOSt Oswal M50 ETF",
+      "url": "/mutual-funds/nav/motilal-oswal-nifty-m50-etf/MMO001",
+      "schemeCode": "MMO001",
+      "category": "ETF",
+      "aum": "48.53",
+      "returns": {
+        "1W": "-2.24",
+        "1M": "--",
+        "3M": "-7.63",
+        "6M": "-5.06",
+        "1Y": "6.92",
+        "2Y": "14.75",
+        "3Y": "9.51"
+      }
+    },
+    {
+      "name": "Nippon ETF Nifty BeES",
+      "url": "/mutual-funds/nav/nippon-india-etf-nifty-50-bees/MBM001",
+      "schemeCode": "MBM001",
+      "category": "ETF",
+      "aum": "36638.89",
+      "returns": {
+        "1W": "-2.24",
+        "1M": "--",
+        "3M": "-7.63",
+        "6M": "-5.04",
+        "1Y": "6.96",
+        "2Y": "14.78",
+        "3Y": "9.5"
+      }
+    },
+    {
+      "name": "ICICI Prudential Nifty ETF",
+      "url": "/mutual-funds/nav/icici-prudential-nifty-50-etf/MPI1312",
+      "schemeCode": "MPI1312",
+      "category": "ETF",
+      "aum": "22100.65",
+      "returns": {
+        "1W": "-2.24",
+        "1M": "--",
+        "3M": "-7.62",
+        "6M": "-5.04",
+        "1Y": "6.97",
+        "2Y": "14.79",
+        "3Y": "9.51"
+      }
+    },
+    {
+      "name": "Quantum Nifty ETF (G)",
+      "url": "/mutual-funds/nav/quantum-nifty-etf/MQU007",
+      "schemeCode": "MQU007",
+      "category": "ETF",
+      "aum": "60.56",
+      "returns": {
+        "1W": "-2.25",
+        "1M": "--",
+        "3M": "-7.64",
+        "6M": "-5.07",
+        "1Y": "6.9",
+        "2Y": "14.71",
+        "3Y": "9.46"
+      }
+    },
+    {
+      "name": "Bandhan Nifty 50 ETF",
+      "url": "/mutual-funds/nav/bandhan-nifty-50-etf/MAG1780",
+      "schemeCode": "MAG1780",
+      "category": "ETF",
+      "aum": "26.74",
+      "returns": {
+        "1W": "-2.24",
+        "1M": "--",
+        "3M": "-7.63",
+        "6M": "-5.06",
+        "1Y": "6.91",
+        "2Y": "14.72",
+        "3Y": "9.45"
+      }
+    },
+    {
+      "name": "ABSL Nifty ETF",
+      "url": "/mutual-funds/nav/aditya-birla-sun-life-nifty-exchange-traded-fund/MBS589",
+      "schemeCode": "MBS589",
+      "category": "ETF",
+      "aum": "2791.75",
+      "returns": {
+        "1W": "-2.26",
+        "1M": "--",
+        "3M": "-7.64",
+        "6M": "-5.06",
+        "1Y": "6.93",
+        "2Y": "14.77",
+        "3Y": "9.5"
+      }
+    },
+    {
+      "name": "Invesco India Nifty ETF",
+      "url": "/mutual-funds/nav/invesco-india-nifty-exchange-traded-fund/MLI428",
+      "schemeCode": "MLI428",
+      "category": "ETF",
+      "aum": "88.24",
+      "returns": {
+        "1W": "-2.25",
+        "1M": "--",
+        "3M": "-7.65",
+        "6M": "-5.09",
+        "1Y": "6.87",
+        "2Y": "14.69",
+        "3Y": "9.42"
+      }
+    },
+    {
+      "name": "Nippon India ETF BSE Sensex",
+      "url": "/mutual-funds/nav/nippon-india-etf-bse-sensex/MRC1688",
+      "schemeCode": "MRC1688",
+      "category": "ETF",
+      "aum": "12517.84",
+      "returns": {
+        "1W": "-2.17",
+        "1M": "--",
+        "3M": "-6.53",
+        "6M": "-4.62",
+        "1Y": "6.56",
+        "2Y": "14.04",
+        "3Y": "9.04"
+      }
+    },
+    {
+      "name": "SBI BSE Sensex ETF",
+      "url": "/mutual-funds/nav/sbi-bse-sensex-etf/MSB583",
+      "schemeCode": "MSB583",
+      "category": "ETF",
+      "aum": "114572.21",
+      "returns": {
+        "1W": "-2.17",
+        "1M": "--",
+        "3M": "-6.53",
+        "6M": "-4.63",
+        "1Y": "6.54",
+        "2Y": "13.99",
+        "3Y": "9.01"
+      }
+    },
+    {
+      "name": "UTI BSE Sensex ETF",
+      "url": "/mutual-funds/nav/uti-bse-sensex-etf/MUT2098",
+      "schemeCode": "MUT2098",
+      "category": "ETF",
+      "aum": "44121.79",
+      "returns": {
+        "1W": "-2.17",
+        "1M": "--",
+        "3M": "-6.53",
+        "6M": "-4.62",
+        "1Y": "6.54",
+        "2Y": "13.99",
+        "3Y": "9.01"
+      }
+    },
+    {
+      "name": "LIC MF BSE Sensex ETF",
+      "url": "/mutual-funds/nav/lic-mf-bse-sensex-etf/MJB440",
+      "schemeCode": "MJB440",
+      "category": "ETF",
+      "aum": "818.25",
+      "returns": {
+        "1W": "-2.18",
+        "1M": "--",
+        "3M": "-6.54",
+        "6M": "-4.69",
+        "1Y": "6.45",
+        "2Y": "13.9",
+        "3Y": "8.97"
+      }
+    },
+    {
+      "name": "Kotak BSE Sensex ETF",
+      "url": "/mutual-funds/nav/kotak-bse-sensex-etf/MKM237",
+      "schemeCode": "MKM237",
+      "category": "ETF",
+      "aum": "27.14",
+      "returns": {
+        "1W": "-2.18",
+        "1M": "--",
+        "3M": "-6.57",
+        "6M": "-4.7",
+        "1Y": "6.35",
+        "2Y": "13.74",
+        "3Y": "8.78"
+      }
+    },
+    {
+      "name": "Edelweiss ETS - Nifty (Nifty EES)",
+      "url": "/mutual-funds/nav/edelweiss-etf-nifty-50/MEW119",
+      "schemeCode": "MEW119",
+      "category": "ETF",
+      "aum": "123.87",
+      "returns": {
+        "1W": "-2.25",
+        "1M": "--",
+        "3M": "-7.76",
+        "6M": "-5.31",
+        "1Y": "6.12",
+        "2Y": "13.92",
+        "3Y": "8.65"
+      }
+    },
+    {
+      "name": "Nippon ETF Shariah BeES",
+      "url": "/mutual-funds/nav/nippon-india-etf-nifty-50-shariah-bees/MBM025",
+      "schemeCode": "MBM025",
+      "category": "ETF",
+      "aum": "29.55",
+      "returns": {
+        "1W": "-2.24",
+        "1M": "--",
+        "3M": "-10.18",
+        "6M": "-4.79",
+        "1Y": "5.47",
+        "2Y": "11.94",
+        "3Y": "3.42"
+      }
+    },
+    {
+      "name": "Kotak PSU Bank ETF",
+      "url": "/mutual-funds/nav/kotak-nifty-psu-bank-etf/MKM178",
+      "schemeCode": "MKM178",
+      "category": "ETF",
+      "aum": "1402.24",
+      "returns": {
+        "1W": "-3.78",
+        "1M": "--",
+        "3M": "-7.46",
+        "6M": "-14.9",
+        "1Y": "5.05",
+        "2Y": "20",
+        "3Y": "31.07"
+      }
+    },
+    {
+      "name": "Nippon ETF PSU Bank BeES",
+      "url": "/mutual-funds/nav/nippon-india-etf-nifty-psu-bank-bees/MBM018",
+      "schemeCode": "MBM018",
+      "category": "ETF",
+      "aum": "2666.85",
+      "returns": {
+        "1W": "-3.78",
+        "1M": "--",
+        "3M": "-7.47",
+        "6M": "-14.9",
+        "1Y": "5.07",
+        "2Y": "19.99",
+        "3Y": "31.07"
+      }
+    },
+    {
+      "name": "Kotak Banking ETF",
+      "url": "/mutual-funds/nav/kotak-nifty-bank-etf/MKM903",
+      "schemeCode": "MKM903",
+      "category": "ETF",
+      "aum": "5161.92",
+      "returns": {
+        "1W": "-2.94",
+        "1M": "--",
+        "3M": "-6",
+        "6M": "-6.65",
+        "1Y": "2.8",
+        "2Y": "7.92",
+        "3Y": "8.94"
+      }
+    },
+    {
+      "name": "SBI - ETF Nifty Bank",
+      "url": "/mutual-funds/nav/sbi-nifty-bank-etf/MSB1111",
+      "schemeCode": "MSB1111",
+      "category": "ETF",
+      "aum": "4513.01",
+      "returns": {
+        "1W": "-2.94",
+        "1M": "--",
+        "3M": "-6",
+        "6M": "-6.65",
+        "1Y": "2.79",
+        "2Y": "7.94",
+        "3Y": "8.98"
+      }
+    },
+    {
+      "name": "Nippon ETF Bank BeES",
+      "url": "/mutual-funds/nav/nippon-india-etf-nifty-bank-bees/MBM004",
+      "schemeCode": "MBM004",
+      "category": "ETF",
+      "aum": "7335.32",
+      "returns": {
+        "1W": "-2.94",
+        "1M": "--",
+        "3M": "-6.01",
+        "6M": "-6.65",
+        "1Y": "2.78",
+        "2Y": "7.95",
+        "3Y": "8.98"
+      }
+    },
+    {
+      "name": "Nippon ETF Liquid BeES",
+      "url": "/mutual-funds/nav/nippon-india-etf-nifty-1d-rate-liquid-bees/MBM003",
+      "schemeCode": "MBM003",
+      "category": "ETF",
+      "aum": "11862.86",
+      "returns": {
+        "1W": "--",
+        "1M": "--",
+        "3M": "0.74",
+        "6M": "1.78",
+        "1Y": "4.1",
+        "2Y": "4.71",
+        "3Y": "4.33"
+      }
+    },
+    {
+      "name": "Nippon Close Ended Eqty-Sr-A (G)",
+      "url": "/mutual-funds/nav/nippon-india-close-ended-equity-fund-series-a/MRC1304",
+      "schemeCode": "MRC1304",
+      "category": "ETF",
+      "aum": "346.27",
+      "returns": {
+        "1W": "--",
+        "1M": "--",
+        "3M": "--",
+        "6M": "--",
+        "1Y": "--",
+        "2Y": "--",
+        "3Y": "--"
+      }
+    },
+    {
+      "name": "ICICI Prudential BSE Midcap Select ETF",
+      "url": "/mutual-funds/nav/icici-prudential-bse-midcap-select-etf/MPI3035",
+      "schemeCode": "MPI3035",
+      "category": "ETF",
+      "aum": "81.1",
+      "returns": {
+        "1W": "-7.39",
+        "1M": "--",
+        "3M": "-9.81",
+        "6M": "-5.32",
+        "1Y": "17.87",
+        "2Y": "31.13",
+        "3Y": "15.58"
+      }
+    },
+    {
+      "name": "ICICI Prudential NV20 ETF",
+      "url": "/mutual-funds/nav/icici-prudential-nifty50-value-20-etf/MPI3012",
+      "schemeCode": "MPI3012",
+      "category": "ETF",
+      "aum": "177.17",
+      "returns": {
+        "1W": "-1.49",
+        "1M": "--",
+        "3M": "-6.85",
+        "6M": "-2.73",
+        "1Y": "13.73",
+        "2Y": "21.49",
+        "3Y": "13.48"
+      }
+    },
+    {
+      "name": "ICICI Prudential Nifty 100 ETF",
+      "url": "/mutual-funds/nav/icici-prudential-nifty-100-etf/MPI1512",
+      "schemeCode": "MPI1512",
+      "category": "ETF",
+      "aum": "105.56",
+      "returns": {
+        "1W": "-2.9",
+        "1M": "--",
+        "3M": "-9.23",
+        "6M": "-6.92",
+        "1Y": "7.8",
+        "2Y": "15.08",
+        "3Y": "9.4"
+      }
+    },
+    {
+      "name": "HDFC BSE Sensex ETF",
+      "url": "/mutual-funds/nav/hdfc-bse-sensex-etf/MHD2723",
+      "schemeCode": "MHD2723",
+      "category": "ETF",
+      "aum": "458.28",
+      "returns": {
+        "1W": "-2.17",
+        "1M": "--",
+        "3M": "-6.53",
+        "6M": "-4.63",
+        "1Y": "6.54",
+        "2Y": "14",
+        "3Y": "9.03"
+      }
+    },
+    {
+      "name": "R*Shares Gold ETF",
+      "url": "/mutual-funds/nav/r*shares-gold-etf/MRC256",
+      "schemeCode": "MRC256",
+      "category": "ETF",
+      "aum": "1278.25",
+      "returns": {
+        "1W": "--",
+        "1M": "--",
+        "3M": "--",
+        "6M": "--",
+        "1Y": "--",
+        "2Y": "--",
+        "3Y": "--"
+      }
+    },
+    {
+      "name": null,
+      "url": null,
+      "category": "ETF",
+      "returns": {}
+    }
+  ]

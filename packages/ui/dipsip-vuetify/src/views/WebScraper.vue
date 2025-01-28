@@ -77,6 +77,7 @@
 
 <script>
 import api from './api'
+import etfFunds from './indices/etf_funds_data.json'
 export default {
   name: 'MutualFundScraper',
   
@@ -135,7 +136,12 @@ export default {
       }
     },
 
-    async get_funds_for_category_url(mf_category_url, inputSchemeCodes) {
+    async get_funds_for_category_url(category, mf_category_url, inputSchemeCodes) {
+        if (category === "etfs"){
+            let funds = inputSchemeCodes.length === 0 ? etfFunds : etfFunds.filter(e => e && e.schemeCode && inputSchemeCodes.indexOf(e.schemeCode) > -1);
+            funds = funds.map(f => ({...f, "url": this.base_url + f.url}))
+            return funds
+        }
         console.log(new Date(), "inputSchemeCodes", inputSchemeCodes)
       const document = await this.fetchWithRetry(mf_category_url);
       const headerRow = document.querySelector('table thead tr');
@@ -302,9 +308,9 @@ export default {
       const categoryUrl = this.get_category_url(category);
       let funds;
       (mf_scheme_code === "" || mf_scheme_code === "All") ? 
-        funds = await this.get_funds_for_category_url(categoryUrl, []):
-        funds = await this.get_funds_for_category_url(categoryUrl, mf_scheme_code.split(",").map(item => item.trim()))
-      
+        funds = await this.get_funds_for_category_url(category, categoryUrl, []):
+        funds = await this.get_funds_for_category_url(category, categoryUrl, mf_scheme_code.split(",").map(item => item.trim()))
+      console.log("fundsToProcess", funds);
       for (let i = 0; i < funds.length && !this.stopProcessing; i++) {
             await this.sleep(this.delay);
             funds[i] = await this.processFundDetails(funds[i]);

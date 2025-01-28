@@ -15,16 +15,19 @@ let reporting_dates = []
 /*const pinecone = new Pinecone({
  apiKey: process.env.PINECONE_API_KEY,
 });*/
-const stripJSTicks = function(functionText){
-    let idx = functionText.indexOf('```javascript') 
+//'```javascript'
+const stripJSTicks = function(functionText, stringToStrip){
+    /*let idx = functionText.indexOf(stringToStrip) 
    if ( idx > -1) {
-     functionText = functionText.substring(idx +  '```javascript'.length);
+     functionText = functionText.substring(idx +  stringToStrip.length);
      idx = functionText.indexOf('```') 
      if (idx > -1) {
        functionText = functionText.substring(0, idx);
      }
-   }
-   return functionText
+   }*/
+  const idx = functionText.indexOf("function analyzeMutualFundsHoldings")
+  const lastIdx = functionText.lastIndexOf("}")
+   return functionText.substring(idx, lastIdx+1)
 }
 const removeRegularFunds = function(holding_data){
     const directFunds = new Set();  
@@ -127,7 +130,7 @@ const route = async (req, res) => {
 
    const prompt = `${base_prompt}\n${examples}\nHere is the Question: ${userQuestion}`;
    const getLLMResponse = async (promptToSend, retries = config.MAX_RETRIES) => {
-    console.log("Sending prompt\n", promptToSend)
+    console.log("Sending prompt\n", promptToSend, process.env.LLM_TO_USE)
      try {
        if (process.env.LLM_TO_USE === 'Ollama') {
          const { data } = await axios.post(`${config.OLLAMA_URL}/api/generate`, {
@@ -141,7 +144,7 @@ const route = async (req, res) => {
        } else if (process.env.LLM_TO_USE === 'Claude') {
          const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_API_KEY });
          const resp = await anthropic.messages.create({
-            model: "claude-3-5-sonnet-20241022",
+            model: "claude-3-5-haiku-20241022",
             max_tokens: 1024,
             messages: [{ role: "user", content: prompt }],
             temperature
@@ -165,7 +168,8 @@ const route = async (req, res) => {
    };
 
    let functionText = (await getLLMResponse(prompt)).trim();
-   functionText = stripJSTicks(functionText)
+   functionText = stripJSTicks(functionText, '```')
+   functionText = stripJSTicks(functionText, '```javascript')
    //console.log("functionText to eval", functionText)
    let analyzeFunction;
    try {
@@ -174,7 +178,8 @@ const route = async (req, res) => {
    } catch (e) {
     console.log("Syntax failed, checking")
     console.error(e)
-     const syntaxPrompt = fs.readFileSync(path.join(PROMPTS_FOLDER, 'javascript_syntax_prompt.txt'), 'utf-8');
+     let syntaxPrompt = fs.readFileSync(path.join(PROMPTS_FOLDER, 'javascript_syntax_prompt.txt'), 'utf-8');
+     syntaxPrompt = syntaxPrompt.replaceAll("{{}}", e+"")
      const syntaxCheckerPrompt = `${syntaxPrompt} \n\n Here is the function to fix: \n\n ${functionText}`;
      functionText = await getLLMResponse(syntaxCheckerPrompt);
      functionText = stripJSTicks(functionText)

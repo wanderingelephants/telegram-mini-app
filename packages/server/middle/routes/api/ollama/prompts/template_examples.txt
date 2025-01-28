@@ -114,38 +114,6 @@ return latest_holdings.filter(holding => {
 }));
 }
 
-
-Question: which stock is present in exactly 3 funds. output the stock name and fund name
-Response:
-function analyzeMutualFundsHoldings(mutual_funds_holdings, reporting_dates) {
-    // find latest date
-    const latest_reporting_date = reporting_dates[0];
-    //Filter holdings to get only latest holdings
-    const latest_holdings = mutual_funds_holdings.filter(h => h.holding_reporting_date.toISOString() === latest_reporting_date.toISOString());
-    console.log(latest_holdings.length)
-
-    //create a Map stock_groups with key stock_name.toLowerCase(), value being the array of funds that hold that stock
-    //then just filter those entries where the value array length is 3
-    const stock_groups = new Map();
-latest_holdings.forEach(h => {
-    const stock_key = h.stock_name.toLowerCase();
-    if (!stock_groups.has(stock_key)) {
-        stock_groups.set(stock_key, {
-            stock_name: h.stock_name,
-            funds: []
-        });
-    }
-    stock_groups.get(stock_key).funds.push(h.mutual_fund_name);
-});
-//Return stocks present in exactly 3 funds with their fund names
-return Array.from(stock_groups.values())
-    .filter(group => group.funds.length === 3)
-    .map(group => ({
-        stock_name: group.stock_name,
-        mutual_fund_names: group.funds
-    }));
-}
-
 Question: Which stocks are present in both small cap and large cap funds
 Response:
 function analyzeMutualFundsHoldings(mutual_funds_holdings, reporting_dates) {

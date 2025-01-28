@@ -66,8 +66,8 @@ export default{
             promptName: 'risk_profile',
             promptResponse: '',
             query: 'which stock is present in only small cap funds',
-            model: 'deepseek-coder-v2',
-            models: ['deepseek-coder-v2', 'llama3.2:latest', 'gemma:7b', 'tinyllama:latest', 'phi3:mini', 'mistral:latest', 'phi4:latest', 'deepseek-v2', 'incept5/llama3.1-claude'],
+            model: 'deepseek-r1',
+            models: ['deepseek-coder-v2', 'llama3.2:latest', 'gemma:7b', 'tinyllama:latest', 'phi3:mini', 'mistral:latest', 'phi4:latest', 'deepseek-r1', 'incept5/llama3.1-claude'],
             timeTaken: 0,
             operation: 'testPrompt',
             operations: ['savePrompt', 'testPrompt'],
@@ -225,6 +225,7 @@ return latest_holdings.filter(latest => {
         parseFloat(latest.stock_holding_in_percentage) > parseFloat(previous?.stock_holding_in_percentage || '0');
 });
 }
+
 
 Output only the function text, and nothing else.
 
