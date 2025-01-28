@@ -1,6 +1,6 @@
 const Database = require('better-sqlite3');
 const db = new Database(process.env.SQLITE_DB + '/dipsip.db', {  });
-const { Pinecone } = require('@pinecone-database/pinecone');
+//const { Pinecone } = require('@pinecone-database/pinecone');
 const { Anthropic } = require('@anthropic-ai/sdk');
 const OpenAI = require('openai');
 const axios = require('axios');
@@ -12,10 +12,9 @@ const temperature = 0
 
 let processed_holding_data = []
 let reporting_dates = []
-const pinecone = new Pinecone({
+/*const pinecone = new Pinecone({
  apiKey: process.env.PINECONE_API_KEY,
- //environment: process.env.PINECONE_ENVIRONMENT
-});
+});*/
 const stripJSTicks = function(functionText){
     let idx = functionText.indexOf('```javascript') 
    if ( idx > -1) {
