@@ -19,5 +19,10 @@ curl -X POST http://localhost:3000/api/nse/process \
   "etfFileName": "2025-01-23.json"
 }'
 
+curl -X POST http://localhost:3000/api/mutualfunds/compare \
+-H "Content-Type: application/json" \
+-d '{
+  "fundList": ["Groww Large Cap Fund - Regular Plan - Growth", "Motilal Oswal Large Cap Fund - Regular Plan - Growth"]
+}'
 #/api/etf
 #/api/corporate-announcements?index=sme&from_date=02-01-2025&to_date=03-01-2025&csv=true

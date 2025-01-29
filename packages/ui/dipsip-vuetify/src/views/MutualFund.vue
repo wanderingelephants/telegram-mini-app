@@ -65,7 +65,7 @@
                   </template>
                 </v-autocomplete>
                 </v-card-text>
-              <overlap-analysis :compare-data="compareData" v-if="compareData.overlaps"></overlap-analysis>
+              <mutual-fund-analysis :analysisReport="compareData" v-if="compareData.overlaps"></mutual-fund-analysis>
             </v-card>
       </v-col>
       <v-col cols="12" md="6" order="last" order-md="last" class="right-panel">
@@ -99,13 +99,13 @@ import { mapState } from "vuex";
 
 import GoogleSignIn from '../components/GoogleSignIn'
 import api from './api'
-import OverlapAnalysisVue from '../components/OverlapAnalysis.vue'
+import MutualFundAnalysis from '../components/MutualFundAnalysis.vue'
 import PromptChat from "./PromptChat.vue"
 
 export default {
   name: 'ChatApp',
   components: {
-    OverlapAnalysisVue, GoogleSignIn, PromptChat
+    MutualFundAnalysis, GoogleSignIn, PromptChat
   },  
   data() {
     return {
@@ -124,6 +124,28 @@ export default {
       userInputLabel: "Ask about Mutual Funds. No Trading tips.",
       debug: false,
       systemPrompt: "mutual_funds",
+      analysisTypes: [
+      {
+        name: 'Overlap Analysis',
+        color: 'primary',
+        icon: 'mdi-compare'
+      },
+      {
+        name: 'Diversification Analysis',
+        color: 'success',
+        icon: 'mdi-chart-pie'
+      },
+      {
+        name: 'Performance Compare',
+        color: 'info',
+        icon: 'mdi-chart-line'
+      },
+      {
+        name: 'Fee Compare',
+        color: 'warning',
+        icon: 'mdi-alert-circle-outline'
+      }
+    ]
     
     }
   },
@@ -171,7 +193,7 @@ export default {
       this.searchText = val;
     },
     handleFundSelection(value){
-      this.searchText = ""
+      //this.searchText = ""
       this.portfolio.value = value.map(name => {
         const fund = this.fundList.find(f => f.name === name)
         return {

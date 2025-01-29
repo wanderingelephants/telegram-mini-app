@@ -84,7 +84,7 @@ export default {
   data() {
     return {
       base_url: 'https://www.moneycontrol.com',
-      mutual_fund_categories: ['All', 'aggressive-hybrid-fund','arbitrage-fund','childrens-fund','conservative-hybrid-fund','contra-fund','dividend-yield-fund','dynamic-asset-allocation-or-balanced-advantage','elss-tax-saving-schemes','equity-savings','etfs','flexi-cap-fund','focused-fund','fund-of-funds','funds_category.txt','hybrid-aggressive','index-fundsetfs','investment-cum-insurance','large-and-mid-cap-fund','large-cap-fund','mid-cap-fund','multi-asset-allocation','multi-cap-fund','retirement-fund','sectoralthematic','small-cap-fund','value-fund'],
+      mutual_fund_categories: ['All', 'aggressive-hybrid-fund','arbitrage-fund','childrens-fund','conservative-hybrid-fund','contra-fund','dividend-yield-fund','dynamic-asset-allocation-or-balanced-advantage','elss-tax-saving-schemes','equity-savings','etfs','flexi-cap-fund','focused-fund','fund-of-funds','hybrid-aggressive','index-fundsetfs','investment-cum-insurance','large-and-mid-cap-fund','large-cap-fund','mid-cap-fund','multi-asset-allocation','multi-cap-fund','retirement-fund','sectoralthematic','small-cap-fund','value-fund'],
       mf_category_selected: 'childrens-fund',
       mf_scheme_code: '',
       delay: 3000,

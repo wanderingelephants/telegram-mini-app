@@ -211,10 +211,11 @@ export default{
   const words = text.split(/\s+/);
   const lastWord = words[words.length - 1].toLowerCase();
   
+  let matchedCompanies = []
   if (lastWord.length > 4) {
-    const matchedCompanies = this.company_names_list
+    matchedCompanies = this.company_names_list
       .filter(name => name.toLowerCase().includes(lastWord));
-      
+  }    
     this.suggestions = matchedCompanies.length > 0 ? 
       matchedCompanies.map(name => {
         const newWords = [...words];
@@ -222,7 +223,7 @@ export default{
         return newWords.join(' ');
       }).slice(0, 5) : 
       [text]; // Keep original text if no matches
-  }
+  
 },
     scrollToBottom() {
       const container = this.$refs.messagesContainer;

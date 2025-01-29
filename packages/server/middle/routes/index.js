@@ -63,7 +63,7 @@ const routes = {
         },
         mutualfunds: {
             list: require('./api/mutualfunds/list'),
-            compare: require('./api/mutualfunds/compare'),
+            analyze: require('./api/mutualfunds/analyze'),
             categoryScrape: require('./api/mutualfunds/categoryScrape')
         },
         nse: {
@@ -95,7 +95,7 @@ router.post('/api/db/saveconfig', verifyToken, routes.api.db.saveconfig)
 router.get('/api/kite/order/create', routes.api.kite.order.create)
 router.get('/api/kite/login/success', routes.api.kite.login.success)
 router.get('/api/kite/instrument/quote', routes.api.kite.instrument.quote)
-router.post ('/api/mutualfunds/compare', verifyToken, routes.api.mutualfunds.compare)
+router.post ('/api/mutualfunds/compare', routes.api.mutualfunds.analyze)
 router.get('/api/mutualfunds/list', verifyToken, routes.api.mutualfunds.list)
 router.post('/api/mutualfunds/categoryScrape', routes.api.mutualfunds.categoryScrape)
 router.post('/api/mutualfunds/chatStream', routes.api.ollama.singleShotStream)
