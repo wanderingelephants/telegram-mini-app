@@ -55,7 +55,7 @@ The function and its parameters are defined in this JSON:
                     "enum": null
                 },
                 {
-                    "name": "holding_reporting_date",
+                    "name": "stock_holding_reporting_date",
                     "type": "Date",
                     "description": "date on which this holding data was reported by the fund",
                     "enum": null
@@ -65,10 +65,10 @@ The function and its parameters are defined in this JSON:
             {
                 "type": "Array",
                 "name": "holding_reporting_dates",
-                "description": "An Array of unique holding_reporting_date sorted descending by time. Useful for time based filters logic",
+                "description": "An Array of unique stock_holding_reporting_date sorted descending by time. Useful for time based filters logic",
                 "items": [
                     {
-                        "name": "holding_reporting_date"
+                        "name": "stock_holding_reporting_date"
                         "type": "Date",
                         "description": "The date on which the mutual fund published the holdings",
                         "enum": null 
@@ -106,8 +106,8 @@ function analyzeMutualFundsHoldings(mutual_funds_stock_holdings, holding_reporti
     const latest_reporting_date = holding_reporting_dates[0]
 
     //Step 2 :
-    //Filter on holding_reporting_date field. first convert date toISOString() and then check. Date objects cannot be directly compared using ===
-    const latest_holdings = mutual_funds_holdings.filter(mfh => mfh.holding_reporting_date.toISOString() === latest_reporting_date.toISOString())
+    //Filter on stock_holding_reporting_date field. first convert date toISOString() and then check. Date objects cannot be directly compared using ===
+    const latest_holdings = mutual_funds_holdings.filter(mfh => mfh.stock_holding_reporting_date.toISOString() === latest_reporting_date.toISOString())
     
     //Step 3 : Identify small cap as mutual_fund_category. Filter on the enum value 'small cap fund'
     const smallCapFundsRatedThreeOrAbove = latest_holdings.filter(mfh => 
@@ -135,12 +135,12 @@ function analyzeMutualFundsHoldings(mutual_funds_holdings, reporting_dates) {
     //Identify "XYZ" as a Named entity corresponding to field stock_name. Applied case-insensitive wild-card filter logic.
     //filter to get latest holdings in XYZ
     const latest_holdings = mutual_funds_holdings.filter(h => 
-        h.holding_reporting_date.toISOString() === latest_reporting_date.toISOString() && 
+        h.stock_holding_reporting_date.toISOString() === latest_reporting_date.toISOString() && 
         h.stock_name.toLowerCase().indexOf('XYZ'.toLowerCase()) > -1
     );
     //filter to get preceding holdings
     const preceding_holdings = mutual_funds_holdings.filter(h => 
-        h.holding_reporting_date.toISOString() === preceding_reporting_date.toISOString() && 
+        h.stock_holding_reporting_date.toISOString() === preceding_reporting_date.toISOString() && 
         h.stock_name.toLowerCase().indexOf('XYZ'.toLowerCase()) > -1 
     );
 //compare based on stock_holding_in_percentage
@@ -161,7 +161,7 @@ function analyzeMutualFundsHoldings(mutual_funds_stock_holdings, holding_reporti
     const latest_reporting_date = holding_reporting_dates[0];
     //Filter for latest holdings
 const latest_holdings = mutual_funds_stock_holdings.filter(mfh => 
-    mfh.holding_reporting_date.toISOString() === latest_reporting_date.toISOString()
+    mfh.stock_holding_reporting_date.toISOString() === latest_reporting_date.toISOString()
 );
 
 //Get all ETF holdings
