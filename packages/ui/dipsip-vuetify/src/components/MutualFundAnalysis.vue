@@ -6,14 +6,15 @@
         <span class="text-h6">Stock Overlap Analysis</span>
         <v-spacer></v-spacer>
         <v-btn
-          color="primary"
-          @click="downloadOverlapData"
-          :loading="downloading"
-          density="comfortable"
-          class="ml-2"
-        >
-          Download Report
-        </v-btn>
+  color="primary"
+  @click="downloadCompleteReport"
+  :loading="downloading"
+  density="comfortable"
+  class="ml-2"
+>
+  Download Report
+  <v-icon right>mdi-file-pdf</v-icon>
+</v-btn>
       </v-card-title>
       
       <v-card-text>
@@ -90,6 +91,7 @@
               <v-card-text>
                 <div class="d-flex justify-center">
                   <apexchart
+                  id="sectorChart"
                     type="donut"
                     height="300"
                     :options="sectorChartOptions"
@@ -310,6 +312,10 @@
 </template>
 
 <script>
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+
+import 'jspdf-autotable';
 import VueApexCharts from "vue3-apexcharts";
 
 export default {
@@ -466,7 +472,7 @@ export default {
       this.showDialog = true;
     },
     
-    async downloadOverlapData() {
+    /*async downloadOverlapData() {
       this.downloading = true;
       try {
         const csvContent = this.generateCSV();
@@ -499,7 +505,209 @@ export default {
         overlap.comparison_metadata.fund2.star_rating
       ]);
       return [headers, ...rows].map(row => row.join(',')).join('\n');
+    },*/
+    async downloadCompleteReport() {
+   this.downloading = true;
+   try {
+     const pdf = new jsPDF('p', 'mm', 'a4');
+     let yOffset = 10;
+     
+     // Title
+     pdf.setFontSize(18);
+     pdf.text('Mutual Fund Analysis Report', 105, yOffset, { align: 'center' });
+     yOffset += 15;
+
+     // 1. Portfolio Overview - Unique Stocks Analysis
+     pdf.setFontSize(14);
+     pdf.text('1. Portfolio Overview', 10, yOffset);
+     yOffset += 10;
+     pdf.setFontSize(10);
+     const uniqueStocksText = `Total Unique Stocks: ${this.analysisReport.diversification.unique_stocks.count}`;
+     pdf.text(uniqueStocksText, 15, yOffset);
+     yOffset += 5;
+     pdf.text(`Status: ${this.analysisReport.diversification.unique_stocks.status}`, 15, yOffset);
+     yOffset += 5;
+     pdf.text(`Recommendation: ${this.analysisReport.diversification.unique_stocks.recommendation}`, 15, yOffset);
+     yOffset += 15;
+
+     // 2. Sector Breakdown
+     pdf.setFontSize(14);
+     pdf.text('2. Sector Allocation', 10, yOffset);
+     yOffset += 10;
+
+     // Prepare sector data for table
+     const sectorData = Object.entries(this.analysisReport.diversification.sector_breakdown)
+       .map(([sector, data]) => [
+         sector,
+         `${data.percentage.toFixed(1)}%`
+       ])
+       .sort((a, b) => parseFloat(b[1]) - parseFloat(a[1])); // Sort by percentage descending
+
+     pdf.autoTable({
+       startY: yOffset,
+       head: [['Sector', 'Allocation']],
+       body: sectorData,
+       theme: 'striped',
+       headStyles: { fillColor: [71, 85, 119] },
+       columnStyles: {
+         0: { cellWidth: 100 },  // Sector name column
+         1: { cellWidth: 40, halign: 'right' }  // Percentage column
+       },
+       margin: { left: 15 }
+     });
+     
+     yOffset = pdf.lastAutoTable.finalY + 10;
+
+     // 3. Fund Category Distribution
+     pdf.setFontSize(14);
+     pdf.text('3. Fund Category Distribution', 10, yOffset);
+     yOffset += 10;
+     
+     // Prepare category data for table
+     const categoryData = Object.entries(this.analysisReport.diversification.category_breakdown)
+       .map(([category, data]) => [
+         category,
+         `${data.percentage.toFixed(1)}%`
+       ])
+       .sort((a, b) => parseFloat(b[1]) - parseFloat(a[1]));
+
+     pdf.autoTable({
+       startY: yOffset,
+       head: [['Category', 'Allocation']],
+       body: categoryData,
+       theme: 'striped',
+       headStyles: { fillColor: [71, 85, 119] },
+       columnStyles: {
+         0: { cellWidth: 100 },
+         1: { cellWidth: 40, halign: 'right' }
+       },
+       margin: { left: 15 }
+     });
+     
+     yOffset = pdf.lastAutoTable.finalY + 10;
+
+     // 4. Stock Overlaps
+     pdf.setFontSize(14);
+     pdf.text('4. Stock Overlaps Analysis', 10, yOffset);
+     yOffset += 10;
+     
+     // Get the significant overlaps from the formatted data
+     const significantOverlaps = this.formattedOverlaps
+       .filter(overlap => overlap.overlap_percentage >= 25)
+       .sort((a, b) => b.overlap_percentage - a.overlap_percentage);
+
+     const overlapData = this.formattedOverlaps
+       .map(overlap => [
+         overlap.fund1_name,
+         overlap.fund2_name,
+         `${overlap.overlap_percentage.toFixed(1)}%`
+       ])
+       .sort((a, b) => parseFloat(b[2]) - parseFloat(a[2]));
+
+     pdf.autoTable({
+       startY: yOffset,
+       head: [['Fund 1', 'Fund 2', 'Overlap']],
+       body: overlapData,
+       theme: 'striped',
+       headStyles: { fillColor: [71, 85, 119] },
+       columnStyles: {
+         0: { cellWidth: 70 },
+         1: { cellWidth: 70 },
+         2: { cellWidth: 30, halign: 'right' }
+       },
+       margin: { left: 15 }
+     });
+     
+     yOffset = pdf.lastAutoTable.finalY + 10;
+
+     if (significantOverlaps.length > 0) {
+       pdf.setFontSize(10);
+       pdf.text('High Overlap Warning:', 15, yOffset, { style: 'bold' });
+       yOffset += 5;
+       pdf.text('The following fund pairs have significant overlap (>25%):', 15, yOffset);
+       yOffset += 5;
+       
+       significantOverlaps.forEach(overlap => {
+         const warningText = `• ${overlap.fund1_name} - ${overlap.fund2_name}: ${overlap.overlap_percentage.toFixed(1)}%`;
+         pdf.text(warningText, 20, yOffset);
+         yOffset += 5;
+       });
+     }
+     yOffset += 5;
+
+     // 5. Expense Analysis
+     pdf.setFontSize(14);
+     pdf.text('5. Expense Ratio Analysis', 10, yOffset);
+     yOffset += 10;
+     
+     const expenseData = this.analysisReport.expenses.map(fund => [
+       fund.fund_name,
+       `${fund.expense_ratio.toFixed(2)}%`,
+       `${fund.category_avg.toFixed(2)}%`,
+       `${fund.relative_cost > 0 ? '+' : ''}${fund.relative_cost.toFixed(2)}%`
+     ]);
+     
+     pdf.autoTable({
+       startY: yOffset,
+       head: [['Fund Name', 'Expense Ratio', 'Category Avg', 'Relative Cost']],
+       body: expenseData,
+       theme: 'striped',
+       headStyles: { fillColor: [71, 85, 119] },
+       columnStyles: {
+         0: { cellWidth: 70 },
+         1: { cellWidth: 40, halign: 'right' },
+         2: { cellWidth: 40, halign: 'right' },
+         3: { cellWidth: 40, halign: 'right' }
+       },
+       margin: { left: 15 }
+     });
+     
+     yOffset = pdf.lastAutoTable.finalY + 10;
+
+     // 6. Key Recommendations
+     pdf.setFontSize(14);
+     pdf.text('6. Key Recommendations', 10, yOffset);
+     yOffset += 10;
+     
+     pdf.setFontSize(10);
+     const recommendations = this.generateRecommendations();
+     recommendations.forEach(rec => {
+       pdf.text(`• ${rec}`, 15, yOffset);
+       yOffset += 5;
+     });
+
+     pdf.save('mutual_fund_analysis_report.pdf');
+   } catch (error) {
+     console.error('Error generating PDF:', error);
+   } finally {
+     this.downloading = false;
+   }
+ },
+
+  generateRecommendations() {
+    const recommendations = [];
+    
+    // Overlap recommendations
+    if (this.analysisReport.overlaps.maxOverlap > 25) {
+      recommendations.push(`Consider consolidating funds with high overlap (${this.analysisReport.overlaps.maxOverlapPair?.fund1_name} and ${this.analysisReport.overlaps.maxOverlapPair?.fund2_name})`);
     }
+
+    // Diversification recommendations
+    const { unique_stocks } = this.analysisReport.diversification;
+    if (unique_stocks.count > 100) {
+      recommendations.push('Portfolio may be over-diversified. Consider streamlining holdings.');
+    } else if (unique_stocks.count < 30) {
+      recommendations.push('Portfolio concentration is high. Consider adding more diversity.');
+    }
+
+    // Expense recommendations
+    const highExpenseFunds = this.analysisReport.expenses.filter(fund => fund.relative_cost > 0.5);
+    if (highExpenseFunds.length > 0) {
+      recommendations.push(`Consider reviewing high expense funds: ${highExpenseFunds.map(f => f.fund_name).join(', ')}`);
+    }
+
+    return recommendations;
+  }
   }
 };
 </script>
