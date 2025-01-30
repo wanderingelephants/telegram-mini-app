@@ -1,244 +1,116 @@
-const Database = require('better-sqlite3');
-const db = new Database(process.env.SQLITE_DB + '/dipsip.db', {  });
-//const { Pinecone } = require('@pinecone-database/pinecone');
-const { Anthropic } = require('@anthropic-ai/sdk');
-const OpenAI = require('openai');
-const axios = require('axios');
 const fs = require('fs')
 require('dotenv').config();
 const path = require('path')
+const getData = require('../mutualfunds/getData')
+const getLLMResponse = require('./llmResponse')
+const fixSyntaxError = require('./syntaxAgent')
+const formatResults = require('./formatAgent.js')
+let mutualFunds, stockHoldings;
+let mutual_fund_data = []
 const PROMPTS_FOLDER = path.join(__dirname, "prompts")
-const temperature = 0
+const GENERATED_FUNCTIONS_PATH = process.env.GENERATED_FUNCTIONS_PATH
+if (!fs.existsSync(GENERATED_FUNCTIONS_PATH)) fs.mkdirSync(GENERATED_FUNCTIONS_PATH, { recursive: true })
+const functionName = "analyzeMutualFunds"
 
-let processed_holding_data = []
 let reporting_dates = []
-/*const pinecone = new Pinecone({
- apiKey: process.env.PINECONE_API_KEY,
-});*/
-//'```javascript'
-const stripJSTicks = function(functionText, stringToStrip){
-    /*let idx = functionText.indexOf(stringToStrip) 
-   if ( idx > -1) {
-     functionText = functionText.substring(idx +  stringToStrip.length);
-     idx = functionText.indexOf('```') 
-     if (idx > -1) {
-       functionText = functionText.substring(0, idx);
-     }
-   }*/
-  const idx = functionText.indexOf("function analyzeMutualFundsHoldings")
+const stripJSTicks = function (functionText) {
+  const idx = functionText.indexOf(`const ${functionName} = function`)
   const lastIdx = functionText.lastIndexOf("}")
-   return functionText.substring(idx, lastIdx+1)
-}
-const removeRegularFunds = function(holding_data){
-    const directFunds = new Set();  
-    holding_data.forEach(holding => {
-    if (holding.mutual_fund_name.includes('Direct Plan')) {
-        directFunds.add(getBaseFundName(holding.mutual_fund_name));
-    }
-});
-
-// Helper function to get base name
-function getBaseFundName(fundName) {
-    return fundName.replace(' - Direct Plan', '').replace(' - Regular Plan', '');
+  return functionText.substring(idx, lastIdx + 1)
 }
 
-// Find holdings to remove (Regular Plans where Direct exists)
-const holdingsToRemove = holding_data.filter(holding => {
-    if (!holding.mutual_fund_name.includes('Regular Plan')) return false;
-    const baseName = getBaseFundName(holding.mutual_fund_name);
-    return directFunds.has(baseName);
-});
-
-// Create final filtered holdings
-const filtered_holdings = holding_data.filter(holding => {
-    if (!holding.mutual_fund_name.includes('Regular Plan')) return true;
-    const baseName = getBaseFundName(holding.mutual_fund_name);
-    return !directFunds.has(baseName);
-});
-
-// Output results
-console.log('1. Removed Regular Fund Details:');
-console.log('Number of holdings removed:', holdingsToRemove.length);
-console.log('Regular funds removed:', 
-    [...new Set(holdingsToRemove.map(h => h.mutual_fund_name))]);
-
-console.log('\n2. Final Holdings Count:', filtered_holdings.length);
-
-console.log('\n3. Verification:');
-console.log('Initial holdings:', holding_data.length);
-console.log('Removed holdings:', holdingsToRemove.length);
-console.log('Final holdings:', filtered_holdings.length);
-console.log('Numbers add up:', 
-    holding_data.length === (holdingsToRemove.length + filtered_holdings.length));
-return filtered_holdings    
+function normalizeMutualFundsData(inputData) {
+  // Extract mutual funds data without stock holdings
+  const mutualFunds = inputData.map(({ mutual_fund_stock_holdings, ...fundData }) => fundData);
+  
+  // Create denormalized stock holdings with mutual fund data
+  const stockHoldings = inputData.flatMap(fund => {
+      return fund.mutual_fund_stock_holdings.map(holding => ({
+          ...holding,
+          mutual_fund_name: fund.mutual_fund_name,
+          mutual_fund_category: fund.mutual_fund_category,
+          mutual_fund_star_rating: fund.mutual_fund_star_rating,
+          mutual_fund_aum: fund.mutual_fund_aum,
+          mutual_fund_expenses_ratio: fund.mutual_fund_expenses_ratio,
+          mutual_fund_category_expenses_ratio: fund.mutual_fund_category_expenses_ratio
+      }));
+  });
+  
+  return {
+      mutualFunds,
+      stockHoldings
+  };
 }
 
-const getMutualFundHoldingsJSONArray = function(){
-    const sql = `SELECT mf.name as mutual_fund_name, mf.category as mutual_fund_category, mfh.stock_name, mfh.stock_holding_in_percentage as stock_holding_in_percentage,
-mfh.reporting_date as holding_reporting_date
-FROM "mutual_fund_holdings" mfh, mutual_fund mf
-where mf.scheme_code=mfh.scheme_code`
-    const holding_data = db.prepare(sql).all()
-    const holding_data_regular_removed = removeRegularFunds(holding_data)
-    processed_holding_data = holding_data_regular_removed.map(holding => ({
+const getMutualFundHoldingsJSONArray = function () {
+  mutual_fund_data = getData([], [])
+  
+  // Create a Set of unique date strings
+  const unique_dates = new Set();
+  mutual_fund_data.forEach(mf => {
+    mf.mutual_fund_stock_holdings = mf.mutual_fund_stock_holdings.map(holding => {
+      unique_dates.add(holding.stock_holding_reporting_date);
+      return {
         ...holding,
-        holding_reporting_date: new Date(holding.holding_reporting_date)
-    }));
-    
-    // Create a Set of unique date strings
-    const unique_dates = new Set();
-    processed_holding_data.forEach(holding => {
-        // Convert to ISO string and strip the time portion to compare dates only
-        const dateStr = holding.holding_reporting_date.toISOString().split('T')[0];
-        unique_dates.add(dateStr);
-    });
-    
-    // Convert Set to array of Date objects and sort in descending order
-    reporting_dates = Array.from(unique_dates)
-        .map(dateStr => new Date(dateStr))
-        .sort((a, b) => b - a);     
-    console.log("reporting_dates", reporting_dates)
+        stock_holding_reporting_date: new Date(holding.stock_holding_reporting_date)
+      }
+    })
+  });
+
+  
+  // Convert Set to array of Date objects and sort in descending order
+  reporting_dates = Array.from(unique_dates)
+    .map(dateStr => new Date(dateStr))
+    .sort((a, b) => b - a);
+  console.log("reporting_dates", reporting_dates)
 }
 getMutualFundHoldingsJSONArray()
 
 const route = async (req, res) => {
- try {
-   const { base_prompt, userQuestion, ollamaModel } = req.body;
-   const config = {
-     MAX_RETRIES: 1,
-     MAX_RESULTS: 20,
-     OLLAMA_URL: process.env.OLLAMA_URL,
-     PINECONE_INDEX: process.env.PINECONE_INDEX
-   };
+  try {
+    const { base_prompt, userQuestion, ollamaModel } = req.body;
 
-   //const index = pinecone.Index(config.PINECONE_INDEX);
-   
-   let examples = '';
-   /*const queryResponse = await index.query({
-     vector: await getEmbeddings(userQuestion),
-     topK: 3,
-     includeMetadata: true
-   });
-   console.log("Examples from Embeddings", examples)
-   if (queryResponse.matches.length === 0) {
-     examples = fs.readFileSync(path.join(PROMPTS_FOLDER, 'template_examples.txt'), 'utf-8');
-   } else {
-     examples = queryResponse.matches
-       .map(match => match.metadata.example_text)
-       .join('\n\n');
-   }*/
+    const prompt = `${base_prompt}\nHere is the Question: ${userQuestion}`;
 
-   const prompt = `${base_prompt}\n${examples}\nHere is the Question: ${userQuestion}`;
-   const getLLMResponse = async (promptToSend, retries = config.MAX_RETRIES) => {
-    console.log("Sending prompt\n", promptToSend, process.env.LLM_TO_USE)
-     try {
-       if (process.env.LLM_TO_USE === 'Ollama') {
-         const { data } = await axios.post(`${config.OLLAMA_URL}/api/generate`, {
-           model: ollamaModel,
-           "prompt": promptToSend,
-           stream: false,
-           temperature
-         });
-         console.log("LLM Response", data.response)
-         return data.response;
-       } else if (process.env.LLM_TO_USE === 'Claude') {
-         const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_API_KEY });
-         const resp = await anthropic.messages.create({
-            model: "claude-3-5-haiku-20241022",
-            max_tokens: 1024,
-            messages: [{ role: "user", content: prompt }],
-            temperature
-          });
-         return resp.content[0].text;
-       } else {
-        const openai = new OpenAI({
-            apiKey: process.env.OPENAI_API_KEY
-          });
-          const response = await openai.chat.completions.create({
-            model: "gpt-3.5-turbo",
-            messages: [{ role: "user", content: prompt }],
-            temperature
-          });
-          return response.choices[0].message.content;
-       }
-     } catch (error) {
-       if (retries > 0) return getLLMResponse(prompt, retries - 1);
-       throw error;
-     }
-   };
+    let functionText = (await getLLMResponse(prompt, ollamaModel)).trim();
+    functionText = stripJSTicks(functionText, '```')
+    if (functionText.indexOf(`module.exports = ${functionName}`) === -1) {
+      functionText += `\nmodule.exports = ${functionName}`
+    }
+    const generatedFileName = (new Date()).getTime() + ".js";
+    let generatedFilePath = path.join(GENERATED_FUNCTIONS_PATH, generatedFileName);
+    fs.writeFileSync(generatedFilePath, functionText);
+    let analyzeMutualFunds;
+    let result = [];
+    let firstRunFailed = true
+    let fixedFilePath = "";
+    const {mutualFunds, stockHoldings} = normalizeMutualFundsData(mutual_fund_data)
+    try {
+      analyzeMutualFunds = require(generatedFilePath);
+      result = await analyzeMutualFunds(mutualFunds, stockHoldings, reporting_dates);
+      firstRunFailed = false
+    } catch (e) {
+      console.log("Syntax failed, checking")
+      console.error(e)
+      fixedFilePath = await fixSyntaxError(generatedFilePath, e.stack, ollamaModel)
+    }
 
-   let functionText = (await getLLMResponse(prompt)).trim();
-   functionText = stripJSTicks(functionText, '```')
-   functionText = stripJSTicks(functionText, '```javascript')
-   //console.log("functionText to eval", functionText)
-   let analyzeFunction;
-   try {
-     analyzeFunction = eval(`(${functionText})`);
-     await analyzeFunction(processed_holding_data, reporting_dates);
-   } catch (e) {
-    console.log("Syntax failed, checking")
-    console.error(e)
-     let syntaxPrompt = fs.readFileSync(path.join(PROMPTS_FOLDER, 'javascript_syntax_prompt.txt'), 'utf-8');
-     syntaxPrompt = syntaxPrompt.replaceAll("{{}}", e+"")
-     const syntaxCheckerPrompt = `${syntaxPrompt} \n\n Here is the function to fix: \n\n ${functionText}`;
-     functionText = await getLLMResponse(syntaxCheckerPrompt);
-     functionText = stripJSTicks(functionText)
-     console.log("Revised function", functionText)
-     analyzeFunction = eval(`(${functionText})`);
-   }
-   console.log("Final Function", functionText)
-   //const mutualFundData = await getMutualFundHoldingsJSONArray();
-   let result = [];
-   
-   try {
-     result = analyzeFunction(processed_holding_data, reporting_dates);
-     //result = result.slice(0, config.MAX_RESULTS);
+    if (firstRunFailed === true && fixedFilePath !== "") {
+      console.log("Fixed Function to retry", fixedFilePath)
+      try {
+        analyzeMutualFunds = require(fixedFilePath);
+        result = await analyzeMutualFunds(mutualFunds, stockHoldings, reporting_dates);
+      } catch (e) {
+        console.error('Execution error:', e);
+      }
+    }
 
-     /*await index.upsert(
-        [{
-         id: Date.now().toString(),
-         values: await getEmbeddings(userQuestion),
-         metadata: {
-            example_text: `Example\nQuestion: ${userQuestion}\nResponse:\n${functionText}`,
-           success_count: 1,
-           created_at: new Date().toISOString()
-         }
-       }]
-     );*/
-   } catch (e) {
-     console.error('Execution error:', e);
-   }
-   console.log(new Date(), "Result", result)
-   res.json({ result });
- } catch (error) {
+    console.log(new Date(), "Result", result.slice(0))
+    const formattedResponse = await formatResults(result, userQuestion, ollamaModel)
+    res.json(formattedResponse);
+  } catch (error) {
     console.error(error)
-   res.status(500).json({ error: error.message });
- }
+    res.status(500).json({ error: error.message });
+  }
 };
-
-// Helper function to get embeddings (implement based on your chosen embeddings model)
-async function getEmbeddings(text) {
- // Example using OpenAI embeddings
- const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY
-  });
- const response = await openai.embeddings.create({
-    model: "text-embedding-ada-002",
-    input: text
-  });
-  return response.data[0].embedding;
- return response.data.data[0].embedding;
-}
-
 module.exports = route;
-
-// Required environment variables:
-/*
-PINECONE_API_KEY=
-PINECONE_ENVIRONMENT=
-PINECONE_INDEX=
-OLLAMA_URL=
-CLAUDE_API_KEY=
-OPENAI_API_KEY=
-LLM_TO_USE=
-*/

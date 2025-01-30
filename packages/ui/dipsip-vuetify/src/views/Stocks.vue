@@ -1,5 +1,6 @@
 <template>
     <div>
+        <v-card-title>Coming Soon !! AI Agents for stock discovery</v-card-title>
         <v-card-title>Tools and Frameworks for Stock Pickers</v-card-title>
         <frozen-table 
         title="Valuation Framework"

@@ -1,15 +1,16 @@
 You are a javascript programmer who has to write a function code, that processes some mutual fund data from indian markets, to answer the given User Question.
+The input data consists of 3 arrays -  mutual_funds, mutual_fund_stock_holdings, mutual_funds_reporting_dates
 The function and its parameters are defined in this JSON:
 
 {
     "function": {
-        "name": "analyzeMutualFundsHoldings",
-        "description" : "process the mutual fund and their stock holdings data to answer the User Question",
+        "name": "analyzeMutualFunds",
+        "description" : "process the mutual funds and their stock holdings data to answer the User Question",
         "parameters": [
             {
             "type" : "Array",
-            "name" : "mutual_funds_stock_holdings",
-            "description": "An array representing stock holdings for mutual funds. Each object represents a particular stock's percentage holding in the mutual fund",
+            "name" : "mutual_funds",
+            "description": "An array representing mutual funds. Each object represents a mutual fund, its attributes and stock holdings",
             "items" : [
                 {
                     "name": "mutual_fund_name",
@@ -30,47 +31,100 @@ The function and its parameters are defined in this JSON:
                     "enum": [1, 2, 3, 4, 5]
                 },
                 {
-                    "name": "mutual_fund_fee_percentage",
-                    "type": "number",
-                    "description": "Fee charged by fund, also known as Expense Ratio",
-                    "enum": null
-                },
-                {   
-                    "name": "stock_name",
-                    "type": "string",
-                    "description": "Name of the stock for this holding object",
-                    "enum": null
-                },
-                ,
-                {   
-                    "name": "stock_sector",
-                    "type": "string",
-                    "description": "Industry sector for the stock, e.g. Automoible, Pharma, IT",
+                    "name": "mutual_fund_aum",
+                    "type": "float",
+                    "description": "mutual fund's assets under management expressed in Crores (INR)",
                     "enum": null
                 },
                 {
-                    "name": "stock_holding_in_percentage",
+                    "name": "mutual_fund_expenses_ratio",
                     "type": "number",
-                    "description": "the stock's holding in mutual fund, expressed as percentage",
+                    "description": "Fee charged by fund, also known as mutual fund fee",
                     "enum": null
                 },
                 {
-                    "name": "stock_holding_reporting_date",
-                    "type": "Date",
-                    "description": "date on which this holding data was reported by the fund",
+                    "name": "mutual_fund_category_expenses_ratio",
+                    "type": "number",
+                    "description": "Average Fee charged by other funds in same category, also known as average category fees",
                     "enum": null
                 }
             ]
             },
+                {
+                    "name" : "mutual_fund_stock_holdings",
+                    "type" : "Array",
+                    "items" : [
+                        {
+                    "name": "mutual_fund_name",
+                    "type": "string",
+                    "description": "name of the mutual fund",
+                    "enum": null
+                },
+                {
+                    "name": "mutual_fund_category",
+                    "type": "string",
+                    "description": "mutual fund category. must be one of the enums",
+                    "enum": ["small cap fund", "mid cap fund", "large cap fund", "multi cap fund"]
+                },
+                {
+                    "name": "mutual_fund_star_rating",
+                    "type": "number",
+                    "description": "mutual fund star rating. 1 through 5. 5 being best, 1 being worst. Null means unrated",
+                    "enum": [1, 2, 3, 4, 5]
+                },
+                {
+                    "name": "mutual_fund_aum",
+                    "type": "float",
+                    "description": "mutual fund's assets under management expressed in Crores (INR)",
+                    "enum": null
+                },
+                {
+                    "name": "mutual_fund_expenses_ratio",
+                    "type": "number",
+                    "description": "Fee charged by fund, also known as mutual fund fee",
+                    "enum": null
+                },
+                {
+                    "name": "mutual_fund_category_expenses_ratio",
+                    "type": "number",
+                    "description": "Average Fee charged by other funds in same category, also known as average category fees",
+                    "enum": null
+                },
+                        {   
+                            "name": "stock_name",
+                            "type": "string",
+                            "description": "Name of the stock for this holding object",
+                            "enum": null
+                        },
+                        {   
+                            "name": "stock_sector",
+                            "type": "string",
+                            "description": "Industry sector for the stock, e.g. Automoible, Pharma, IT",
+                            "enum": null
+                        },
+                        {
+                            "name": "stock_holding_percentage_in_fund",
+                            "type": "number",
+                            "description": "the stock's holding in mutual fund, expressed as percentage",
+                            "enum": null
+                        },
+                        {
+                            "name": "stock_holding_reporting_date",
+                            "type": "Date",
+                            "description": "date on which this holding data was reported by the fund",
+                            "enum": null
+                        }
+                    ]
+                }   
+             ,
             {
                 "type": "Array",
-                "name": "holding_reporting_dates",
-                "description": "An Array of unique stock_holding_reporting_date sorted descending by time. Useful for time based filters logic",
+                "name": "mutual_funds_reporting_dates",
+                "description": "An Array of unique stock_holding_reporting_date sorted descending by time. Useful for time based filters logic for analyzing stock holding trends  and to get latest data",
                 "items": [
                     {
-                        "name": "stock_holding_reporting_date"
                         "type": "Date",
-                        "description": "The date on which the mutual fund published the holdings",
+                        "description": "The date on which the mutual fund published the holdings and other data",
                         "enum": null 
                         
                     }
@@ -82,6 +136,9 @@ The function and its parameters are defined in this JSON:
 
 Coding Guidelines
 
+- for any Question, there is no use-case of using both the arrays mutual_funds and mutual_fund_stock_holdings together. Use only one of them as following 2 rules describe.
+- If Question is related only to Mutual Fund attributes (e.g. star rating, aum, expenses ratio), then it should be answered using mutual_funds array alone. 
+- If Question is related to stock holdings, then it should be answered using mutual_fund_stock_holdings. Stock holding question may refer to some attributes like star rating, which is already available in the mutual_fund_stock_holdings array (Denormalized)
 - When filtering on Date fields, do not match with === operator directly on the Date objects, first convert to string using toISOString() and then match using ===
 - Avoid chained function calling with map(), filter(), sort(), reduce() etc. Keep it "verbose" multi-line, with intermediate values assigned to variables, so code is simple to read and debug.
 - Put your reasoning steps as comments in the code.
@@ -95,142 +152,71 @@ Coding Guidelines
 Validation: Make sure the Javascript syntax is correct, and it "compiles". i.e. stuff like opening and closing brackets are matching everywhere. e.g. if you start an array with [, then ensure there is a matching closing ]
 If you start some block with {, ensure there is matching }. 
 
-Example : Simple Question with successive filers
-Question: Which small cap funds have rating of 3 or more
-Response:
-function analyzeMutualFundsHoldings(mutual_funds_stock_holdings, holding_reporting_dates){
-    //REASONING STEPS mentioned as comments
 
-    //Since no time period is explicitly mentioned, assume analysis to be done on latest_holdings
-    //Step 1 : get the latest_reporting_date
-    const latest_reporting_date = holding_reporting_dates[0]
+Output function as shown here:
 
-    //Step 2 :
-    //Filter on stock_holding_reporting_date field. first convert date toISOString() and then check. Date objects cannot be directly compared using ===
-    const latest_holdings = mutual_funds_holdings.filter(mfh => mfh.stock_holding_reporting_date.toISOString() === latest_reporting_date.toISOString())
-    
-    //Step 3 : Identify small cap as mutual_fund_category. Filter on the enum value 'small cap fund'
-    const smallCapFundsRatedThreeOrAbove = latest_holdings.filter(mfh => 
-        mfh.mutual_fund_category.toLowerCase() === 'small cap fund' && 
-        mfh.mutual_fund_star_rating >= 3
-    );
-
+const analyzeMutualFunds = function(mutual_funds, mutual_fund_stock_holdings, mutual_funds_reporting_dates){
+    //Fill this up based on user question, as explained above.
 }
 
-Examples of Multi-hop Questions with filters
-
-Example
-Question: Which mutual funds have increased their  holdings in XYZ stock
+Example 1 : Simple Question with successive filers
+Question: Which small cap funds have rating of 4 or more
 Response:
 
-function analyzeMutualFundsHoldings(mutual_funds_holdings, reporting_dates) {
+const analyzeMutualFunds = function(mutual_funds, mutual_funds_reporting_dates){
+//REASONING STEPS
+//This query can be answered using mutual_funds array alone
+//Step 1 : Filter for mutual funds with mutual_fund_star_rating equal to 4
+    const fourStarRatedMutualFunds = mutual_funds.filter(mf => 
+        mf.mutual_fund_star_rating === 4
+    );
 
-    //REASONING STEPS given as code comments. 
-    //Since Question is about increase in holdings, it means comparison of latest_reporting_date and preceding_reporting_date. 
-    //Therefore, first calculate latest_reporting_date and preceding_reporting_date. Parse the Date() in order to do sorting.
-    
-    const latest_reporting_date = reporting_dates[0];
-    const preceding_reporting_date = reporting_dates[1];
-
-    //Identify "XYZ" as a Named entity corresponding to field stock_name. Applied case-insensitive wild-card filter logic.
-    //filter to get latest holdings in XYZ
-    const latest_holdings = mutual_funds_holdings.filter(h => 
-        h.stock_holding_reporting_date.toISOString() === latest_reporting_date.toISOString() && 
-        h.stock_name.toLowerCase().indexOf('XYZ'.toLowerCase()) > -1
-    );
-    //filter to get preceding holdings
-    const preceding_holdings = mutual_funds_holdings.filter(h => 
-        h.stock_holding_reporting_date.toISOString() === preceding_reporting_date.toISOString() && 
-        h.stock_name.toLowerCase().indexOf('XYZ'.toLowerCase()) > -1 
-    );
-//compare based on stock_holding_in_percentage
-return latest_holdings.filter(latest => {
-    const previous = preceding_holdings.find(prev => 
-        prev.mutual_fund_name.toLowerCase() === latest.mutual_fund_name.toLowerCase()
-    );
-    return !previous || 
-        parseFloat(latest.stock_holding_in_percentage) > parseFloat(previous?.stock_holding_in_percentage || '0');
-});
+//return result
+    return fourStarRatedMutualFunds;
 }
 
-Example
-Question : which large cap funds have an overlap over 25% compared with etfs. basically, find common stocks in funds belonging to large cap and etfs and then add their percentage holdings, and report pairs that have more than 25 % overlap. 
+Example 2 : Multi hop question with more reasoning steps
+Question : in small cap funds, which stocks got added newly 
 Response :
-function analyzeMutualFundsHoldings(mutual_funds_stock_holdings, holding_reporting_dates) {
-    //Since no time period mentioned, use the latest reporting date
-    const latest_reporting_date = holding_reporting_dates[0];
-    //Filter for latest holdings
-const latest_holdings = mutual_funds_stock_holdings.filter(mfh => 
-    mfh.stock_holding_reporting_date.toISOString() === latest_reporting_date.toISOString()
+
+const analyzeMutualFunds = function(mutual_funds, mutual_fund_stock_holdings, mutual_funds_reporting_dates) {
+//REASONING STEPS
+//Need to analyze stock holdings across 2 time periods - latest and preceding quarter
+//Step 1: Get the latest and previous reporting dates
+const latest_date = mutual_funds_reporting_dates[0];
+const preceding_date = mutual_funds_reporting_dates[1];
+//Step 2: Get small cap fund holdings for latest date
+const latest_smallcap_holdings = mutual_fund_stock_holdings.filter(mfh => 
+    mfh.mutual_fund_category.toLowerCase().indexOf('small cap fund') !== -1 &&
+    mfh.stock_holding_reporting_date.toISOString() === latest_date.toISOString()
 );
 
-//Get all ETF holdings
-const etf_holdings = latest_holdings.filter(mfh => 
-    mfh.mutual_fund_category.toLowerCase() === 'etf'
+//Step 3: Get small cap fund holdings for preceding date
+const preceding_smallcap_holdings = mutual_fund_stock_holdings.filter(mfh => 
+    mfh.mutual_fund_category.toLowerCase().indexOf('small cap fund') !== -1 &&
+    mfh.stock_holding_reporting_date.toISOString() === preceding_date.toISOString()
 );
 
-//Get all large cap fund holdings
-const large_cap_holdings = latest_holdings.filter(mfh => 
-    mfh.mutual_fund_category.toLowerCase() === 'large cap fund'
+//Step 4: Find stocks that exist in latest but not in preceding
+const latest_stocks = new Set(latest_smallcap_holdings.map(mfh => mfh.stock_name.toLowerCase()));
+const preceding_stocks = new Set(preceding_smallcap_holdings.map(mfh => mfh.stock_name.toLowerCase()));
+
+const newly_added_holdings = latest_smallcap_holdings.filter(mfh => 
+    !preceding_stocks.has(mfh.stock_name.toLowerCase())
 );
 
-//Calculate overlap for each large cap fund with each ETF
-const overlaps = [];
+//Step 5: Create result objects with relevant fields
+const result = newly_added_holdings.map(mfh => ({
+    mutual_fund_name: mfh.mutual_fund_name,
+    stock_name: mfh.stock_name,
+    stock_sector: mfh.stock_sector,
+    holding_percentage: mfh.stock_holding_percentage_in_fund
+}));
 
-//Get unique large cap fund names
-const large_cap_fund_names = [...new Set(
-    large_cap_holdings.map(mfh => mfh.mutual_fund_name)
-)];
+//Step 6: Remove duplicates based on all fields
+const unique_results = Array.from(new Set(result.map(JSON.stringify))).map(JSON.parse);
 
-//Get unique ETF names
-const etf_names = [...new Set(
-    etf_holdings.map(mfh => mfh.mutual_fund_name)
-)];
+return unique_results;
+}
 
-//For each large cap fund, calculate overlap with each ETF
-large_cap_fund_names.forEach(fund_name => {
-    //Get holdings of this large cap fund
-    const fund_holdings = large_cap_holdings.filter(mfh => 
-        mfh.mutual_fund_name.toLowerCase() === fund_name.toLowerCase()
-    );
-
-    etf_names.forEach(etf_name => {
-        //Get holdings of this ETF
-        const etf_fund_holdings = etf_holdings.filter(mfh => 
-            mfh.mutual_fund_name.toLowerCase() === etf_name.toLowerCase()
-        );
-
-        //Initialize overlap percentage
-        let overlap_percentage = 0;
-
-        //For each stock in the large cap fund
-        fund_holdings.forEach(fund_holding => {
-            //Check if this ETF also holds this stock
-            const matching_etf_holding = etf_fund_holdings.find(etf => 
-                etf.stock_name.toLowerCase() === fund_holding.stock_name.toLowerCase()
-            );
-
-            //If match found, add the minimum of the two percentages to overlap
-            if(matching_etf_holding) {
-                overlap_percentage += Math.min(
-                    fund_holding.stock_holding_in_percentage,
-                    matching_etf_holding.stock_holding_in_percentage
-                );
-            }
-        });
-
-        //If overlap is more than 25%, add to results
-        if(overlap_percentage > 25) {
-            overlaps.push({
-                large_cap_fund: fund_name,
-                etf_name: etf_name,
-                overlap_percentage: overlap_percentage
-            });
-        }
-    });
-});
-
-
-Output only the function text, and nothing else.
-
-Here is the User Question: in small cap funds, which stocks got added newly 
+Output only the function code, and absolutely nothing  else.

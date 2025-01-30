@@ -1,11 +1,57 @@
 const Database = require('better-sqlite3');
-const db = new Database(process.env.SQLITE_DB + '/dipsip.db', { verbose: console.log });
+const db = new Database(process.env.SQLITE_DB + '/dipsip.db', {  });
 
-const getData = (fundList) => {
+const removeRegularFunds = function(holding_data){
+    const directFunds = new Set();  
+    holding_data.forEach(holding => {
+    if (holding.mutual_fund_name.includes('Direct Plan')) {
+        directFunds.add(getBaseFundName(holding.mutual_fund_name));
+    }
+});
+
+// Helper function to get base name
+function getBaseFundName(fundName) {
+    return fundName.replace(' - Direct Plan', '').replace(' - Regular Plan', '');
+}
+
+// Find holdings to remove (Regular Plans where Direct exists)
+const holdingsToRemove = holding_data.filter(holding => {
+    if (!holding.mutual_fund_name.includes('Regular Plan')) return false;
+    const baseName = getBaseFundName(holding.mutual_fund_name);
+    return directFunds.has(baseName);
+});
+
+// Create final filtered holdings
+const filtered_holdings = holding_data.filter(holding => {
+    if (!holding.mutual_fund_name.includes('Regular Plan')) return true;
+    const baseName = getBaseFundName(holding.mutual_fund_name);
+    return !directFunds.has(baseName);
+});
+
+return filtered_holdings    
+}
+const getData = (fundList = [], categoryList = []) => {
     try {
-        // Prepare the SQL query for mutual funds
-        const placeholders = fundList.map(() => '?').join(',');
-        
+        const conditions = [];
+        const params = [];
+
+        if (fundList.length > 0) {
+            const namePlaceholders = fundList.map(() => '?').join(',');
+            conditions.push(`name IN (${namePlaceholders})`);
+            params.push(...fundList);
+        }
+
+        if (categoryList.length > 0) {
+            const categoryPlaceholders = categoryList.map(() => '?').join(',');
+            conditions.push(`category IN (${categoryPlaceholders})`);
+            params.push(...categoryList);
+        }
+
+        // Construct the final WHERE clause
+        const whereClause = conditions.length > 0 
+            ? `WHERE ${conditions.join(' AND ')}` 
+            : '';
+
         // Get mutual fund basic data
         const fundQuery = `
             SELECT 
@@ -17,10 +63,10 @@ const getData = (fundList) => {
                 expenses_ratio as mutual_fund_expenses_ratio,
                 expenses_ratio_cat_avg as mutual_fund_category_expenses_ratio
             FROM mutual_fund
-            WHERE name IN (${placeholders})
+            ${whereClause}
         `;
-        // Execute the fund query
-        const funds = db.prepare(fundQuery).all(fundList);
+        // Execute the fund query with combined parameters
+        const funds = db.prepare(fundQuery).all(params);
         // For each fund, get its holdings
         const holdingsQuery = db.prepare(`
             SELECT 
@@ -36,7 +82,6 @@ const getData = (fundList) => {
         // Map over funds to add holdings data
         const enrichedFunds = funds.map(fund => {
             const holdings = holdingsQuery.all(fund.id);
-            
             // Remove the id field as it's not needed in the output
             const { id, ...fundWithoutId } = fund;
             
@@ -45,7 +90,6 @@ const getData = (fundList) => {
                 mutual_fund_stock_holdings: holdings
             };
         });
-        console.log(enrichedFunds)
         return enrichedFunds;
         
     } catch (error) {

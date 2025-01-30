@@ -19,10 +19,22 @@ curl -X POST http://localhost:3000/api/nse/process \
   "etfFileName": "2025-01-23.json"
 }'
 
-curl -X POST http://localhost:3000/api/mutualfunds/compare \
+curl -X POST http://localhost:3000/api/mutualfunds/recommend \
 -H "Content-Type: application/json" \
 -d '{
-  "fundList": ["Groww Large Cap Fund - Regular Plan - Growth", "Motilal Oswal Large Cap Fund - Regular Plan - Growth"]
+  "fundList": ["Motilal MOSt Oswal Midcap 100 ETF", "Groww Large Cap Fund - Regular Plan - Growth", "Motilal Oswal Large Cap Fund - Regular Plan - Growth"]
+}'
+curl -X POST http://localhost:3000/api/mutualfunds/recommend \
+-H "Content-Type: application/json" \
+-d '{
+  "fundList": ["Groww Large Cap Fund - Regular Plan - Growth"]
+}'
+
+curl -X POST http://localhost:3000/api/mutualfunds/recommend \
+-H "Content-Type: application/json" \
+-d '{
+  "fundList": [],
+  "reverse_match_etf": ["Motilal MOSt Oswal Midcap 100 ETF"]
 }'
 #/api/etf
 #/api/corporate-announcements?index=sme&from_date=02-01-2025&to_date=03-01-2025&csv=true
