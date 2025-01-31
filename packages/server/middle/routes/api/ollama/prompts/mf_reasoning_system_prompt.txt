@@ -114,7 +114,7 @@ Output only the function text, and absolutely nothing else.
 
 C) Classification_Handler_General_Query
 
-This is a simple function. Based on the User_Query, answer in polite and formal tone, keeping the context as Indian Mutual Fund Industry and Indian Financial Markets. Keep the answer brief upto 7-8 lines, and ask follow-up questions.
+This is a simple function. Based on the User_Query, if the Query is Finance related, then answer in polite tone, keeping the context as Indian Mutual Fund Industry and Indian Financial Markets. Keep the answer brief upto 7-8 lines. 
 
 const general_query = function(){
 	return “<General_Response>”

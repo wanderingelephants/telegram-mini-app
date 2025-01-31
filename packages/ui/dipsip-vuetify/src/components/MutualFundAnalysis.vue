@@ -639,7 +639,7 @@ export default {
      pdf.setFontSize(14);
      pdf.text('5. Expense Ratio Analysis', 10, yOffset);
      yOffset += 10;
-     
+     console.log(this.analysisReport.expenses)
      const expenseData = this.analysisReport.expenses.map(fund => [
        fund.fund_name,
        `${fund.expense_ratio.toFixed(2)}%`,

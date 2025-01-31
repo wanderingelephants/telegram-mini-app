@@ -128,9 +128,15 @@ const route = async (req, res) => {
       functionText += `\nmodule.exports = ${functionName}`
     }
     const generatedFileName = (new Date()).getTime() + ".js";
-    
+
     let generatedFilePath = path.join(GENERATED_FUNCTIONS_PATH, generatedFileName);
     fs.writeFileSync(generatedFilePath, functionText);
+
+    /*const generatedFileName = "1738308131063.js"
+    let generatedFilePath = path.join(GENERATED_FUNCTIONS_PATH, generatedFileName);
+    const functionName = "mutual_fund_stock_holding_query"*/
+    
+    
     
     let result = [];
     let firstRunFailed = true
@@ -142,13 +148,13 @@ const route = async (req, res) => {
           const mutual_fund_query = require(generatedFilePath)
           result = await mutual_fund_query(mutualFunds)
         break;
-        case "mutual_fund_holdings_query":
+        case "mutual_fund_stock_holding_query":
           const mutual_fund_stock_holding_query = require(generatedFilePath)
-          result = await mutual_fund_stock_holding_query(mutualFunds) 
+          result = await mutual_fund_stock_holding_query(mutualFunds, stockHoldings, reporting_dates) 
         break;
         case "general":
           const general_query = require(generatedFilePath)
-          result = await general_query(mutualFunds)
+          result = await general_query()
         break;
       }
       firstRunFailed = false
@@ -162,8 +168,20 @@ const route = async (req, res) => {
     if (firstRunFailed === true && fixedFilePath !== "") {
       console.log("Fixed Function to retry", fixedFilePath)
       try {
-        analyzeMutualFundsHoldings = require(fixedFilePath);
-        result = await analyzeMutualFundsHoldings(stockHoldings, reporting_dates);
+        switch(functionName){
+          case "mutual_fund_query": 
+            const mutual_fund_query = require(generatedFilePath)
+            result = await mutual_fund_query(mutualFunds)
+          break;
+          case "mutual_fund_stock_holding_query":
+            const mutual_fund_stock_holding_query = require(generatedFilePath)
+            result = await mutual_fund_stock_holding_query(mutualFunds, stockHoldings, reporting_dates) 
+          break;
+          case "general":
+            const general_query = require(generatedFilePath)
+            result = await general_query()
+          break;
+        }
       } catch (e) {
         console.error('Execution error:', e);
       }

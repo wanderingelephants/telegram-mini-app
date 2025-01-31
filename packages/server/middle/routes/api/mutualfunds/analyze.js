@@ -136,8 +136,8 @@ const route = async (req, res) => {
         const expenseAnalysis = mutual_fund_data.map(fund => ({
             fund_name: fund.mutual_fund_name,
             expense_ratio: fund.mutual_fund_fee_percentage,
-            category_avg: fund.mutual_fund_category_expenses_ratio,
-            relative_cost: Number((fund.mutual_fund_fee_percentage - fund.mutual_fund_category_expenses_ratio).toFixed(2))
+            category_avg: fund.mutual_fund_category_fee_percentage,
+            relative_cost: Number((fund.mutual_fund_fee_percentage - fund.mutual_fund_category_fee_percentage).toFixed(2))
         }));
 
         reportData.overlaps = compareResults;
