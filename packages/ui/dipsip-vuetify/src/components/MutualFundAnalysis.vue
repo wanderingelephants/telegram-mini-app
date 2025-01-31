@@ -155,7 +155,7 @@
       </v-card-text>
     </v-card>
     <v-card class="mt-4">
-  <v-card-title class="text-h6">Recommended ETFs</v-card-title>
+  <v-card-title class="text-h6">Similar ETFs</v-card-title>
   <v-card-text>
     <v-data-table
       :headers="etfRecommendationHeaders"
@@ -402,10 +402,10 @@ export default {
     activeTab: 0,
     downloading: false,
     overlapHeaders: [
-      { text: "Fund 1", value: "fund1_name" },
-      { text: "Fund 2", value: "fund2_name" },
-      { text: "Overlap %", value: "overlap_percentage" },
-      { text: "Actions", value: "actions", sortable: false },
+      { title: "Fund 1", key: "fund1_name" },
+      { title: "Fund 2", key: "fund2_name" },
+      { title: "Overlap %", key: "overlap_percentage" },
+      { title: "Actions", key: "actions", sortable: false },
     ],
     expenseHeaders: [
       { title: "Fund Name", key: "fund_name" },
@@ -542,7 +542,7 @@ export default {
         fund2_name: overlap.comparison_metadata.fund2.name,
         overlap_percentage: overlap.overlap_percentage,
         ...overlap,
-      }));
+      })).sort((a, b) => b.overlap_percentage - a.overlap_percentage);
     },
   },
 

@@ -36,7 +36,7 @@ const formatResults = async (result, userQuestion, ollamaModel) => {
         In response to an Investor's query, create a natural response from the JSON Result.  
         User Query: ${userQuestion}
         \n
-        JSON Result: ${resultString}
+        Result: ${resultString}
         \n\n
         Output only your formatted response text, and nothing else.
         `

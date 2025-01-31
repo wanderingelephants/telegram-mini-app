@@ -20,6 +20,29 @@ const stripJSTicks = function (functionText, stringToStrip) {
     return functionText.substring(0, lastIdx)
   else return functionText
 }
+function convertToConstFormat(functionText) {
+  // Extract the function name and parameters
+  const functionMatch = functionText.match(/function\s+(\w+)\s*\((.*?)\)/);
+  if (!functionMatch) {
+      throw new Error("Invalid function format");
+  }
+  
+  const [_, functionName, params] = functionMatch;
+  
+  // Get the function body (everything between the first { and the last })
+  const bodyStart = functionText.indexOf('{');
+  const bodyEnd = functionText.lastIndexOf('}');
+  const functionBody = functionText.slice(bodyStart);
+  let newFunctionText = `const ${functionName} = function(${params})${functionBody}`
+  newFunctionText +=  `\nmodule.exports = ${functionName}`
+  const generatedFileName = `${functionName}_${(new Date()).getTime()}.js`;
+
+  let generatedFilePath = path.join(GENERATED_FUNCTIONS_PATH, generatedFileName);
+  fs.writeFileSync(generatedFilePath, newFunctionText);
+  return  {functionName, generatedFilePath}
+  // Create the new format
+  //return `const ${functionName} = function(${params})${functionBody}`;
+}
 function extractFunctionName(functionText) {
   const pattern = /const\s+([a-zA-Z_$][\w$]*)\s*=\s*function\s*\(/;
   const match = functionText.match(pattern);
@@ -104,7 +127,7 @@ getMutualFundHoldingsJSONArray()
 const route = async (req, res) => {
   try {
     const { baseModel, messages, streaming } = req.body;
-    let {ollamaModel} = req.body;
+    let {ollamaModel, promptInstruct} = req.body;
     if (!ollamaModel) ollamaModel = process.env.OLLAMA_MODEL ? process.env.OLLAMA_MODEL : "llama3.2:latest" 
     const latestMessage = messages[messages.length - 1]
     let userQuestion; 
@@ -115,30 +138,20 @@ const route = async (req, res) => {
     //console.log("Normalized", mutualFunds)
     if (true == streaming) 
       res.writeHead(200, {'Content-Type': 'text/event-stream','Cache-Control': 'no-cache','Connection': 'keep-alive'});
-    const base_prompt = fs.readFileSync(path.join(PROMPTS_FOLDER, baseModel + "_system_prompt.txt"), "utf-8")
+    let base_prompt;
+    promptInstruct ? base_prompt  = promptInstruct :
+    base_prompt = fs.readFileSync(path.join(PROMPTS_FOLDER, baseModel + "_system_prompt.txt"), "utf-8")
     const prompt = `${base_prompt}\nHere is the Question: ${userQuestion}`;
 
     let functionText = (await getLLMResponse(prompt, ollamaModel)).trim();
     console.log("LLM Response", functionText)
     functionText = stripJSTicks(functionText, '```')
     functionText = stripJSTicks(functionText, '```javascript')
+    functionText = functionText.trim()
     console.log("functionText after strip\n", functionText)
-    const functionName = extractFunctionName(functionText)
-    console.log("functionName", functionName)
-    if (functionText.indexOf("module.exports")  === -1) {
-      functionText += `\nmodule.exports = ${functionName}`
-    }
-    const generatedFileName = (new Date()).getTime() + ".js";
-
-    let generatedFilePath = path.join(GENERATED_FUNCTIONS_PATH, generatedFileName);
-    fs.writeFileSync(generatedFilePath, functionText);
-
-    /*const generatedFileName = "1738308131063.js"
-    let generatedFilePath = path.join(GENERATED_FUNCTIONS_PATH, generatedFileName);
-    const functionName = "mutual_fund_stock_holding_query"*/
-    
-    
-    
+    const {functionName, generatedFilePath} = convertToConstFormat(functionText)
+    //let functionName = "mutual_fund_stock_holding_query"
+    //let generatedFilePath = path.join(GENERATED_FUNCTIONS_PATH, "mutual_fund_stock_holding_query_1738334805695.js")
     let result = [];
     let firstRunFailed = true
     let fixedFilePath = "";
@@ -151,7 +164,7 @@ const route = async (req, res) => {
         break;
         case "mutual_fund_stock_holding_query":
           const mutual_fund_stock_holding_query = require(generatedFilePath)
-          result = await mutual_fund_stock_holding_query(mutualFunds, stockHoldings, reporting_dates) 
+          result = await mutual_fund_stock_holding_query(stockHoldings, reporting_dates) 
         break;
         case "general":
           const general_query = require(generatedFilePath)
