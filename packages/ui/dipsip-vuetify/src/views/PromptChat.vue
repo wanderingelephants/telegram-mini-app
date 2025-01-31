@@ -53,27 +53,16 @@
       <!-- Input Area - Sticky Bottom -->
       <div class="chat-input">
         <v-card-actions class="pa-4">
-          <v-autocomplete
-          ref="autocomplete"
+          <v-text-field
             v-model="userInput"
-            :items="suggestions"
             :label="userInputLabel"
             :disabled="isLoading"
             variant="outlined"
             density="comfortable"
             hide-details
-            :hide-no-data="hideNoData"
-            @keydown.enter.prevent="handleEnter"
-            @update:search="onInputChange"
+            @keyup.enter="sendMessage"
             append-inner-icon="mdi-send"
             @click:append-inner="sendMessage"
-            :menu-props="{ 
-         maxHeight: 200,
-         openOnClick: false,
-         closeOnClick: true,
-         closeOnContentClick: true
-       }"
-        no-data-text=""
           />
         </v-card-actions>
       </div>
