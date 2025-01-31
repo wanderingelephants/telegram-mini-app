@@ -38,13 +38,13 @@ const calculateStockOverlap = (fund1, fund2) => {
                 name: fund1.mutual_fund_name,
                 aum: fund1.mutual_fund_aum,
                 star_rating: fund1.mutual_fund_star_rating,
-                expenses_ratio: fund1.mutual_fund_expenses_ratio
+                expenses_ratio: fund1.mutual_fund_fee_percentage
             },
             fund2: {
                 name: fund2.mutual_fund_name,
                 aum: fund2.mutual_fund_aum,
                 star_rating: fund2.mutual_fund_star_rating,
-                expenses_ratio: fund2.mutual_fund_expenses_ratio
+                expenses_ratio: fund2.mutual_fund_fee_percentage
             }
         }
     };
@@ -135,9 +135,9 @@ const route = async (req, res) => {
         // Additional suggested analytics
         const expenseAnalysis = mutual_fund_data.map(fund => ({
             fund_name: fund.mutual_fund_name,
-            expense_ratio: fund.mutual_fund_expenses_ratio,
+            expense_ratio: fund.mutual_fund_fee_percentage,
             category_avg: fund.mutual_fund_category_expenses_ratio,
-            relative_cost: Number((fund.mutual_fund_expenses_ratio - fund.mutual_fund_category_expenses_ratio).toFixed(2))
+            relative_cost: Number((fund.mutual_fund_fee_percentage - fund.mutual_fund_category_expenses_ratio).toFixed(2))
         }));
 
         reportData.overlaps = compareResults;

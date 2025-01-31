@@ -60,8 +60,13 @@ const getData = (fundList = [], categoryList = []) => {
                 category as mutual_fund_category,
                 star_rating as mutual_fund_star_rating,
                 aum as mutual_fund_aum,
-                expenses_ratio as mutual_fund_expenses_ratio,
-                expenses_ratio_cat_avg as mutual_fund_category_expenses_ratio
+                return_1Y as mutual_fund_return_1Y,
+                return_2Y as mutual_fund_return_2Y,
+                return_3Y as mutual_fund_return_3Y,
+                return_5Y as mutual_fund_return_5Y,
+                return_10Y as mutual_fund_return_10Y,
+                expenses_ratio as mutual_fund_fee_percentage,
+                expenses_ratio_cat_avg as mutual_fund_category_fee_percentage
             FROM mutual_fund
             ${whereClause}
         `;

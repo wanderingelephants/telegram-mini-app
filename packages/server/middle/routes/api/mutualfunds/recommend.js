@@ -81,8 +81,8 @@ const calculateSimilarityScore = (fund1, fund2, config = DEFAULT_CONFIG) => {
     const holdingsSimilarity = calculateHoldingsSimilarity(holdings1, holdings2);
     const sectorSimilarity = calculateSectorSimilarity(holdings1, holdings2);
     const expenseSimilarity = calculateExpenseSimilarity(
-        fund1.mutual_fund_expenses_ratio,
-        fund2.mutual_fund_expenses_ratio
+        fund1.mutual_fund_fee_percentage,
+        fund2.mutual_fund_fee_percentage
     );
     const aumSimilarity = calculateAUMSimilarity(
         fund1.mutual_fund_aum,
@@ -105,9 +105,9 @@ const calculateSimilarityScore = (fund1, fund2, config = DEFAULT_CONFIG) => {
             aum_similarity: aumSimilarity
         },
         expense_comparison: {
-            fund1_expense: fund1.mutual_fund_expenses_ratio,
-            fund2_expense: fund2.mutual_fund_expenses_ratio,
-            difference: fund1.mutual_fund_expenses_ratio - fund2.mutual_fund_expenses_ratio
+            fund1_expense: fund1.mutual_fund_fee_percentage,
+            fund2_expense: fund2.mutual_fund_fee_percentage,
+            difference: fund1.mutual_fund_fee_percentage - fund2.mutual_fund_fee_percentage
         }
     };
 };
@@ -143,7 +143,7 @@ const consolidatePortfolio = (fundList) => {
     return {
         mutual_fund_stock_holdings: consolidatedHoldings,
         mutual_fund_aum: totalAUM,
-        mutual_fund_expenses_ratio: _.meanBy(fundList, 'mutual_fund_expenses_ratio')
+        mutual_fund_fee_percentage: _.meanBy(fundList, 'mutual_fund_fee_percentage')
     };
 };
 
@@ -183,7 +183,7 @@ const reverseETFMatch = async (etfName, config = DEFAULT_CONFIG) => {
         etf_details: {
             name: targetETF.mutual_fund_name,
             aum: targetETF.mutual_fund_aum,
-            expense_ratio: targetETF.mutual_fund_expenses_ratio,
+            expense_ratio: targetETF.mutual_fund_fee_percentage,
             category: targetETF.mutual_fund_category
         },
         matching_funds: _.orderBy(

@@ -123,7 +123,7 @@ export default {
       subTitle: 'Ask about Mutual Funds',
       userInputLabel: "Ask about Mutual Funds. No Trading tips.",
       debug: false,
-      systemPrompt: "mutual_funds",
+      systemPrompt: "mf_reasoning",
       analysisTypes: [
       {
         name: 'Overlap Analysis',

@@ -133,17 +133,16 @@ export default{
       this.isLoading = true;
 
       try {
-	      const response = await fetch('/api/ollama/promptChat', {
+	      const response = await fetch('/api/reasoning/promptChat', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'text/event-stream',
       },
       body: JSON.stringify({
-        model: this.model,
-        operation: this.operation,
-        promptName: this.systemPrompt,
-        messages: [...this.messages]
+        baseModel: this.systemPrompt,
+        messages: [...this.messages],
+        streaming: true
       })
     });
 

@@ -5,23 +5,54 @@ const getData = require('../mutualfunds/getData')
 const getLLMResponse = require('./llmResponse')
 const fixSyntaxError = require('./syntaxAgent')
 const formatResults = require('./formatAgent.js')
-let mutualFunds, stockHoldings;
 let mutual_fund_data = []
 const PROMPTS_FOLDER = path.join(__dirname, "prompts")
 const GENERATED_FUNCTIONS_PATH = process.env.GENERATED_FUNCTIONS_PATH
 if (!fs.existsSync(GENERATED_FUNCTIONS_PATH)) fs.mkdirSync(GENERATED_FUNCTIONS_PATH, { recursive: true })
-const functionName = "analyzeMutualFunds"
+//const functionName = "analyzeMutualFundsHoldings"
 
 let reporting_dates = []
-const stripJSTicks = function (functionText) {
-  const idx = functionText.indexOf(`const ${functionName} = function`)
-  const lastIdx = functionText.lastIndexOf("}")
-  return functionText.substring(idx, lastIdx + 1)
+const stripJSTicks = function (functionText, stringToStrip) {
+  const idx = functionText.indexOf(stringToStrip)
+  if (idx > -1) functionText =functionText.substring(idx+stringToStrip.length)
+  const lastIdx = functionText.lastIndexOf(stringToStrip)
+  if (lastIdx > -1)
+    return functionText.substring(0, lastIdx)
+  else return functionText
 }
-
+function extractFunctionName(functionText) {
+  const pattern = /const\s+([a-zA-Z_$][\w$]*)\s*=\s*function\s*\(/;
+  const match = functionText.match(pattern);
+  return match ? match[1] : null;
+}
 function normalizeMutualFundsData(inputData) {
   // Extract mutual funds data without stock holdings
-  const mutualFunds = inputData.map(({ mutual_fund_stock_holdings, ...fundData }) => fundData);
+  const mutualFunds = inputData.map(({ 
+    mutual_fund_name,
+    mutual_fund_category,
+    mutual_fund_star_rating,
+    mutual_fund_aum,
+    mutual_fund_fee_percentage,
+    mutual_fund_category_fee_percentage,
+    mutual_fund_return_1Y,
+    mutual_fund_return_2Y,
+    mutual_fund_return_3Y,
+    mutual_fund_return_5Y,
+    mutual_fund_return_10Y
+          
+  }) => ({
+    mutual_fund_fee_percentage,
+    mutual_fund_category_fee_percentage,
+    mutual_fund_name,
+    mutual_fund_category,
+    mutual_fund_star_rating,
+    mutual_fund_aum,
+    mutual_fund_return_1Y,
+    mutual_fund_return_2Y,
+    mutual_fund_return_3Y,
+    mutual_fund_return_5Y,
+    mutual_fund_return_10Y
+  }));
   
   // Create denormalized stock holdings with mutual fund data
   const stockHoldings = inputData.flatMap(fund => {
@@ -31,8 +62,13 @@ function normalizeMutualFundsData(inputData) {
           mutual_fund_category: fund.mutual_fund_category,
           mutual_fund_star_rating: fund.mutual_fund_star_rating,
           mutual_fund_aum: fund.mutual_fund_aum,
-          mutual_fund_expenses_ratio: fund.mutual_fund_expenses_ratio,
-          mutual_fund_category_expenses_ratio: fund.mutual_fund_category_expenses_ratio
+          mutual_fund_fee_percentage: fund.mutual_fund_fee_percentage,
+          mutual_fund_category_fee_percentage: fund.mutual_fund_category_fee_percentage,
+          mutual_fund_return_1Y: fund.mutual_fund_return_1Y,
+    mutual_fund_return_2Y: fund.mutual_fund_return_2Y,
+    mutual_fund_return_3Y: fund.mutual_fund_return_3Y,
+    mutual_fund_return_5Y: fund.mutual_fund_return_5Y,
+    mutual_fund_return_10Y: fund.mutual_fund_return_10Y
       }));
   });
   
@@ -65,41 +101,69 @@ const getMutualFundHoldingsJSONArray = function () {
   console.log("reporting_dates", reporting_dates)
 }
 getMutualFundHoldingsJSONArray()
-
+const ollamaModel = "llama3.2:latest"
 const route = async (req, res) => {
   try {
-    const { base_prompt, userQuestion, ollamaModel } = req.body;
-
+    const { baseModel, messages, streaming } = req.body;
+    const latestMessage = messages[messages.length - 1]
+    let userQuestion; 
+    if (latestMessage.role == 'user') {
+      userQuestion = latestMessage.content
+    }
+    const {mutualFunds, stockHoldings} = normalizeMutualFundsData(mutual_fund_data)
+    //console.log("Normalized", mutualFunds)
+    if (true == streaming) 
+      res.writeHead(200, {'Content-Type': 'text/event-stream','Cache-Control': 'no-cache','Connection': 'keep-alive'});
+    const base_prompt = fs.readFileSync(path.join(PROMPTS_FOLDER, baseModel + "_system_prompt.txt"), "utf-8")
     const prompt = `${base_prompt}\nHere is the Question: ${userQuestion}`;
 
     let functionText = (await getLLMResponse(prompt, ollamaModel)).trim();
+    console.log("LLM Response", functionText)
     functionText = stripJSTicks(functionText, '```')
-    if (functionText.indexOf(`module.exports = ${functionName}`) === -1) {
+    functionText = stripJSTicks(functionText, '```javascript')
+    console.log("functionText after strip\n", functionText)
+    const functionName = extractFunctionName(functionText)
+    console.log("functionName", functionName)
+    if (functionText.indexOf("module.exports")  === -1) {
       functionText += `\nmodule.exports = ${functionName}`
     }
     const generatedFileName = (new Date()).getTime() + ".js";
+    
     let generatedFilePath = path.join(GENERATED_FUNCTIONS_PATH, generatedFileName);
     fs.writeFileSync(generatedFilePath, functionText);
-    let analyzeMutualFunds;
+    
     let result = [];
     let firstRunFailed = true
     let fixedFilePath = "";
-    const {mutualFunds, stockHoldings} = normalizeMutualFundsData(mutual_fund_data)
+    
     try {
-      analyzeMutualFunds = require(generatedFilePath);
-      result = await analyzeMutualFunds(mutualFunds, stockHoldings, reporting_dates);
+      switch(functionName){
+        case "mutual_fund_query": 
+          const mutual_fund_query = require(generatedFilePath)
+          result = await mutual_fund_query(mutualFunds)
+        break;
+        case "mutual_fund_holdings_query":
+          const mutual_fund_stock_holding_query = require(generatedFilePath)
+          result = await mutual_fund_stock_holding_query(mutualFunds) 
+        break;
+        case "general":
+          const general_query = require(generatedFilePath)
+          result = await general_query(mutualFunds)
+        break;
+      }
       firstRunFailed = false
     } catch (e) {
       console.log("Syntax failed, checking")
       console.error(e)
       fixedFilePath = await fixSyntaxError(generatedFilePath, e.stack, ollamaModel)
+      console.log("fixedFilePAth", fixedFilePath)
     }
 
     if (firstRunFailed === true && fixedFilePath !== "") {
       console.log("Fixed Function to retry", fixedFilePath)
       try {
-        analyzeMutualFunds = require(fixedFilePath);
-        result = await analyzeMutualFunds(mutualFunds, stockHoldings, reporting_dates);
+        analyzeMutualFundsHoldings = require(fixedFilePath);
+        result = await analyzeMutualFundsHoldings(stockHoldings, reporting_dates);
       } catch (e) {
         console.error('Execution error:', e);
       }
@@ -107,10 +171,24 @@ const route = async (req, res) => {
 
     console.log(new Date(), "Result", result.slice(0))
     const formattedResponse = await formatResults(result, userQuestion, ollamaModel)
-    res.json(formattedResponse);
+    if (true  == streaming){
+      let json;
+      const lines = formattedResponse.split("\n")
+      for (const line of lines){
+        json = { "response": line, "done": false }
+        res.write(`data: ${JSON.stringify(json)}\n\n`);
+      }
+      json = { "response": "", "done": true }
+      res.write(`data: ${JSON.stringify(json)}\n\n`);
+      res.end();
+    }
+    else res.json(formattedResponse);
   } catch (error) {
     console.error(error)
-    res.status(500).json({ error: error.message });
+    json = { "response": "Sorry, no response", "done": true }
+    res.write(`data: ${JSON.stringify(json)}\n\n`);
+    res.end();
+    //res.status(500).json({ error: error.message });
   }
 };
 module.exports = route;

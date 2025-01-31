@@ -3,13 +3,13 @@ const { Anthropic } = require('@anthropic-ai/sdk');
 const OpenAI = require('openai');
 const OLLAMA_URL = process.env.OLLAMA_URL;
 const temperature = 0
-const getLLMResponse = async (promptToSend, ollamaModel) => {
-    console.log("Sending prompt\n", promptToSend, process.env.LLM_TO_USE)
+const getLLMResponse = async (prompt, ollamaModel) => {
+    console.log("Sending prompt\n", prompt, process.env.LLM_TO_USE)
     try {
         if (process.env.LLM_TO_USE === 'Ollama') {
             const { data } = await axios.post(`${OLLAMA_URL}/api/generate`, {
                 model: ollamaModel,
-                "prompt": promptToSend,
+                "prompt": prompt,
                 stream: false,
                 temperature
             });

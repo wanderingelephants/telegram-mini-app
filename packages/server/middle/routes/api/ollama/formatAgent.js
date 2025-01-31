@@ -1,11 +1,34 @@
 const getLLMResponse = require('./llmResponse')
 const MAX_RESULTS_TO_FORMAT = 10
 
+function removeDuplicates(array) {
+    // If array is empty, return empty array
+    if (!array.length) return [];
+    
+    // Check if first element is an object
+    const isObjectArray = typeof array[0] === 'object' && array[0] !== null;
+    
+    if (isObjectArray) {
+      // For arrays of objects
+      const seen = new Set();
+      return array.filter(item => {
+        // Create unique key by concatenating all values
+        const key = Object.values(item).join('-');
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+    } else {
+      // For arrays of primitive values
+      return [...new Set(array)];
+    }
+}
 const formatResults = async (result, userQuestion, ollamaModel) => {
     if (result === "" || result.length == 0) 
     if (!Array.isArray(result)) return "Sorry, No Response" 
     
     try{
+        result = removeDuplicates(result)
         if (result.length > 10)  result = result.slice(0, MAX_RESULTS_TO_FORMAT)
         let resultString = JSON.stringify(result)
         let base_prompt = `

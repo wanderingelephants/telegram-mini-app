@@ -1,80 +1,4 @@
-<template>
-    <div>
-        <v-textarea
-            v-model="promptTemplate"
-            label="Enter your prompt"
-            rows="20"
-        ></v-textarea>
-        <v-textarea
-            v-model="query"
-            label="Enter your query"
-            rows="1"
-        ></v-textarea>
-        <v-card-title>Time Taken: {{timeTaken}}</v-card-title>
-        <v-textarea
-            v-model="promptResponse"
-            label="Response"
-            rows="4"
-        ></v-textarea>
-        <v-text-field label="Prompt Name" v-model="promptName">
-        </v-text-field>
-        
-        <v-select
-            v-model="operation"
-            :items="operations"
-            label="Select Operation"
-            class="mb-4"
-        ></v-select>
-        <v-select
-            v-model="ollamaModel"
-            :items="models"
-            label="Select Model"
-            class="mb-4"
-        ></v-select>
-        <v-btn @click="sendPrompt">SEND</v-btn>
-    </div>
-</template>
-
-<script>
-import api from "./api";
-
-export default{
-    methods: {
-        async sendPrompt(){
-            console.log('sending', this.model)
-            try{
-                const startTime = new Date()
-                const resp = await api.post('/api/ollama/promptInstruct', {
-                    baseModel: 'mf_reasoning',
-                    ollamaModel: this.ollamaModel,
-                    base_prompt: this.promptTemplate,
-                    streaming: false,
-                    messages: [{"role": "user", "content": this.query}],
-                    operation: this.operation,
-                    promptName: this.promptName                    
-                })
-                const endTime = new Date()
-                this.timeTaken = endTime - startTime
-                console.log("Time Taken", this.timeTaken)
-                this.promptResponse = JSON.stringify(resp.data)
-            }
-            catch(e){
-                console.log(e)
-            }
-        }
-    },
-    data(){
-        return {
-            model: 'mf_reasoning',
-            promptResponse: '',
-            query: 'which stock is present in only small cap funds',
-            ollamaModel: 'llama3.2:latest',
-            models: ['deepseek-coder-v2', 'llama3.2:latest', 'gemma:7b', 'tinyllama:latest', 'phi3:mini', 'mistral:latest', 'phi4:latest', 'deepseek-r1', 'incept5/llama3.1-claude'],
-            timeTaken: 0,
-            operation: 'testPrompt',
-            operations: ['savePrompt', 'testPrompt'],
-            promptTemplate: `
-            You are a javascript programmer who has to write a function code, that processes some mutual fund data from indian markets, to answer the given User Question.
+You are a javascript programmer who has to write a function code, that processes some mutual fund data from indian markets, to answer the given User Question.
 The function and its parameters are defined in this JSON:
 
 {
@@ -111,6 +35,18 @@ The function and its parameters are defined in this JSON:
                     "description": "Fee charged by fund, also known as Expense Ratio",
                     "enum": null
                 },
+                {
+                    "name": "mutual_fund_category_fee_percentage",
+                    "type": "number",
+                    "description": "Average Fee charged by other funds in same category, also known as Category Expense Ratio",
+                    "enum": null
+                },
+                {
+                    "name": "mutual_fund_aum",
+                    "type": "number",
+                    "description": "Mutual Fund's Assets Under Management  (AUM), expressed in Crores INR",
+                    "enum": null
+                },
                 {   
                     "name": "stock_name",
                     "type": "string",
@@ -125,13 +61,13 @@ The function and its parameters are defined in this JSON:
                     "enum": null
                 },
                 {
-                    "name": "stock_holding_in_percentage",
+                    "name": "stock_holding_percentage_in_fund",
                     "type": "number",
                     "description": "the stock's holding in mutual fund, expressed as percentage",
                     "enum": null
                 },
                 {
-                    "name": "holding_reporting_date",
+                    "name": "stock_holding_reporting_date",
                     "type": "Date",
                     "description": "date on which this holding data was reported by the fund",
                     "enum": null
@@ -141,10 +77,10 @@ The function and its parameters are defined in this JSON:
             {
                 "type": "Array",
                 "name": "holding_reporting_dates",
-                "description": "An Array of unique holding_reporting_date sorted descending by time. Useful for time based filters logic",
+                "description": "An Array of unique stock_holding_reporting_date sorted descending by time. Useful for time based filters logic",
                 "items": [
                     {
-                        "name": "holding_reporting_date"
+                        "name": "stock_holding_reporting_date"
                         "type": "Date",
                         "description": "The date on which the mutual fund published the holdings",
                         "enum": null 
@@ -165,7 +101,8 @@ Coding Guidelines
 - wherever the JSON schema indicates enum (not null), make sure you use one of the enum values only. e.g. if user mentions "small cap funds" then it means "small cap fund" from enum defined in above schema.
 - holding_reporting_dates : this array must always be used. If the User Question does not mention any time period, then it is assumed to be the latest reporting date, i.e. holding_reporting_dates[0]
     If the User Question is about mutual fund stock holdings comparison across time, then latest_date will be holding_reporting_dates[0], preceding_reporting_date will be holding_reporting_dates[1] and so on. Broadly, one date per Quarter in the indian markets.
-- Duplicates : If return data is an array, then ensure there are no duplicates. e.g. if there are 3 fields in each object of the array, then use the 3 as key to eliminate duplicates.    
+- finally, use map() to return only relevant columns and not all the columns. If User has not explicitly asked then return key columns only like mutual_fund_name, mutual_fund_category. If Question was stock holdings, then stock_name, stock_sector, stock_holding_percentage_in_fund 
+- based on selected columns, remove duplicates from the array. the uniqueness is simply concatenation of each property's value. e.g. if you selected mutual_fund_name, mutual_fund_category, mutual_fund_star_rating then uniqueness is determined by combining all 3.
 
 Validation: Make sure the Javascript syntax is correct, and it "compiles". i.e. stuff like opening and closing brackets are matching everywhere. e.g. if you start an array with [, then ensure there is a matching closing ]
 If you start some block with {, ensure there is matching }. 
@@ -181,8 +118,8 @@ function analyzeMutualFundsHoldings(mutual_funds_stock_holdings, holding_reporti
     const latest_reporting_date = holding_reporting_dates[0]
 
     //Step 2 :
-    //Filter on holding_reporting_date field. first convert date toISOString() and then check. Date objects cannot be directly compared using ===
-    const latest_holdings = mutual_funds_holdings.filter(mf => mf.holding_reporting_date.toISOString() === latest_reporting_date.toISOString())
+    //Filter on stock_holding_reporting_date field. first convert date toISOString() and then check. Date objects cannot be directly compared using ===
+    const latest_holdings = mutual_funds_holdings.filter(mf => mf.stock_holding_reporting_date.toISOString() === latest_reporting_date.toISOString())
     
     //Step 3 : Identify small cap as mutual_fund_category. Filter on the enum value 'small cap fund'
     const smallCapFundsRatedThreeOrAbove = latest_holdings.filter(mf => 
@@ -210,28 +147,23 @@ function analyzeMutualFundsHoldings(mutual_funds_holdings, reporting_dates) {
     //Identify "XYZ" as a Named entity corresponding to field stock_name. Applied case-insensitive wild-card filter logic.
     //filter to get latest holdings in XYZ
     const latest_holdings = mutual_funds_holdings.filter(h => 
-        h.holding_reporting_date.toISOString() === latest_reporting_date.toISOString() && 
+        h.stock_holding_reporting_date.toISOString() === latest_reporting_date.toISOString() && 
         h.stock_name.toLowerCase().indexOf('XYZ'.toLowerCase()) > -1
     );
     //filter to get preceding holdings
     const preceding_holdings = mutual_funds_holdings.filter(h => 
-        h.holding_reporting_date.toISOString() === preceding_reporting_date.toISOString() && 
+        h.stock_holding_reporting_date.toISOString() === preceding_reporting_date.toISOString() && 
         h.stock_name.toLowerCase().indexOf('XYZ'.toLowerCase()) > -1 
     );
-//compare based on stock_holding_in_percentage
+//compare based on stock_holding_percentage_in_fund
 return latest_holdings.filter(latest => {
     const previous = preceding_holdings.find(prev => 
         prev.mutual_fund_name.toLowerCase() === latest.mutual_fund_name.toLowerCase()
     );
     return !previous || 
-        parseFloat(latest.stock_holding_in_percentage) > parseFloat(previous?.stock_holding_in_percentage || '0');
+        parseFloat(latest.stock_holding_percentage_in_fund) > parseFloat(previous?.stock_holding_percentage_in_fund || '0');
 });
 }
 
 
 Output only the function text, and nothing else.
-`,
-        }
-    }
-}
-</script>
