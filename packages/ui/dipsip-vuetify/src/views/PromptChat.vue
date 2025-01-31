@@ -6,7 +6,9 @@
         <v-card-title class="primary white--text">
           {{ title }}
         </v-card-title>
-        <v-card-subtitle>{{ subTitle }}</v-card-subtitle>
+        
+        <v-card-subtitle v-for="(subTitle, idx) in subTitles" :key="idx">{{ subTitle }}</v-card-subtitle>
+        
       </div>
 
       <!-- Messages Area - Scrollable -->
@@ -83,9 +85,9 @@ export default{
             required: true,
             type: String
         },
-        subTitle: {
+        subTitles: {
             required: true,
-            type: String
+            type: Array
         },
         userInputLabel: {
             required: true,

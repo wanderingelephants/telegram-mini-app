@@ -12,12 +12,12 @@
               <google-sign-in/>
               <v-card-text v-if="loggedInGoogle === true">Welcome {{userGoogle.displayName}}</v-card-text>
             <v-card class="ma-2">
-              <v-card-title>Mutual Fund Overlap Analysis (Select 2 or more)</v-card-title>
+              <v-card-title>Mutual Fund Comparative Analysis (Select 2 or more)</v-card-title>
               <v-card-subtitle class="text-subtitle-2">
                 Reduce Overlap, for Cleaner and Efficient Portfolio.
               </v-card-subtitle>
               <v-card-subtitle class="text-subtitle-2">
-                Fee of ETFs is 10X lower than Mutual Funds. 
+                Fee of ETFs can be 10X lower than Mutual Funds. 
                 <a href="/etfList">See ETFs</a>
               </v-card-subtitle>
               <!-- Analysis Type Chips -->
@@ -69,7 +69,7 @@
             </v-card>
       </v-col>
       <v-col cols="12" md="6" order="last" order-md="last" class="right-panel">
-        <prompt-chat :systemPrompt="systemPrompt" :title="title" :subTitle="subTitle" :userInputLabel="userInputLabel" :debug="debug"></prompt-chat>
+        <prompt-chat :systemPrompt="systemPrompt" :title="title" :subTitles="subTitles" :userInputLabel="userInputLabel" :debug="debug"></prompt-chat>
       </v-col>
     </v-row>
 
@@ -119,9 +119,10 @@ export default {
       portfolio: [],
       compareData: {},
       searchText: '',
-      title: 'Your Financial Assistant',
-      subTitle: 'Ask about Mutual Funds',
-      userInputLabel: "Ask about Mutual Funds. No Trading tips.",
+      title: 'Mutual Fund Helper',
+      subTitles: ['Try Questions that Google or ChatGPT cannot answer', 'E.g. Which mutual funds have fee below 0.5%, and returns above 20%', 'E.g. स्माल कैप फंड्स में 4 स्टार रेटेड अच्छे फंड्स बताइये',
+      'E.g. Which stocks are present in only 1 mutual fund', '** Trained on Indian data, can make mistakes'],
+      userInputLabel: "This is an AI tool, double check responses. No answer is any investing advice",
       debug: false,
       systemPrompt: "mf_reasoning",
       analysisTypes: [

@@ -101,10 +101,11 @@ const getMutualFundHoldingsJSONArray = function () {
   console.log("reporting_dates", reporting_dates)
 }
 getMutualFundHoldingsJSONArray()
-const ollamaModel = "llama3.2:latest"
 const route = async (req, res) => {
   try {
     const { baseModel, messages, streaming } = req.body;
+    let {ollamaModel} = req.body;
+    if (!ollamaModel) ollamaModel = process.env.OLLAMA_MODEL ? process.env.OLLAMA_MODEL : "llama3.2:latest" 
     const latestMessage = messages[messages.length - 1]
     let userQuestion; 
     if (latestMessage.role == 'user') {
