@@ -170,6 +170,10 @@ const route = async (req, res) => {
           const general_query = require(generatedFilePath)
           result = await general_query()
         break;
+        case "input_not_recognized":
+          const input_not_recognized = require(generatedFilePath)
+          result = await input_not_recognized()
+        break;
       }
       firstRunFailed = false
     } catch (e) {

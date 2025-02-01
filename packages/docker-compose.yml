@@ -33,6 +33,7 @@ services:
     volumes:
       - ./.env:/.env
       - ${PROMPTS_FOLDER:-/home/ec2-user/data/prompts}:/app/data/prompts
+      - ${GENERATED_FUNCTIONS:-/home/ec2-user/data/generated_functions}:/app/data/generated_functions
       - ${CONFIG:-/home/ec2-user/data/config}:/app/data/config
       - ${DOWNLOADS:-/home/ec2-user/data/downloads}:/app/data/downloads    
       - ${SQLITE_DB:-/home/ec2-user/data/sqlite_db}:/app/data/sqlite_db  
