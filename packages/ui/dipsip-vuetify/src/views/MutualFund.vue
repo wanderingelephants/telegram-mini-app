@@ -97,7 +97,7 @@
 <script>
 import { mapState } from "vuex";
 
-import GoogleSignIn from '../components/GoogleSignIn'
+//import GoogleSignIn from '../components/GoogleSignIn'
 import api from './api'
 import MutualFundAnalysis from '../components/MutualFundAnalysis.vue'
 import PromptChat from "./PromptChat.vue"
@@ -105,7 +105,7 @@ import PromptChat from "./PromptChat.vue"
 export default {
   name: 'ChatApp',
   components: {
-    MutualFundAnalysis, GoogleSignIn, PromptChat
+    MutualFundAnalysis, PromptChat
   },  
   data() {
     return {
@@ -329,7 +329,7 @@ export default {
     }
   },
 
-  watch: {
+  /*watch: {
     messages: {
       handler() {
         this.$nextTick(() => {
@@ -338,18 +338,20 @@ export default {
       },
       deep: true
     },
-    /*'$store.state.loggedInGoogle': {
+    '$store.state.loggedInGoogle': {
     async handler(newValue) {
       if (newValue === true) {
         await this.fetchFundList();
       }
     },
     immediate: true  
-  }*/
-  },
+  }
+  },*/
 
   async mounted() {
 	  //if  (this.loggedInGoogle == true)
+    console.log("mounted mutual fund")
+    if (this.fundList.length == 0)
     await this.fetchFundList()
     // Initial scroll to bottom
     //this.scrollToBottom();
