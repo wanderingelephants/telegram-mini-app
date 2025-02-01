@@ -120,9 +120,9 @@ export default {
       compareData: {},
       searchText: '',
       title: 'Mutual Fund Helper',
-      subTitles: ['Try Questions that Google or ChatGPT cannot answer', 'E.g. Which mutual funds have fee below 0.5%, and returns above 20%', 'E.g. स्माल कैप फंड्स में 4 स्टार रेटेड अच्छे फंड्स बताइये',
-      'E.g. Which stocks are present in only 1 mutual fund', '** Trained on Indian data, can make mistakes'],
-      userInputLabel: "This is an AI tool, double check responses. No answer is any investment advice",
+      subTitles: ['Try Questions that Google or ChatGPT cannot answer', 'E.g. किन म्यूचुअल फंडों में शुल्क 0.5% से कम है, और रिटर्न 20% से अधिक है', 'E.g. ಕೆಲವು ಉತ್ತಮ 4-ಸ್ಟಾರ್ ರೇಟ್ ಸ್ಮಾಲ್ ಕ್ಯಾಪ್ ಫಂಡ್‌ಗಳನ್ನು ತಿಳಿಸಿ',
+      'E.g. Complex Discovery Questions: Which stocks are present in only 1 mutual fund', '** Trained on Indian data, can make mistakes'],
+      userInputLabel: "This is an AI tool, double check responses. No answer is any investment advice.",
       debug: false,
       systemPrompt: "mf_reasoning",
       analysisTypes: [

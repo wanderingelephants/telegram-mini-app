@@ -12,27 +12,27 @@
       </div>
 
       <!-- Messages Area - Scrollable -->
-      <div class="messages-wrapper">
-        <v-card-text class="chat-messages" ref="messagesContainer">
+      <div class="messages-wrapper" ref="messagesContainer">
+        <v-card-text class="chat-messages" >
           <v-list two-line>
             <template v-for="(message, index) in messages" :key="index">
-              <v-list-item :class="message.role === 'user' ? 'justify-end' : ''">
-                <v-list-item-content
-                  :class="[
-                    'rounded-lg pa-3 ma-2',
-                    message.role === 'user' ? 'blue lighten-4 ml-auto' : 'grey lighten-3',
-                    'max-width-75'
-                  ]"
-                >
-                  <v-list-item-title class="mb-2">
-                    {{ message.role === 'user' ? 'You' : 'Assistant' }}
-                  </v-list-item-title>
-                  <div class="message-content">
-                    {{ message.content }}
-                  </div>
-                </v-list-item-content>
-              </v-list-item>
-            </template>
+  <v-list-item :class="message.role === 'user' ? 'justify-end' : ''" class="message-item">
+    <v-card 
+      :class="[
+        'message-card',
+        message.role === 'user' ? 'user-message' : 'assistant-message'
+      ]"
+      elevation="0"
+    >
+      <v-card-title class="text-caption pb-1">
+        {{ message.role === 'user' ? 'You' : 'Assistant' }}
+      </v-card-title>
+      <v-card-text class="white-space-pre pt-0">
+        {{ message.content }}
+      </v-card-text>
+    </v-card>
+  </v-list-item>
+</template>
             
             <!-- Loading indicator -->
             <v-list-item v-if="isLoading">
@@ -56,6 +56,7 @@
       <div class="chat-input">
         <v-card-actions class="pa-4">
           <v-text-field
+            ref="chatInput"
             v-model="userInput"
             :label="userInputLabel"
             :disabled="isLoading"
@@ -162,7 +163,7 @@ export default{
             }
 
 
-            currentResponse += data.response;
+            currentResponse += data.response + '\n';
             // Update the UI with the streaming response
             if (this.messages[this.messages.length - 1]?.role === 'assistant') {
               this.messages[this.messages.length - 1].content = currentResponse;
@@ -218,8 +219,14 @@ export default{
     scrollToBottom() {
       const container = this.$refs.messagesContainer;
       if (container) {
-        container.scrollTop = container.scrollHeight;
+        container.scrollTo({
+          top: container.scrollHeight,
+          behavior: 'smooth'
+        });
       }
+      this.$nextTick(() => {
+      this.$refs.chatInput.focus();
+    });
     }
     },
     data(){
@@ -242,8 +249,7 @@ export default{
 </script>
 <style scoped>
 .chat-wrapper {
-  height: 100vh;
-  position: relative;
+  height: calc(100vh - 64px);
   display: flex;
   flex-direction: column;
 }
@@ -253,6 +259,7 @@ export default{
   flex-direction: column;
   height: 100%;
   margin: 8px;
+  max-height: calc(100vh - 64px);
 }
 
 .chat-header {
@@ -260,11 +267,10 @@ export default{
 }
 
 .messages-wrapper {
-  flex-grow: 1;
+  flex: 1;
   overflow-y: auto;
-  position: relative;
-  /* Add padding bottom to prevent messages from being hidden behind input */
-  padding-bottom: 80px;
+  min-height: 0; /* This is important for Firefox */
+   height: calc(100vh - 180px); 
 }
 
 .chat-messages {
@@ -272,16 +278,10 @@ export default{
 }
 
 .chat-input {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  flex-shrink: 0;
   background: white;
-  z-index: 1;
-  /* Adjust these margins to match your layout */
-  margin: 8px;
-  margin-left: 50%;
   border-top: 1px solid rgba(0, 0, 0, 0.12);
+  
 }
 
 @media (max-width: 960px) {
@@ -289,8 +289,31 @@ export default{
     margin-left: 8px;
   }
 }
+.message-line {
+  margin: 0;  /* Remove default paragraph margins */
+  min-height: 1.2em; /* Preserve empty lines */
+}
+.message-item {
+  padding: 4px 64px; /* Reduce default v-list-item padding */
+}
 
-.max-width-75 {
+.message-card {
   max-width: 75%;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.user-message {
+  margin-left: auto;
+  background-color: #E3F2FD; /* Light blue */
+}
+
+.assistant-message {
+  background-color: #F5F5F5; /* Light grey */
+}
+
+.white-space-pre {
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 </style>

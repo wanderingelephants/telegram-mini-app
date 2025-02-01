@@ -203,6 +203,7 @@ const route = async (req, res) => {
 
     console.log(new Date(), "Result", result.slice(0))
     const formattedResponse = await formatResults(result, userQuestion, ollamaModel)
+    
     if (true  == streaming){
       let json;
       const lines = formattedResponse.split("\n")
