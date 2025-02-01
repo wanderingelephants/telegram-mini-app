@@ -24,8 +24,8 @@ function removeDuplicates(array) {
     }
 }
 const formatResults = async (result, userQuestion, ollamaModel) => {
-    if (result === "" || result.length == 0) 
-    if (!Array.isArray(result)) return "Sorry, No Response" 
+    if (result === "" || result.length == 0) return "Sorry, I could not answer"
+    if (!Array.isArray(result)) return result 
     
     try{
         result = removeDuplicates(result)
