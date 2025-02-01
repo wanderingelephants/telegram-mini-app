@@ -150,9 +150,9 @@ const route = async (req, res) => {
     functionText = functionText.trim()
     console.log("functionText after strip\n", functionText)
     const {functionName, generatedFilePath} = convertToConstFormat(functionText)
-    //let functionName = "mutual_fund_stock_holding_query"
-    //let generatedFilePath = path.join(GENERATED_FUNCTIONS_PATH, "mutual_fund_stock_holding_query_1738334805695.js")
-    let result = [];
+    //let functionName = "general_query"
+    //let generatedFilePath = path.join(GENERATED_FUNCTIONS_PATH, "general_query_1738419569261")
+    let result;
     let firstRunFailed = true
     let fixedFilePath = "";
     
@@ -166,7 +166,7 @@ const route = async (req, res) => {
           const mutual_fund_stock_holding_query = require(generatedFilePath)
           result = await mutual_fund_stock_holding_query(stockHoldings, reporting_dates) 
         break;
-        case "general":
+        case "general_query":
           const general_query = require(generatedFilePath)
           result = await general_query()
         break;
@@ -195,7 +195,7 @@ const route = async (req, res) => {
             const mutual_fund_stock_holding_query = require(generatedFilePath)
             result = await mutual_fund_stock_holding_query(mutualFunds, stockHoldings, reporting_dates) 
           break;
-          case "general":
+          case "general_query":
             const general_query = require(generatedFilePath)
             result = await general_query()
           break;
@@ -205,7 +205,7 @@ const route = async (req, res) => {
       }
     }
 
-    console.log(new Date(), "Result", result.slice(0))
+    console.log(new Date(), "Result", Array.isArray(result) ? result.slice(0) : result)
     const formattedResponse = await formatResults(result, userQuestion, ollamaModel)
     
     if (true  == streaming){
