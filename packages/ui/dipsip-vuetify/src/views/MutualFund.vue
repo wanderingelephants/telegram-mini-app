@@ -9,7 +9,7 @@
             order-md="first"
             class="left-panel"
           >
-              <google-sign-in/>
+              <!--<google-sign-in/> -->
               <v-card-text v-if="loggedInGoogle === true">Welcome {{userGoogle.displayName}}</v-card-text>
             <v-card class="ma-2">
               <v-card-title>Mutual Fund Comparative Analysis (Select 2 or more)</v-card-title>
@@ -349,7 +349,7 @@ export default {
   },
 
   async mounted() {
-	  if  (this.loggedInGoogle == true)
+	  //if  (this.loggedInGoogle == true)
     await this.fetchFundList()
     // Initial scroll to bottom
     //this.scrollToBottom();

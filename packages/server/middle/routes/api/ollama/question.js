@@ -40,13 +40,6 @@ function convertToConstFormat(functionText) {
   let generatedFilePath = path.join(GENERATED_FUNCTIONS_PATH, generatedFileName);
   fs.writeFileSync(generatedFilePath, newFunctionText);
   return  {functionName, generatedFilePath}
-  // Create the new format
-  //return `const ${functionName} = function(${params})${functionBody}`;
-}
-function extractFunctionName(functionText) {
-  const pattern = /const\s+([a-zA-Z_$][\w$]*)\s*=\s*function\s*\(/;
-  const match = functionText.match(pattern);
-  return match ? match[1] : null;
 }
 function normalizeMutualFundsData(inputData) {
   // Extract mutual funds data without stock holdings
@@ -100,7 +93,6 @@ function normalizeMutualFundsData(inputData) {
       stockHoldings
   };
 }
-
 const getMutualFundHoldingsJSONArray = function () {
   mutual_fund_data = getData([], [])
   
@@ -123,23 +115,18 @@ const getMutualFundHoldingsJSONArray = function () {
     .sort((a, b) => b - a);
   console.log("reporting_dates", reporting_dates)
 }
-getMutualFundHoldingsJSONArray()
-const route = async (req, res) => {
-  try {
-    const { baseModel, messages, streaming } = req.body;
-    let {ollamaModel, promptInstruct} = req.body;
-    if (!ollamaModel) ollamaModel = process.env.OLLAMA_MODEL ? process.env.OLLAMA_MODEL : "llama3.2:latest" 
-    const latestMessage = messages[messages.length - 1]
-    let userQuestion; 
-    if (latestMessage.role == 'user') {
-      userQuestion = latestMessage.content
-    }
-    const {mutualFunds, stockHoldings} = normalizeMutualFundsData(mutual_fund_data)
+const handleDipSipQuery = async function(baseModel, userQuestion, ollamaModel){
+  const base_prompt = fs.readFileSync(path.join(PROMPTS_FOLDER, baseModel + "_system_prompt.txt"), "utf-8")
+  const prompt = `${base_prompt}\nHere is the Question: ${userQuestion}`;
+  const formattedResponse = (await getLLMResponse(prompt, ollamaModel)).trim();
+  return formattedResponse  
+}
+const handleMutualFundQuery = async function(baseModel, userQuestion, ollamaModel){
+  getMutualFundHoldingsJSONArray()
+  const {mutualFunds, stockHoldings} = normalizeMutualFundsData(mutual_fund_data)
     //console.log("Normalized", mutualFunds)
-    if (true == streaming) 
-      res.writeHead(200, {'Content-Type': 'text/event-stream','Cache-Control': 'no-cache','Connection': 'keep-alive'});
     let base_prompt;
-    promptInstruct ? base_prompt  = promptInstruct :
+    //promptInstruct ? base_prompt  = promptInstruct :
     base_prompt = fs.readFileSync(path.join(PROMPTS_FOLDER, baseModel + "_system_prompt.txt"), "utf-8")
     const prompt = `${base_prompt}\nHere is the Question: ${userQuestion}`;
     console.log("Question", userQuestion)
@@ -207,6 +194,35 @@ const route = async (req, res) => {
 
     console.log(new Date(), "Result", Array.isArray(result) ? result.slice(0) : result)
     const formattedResponse = await formatResults(result, userQuestion, ollamaModel)
+    return formattedResponse
+}
+
+const route = async (req, res) => {
+  try {
+    const { baseModel, messages, streaming } = req.body;
+    console.log("question.js", { baseModel, messages, streaming })
+    let {ollamaModel, promptInstruct} = req.body;
+    if (!ollamaModel) ollamaModel = process.env.OLLAMA_MODEL ? process.env.OLLAMA_MODEL : "llama3.2:latest" 
+    const latestMessage = messages[messages.length - 1]
+    let userQuestion; 
+    if (latestMessage.role == 'user') {
+      userQuestion = latestMessage.content
+    }
+    let formattedResponse = "Sorry, No Response";
+    
+    switch(baseModel){
+      case "mf_reasoning" : {
+        formattedResponse = await handleMutualFundQuery(baseModel, userQuestion, ollamaModel)
+        break;
+      }
+      case "dipsip" : {
+        formattedResponse = await handleDipSipQuery(baseModel, userQuestion, ollamaModel)
+        break;
+      }
+    }
+    if (true == streaming) 
+      res.writeHead(200, {'Content-Type': 'text/event-stream','Cache-Control': 'no-cache','Connection': 'keep-alive'});
+  
     
     if (true  == streaming){
       let json;

@@ -3,7 +3,7 @@
     <v-responsive>
     <v-row no-gutters class="fill-height">
         <v-col>
-              <google-sign-in/>
+              <!--<google-sign-in/> -->
               </v-col>
       <v-col
         cols="12"
@@ -200,7 +200,7 @@
         </v-card>
       </v-col>
       <v-col cols="12" md="6" order="last" order-md="last" class="right-panel">
-        <prompt-chat :systemPrompt="systemPrompt" :title="title" :subTitle="subTitle" :userInputLabel="userInputLabel" :debug="debug"></prompt-chat>
+        <prompt-chat :systemPrompt="systemPrompt" :title="title" :subTitles="subTitles" :userInputLabel="userInputLabel" :debug="debug"></prompt-chat>
       </v-col>
     </v-row>
     </v-responsive>
@@ -262,10 +262,10 @@ export default {
       },
       showSaveConfigDialog: false,
       title: 'Your Financial Assistant',
-      subTitle: 'Ask about DipSIP and how it is useful',
+      subTitles: ['Ask about DipSIP and how it is useful'],
       userInputLabel: "Ask about DipSIP. No Trading tips.",
       debug: false,
-      systemPrompt: "dipsip",
+      systemPrompt: "dipsip"
     };
   },
   methods: {
