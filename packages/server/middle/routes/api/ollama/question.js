@@ -142,7 +142,7 @@ const route = async (req, res) => {
     promptInstruct ? base_prompt  = promptInstruct :
     base_prompt = fs.readFileSync(path.join(PROMPTS_FOLDER, baseModel + "_system_prompt.txt"), "utf-8")
     const prompt = `${base_prompt}\nHere is the Question: ${userQuestion}`;
-
+    console.log("Question", userQuestion)
     let functionText = (await getLLMResponse(prompt, ollamaModel)).trim();
     console.log("LLM Response", functionText)
     functionText = stripJSTicks(functionText, '```')

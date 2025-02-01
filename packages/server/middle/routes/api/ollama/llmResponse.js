@@ -4,7 +4,7 @@ const OpenAI = require('openai');
 const OLLAMA_URL = process.env.OLLAMA_URL;
 const temperature = 0
 const getLLMResponse = async (prompt, ollamaModel) => {
-    console.log("Sending prompt\n", prompt, process.env.LLM_TO_USE)
+    //console.log("Sending prompt\n", prompt, process.env.LLM_TO_USE)
     try {
         if (process.env.LLM_TO_USE === 'Ollama') {
             const { data } = await axios.post(`${OLLAMA_URL}/api/generate`, {
