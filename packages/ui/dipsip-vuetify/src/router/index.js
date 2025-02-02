@@ -1,16 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Carousel from '@/views/Carousel.vue'
-import ETFPage from '@/views/ETFPage.vue'
 import PrivacyPolicy from '@/views/PrivacyPolicy.vue'
 import ContactUs from '@/views/ContactUs.vue'
 import AboutUs from '@/views/AboutUs.vue'
 
-import RiskProfile from '@/views/RiskProfile.vue'
-import Principles from '../components/Principles'
-import MutualFund from '@/views/MutualFund.vue'
 import SettingsPage from '@/views/SettingsPage.vue'
 import WebScraper from '@/views/WebScraper.vue'
-import DipSip from '@/views/DipSipChat.vue'
 import Utils from '@/views/Utils.vue'
 import Stocks from '@/views/Stocks.vue'
 import PromptInstruct from '@/views/PromptInstruct.vue'
@@ -27,7 +22,7 @@ const routes = [
   {
     path: '/principles',
     name: 'Principles',
-    component: Principles
+    component: () => import('../components/Principles')
   },
   {
     path: '/settings',
@@ -52,17 +47,17 @@ const routes = [
   {
     path: '/dipsip',
     name: 'DipSip',
-    component: DipSip
+    component: () => import('@/views/DipSipChat.vue')
   },
   {
     path: '/etfList',
     name: 'ETFPage',
-    component: ETFPage
+    component: () => import('@/views/ETFPage.vue')
   },
   {
     path: '/mutualfunds',
     name: 'MutualFunds',
-    component: MutualFund
+    component: () => import('@/views/MutualFund.vue')
   },
   {
     path: '/pricing',
@@ -72,7 +67,7 @@ const routes = [
   {
     path: '/riskProfile',
     name: 'RiskProfile',
-    component: RiskProfile
+    component: () => import('@/views/RiskProfile.vue') 
   },
   {
     path: '/utils',

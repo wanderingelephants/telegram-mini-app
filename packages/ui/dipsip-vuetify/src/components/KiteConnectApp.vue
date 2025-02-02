@@ -7,25 +7,15 @@
     title="Zerodha Users can directly place after reviewing. Other Brokerage users, please login to your respective client and place these Orders"
     type="warning"
   ></v-alert></h1>
-  
-    <!--<KiteConnectButton v-if="showKiteBtn" :apiKey="yourApiKey" :exchange="exchange" :instrument="instrument" :quantity="quantity" :price="price"/> -->
-     
   </v-col>
   </v-row>
   <div>
-    <!--<v-row>
-        <v-col cols="3"><th><b>ETF</b></th></v-col>
-        <v-col cols="3"><th><b>Price</b></th></v-col>
-        <v-col cols="3"><th><b>Quantity</b></th></v-col>
-        <v-col cols="3"><th><b>Amount</b></th></v-col>
-    </v-row> -->
   <v-row v-for="b of basket" :key="b.instrument">
     <v-col cols="3"><h3>{{instrumentDisplay(b)}}</h3></v-col>
     <v-col cols="4"><v-text-field type="number" label="Trigger Price" v-model="b.price" @update:modelValue="showConfirm=true; showKiteBtn=false"></v-text-field></v-col>
     <v-col cols="3"><v-text-field type="number"  label="Quantity" v-model="b.quantity"  @update:modelValue="showConfirm=true; showKiteBtn=false"></v-text-field></v-col>
     <v-col cols="2" label="Amt"><v-card-text>{{(Math.round(b.price * b.quantity)).toLocaleString()}}</v-card-text></v-col>
   </v-row>
-
   <v-row>
     <v-col cols="4">
         <h2>Rs. {{totalInvestment.toLocaleString()}}</h2>

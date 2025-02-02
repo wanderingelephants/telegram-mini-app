@@ -1,4 +1,3 @@
-<!-- WealthLandingPage.vue -->
 <template>
   <v-app>
     <!-- Header -->

@@ -11,14 +11,14 @@
           v-for="item in menuItems" 
           :key="item.path"
           :to="item.path"
-          @click="drawer = false;"
+          @click="drawer = false"
         >
           <v-list-item-title>{{ item.title }}</v-list-item-title>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar color="#FFA000" >
+    <v-app-bar color="#FFA000">
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title>Menu</v-toolbar-title>
     </v-app-bar>
@@ -31,45 +31,11 @@
           </v-fade-transition>
         </router-view>
       </v-container>
-
     </v-main>
 
-    <!-- Footer -->
     <v-footer class="bg-grey-darken-4" v-if="false">
       <v-container fluid>
         <v-row justify="center">
-          <!-- Footer Links -->
-          <!--<v-col cols="12" sm="9" md="6">
-            <v-row justify="center" class="text-center">
-              <v-col cols="6" sm="3">
-                <router-link to="/privacy" class="text-white text-decoration-none">Privacy Policy</router-link>
-              </v-col>
-              <v-col cols="6" sm="3">
-                <router-link to="/about" class="text-white text-decoration-none">About Us</router-link>
-              </v-col>
-              <v-col cols="6" sm="3">
-                <router-link to="/contact" class="text-white text-decoration-none">Contact Us</router-link>
-              </v-col> 
-            </v-row>
-          </v-col> -->
-
-          <!-- Social Media Links -->
-          <!--<v-col cols="12" class="text-center mt-4">
-            <v-btn
-              v-for="icon in socialIcons"
-              :key="icon.icon"
-              :href="icon.link"
-              target="_blank"
-              icon
-              variant="text"
-              class="mx-2"
-              color="white"
-            >
-              <v-icon>{{ icon.icon }}</v-icon>
-            </v-btn>
-          </v-col> -->
-
-          <!-- Copyright -->
           <v-col cols="12" class="text-center mt-4 text-white">
             <div class="text-caption">
               © {{ new Date().getFullYear() }} Aidea Solutions Private Limited. All rights reserved.

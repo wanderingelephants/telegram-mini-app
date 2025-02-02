@@ -57,7 +57,7 @@ const store = createStore({
 
 
 const app = createApp(App)
-app.component('apexcharts', Vue3ApexCharts)
+//app.component('apexcharts', Vue3ApexCharts)
 
 app.use(store)
 

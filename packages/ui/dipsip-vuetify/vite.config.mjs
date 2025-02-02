@@ -1,6 +1,7 @@
 // Plugins
 import Components from 'unplugin-vue-components/vite'
 import Vue from '@vitejs/plugin-vue'
+import visualizer from '@vitejs/plugin-vue'
 import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 import ViteFonts from 'unplugin-fonts/vite'
 import VueRouter from 'unplugin-vue-router/vite'
@@ -32,6 +33,13 @@ export default defineConfig({
         }],
       },
     }),
+    /*visualizer({
+      filename: 'dist/stats.html', // will be saved in dist/stats.html
+      open: true, // automatically open the visualization after build
+      gzipSize: true,
+      brotliSize: true,
+      template: 'treemap' // or 'sunburst', 'network'
+    })*/
   ],
   define: { 'process.env': {"NODE_ENV": "development"} },
   resolve: {
@@ -65,4 +73,18 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    sourcemap: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vuetify': ['vuetify'],
+          'vue': ['vue', 'vue-router'],
+          'apexcharts': ['apexcharts'],
+          'chart': ['chart.js']
+          
+        }
+      }
+    }
+  }
 })

@@ -5,7 +5,7 @@
       <v-card-title class="d-flex flex-wrap">
         <span class="text-h6">Stock Overlap Analysis</span>
         <v-spacer></v-spacer>
-        <v-btn
+        <!--<v-btn
           color="primary"
           @click="downloadCompleteReport"
           :loading="downloading"
@@ -14,7 +14,7 @@
         >
           Download Report
           <v-icon right>mdi-file-pdf</v-icon>
-        </v-btn>
+        </v-btn> -->
       </v-card-title>
 
       <v-card-text>
@@ -79,8 +79,7 @@
             </v-card>
           </v-col>
         </v-row>
-        <v-row>
-          <!-- Sector Breakdown -->
+        <!--<v-row>
           <v-col>
             <v-card outlined class="h-100">
               <v-card-title class="text-subtitle-1">
@@ -103,7 +102,7 @@
               </v-card-text>
             </v-card>
           </v-col>
-        </v-row>
+        </v-row> -->
         <v-row>
           <!-- Category Breakdown -->
           <v-col cols="12" sm="6" md="12" lg="4">
@@ -376,16 +375,11 @@
 </template>
 
 <script>
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
-
-import "jspdf-autotable";
-import VueApexCharts from "vue3-apexcharts";
 
 export default {
   name: "MFAnalysis",
   components: {
-    apexchart: VueApexCharts,
+  //  apexchart: VueApexCharts,
   },
 
   props: {

@@ -123,17 +123,6 @@
                     </v-btn>
                   </v-col>
                 </v-row>
-                <v-row class="mt-6">
-                  <v-col cols="12" sm="8" md="6" class="mx-auto">
-                    <v-btn
-                      block
-                      color="primary"
-                      @click="getLLMPrompt"
-                    >
-                      Generate LLM
-                    </v-btn>
-                  </v-col>
-                </v-row>
               </v-col>
             </v-row>
           </v-card-text>
