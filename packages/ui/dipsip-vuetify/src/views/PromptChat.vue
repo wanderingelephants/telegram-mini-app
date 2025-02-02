@@ -6,7 +6,7 @@
         <v-card-title class="primary white--text">
           {{ title }}
         </v-card-title>
-        <v-card-subtitle v-for="(subTitle, idx) in subTitles" :key="idx">{{ subTitle }}</v-card-subtitle>
+        <v-card-subtitle class="subtitle-wrap" v-for="(subTitle, idx) in subTitles" :key="idx">{{ subTitle }}</v-card-subtitle>
       </div>
 
       <!-- Messages Area - Scrollable -->
@@ -263,7 +263,12 @@ export default{
 .chat-header {
   flex-shrink: 0;
 }
-
+.subtitle-wrap {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
 .messages-wrapper {
   flex: 1;
   overflow-y: auto;

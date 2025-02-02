@@ -136,6 +136,22 @@ const findRecommendedETFs = (fund, fundList, threshold = MINIMUM_OVERLAP_THRESHO
     // Sort by overlap percentage and potential fee savings
     return _.orderBy(recommendations, ['overlap%', 'potential_savings'], ['desc', 'desc']);
 };
+const calculatePerformanceAnalysis = (fundList) => {
+    return fundList.map(({mutual_fund_name, mutual_fund_star_rating,
+        mutual_fund_aum,
+        mutual_fund_return_1Y,
+        mutual_fund_return_2Y,
+        mutual_fund_return_3Y,
+        mutual_fund_return_5Y,
+        mutual_fund_return_10Y
+      }) => ({mutual_fund_name, mutual_fund_star_rating,
+        mutual_fund_aum,
+        mutual_fund_return_1Y,
+        mutual_fund_return_2Y,
+        mutual_fund_return_3Y,
+        mutual_fund_return_5Y,
+        mutual_fund_return_10Y}))
+}
 const calculatePortfolioDiversification = (fundList) => {
     // Combine all latest holdings
     const allHoldings = fundList.flatMap(fund => {
@@ -221,7 +237,7 @@ const route = async (req, res) => {
         }
         // Calculate diversification metrics
         const diversificationAnalysis = calculatePortfolioDiversification(mutual_fund_data);
-
+        const performanceAnalysis = calculatePerformanceAnalysis(mutual_fund_data);
         // Additional suggested analytics
         const expenseAnalysis = mutual_fund_data.map(fund => ({
             fund_name: fund.mutual_fund_name,
@@ -233,6 +249,7 @@ const route = async (req, res) => {
         reportData.overlaps = compareResults;
         reportData.diversification = diversificationAnalysis;
         reportData.expenses = expenseAnalysis;
+        reportData.performanceAnalysis = performanceAnalysis;
         reportData.recommendedETFs = recommendedETFs;
         console.log(reportData.recommendedETFs)
 

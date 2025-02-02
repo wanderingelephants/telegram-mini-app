@@ -79,33 +79,66 @@
             </v-card>
           </v-col>
         </v-row>
-        <!--<v-row>
+        <v-row>
           <v-col>
-            <v-card outlined class="h-100">
-              <v-card-title class="text-subtitle-1">
-                Sector Breakdown
-                <v-spacer></v-spacer>
-                <v-btn icon small @click="showSectorDetails = true">
-                  <v-icon>mdi-magnify</v-icon>
-                </v-btn>
-              </v-card-title>
-              <v-card-text>
-                <div class="d-flex justify-center">
-                  <apexchart
-                    id="sectorChart"
-                    type="donut"
-                    height="300"
-                    :options="sectorChartOptions"
-                    :series="sectorChartSeries"
-                  />
-                </div>
-              </v-card-text>
-            </v-card>
+            <v-card>
+        <v-card-title>
+          Sector Analysis Details
+          <v-spacer></v-spacer>
+        </v-card-title>
+        <v-card-text>
+          <v-data-table
+            :headers="sectorHeaders"
+            :items="sectorTableData"
+            :items-per-page="5"
+            density="comfortable"
+            class="elevation-1"
+          >
+            <template v-slot:item="{ item }">
+              <tr>
+                <td>{{ item.name }}</td>
+                <td>
+                  <v-progress-linear
+                    :value="item.percentage"
+                    height="20"
+                    color="primary"
+                  >
+                    <template v-slot:default>
+                      {{ item.percentage.toFixed(1) }}%
+                    </template>
+                  </v-progress-linear>
+                </td>
+              </tr>
+            </template>
+          </v-data-table>
+        </v-card-text>
+      </v-card>
           </v-col>
-        </v-row> -->
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-card>
+        <v-card-title>
+          Performance Analysis (Returns)
+          <v-spacer></v-spacer>
+        </v-card-title>
+        <v-card-text>
+         <v-data-table
+            :headers="performanceHeaders"
+            :items="performanceTableData"
+            :items-per-page="5"
+            density="comfortable"
+            class="elevation-1"
+          >
+          
+</v-data-table>
+        </v-card-text> 
+      </v-card>
+          </v-col>
+        </v-row>
         <v-row>
           <!-- Category Breakdown -->
-          <v-col cols="12" sm="6" md="12" lg="4">
+          <v-col cols="12" sm="6" md="12" lg="12">
             <v-card outlined>
               <v-card-title class="text-subtitle-1"
                 >Fund Category Distribution</v-card-title
@@ -334,43 +367,6 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <!-- Sector Details Dialog -->
-    <v-dialog v-model="showSectorDetails" max-width="800">
-      <v-card>
-        <v-card-title>
-          Sector Analysis Details
-          <v-spacer></v-spacer>
-          <v-btn icon @click="showSectorDetails = false">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </v-card-title>
-        <v-card-text>
-          <v-data-table
-            :headers="sectorHeaders"
-            :items="sectorTableData"
-            :items-per-page="10"
-            class="elevation-1"
-          >
-            <template v-slot:item="{ item }">
-              <tr>
-                <td>{{ item.name }}</td>
-                <td>
-                  <v-progress-linear
-                    :value="item.percentage"
-                    height="20"
-                    color="primary"
-                  >
-                    <template v-slot:default>
-                      {{ item.percentage.toFixed(1) }}%
-                    </template>
-                  </v-progress-linear>
-                </td>
-              </tr>
-            </template>
-          </v-data-table>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
   </div>
 </template>
 
@@ -522,7 +518,7 @@ export default {
       return Object.entries(sectors).map(([name, data]) => ({
         name,
         percentage: data.percentage,
-      }));
+      })).sort((a, b) => b.percentage - a.percentage);
     },
     sectorHeaders() {
       return [
@@ -530,6 +526,53 @@ export default {
         { title: "Allocation (%)", key: "percentage" },
       ];
     },
+    performanceHeaders() {
+    return [
+      {
+        title: 'Fund Name',
+        key: 'mutual_fund_name',
+        align: 'start',
+        sortable: true
+      },
+      {
+        title: '5 Year',
+        key: 'mutual_fund_return_5Y',
+        align: 'end',
+        sortable: true,
+        format: value => `${value}%`
+      },
+      {
+        title: '3 Year',
+        key: 'mutual_fund_return_3Y',
+        align: 'end',
+        sortable: true,
+        format: value => `${value}%`
+      },
+      {
+        title: '1 Year',
+        key: 'mutual_fund_return_1Y',
+        align: 'end',
+        sortable: true,
+        format: value => `${value}%`
+      },
+    ]
+  },
+
+  performanceTableData() {
+    const flattened_row_data = this.analysisReport.performanceAnalysis
+    console.log("flattened", flattened_row_data.map(fund => ({
+      mutual_fund_name: fund.mutual_fund_name,
+      mutual_fund_return_1Y: fund.mutual_fund_return_1Y || '-',
+      mutual_fund_return_3Y: fund.mutual_fund_return_3Y || '-',
+      mutual_fund_return_5Y: fund.mutual_fund_return_5Y || '-'
+    })))
+    return flattened_row_data.map(fund => ({
+      mutual_fund_name: fund.mutual_fund_name,
+      mutual_fund_return_1Y: fund.mutual_fund_return_1Y || '-',
+      mutual_fund_return_3Y: fund.mutual_fund_return_3Y || '-',
+      mutual_fund_return_5Y: fund.mutual_fund_return_5Y || '-'
+    }))
+  },
     formattedOverlaps() {
       return this.analysisReport.overlaps.overlaps.map((overlap) => ({
         fund1_name: overlap.comparison_metadata.fund1.name,
@@ -883,5 +926,31 @@ export default {
 
 .analysis-container::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+.v-data-table__mobile-table-row {
+  margin: 8px 0;
+  padding: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+}
+
+.v-data-table__mobile-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+}
+
+.v-data-table__mobile-row__header {
+  font-weight: bold;
+  padding-right: 16px;
+  width: 40%;
+}
+
+.v-data-table__mobile-row__cell {
+  text-align: right;
+  width: 60%;
+}
+.hide-headers-mobile .v-data-table__header {
+  display: none !important;
 }
 </style>

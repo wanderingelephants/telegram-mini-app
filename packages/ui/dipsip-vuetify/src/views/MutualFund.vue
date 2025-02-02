@@ -20,10 +20,10 @@
         <v-card-text v-if="loggedInGoogle === true">Welcome {{userGoogle.displayName}}</v-card-text>
             <v-card>
               <v-card-title>Select 2 or More Funds</v-card-title>
-              <v-card-subtitle class="text-subtitle-2">
+              <v-card-subtitle class="subtitle-wrap ">
                 Reduce Overlap
               </v-card-subtitle>
-              <v-card-subtitle class="text-subtitle-2">
+              <v-card-subtitle class="subtitle-wrap ">
                 Fee of ETFs can be 10X lower than Mutual Funds. 
                 <a href="/etfList">See ETFs</a>
               </v-card-subtitle>
@@ -71,7 +71,7 @@
                 </v-autocomplete>
                 </v-card-text>
               <mutual-fund-analysis :analysisReport="compareData" v-if="compareData.overlaps"></mutual-fund-analysis>
-            </v-card> 
+            </v-card>
         </v-col> 
     </v-row>
 
@@ -122,28 +122,28 @@ export default {
       compareData: {},
       searchText: '',
       title: 'Mutual Fund Helper Agent',
-      subTitles: ['Ask what Google/ChatGPT cant answer. E.g.', '-किन म्यूचुअल फंडों में रिटर्न 20% से अधिक है, शुल्क 0.5% से कम है', '-help me understand REITs and InvITs','Which stocks are present in only 2 small cap funds', '** Trained on Indian data, can make mistakes'],
-      userInputLabel: "This is an AI tool, double check responses.",
+      subTitles: ['Ask what Google/ChatGPT cant answer. E.g.', '-किन म्यूचुअल फंडों में रिटर्न 20% से अधिक है, शुल्क 0.5% से कम है', '-help me understand REITs and InvITs','-Which stocks are present in only 2 small cap funds', '** Trained on Indian data, can make mistakes'],
+      userInputLabel: "This is an AI tool. Double Check",
       debug: false,
       systemPrompt: "mf_reasoning",
       analysisTypes: [
       {
-        name: 'Overlap Analysis',
+        name: 'Overlap',
         color: 'primary',
         icon: 'mdi-compare'
       },
       {
-        name: 'Diversification Analysis',
+        name: 'Diversification',
         color: 'success',
         icon: 'mdi-chart-pie'
       },
       {
-        name: 'Performance Compare',
+        name: 'Performance',
         color: 'info',
         icon: 'mdi-chart-line'
       },
       {
-        name: 'Fee Compare',
+        name: 'Fees',
         color: 'warning',
         icon: 'mdi-alert-circle-outline'
       }
@@ -184,8 +184,8 @@ export default {
         const response = await api.post('/api/mutualfunds/compare', {
          "fundList": this.selectedFunds
         })
-        
         this.compareData = response.data
+      
       } catch (error) {
         console.error('Error in sendCompare:', error)
       }
@@ -369,7 +369,12 @@ export default {
   line-height: 1.5;
   max-width: 100%;
 }
-
+.subtitle-wrap {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
 .max-width-75 {
   max-width: 75%;
 }
