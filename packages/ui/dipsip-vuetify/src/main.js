@@ -9,7 +9,6 @@ import { registerPlugins } from '@/plugins'
 
 // Components
 import App from './App.vue'
-import Vue3ApexCharts from "vue3-apexcharts";
 
 // Composables
 import { createApp } from 'vue'

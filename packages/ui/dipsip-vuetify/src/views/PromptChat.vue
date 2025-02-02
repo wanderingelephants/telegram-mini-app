@@ -6,9 +6,7 @@
         <v-card-title class="primary white--text">
           {{ title }}
         </v-card-title>
-        
         <v-card-subtitle v-for="(subTitle, idx) in subTitles" :key="idx">{{ subTitle }}</v-card-subtitle>
-        
       </div>
 
       <!-- Messages Area - Scrollable -->
@@ -64,7 +62,7 @@
             density="comfortable"
             hide-details
             @keyup.enter="sendMessage"
-            append-inner-icon="mdi-send"
+            append-inner-icon="$send"
             @click:append-inner="sendMessage"
           />
         </v-card-actions>
@@ -259,7 +257,7 @@ export default{
   flex-direction: column;
   height: 100%;
   margin: 8px;
-  max-height: calc(100vh - 64px);
+  max-height: calc(100vh - 130px);
 }
 
 .chat-header {

@@ -8,19 +8,25 @@
             order="first"
             order-md="first"
             class="left-panel"
+            
           >
+          
               <!--<google-sign-in/> -->
-              <v-card-text v-if="loggedInGoogle === true">Welcome {{userGoogle.displayName}}</v-card-text>
-            <v-card class="ma-2">
-              <v-card-title>Mutual Fund Comparative Analysis (Select 2 or more)</v-card-title>
+       <prompt-chat :systemPrompt="systemPrompt" :title="title" :subTitles="subTitles" :userInputLabel="userInputLabel" :debug="debug"></prompt-chat>
+      
+              
+      </v-col>
+      <v-col cols="12" md="6" order="last" order-md="last" class="right-panel">
+        <v-card-text v-if="loggedInGoogle === true">Welcome {{userGoogle.displayName}}</v-card-text>
+            <v-card>
+              <v-card-title>Select 2 or More Funds</v-card-title>
               <v-card-subtitle class="text-subtitle-2">
-                Reduce Overlap, for Cleaner and Efficient Portfolio.
+                Reduce Overlap
               </v-card-subtitle>
               <v-card-subtitle class="text-subtitle-2">
                 Fee of ETFs can be 10X lower than Mutual Funds. 
                 <a href="/etfList">See ETFs</a>
               </v-card-subtitle>
-              <!-- Analysis Type Chips -->
               <v-card-text class="pb-0">
                 <v-chip
                   v-for="type in analysisTypes"
@@ -36,7 +42,6 @@
               <v-card-text>
                 <v-btn :disabled="selectedFunds.length <= 1" @click="sendCompare(selectedFunds)" color="amber">Compare</v-btn>
               
-                <!-- Fund Selector -->
                 <v-autocomplete
                   v-model="selectedFunds"
                   :items="fundList"
@@ -66,11 +71,8 @@
                 </v-autocomplete>
                 </v-card-text>
               <mutual-fund-analysis :analysisReport="compareData" v-if="compareData.overlaps"></mutual-fund-analysis>
-            </v-card>
-      </v-col>
-      <v-col cols="12" md="6" order="last" order-md="last" class="right-panel">
-        <prompt-chat :systemPrompt="systemPrompt" :title="title" :subTitles="subTitles" :userInputLabel="userInputLabel" :debug="debug"></prompt-chat>
-      </v-col>
+            </v-card> 
+        </v-col> 
     </v-row>
 
     <!-- Error Snackbar -->
@@ -119,9 +121,9 @@ export default {
       portfolio: [],
       compareData: {},
       searchText: '',
-      title: 'Mutual Fund Helper',
-      subTitles: ['Try Questions that Google or ChatGPT cannot answer', 'E.g. किन म्यूचुअल फंडों में शुल्क 0.5% से कम है, और रिटर्न 20% से अधिक है', 'E.g. help me understand REITs and InvITs','E.g. Complex Discovery Questions: Which stocks are present in only 1 mutual fund', '** Trained on Indian data, can make mistakes'],
-      userInputLabel: "This is an AI tool, double check responses. No answer is any investment advice.",
+      title: 'Mutual Fund Helper Agent',
+      subTitles: ['Ask what Google/ChatGPT cant answer. E.g.', '-किन म्यूचुअल फंडों में रिटर्न 20% से अधिक है, शुल्क 0.5% से कम है', '-help me understand REITs and InvITs','Which stocks are present in only 2 small cap funds', '** Trained on Indian data, can make mistakes'],
+      userInputLabel: "This is an AI tool, double check responses.",
       debug: false,
       systemPrompt: "mf_reasoning",
       analysisTypes: [
