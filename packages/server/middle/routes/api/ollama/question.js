@@ -134,6 +134,8 @@ const handleMutualFundQuery = async function(baseModel, userQuestion, ollamaMode
     console.log("LLM Response", functionText)
     functionText = stripJSTicks(functionText, '```')
     functionText = stripJSTicks(functionText, '```javascript')
+    let lastIdx = functionText.lastIndexOf("}")
+    functionText = functionText.substring(0, lastIdx+1)
     functionText = functionText.trim()
     console.log("functionText after strip\n", functionText)
     const {functionName, generatedFilePath} = convertToConstFormat(functionText)
