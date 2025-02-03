@@ -192,7 +192,7 @@ const handleMutualFundQuery = async function(baseModel, userQuestion, ollamaMode
       }
     }
 
-    console.log(new Date(), "Result", Array.isArray(result) ? result.slice(0) : result)
+    //console.log(new Date(), "Result", Array.isArray(result) ? result.slice(0) : result)
     const formattedResponse = await formatResults(result, userQuestion, ollamaModel)
     return formattedResponse
 }
