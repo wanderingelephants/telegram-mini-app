@@ -40,9 +40,9 @@ const formatResults = async (result, userQuestion, ollamaModel) => {
         \n\n
         Output only your formatted response text, and nothing else.
         `
-        console.log("Sending for formatting", base_prompt)
+        //console.log("Sending for formatting", base_prompt)
         const formattedResponse = await getLLMResponse(base_prompt, ollamaModel)
-        console.log("formattedResponse", formattedResponse)
+        //console.log("formattedResponse", formattedResponse)
         return formattedResponse    
     }
     catch(err){

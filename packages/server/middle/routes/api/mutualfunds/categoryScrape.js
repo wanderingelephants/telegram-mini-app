@@ -191,7 +191,7 @@ const route = async(req, res) => {
         const {categoryKey, funds} = req.body
         //console.log(categoryKey, funds)
         for (const fund of funds) {
-            console.log('processing fund', fund)
+            console.log('processing fund', fund.schemeCode)
             if  (null == fund){
                 console.log("NULL FUND")
                 continue;
