@@ -220,6 +220,7 @@ const route = async (req, res) => {
         break;
       }
     }
+    console.log("formattedResponse", formattedResponse)
     if (true == streaming) 
       res.writeHead(200, {'Content-Type': 'text/event-stream','Cache-Control': 'no-cache','Connection': 'keep-alive'});
   
