@@ -20,6 +20,14 @@ services:
       - /home/ec2-user/app/dipsip/certs/www:/var/www/certbot
       - /var/log/letsencrypt:/var/log/letsencrypt  
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+  graphql-engine:
+    container_name: graphql
+    build:
+      dockerfile: Dockerfile.production
+      context: ./server/hasura
+    ports:
+    - "8081:8080"
+    restart: always
   api:
     build:
       context: ./server/middle

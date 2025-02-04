@@ -44,6 +44,88 @@ def process_pdf(input_pdf_path, output_folder):
         logger.error(error_msg)
         return False, error_msg
 
+@app.route('/api/processSinglePDF', methods=['GET', 'POST'])
+def process_single_pdf():
+    """
+    Process a single PDF file with flexible input methods
+    Supports:
+    1. GET request with query parameters
+    2. POST request with JSON body
+    3. Handling full paths or relative paths
+    """
+    # Determine input method and extract parameters
+    if request.method == 'GET':
+        input_pdf_path = request.args.get('inputPDFPath')
+        output_folder = request.args.get('outputFolder')
+    else:  # POST
+        data = request.get_json()
+        input_pdf_path = data.get('inputPDFPath')
+        output_folder = data.get('outputFolder')
+    
+    # Validate required parameters
+    if not input_pdf_path:
+        return jsonify({
+            'success': False,
+            'error': 'Input PDF path is required'
+        }), 400
+    
+    # Resolve input PDF path
+    # Check if it's an absolute path or a path relative to input base dir
+    pdf_path = Path(input_pdf_path)
+    if not pdf_path.is_absolute():
+        pdf_path = INPUT_BASE_DIR / input_pdf_path
+    
+    # Resolve output folder
+    if output_folder:
+        output_dir = Path(output_folder)
+        if not output_dir.is_absolute():
+            output_dir = OUTPUT_BASE_DIR / output_folder
+    else:
+        # Use default output base directory if not specified
+        output_dir = OUTPUT_BASE_DIR
+    
+    # Create output directory if it doesn't exist
+    output_dir.mkdir(parents=True, exist_ok=True)
+    
+    # Validate input PDF exists
+    if not pdf_path.exists():
+        return jsonify({
+            'success': False,
+            'error': f'Input PDF does not exist: {pdf_path}'
+        }), 404
+    
+    # Validate input is a PDF
+    if pdf_path.suffix.lower() != '.pdf':
+        return jsonify({
+            'success': False,
+            'error': f'Input file is not a PDF: {pdf_path}'
+        }), 400
+    
+    try:
+        # Process the single PDF
+        success, error = process_pdf(pdf_path, output_dir)
+        
+        if success:
+            return jsonify({
+                'success': True,
+                'message': 'PDF processed successfully',
+                'input_file': str(pdf_path),
+                'output_directory': str(output_dir)
+            })
+        else:
+            return jsonify({
+                'success': False,
+                'error': error,
+                'input_file': str(pdf_path)
+            }), 500
+    
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e),
+            'input_file': str(pdf_path)
+        }), 500
+    
 @app.route('/api/processPDFs', methods=['GET', 'POST'])
 def process_pdfs():
     # Get parameters from query string or POST body

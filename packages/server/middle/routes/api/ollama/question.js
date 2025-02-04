@@ -121,6 +121,22 @@ const handleDipSipQuery = async function(baseModel, userQuestion, ollamaModel){
   const formattedResponse = (await getLLMResponse(prompt, ollamaModel)).trim();
   return formattedResponse  
 }
+const handleConcallSummary = async function(baseModel, userQuestion, ollamaModel){
+  const base_prompt = fs.readFileSync(path.join(PROMPTS_FOLDER, baseModel + "_system_prompt.txt"), "utf-8")
+  let prompt = `${base_prompt}\n\n ${userQuestion}`;
+  
+  const formattedResponse = (await getLLMResponse(prompt, ollamaModel)).trim();
+  return formattedResponse  
+}
+const handleAnnouncementSummary = async function(baseModel, userQuestion, ollamaModel){
+  const base_prompt = fs.readFileSync(path.join(PROMPTS_FOLDER, baseModel + "_system_prompt.txt"), "utf-8")
+  let prompt = `${base_prompt}\nHere is the Announcement:\n\n\n ${userQuestion}`;
+  prompt += `\n\nAnouncement Ends\n Remeber you have to output only a JSON having 3 fields a. Summary b. Impact c. Sentiment`
+  console.log(prompt)
+  
+  const formattedResponse = (await getLLMResponse(prompt, ollamaModel)).trim();
+  return formattedResponse  
+}
 const handleMutualFundQuery = async function(baseModel, userQuestion, ollamaModel){
   getMutualFundHoldingsJSONArray()
   const {mutualFunds, stockHoldings} = normalizeMutualFundsData(mutual_fund_data)
@@ -201,9 +217,8 @@ const handleMutualFundQuery = async function(baseModel, userQuestion, ollamaMode
 
 const route = async (req, res) => {
   try {
-    const { baseModel, messages, streaming } = req.body;
-    console.log("question.js", { baseModel, messages, streaming })
-    let {ollamaModel, promptInstruct} = req.body;
+    const { baseModel, messages, streaming = false } = req.body;
+    let {ollamaModel} = req.body;
     if (!ollamaModel) ollamaModel = process.env.OLLAMA_MODEL ? process.env.OLLAMA_MODEL : "llama3.2:latest" 
     const latestMessage = messages[messages.length - 1]
     let userQuestion; 
@@ -219,6 +234,14 @@ const route = async (req, res) => {
       }
       case "dipsip" : {
         formattedResponse = await handleDipSipQuery(baseModel, userQuestion, ollamaModel)
+        break;
+      }
+      case "announcements_summary" : {
+        formattedResponse = await handleAnnouncementSummary(baseModel, userQuestion, ollamaModel)
+        break;
+      }
+      case "concall_summary" : {
+        formattedResponse = await handleConcallSummary(baseModel, userQuestion, ollamaModel)
         break;
       }
     }

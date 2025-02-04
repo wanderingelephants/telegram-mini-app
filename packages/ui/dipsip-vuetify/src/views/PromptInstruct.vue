@@ -45,7 +45,7 @@ export default{
             try{
                 const startTime = new Date()
                 const resp = await api.post('/api/ollama/promptInstruct', {
-                    baseModel: 'mf_reasoning',
+                    baseModel: 'concall_summary',
                     ollamaModel: this.ollamaModel,
                     promptInstruct: this.promptTemplate,
                     streaming: false,

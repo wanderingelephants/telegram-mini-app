@@ -1,0 +1,1 @@
+CREATE TABLE "public"."users" ("id" serial NOT NULL, "google_id" text NOT NULL, "email" text NOT NULL, "display_name" text, "photo_url" text, "last_login" timestamptz, "created_at" timestamptz NOT NULL DEFAULT now(), "updated_at" timestamptz NOT NULL DEFAULT now(), PRIMARY KEY ("id") , UNIQUE ("google_id"), UNIQUE ("email"));
