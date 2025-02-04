@@ -17,6 +17,7 @@ services:
       context: ./server/hasura
       args:
         - POSTGRES_URL=$POSTGRES_URL  
+        - HASURA_ADMIN_SECRET=$HASURA_ADMIN_SECRET
     ports:
     - "8081:8080"
     restart: always
