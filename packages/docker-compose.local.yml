@@ -15,6 +15,8 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./server/hasura
+      args:
+        - POSTGRES_URL=$POSTGRES_URL  
     ports:
     - "8081:8080"
     restart: always
