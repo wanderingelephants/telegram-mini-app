@@ -23,7 +23,7 @@ services:
   graphql-engine:
     container_name: graphql
     build:
-      dockerfile: Dockerfile.production
+      dockerfile: Dockerfile
       context: ./server/hasura
     ports:
     - "8081:8080"
