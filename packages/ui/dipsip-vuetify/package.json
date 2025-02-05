@@ -10,13 +10,17 @@
     "lint": "eslint . --fix"
   },
   "dependencies": {
+    "@apollo/client": "^3.12.9",
     "@firebase/auth": "^1.8.1",
     "@mdi/font": "7.4.47",
     "@mdi/js": "^7.4.47",
+    "@vue/apollo-option": "^4.2.0",
     "apexcharts": "^4.3.0",
     "axios": "^1.7.9",
     "chart.js": "^4.4.7",
     "firebase": "^11.1.0",
+    "graphql": "^16.10.0",
+    "graphql-tag": "^2.12.6",
     "roboto-fontface": "*",
     "vue": "^3.4.31",
     "vue3-apexcharts": "^1.8.0",

@@ -3,52 +3,93 @@ const db = new Database(process.env.SQLITE_DB + '/dipsip.db', { verbose: console
 const admin = require('firebase-admin');
 const config = process.env.CONFIG
 const serviceAccount = require(`${config}/firebase-admin.json`)
-
-/*admin.initializeApp({
-credential: admin.credential.cert(serviceAccount)
-});*/
+const {postToGraphQL} = require("../../../lib/helper");
+const jwt = require("jsonwebtoken")
 
 const route = async(req, res) => {
   try {
     const { idToken } = req.body;
-    const decodedToken = await admin.auth().verifyIdToken(idToken);
-    // Check if user exists in Database, else create
-    const user = db.prepare('SELECT users.email, user_profile.tg_id FROM users left outer join user_profile on users.google_id=user_profile.google_id WHERE users.google_id = ?')
-                  .get(decodedToken.sub);
-    let tg_id = "";
-    let email = ""
-    if (!user) {
-      // Create new user
-      email = decodedToken.email
-      db.prepare(`
-        INSERT INTO users (google_id, email, display_name, photo_url) 
-        VALUES (?, ?, ?, ?)
-      `).run(
-        decodedToken.sub,
-        decodedToken.email,
-        decodedToken.name,
-        decodedToken.picture
-      );
-    } else {
-      // Update last login time
-      db.prepare(`
-        UPDATE users 
-        SET last_login = CURRENT_TIMESTAMP 
-        WHERE google_id = ?
-      `).run(decodedToken.sub);
-      tg_id = user.tg_id ? user.tg_id : ""
-      email = user.email
-    }
+    const customClaims = await admin.auth().verifyIdToken(idToken);
+            if(!customClaims.email) {
+                let user = await firebase.auth().getUser(customClaims.uid);
+                customClaims.email = user.providerData[0].email;
+            }
+            let claims = {
+              "x-hasura-allowed-roles": ["user"],
+              "x-hasura-role": "user",
+              "x-hasura-default-role": "user"
+          }
+          //console.log("req.body.account", req.body.account)
+          //if(req.body.account) {
+              claims['x-hasura-user-id'] = customClaims.email;
+          //}
+          const currentTimestamp = new Date().toISOString();
+              const resp = await postToGraphQL({
+                  query: `
+                  mutation addUser(
+          $google_id: String, 
+          $email: String, 
+          $display_name: String, 
+          $photo_url: String, 
+          $last_login: timestamptz, 
+          $updated_at: timestamptz
+        ) {
+          insert_users_one(
+            on_conflict: {
+              constraint: users_email_key, 
+              update_columns: [last_login, updated_at]
+            }, 
+            object: {
+              google_id: $google_id, 
+              email: $email, 
+              display_name: $display_name, 
+              photo_url: $photo_url, 
+              last_login: $last_login,
+              updated_at: $updated_at
+            }
+          ) {
+            id, isAdmin, status
+          }
+        }                     
+                      `,
+                  variables: {
+                    google_id: customClaims.sub,
+                    email: customClaims.email,
+                    display_name: customClaims.name,
+                    photo_url: customClaims.picture,
+                    last_login: currentTimestamp,
+                    updated_at: currentTimestamp  
+                  }
+              })
+              console.log("insert resp", resp)
+              const isAdmin = resp.data.insert_users_one.isAdmin
+              if (isAdmin){
+                claims['x-hasura-role'] = "admin"
+                claims['x-hasura-allowed-roles'] = ["admin", "user"]
+                claims['x-hasura-default-role'] = "admin"
+              }
+              let secret = process.env.HASURA_JWT_SECRET;
+              let response = { }
+              
+            response.token = jwt.sign(
+                {
+                    "https://hasura.io/jwt/claims": claims
+                }, 
+                secret, 
+                {
+                    expiresIn: '2d'
+                }
+            )
+        
 
-    // Generate session token or use Firebase token
     res.json({ 
-      tokenGoogle: idToken,
+      token: response.token,
       userGoogle: {
-        uid: decodedToken.sub,
-        email: decodedToken.email,
-        name: decodedToken.name,
-        picture: decodedToken.picture,
-        tg_id
+        uid: customClaims.sub,
+        email: customClaims.email,
+        name: customClaims.name,
+        picture: customClaims.picture,
+        isAdmin
       }
     }).status(200);
   } catch (error) {

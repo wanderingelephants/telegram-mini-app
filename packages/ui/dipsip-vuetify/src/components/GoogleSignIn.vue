@@ -46,7 +46,7 @@ export default {
       this.unsubscribeAuth = onAuthStateChanged(auth, async (user) => {
         if (user) {
           // User is signed in
-          const idToken = await user.getIdToken();
+          const idToken = await user.getIdToken(true);
           localStorage.setItem("jwtGoogle", idToken);
           this.$store.commit("setloggedInGoogle", true);
           this.$store.commit("setUserGoogle", user);
@@ -71,13 +71,15 @@ export default {
             body: JSON.stringify({ idToken: existingToken }),
           });
           const json = await response.json();
+          console.log("Mountted", json)
           if (!response.ok) {
             // Token invalid - clear storage
-            localStorage.removeItem("jwtGoogle");
+            localStorage.removeItem("AUTH_TOKEN");
             this.$store.commit("setloggedInGoogle", false);
           } else {
             this.$store.commit("setloggedInGoogle", true);
             this.$store.commit("setUserGoogle", json.userGoogle);
+            localStorage.setItem("AUTH_TOKEN", json.token)
           }
         } catch (error) {
           console.error("Token verification error:", error);
@@ -128,10 +130,12 @@ export default {
 
         if (response.ok) {
           const json = await response.json();
+          console.log("SignIn", json)
           this.showDialog = false;
-          localStorage.setItem("jwtGoogle", idToken);
+          localStorage.setItem("AUTH_TOKEN ", json.token);
+          localStorage.setItem("jwtGoogle ", idToken);
           this.$store.commit("setloggedInGoogle", true);
-          this.$store.commit("setUserGoogle", json.userGoogle);
+          //this.$store.commit("setUserGoogle", json.userGoogle);
         }
       } catch (error) {
         console.error("Google sign-in error:", error);

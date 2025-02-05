@@ -11,7 +11,7 @@
             
           >
           
-              <!--<google-sign-in/> -->
+              <google-sign-in/> 
        <prompt-chat :systemPrompt="systemPrompt" :title="title" :subTitles="subTitles" :userInputLabel="userInputLabel" :debug="debug"></prompt-chat>
       
               
@@ -331,32 +331,9 @@ export default {
     }
   },
 
-  /*watch: {
-    messages: {
-      handler() {
-        this.$nextTick(() => {
-          this.scrollToBottom();
-        });
-      },
-      deep: true
-    },
-    '$store.state.loggedInGoogle': {
-    async handler(newValue) {
-      if (newValue === true) {
-        await this.fetchFundList();
-      }
-    },
-    immediate: true  
-  }
-  },*/
-
-  async mounted() {
-	  //if  (this.loggedInGoogle == true)
-    console.log("mounted mutual fund")
-    if (this.fundList.length == 0)
+  async mounted() {   
+	  if (this.fundList.length == 0)
     await this.fetchFundList()
-    // Initial scroll to bottom
-    //this.scrollToBottom();
   }
 }
 </script>

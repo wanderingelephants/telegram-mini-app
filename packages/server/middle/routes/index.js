@@ -41,7 +41,8 @@ try {
 const routes = {
     api: {
         auth: {
-            google: require('./api/auth/google')
+            google: require('./api/auth/google'),
+            callback: require('./api/auth/callback')
         },
         db: {
             create: require('./api/db/create'),
@@ -86,6 +87,7 @@ const routes = {
     }
 };
 router.post('/api/auth/google', routes.api.auth.google)
+router.get('/api/auth/callback', routes.api.auth.callback)
 router.post('/api/telegram/auth', routes.api.telegram.auth)
 router.post('/api/db/create', verifyAdminToken, routes.api.db.create)
 router.post('/api/db/import', routes.api.db.import)
@@ -95,8 +97,8 @@ router.post('/api/db/saveconfig', routes.api.db.saveconfig)
 router.get('/api/kite/order/create', routes.api.kite.order.create)
 router.get('/api/kite/login/success', routes.api.kite.login.success)
 router.get('/api/kite/instrument/quote', routes.api.kite.instrument.quote)
-router.post ('/api/mutualfunds/compare', routes.api.mutualfunds.analyze)
-router.post ('/api/mutualfunds/recommend', routes.api.mutualfunds.recommend)
+router.post('/api/mutualfunds/compare', routes.api.mutualfunds.analyze)
+router.post('/api/mutualfunds/recommend', routes.api.mutualfunds.recommend)
 router.get('/api/mutualfunds/list', routes.api.mutualfunds.list)
 router.post('/api/mutualfunds/categoryScrape', routes.api.mutualfunds.categoryScrape)
 router.post('/api/mutualfunds/chatStream', routes.api.ollama.singleShotStream)
