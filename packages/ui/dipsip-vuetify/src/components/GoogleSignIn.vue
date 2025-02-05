@@ -1,42 +1,7 @@
 <template>
-  <div>
-    <v-dialog v-if="!loggedInGoogle" v-model="showDialog" max-width="400">
-      <v-card class="rounded-lg">
-        <!-- Header with Google-style typography -->
-        <v-card-title class="text-h5 pt-6 px-6 font-weight-medium">
-          <v-icon color="primary" class="mr-2">mdi-google</v-icon>
-          Sign in with Google
-        </v-card-title>
-
-        <!-- Subtext with Google's product sans font -->
-        <v-card-text class="px-6 pt-4 pb-4 text-body-1 text-grey-darken-1">
-          Sign in to access enhanced features
-        </v-card-text>
-
-        <v-divider></v-divider>
-
-        <!-- Actions with Google-styled buttons -->
-        <v-card-actions class="pa-4">
-          <v-spacer></v-spacer>
-          <v-btn
-            variant="text"
-            class="text-caption text-grey-darken-1 font-weight-medium mr-2"
-            @click="closeDialog"
-          >
-            Cancel
-          </v-btn>
-          <v-btn
-            color="primary"
-            class="text-none px-6 rounded-lg elevation-0"
-            prepend-icon="mdi-google"
-            @click="signInWithGoogle"
-          >
-            Sign in with Google
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </div>
+  <v-btn @click="signInWithGoogle" color="primary" v-if="!loggedInGoogle">
+    Sign in with Google
+  </v-btn>
 </template>
 
 <script>
