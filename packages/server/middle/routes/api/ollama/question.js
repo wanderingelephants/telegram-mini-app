@@ -5,6 +5,8 @@ const getData = require('../mutualfunds/getData')
 const getLLMResponse = require('./llmResponse')
 const fixSyntaxError = require('./syntaxAgent')
 const formatResults = require('./formatAgent.js')
+const MessageManager = require("./MessageManager.js")
+const messageManager = new MessageManager()
 let mutual_fund_data = []
 const PROMPTS_FOLDER = path.join(__dirname, "prompts")
 const GENERATED_FUNCTIONS_PATH = process.env.GENERATED_FUNCTIONS_PATH
@@ -20,7 +22,7 @@ const stripJSTicks = function (functionText, stringToStrip) {
     return functionText.substring(0, lastIdx)
   else return functionText
 }
-function convertToConstFormat(functionText) {
+function convertToConstFormat(functionText, sessionID) {
   // Extract the function name and parameters
   const functionMatch = functionText.match(/function\s+(\w+)\s*\((.*?)\)/);
   if (!functionMatch) {
@@ -115,20 +117,20 @@ const getMutualFundHoldingsJSONArray = function () {
     .sort((a, b) => b - a);
   console.log("reporting_dates", reporting_dates)
 }
-const handleDipSipQuery = async function(baseModel, userQuestion, ollamaModel){
+const handleDipSipQuery = async function(baseModel, userQuestion, ollamaModel, sessionID){
   const base_prompt = fs.readFileSync(path.join(PROMPTS_FOLDER, baseModel + "_system_prompt.txt"), "utf-8")
   const prompt = `${base_prompt}\nHere is the Question: ${userQuestion}`;
   const formattedResponse = (await getLLMResponse(prompt, ollamaModel)).trim();
   return formattedResponse  
 }
-const handleConcallSummary = async function(baseModel, userQuestion, ollamaModel){
+const handleConcallSummary = async function(baseModel, userQuestion, ollamaModel, sessionID){
   const base_prompt = fs.readFileSync(path.join(PROMPTS_FOLDER, baseModel + "_system_prompt.txt"), "utf-8")
   let prompt = `${base_prompt}\n\n ${userQuestion}`;
   
   const formattedResponse = (await getLLMResponse(prompt, ollamaModel)).trim();
   return formattedResponse  
 }
-const handleAnnouncementSummary = async function(baseModel, userQuestion, ollamaModel){
+const handleAnnouncementSummary = async function(baseModel, userQuestion, ollamaModel, sessionID){
   const base_prompt = fs.readFileSync(path.join(PROMPTS_FOLDER, baseModel + "_system_prompt.txt"), "utf-8")
   let prompt = `${base_prompt}\nHere is the Announcement:\n\n\n ${userQuestion}`;
   prompt += `\n\nAnouncement Ends\n Remeber you have to output only a JSON having 3 fields a. Summary b. Impact c. Sentiment`
@@ -137,16 +139,19 @@ const handleAnnouncementSummary = async function(baseModel, userQuestion, ollama
   const formattedResponse = (await getLLMResponse(prompt, ollamaModel)).trim();
   return formattedResponse  
 }
-const handleMutualFundQuery = async function(baseModel, userQuestion, ollamaModel){
+const handleMutualFundQuery = async function(baseModel, userQuestion, ollamaModel, sessionID){
   getMutualFundHoldingsJSONArray()
   const {mutualFunds, stockHoldings} = normalizeMutualFundsData(mutual_fund_data)
     //console.log("Normalized", mutualFunds)
     let base_prompt;
     //promptInstruct ? base_prompt  = promptInstruct :
     base_prompt = fs.readFileSync(path.join(PROMPTS_FOLDER, baseModel + "_system_prompt.txt"), "utf-8")
-    const prompt = `${base_prompt}\nHere is the Question: ${userQuestion}`;
+    const prompt = `${base_prompt}\n\n Below is the interaction messages with the User. Consider previous messages for context if needed. Generate the function considering the last message  from the user, and output only the function text as explained  in System paramter \n `;
     console.log("Question", userQuestion)
-    let functionText = (await getLLMResponse(prompt, ollamaModel)).trim();
+    const contextMessages = messageManager.buildPrompt(sessionID, userQuestion)
+    const finalPrompt = {"system": prompt, messages: contextMessages}
+    console.log("Final Prompt", contextMessages)
+    let functionText = (await getLLMResponse(prompt, contextMessages, ollamaModel)).trim();
     console.log("LLM Response", functionText)
     functionText = stripJSTicks(functionText, '```')
     functionText = stripJSTicks(functionText, '```javascript')
@@ -154,7 +159,7 @@ const handleMutualFundQuery = async function(baseModel, userQuestion, ollamaMode
     functionText = functionText.substring(0, lastIdx+1)
     functionText = functionText.trim()
     console.log("functionText after strip\n", functionText)
-    const {functionName, generatedFilePath} = convertToConstFormat(functionText)
+    const {functionName, generatedFilePath} = convertToConstFormat(functionText, sessionID)
     //let functionName = "general_query"
     //let generatedFilePath = path.join(GENERATED_FUNCTIONS_PATH, "general_query_1738419569261")
     let result;
@@ -212,11 +217,14 @@ const handleMutualFundQuery = async function(baseModel, userQuestion, ollamaMode
 
     //console.log(new Date(), "Result", Array.isArray(result) ? result.slice(0) : result)
     const formattedResponse = await formatResults(result, userQuestion, ollamaModel)
+    messageManager.addMessagesToHistory(sessionID, userQuestion, functionText,formattedResponse)
     return formattedResponse
 }
 
 const route = async (req, res) => {
   try {
+    
+    const sessionID  = req.sessionID
     const { baseModel, messages, streaming = false } = req.body;
     let {ollamaModel} = req.body;
     if (!ollamaModel) ollamaModel = process.env.OLLAMA_MODEL ? process.env.OLLAMA_MODEL : "llama3.2:latest" 
@@ -229,19 +237,19 @@ const route = async (req, res) => {
     
     switch(baseModel){
       case "mf_reasoning" : {
-        formattedResponse = await handleMutualFundQuery(baseModel, userQuestion, ollamaModel)
+        formattedResponse = await handleMutualFundQuery(baseModel, userQuestion, ollamaModel, sessionID)
         break;
       }
       case "dipsip" : {
-        formattedResponse = await handleDipSipQuery(baseModel, userQuestion, ollamaModel)
+        formattedResponse = await handleDipSipQuery(baseModel, userQuestion, ollamaModel, sessionID)
         break;
       }
       case "announcements_summary" : {
-        formattedResponse = await handleAnnouncementSummary(baseModel, userQuestion, ollamaModel)
+        formattedResponse = await handleAnnouncementSummary(baseModel, userQuestion, ollamaModel, sessionID)
         break;
       }
       case "concall_summary" : {
-        formattedResponse = await handleConcallSummary(baseModel, userQuestion, ollamaModel)
+        formattedResponse = await handleConcallSummary(baseModel, userQuestion, ollamaModel, sessionID)
         break;
       }
     }

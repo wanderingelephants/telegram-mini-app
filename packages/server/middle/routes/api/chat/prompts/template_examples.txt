@@ -1,0 +1,207 @@
+Example
+Question: Which mutual funds have holdings in XYZ stock
+Response:
+
+function analyzeMutualFundsHoldings(mutual_funds_holdings, reporting_dates){
+    //REASONING STEPS given as code comments. 
+    
+    //Since no time period is explicitly mentioned, assume holding_reporting_date = reporting_dates[0]
+    const latest_reporting_date = reporting_dates[0]
+    //Filter on date field. first convert date toISOString() and then check. Date objects cannot be directly compared using ===
+    const latest_holdings = mutual_funds_holdings.filter(mfh => mfh.holding_reporting_date.toISOString() === latest_reporting_date.toISOString())
+    //Next Step: Filter latest_holdings. Identify "XYZ" as a Named Entity corresponding to field stock_name. Apply case-insensitive wild-card filter logic.
+    const holdings_in_xyz = latest_holdings.filter(mfh => (mfh.stock_name.toLowerCase().indexOf('XYZ'.toLowerCase()) > -1))
+    return holdings_in_xyz
+}
+
+
+Example
+Question: which stock is present in only small cap funds
+Response:
+
+function analyzeMutualFundsHoldings(mutual_funds_holdings, reporting_dates) {
+
+    //REASONING STEPS given as code comments. 
+
+    //Since no time period is explicitly mentioned, assume analysis to be done on latest_holdings
+    //Step 1 : get the latest_reporting_date
+    const latest_reporting_date = reporting_dates[0]
+
+    //Step 2 :
+    //Filter on holding_reporting_date field. first convert date toISOString() and then check. Date objects cannot be directly compared using ===
+    const latest_holdings = mutual_funds_holdings.filter(mfh => mfh.holding_reporting_date.toISOString() === latest_reporting_date.toISOString())
+    
+    //Step 3 : Identify small cap as mutual_fund_category. Filter on the enum value 'small cap fund'
+    const smallCapFunds = latest_holdings.filter(mfh => 
+        mfh.mutual_fund_category.toLowerCase() === 'small cap fund'
+    );
+
+    //Step 4: Get Stock names in smallCapFunds
+    const stocksWithSmallCapFunds = smallCapFunds.map(mfh => mfh.stock_name);
+
+    //Step 5: Get Funds other than 'small cap fund'
+    const otherFunds = latest_holdings.filter(mfh => 
+        mfh.mutual_fund_category.toLowerCase() !== 'small cap fund'
+    );
+    //Step 6: Get Stock names in otherFunds
+    const stocksInOtherFunds = otherFunds.map(mfh => mfh.stock_name);
+
+    //Step 7: Filter out stocks from otherFunds, to get Stocks ONLY in small cap
+    const stocksOnlyInSmallCapFunds = stocksWithSmallCapFunds.filter(stock => 
+        !stocksInOtherFunds.includes(stock)
+    );
+
+    return stocksOnlyInSmallCapFunds
+}
+
+
+
+Example
+Question: Which mutual funds have increased their  holdings in XYZ stock
+Response:
+
+function analyzeMutualFundsHoldings(mutual_funds_holdings, reporting_dates) {
+
+    //REASONING STEPS given as code comments. 
+    //Since Question is about increase in holdings, it means comparison of latest_reporting_date and preceding_reporting_date. 
+    //Therefore, first calculate latest_reporting_date and preceding_reporting_date. Parse the Date() in order to do sorting.
+    
+    const latest_reporting_date = reporting_dates[0];
+    const preceding_reporting_date = reporting_dates[1];
+
+    //Identify "XYZ" as a Named entity corresponding to field stock_name. Applied case-insensitive wild-card filter logic.
+    //filter to get latest holdings in XYZ
+    const latest_holdings = mutual_funds_holdings.filter(h => 
+        h.holding_reporting_date.toISOString() === latest_reporting_date.toISOString() && 
+        h.stock_name.toLowerCase().indexOf('XYZ'.toLowerCase()) > -1
+    );
+    //filter to get preceding holdings
+    const preceding_holdings = mutual_funds_holdings.filter(h => 
+        h.holding_reporting_date.toISOString() === preceding_reporting_date.toISOString() && 
+        h.stock_name.toLowerCase().indexOf('XYZ'.toLowerCase()) > -1 
+    );
+//compare based on stock_holding_in_percentage
+return latest_holdings.filter(latest => {
+    const previous = preceding_holdings.find(prev => 
+        prev.mutual_fund_name.toLowerCase() === latest.mutual_fund_name.toLowerCase()
+    );
+    return !previous || 
+        parseFloat(latest.stock_holding_in_percentage) > parseFloat(previous?.stock_holding_in_percentage || '0');
+});
+}
+
+Example
+Question: which stock is present in only one fund, output the stock name and fund name
+Response:
+
+function analyzeMutualFundsHoldings(mutual_funds_holdings, reporting_dates) {
+    // find latest date
+    const latest_reporting_date = reporting_dates[0];
+    //Filter holdings to get only latest holdings
+    const latest_holdings = mutual_funds_holdings.filter(h => h.holding_reporting_date.toISOString() === latest_reporting_date.toISOString());
+    console.log(latest_holdings.length)
+//For each holding, find all funds that have same stock (case-insensitive match)
+//If count of funds for that stock is 1, include in results
+//Map results to return only required fields (stock name and fund name)
+return latest_holdings.filter(holding => {
+    const funds_with_stock = latest_holdings.filter(h => 
+        h.stock_name.toLowerCase() === holding.stock_name.toLowerCase()
+    );
+    return funds_with_stock.length === 1;
+}).map(h => ({
+    stock_name: h.stock_name,
+    mutual_fund_name: h.mutual_fund_name
+}));
+}
+
+Question: Which stocks are present in both small cap and large cap funds
+Response:
+function analyzeMutualFundsHoldings(mutual_funds_holdings, reporting_dates) {
+    // REASONING STEPS given as code comments.
+
+    // Step 1: Since no time period is explicitly mentioned, assume analysis is for the latest_reporting_date
+    const latest_reporting_date = reporting_dates[0];
+
+    // Step 2: Filter holdings for the latest reporting date
+    const latest_holdings = mutual_funds_holdings.filter(mfh => 
+        mfh.holding_reporting_date.toISOString() === latest_reporting_date.toISOString()
+    );
+
+    // Step 3: Filter holdings for small cap funds
+    const smallCapHoldings = latest_holdings.filter(mfh => 
+        mfh.mutual_fund_category.toLowerCase() === 'small cap fund'
+    );
+
+    // Step 4: Filter holdings for large cap funds
+    const largeCapHoldings = latest_holdings.filter(mfh => 
+        mfh.mutual_fund_category.toLowerCase() === 'large cap fund'
+    );
+
+    // Step 5: Extract stock names for small cap and large cap funds
+    const smallCapStocks = smallCapHoldings.map(mfh => mfh.stock_name.toLowerCase());
+    const largeCapStocks = largeCapHoldings.map(mfh => mfh.stock_name.toLowerCase());
+
+    // Step 6: Find stocks present in both categories
+    const commonStocks = smallCapStocks.filter(stock => largeCapStocks.includes(stock));
+
+    // Step 7: Remove duplicates and return original stock names (case-sensitive match from holdings)
+    const uniqueCommonStocks = [...new Set(commonStocks)];
+    return uniqueCommonStocks.map(stock => {
+        const originalStock = smallCapHoldings.find(mfh => mfh.stock_name.toLowerCase() === stock) || 
+                              largeCapHoldings.find(mfh => mfh.stock_name.toLowerCase() === stock);
+        return originalStock.stock_name;
+    });
+}
+
+Question: Which stocks are present only in Small Cap Funds
+Response:
+function analyzeMutualFundsHoldings(mutual_funds_holdings, reporting_dates) {
+    // Find latest reporting date
+    const latest_reporting_date = reporting_dates[0];
+// Filter holdings to get only latest holdings
+const latest_holdings = mutual_funds_holdings.filter(h => 
+    h.holding_reporting_date.toISOString() === latest_reporting_date.toISOString()
+);
+
+// Get all unique stocks and the funds they are present in
+const stock_fund_map = new Map();
+
+latest_holdings.forEach(holding => {
+    const stock_key = holding.stock_name.toLowerCase();
+    
+    if (!stock_fund_map.has(stock_key)) {
+        stock_fund_map.set(stock_key, {
+            stock_name: holding.stock_name,
+            fund_categories: new Set()
+        });
+    }
+    
+    stock_fund_map.get(stock_key).fund_categories.add(holding.mutual_fund_category);
+});
+
+// Filter stocks that are only present in small cap funds
+const small_cap_only_stocks = Array.from(stock_fund_map.values())
+    .filter(stock_info => {
+        // Check if stock is only present in small cap funds
+        return stock_info.fund_categories.size === 1 && 
+               Array.from(stock_info.fund_categories)[0].toLowerCase() === "small cap fund";
+    });
+
+// Get fund names for these stocks
+const result = small_cap_only_stocks.map(stock_info => {
+    // Get all small cap funds holding this stock
+    const funds = latest_holdings.filter(h => 
+        h.stock_name.toLowerCase() === stock_info.stock_name.toLowerCase() &&
+        h.mutual_fund_category.toLowerCase() === "small cap fund"
+    );
+    
+    return {
+        stock_name: stock_info.stock_name,
+        mutual_fund_names: funds.map(f => f.mutual_fund_name)
+    };
+});
+
+return result;
+}
+
+

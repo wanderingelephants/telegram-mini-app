@@ -76,7 +76,7 @@
 export default{
   name: 'PromptChat',
     props:{
-        systemPrompt: {
+        distilledModel: {
             required: true,
             type: String
         },
@@ -97,9 +97,6 @@ export default{
             type: Boolean,
             default: true
         }
-    },
-    mounted(){
-      console.log("PromptCHAT mounted")
     },
     methods: {
       handleEnter(e) {
@@ -123,14 +120,14 @@ export default{
       this.isLoading = true;
 
       try {
-	      const response = await fetch('/api/reasoning/promptChat', {
+	      const response = await fetch('/api/chat/reasoning', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'text/event-stream',
       },
       body: JSON.stringify({
-        baseModel: this.systemPrompt,
+        distilledModel: this.distilledModel,
         messages: [...this.messages],
         streaming: true
       })

@@ -102,5 +102,78 @@ const getData = (fundList = [], categoryList = []) => {
         throw new Error('Failed to fetch mutual fund data');
     }
 };
-
-module.exports = getData;
+const getMutualFundHoldingsJSONArray = function () {
+    let mutual_fund_data = getData([], [])
+    //console.log("getData", mutual_fund_data)
+    // Create a Set of unique date strings
+    const unique_dates = new Set();
+    mutual_fund_data.forEach(mf => {
+      mf.mutual_fund_stock_holdings = mf.mutual_fund_stock_holdings.map(holding => {
+        unique_dates.add(holding.stock_holding_reporting_date);
+        return {
+          ...holding,
+          stock_holding_reporting_date: new Date(holding.stock_holding_reporting_date)
+        }
+      })
+    });
+  
+    
+    // Convert Set to array of Date objects and sort in descending order
+    reporting_dates = Array.from(unique_dates)
+      .map(dateStr => new Date(dateStr))
+      .sort((a, b) => b - a);
+    return {mutual_fund_data, reporting_dates}
+}
+const normalizeMutualFundsData = function(inputData) {
+    // Extract mutual funds data without stock holdings
+    const mutualFunds = inputData.map(({ 
+      mutual_fund_name,
+      mutual_fund_category,
+      mutual_fund_star_rating,
+      mutual_fund_aum,
+      mutual_fund_fee_percentage,
+      mutual_fund_category_fee_percentage,
+      mutual_fund_return_1Y,
+      mutual_fund_return_2Y,
+      mutual_fund_return_3Y,
+      mutual_fund_return_5Y,
+      mutual_fund_return_10Y
+            
+    }) => ({
+      mutual_fund_fee_percentage,
+      mutual_fund_category_fee_percentage,
+      mutual_fund_name,
+      mutual_fund_category,
+      mutual_fund_star_rating,
+      mutual_fund_aum,
+      mutual_fund_return_1Y,
+      mutual_fund_return_2Y,
+      mutual_fund_return_3Y,
+      mutual_fund_return_5Y,
+      mutual_fund_return_10Y
+    }));
+    
+    // Create denormalized stock holdings with mutual fund data
+    const stockHoldings = inputData.flatMap(fund => {
+        return fund.mutual_fund_stock_holdings.map(holding => ({
+            ...holding,
+            mutual_fund_name: fund.mutual_fund_name,
+            mutual_fund_category: fund.mutual_fund_category,
+            mutual_fund_star_rating: fund.mutual_fund_star_rating,
+            mutual_fund_aum: fund.mutual_fund_aum,
+            mutual_fund_fee_percentage: fund.mutual_fund_fee_percentage,
+            mutual_fund_category_fee_percentage: fund.mutual_fund_category_fee_percentage,
+            mutual_fund_return_1Y: fund.mutual_fund_return_1Y,
+      mutual_fund_return_2Y: fund.mutual_fund_return_2Y,
+      mutual_fund_return_3Y: fund.mutual_fund_return_3Y,
+      mutual_fund_return_5Y: fund.mutual_fund_return_5Y,
+      mutual_fund_return_10Y: fund.mutual_fund_return_10Y
+        }));
+    });
+    
+    return {
+        mutualFunds,
+        stockHoldings
+    };
+  }
+module.exports = {getData, getMutualFundHoldingsJSONArray, normalizeMutualFundsData};

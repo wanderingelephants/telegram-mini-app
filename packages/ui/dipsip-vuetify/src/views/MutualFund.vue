@@ -11,8 +11,8 @@
             
           >
           
-              <google-sign-in/> 
-       <prompt-chat :systemPrompt="systemPrompt" :title="title" :subTitles="subTitles" :userInputLabel="userInputLabel" :debug="debug"></prompt-chat>
+              <!--<google-sign-in/>  -->
+       <prompt-chat :distilledModel="distilledModel" :title="title" :subTitles="subTitles" :userInputLabel="userInputLabel" :debug="debug"></prompt-chat>
       
               
       </v-col>
@@ -122,10 +122,10 @@ export default {
       compareData: {},
       searchText: '',
       title: 'Mutual Fund Helper Agent',
-      subTitles: ['Ask what Google/ChatGPT cannot answer. E.g.', 'Find - किन म्यूचुअल फंडों में रिटर्न 20% से अधिक है, शुल्क 0.5% से कम है', 'GK - help me understand REITs and InvITs','Stock Discovery - Which stocks are present in only 2 small cap funds', '** Trained on Indian data, can make mistakes'],
+      subTitles: ['Ask what Google/ChatGPT cannot answer. E.g.', 'Find - किन म्यूचुअल फंडों में रिटर्न 20% से अधिक है, शुल्क 0.5% से कम है', 'Stock Discovery - Which stocks are present in only 2 small cap funds', 'Reasoning - Define Churn as stocks bought plus stocks sold in a fund. Which funds had highest churn', '** Trained on Indian data, can make mistakes'],
       userInputLabel: "This is an AI tool. Double Check",
       debug: false,
-      systemPrompt: "mf_reasoning",
+      distilledModel: "mutual_funds_reasoning",
       analysisTypes: [
       {
         name: 'Overlap',

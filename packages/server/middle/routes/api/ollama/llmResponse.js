@@ -3,13 +3,13 @@ const { Anthropic } = require('@anthropic-ai/sdk');
 const OpenAI = require('openai');
 const OLLAMA_URL = process.env.OLLAMA_URL;
 const temperature = 0
-const getLLMResponse = async (prompt, ollamaModel) => {
-    //console.log("Sending prompt\n", prompt, process.env.LLM_TO_USE)
-    try {
+const getLLMResponse = async (systemPrompt, messages, ollamaModel) => {
+    console.log("Sending prompt\n", systemPrompt, messages, process.env.LLM_TO_USE)
+    /*try {
         if (process.env.LLM_TO_USE === 'Ollama') {
             const { data } = await axios.post(`${OLLAMA_URL}/api/generate`, {
                 model: ollamaModel,
-                "prompt": prompt,
+                "prompt": finalPrompt,
                 stream: false,
                 temperature
             });
@@ -19,7 +19,8 @@ const getLLMResponse = async (prompt, ollamaModel) => {
             const resp = await anthropic.messages.create({
                 model: "claude-3-5-haiku-20241022",
                 max_tokens: 1024,
-                messages: [{ role: "user", content: prompt }],
+                system: systemPrompt,
+                messages,
                 temperature
             });
             return resp.content[0].text;
@@ -29,7 +30,7 @@ const getLLMResponse = async (prompt, ollamaModel) => {
             });
             const response = await openai.chat.completions.create({
                 model: "gpt-3.5-turbo",
-                messages: [{ role: "user", content: prompt }],
+                messages: finalPrompt,
                 temperature
             });
             return response.choices[0].message.content;
@@ -37,7 +38,7 @@ const getLLMResponse = async (prompt, ollamaModel) => {
     } catch (error) {
         console.error(error);
         return ""
-    }
+    }*/
 };
 async function getEmbeddings(text) {
     // Example using OpenAI embeddings

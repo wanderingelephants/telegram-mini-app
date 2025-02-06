@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const app = express()
 const port = process.env.PORT || 3000;
 const cron = require('node-cron');
+const crypto = require('crypto')
+const cookieParser = require('cookie-parser');
 const ProcessETFQuotes = require('./routes/api/nse/processETFQuotes')
 
 const { promisify } = require('util');
@@ -40,6 +42,20 @@ app.use([
     }
     next(err)
   })  
+  app.use(cookieParser());
+  app.use((req, res, next) => {
+    // Check if session cookie exists
+    let sessionId = req.cookies?.dSessionID;
+    console.log("sesionID recd", sessionId)
+    if (!sessionId) {
+      // Generate a simple session ID
+      sessionId = crypto.randomUUID();
+      res.cookie('dSessionID', sessionId, { httpOnly: true });
+    }
+  
+    req.sessionId = sessionId;
+    next();
+  });
 app.use('/', require('./routes'));
 
 app.listen(port, () => {
