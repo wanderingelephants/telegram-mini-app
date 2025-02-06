@@ -41,6 +41,17 @@ class MessageManager {
     messages.push(message);
     await writeFile(filePath, JSON.stringify(messages, null, 2));
   }
+  async getMessages(sessionId){
+    const filePath = _getFilePath(this.basePath, sessionId, 'messages.json');
+    let messages = [];
+    try {
+      const data = await readFile(filePath, 'utf-8');
+      messages = JSON.parse(data);
+    } catch (err) {
+      if (err.code !== 'ENOENT') throw err;
+    }
+    return messages
+  }
 
   
   
@@ -53,11 +64,12 @@ class LLMClient {
   }
 
   async sendToLLM(systemPrompt, messages) {
+    console.log("sendtoLLM", JSON.stringify(messages))
     const formattedMessages = messages.map(msg => ({
         role: msg.role,
         content: msg.content[0].text // dynamically wrapping in a string
       }));
-      //console.log("sendtoLLM", formattedMessages)
+      console.log("sendtoLLM", systemPrompt.substring(0, 20), JSON.stringify(formattedMessages))
       //return "function mutual_fund_query(){}"
     if (this.llmToUse === 'Claude') {
       const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_API_KEY });
@@ -141,7 +153,8 @@ class LLMResponseHandler {
                 "content": [
                 {
                     "type": "text",
-                    "text": this.formatContext
+                    //"text": this.formatContext
+                    "text": "Please format the query results"
                 }
             ]
         }
@@ -253,7 +266,11 @@ const route = async (req, res) => {
     await messageManager.saveMessage(sessionId, { "role": 'user', content: [{ "type": 'text', "text": messages[messages.length - 1].content }] });
 
     const llmClient = new LLMClient(LLMToUse);
-    const llmResponse = await llmClient.sendToLLM(systemPrompt, [{ "role": 'user', content: [{ "type": 'text', "text": messages[messages.length - 1].content }] }]);
+    
+    //const llmResponse = await llmClient.sendToLLM(systemPrompt, [{ "role": 'user', content: [{ "type": 'text', "text": messages[messages.length - 1].content }] }]);
+    const allMessages = await messageManager.getMessages(sessionId)
+    const llmResponse = await llmClient.sendToLLM(systemPrompt, allMessages);
+    
     console.log("llmResponse", llmResponse)
     await messageManager.saveMessage(sessionId, { "role": 'assistant', "content": [{ "type": 'text', "text": llmResponse }] });
 
