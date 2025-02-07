@@ -1,0 +1,2 @@
+CREATE  INDEX "insider_trades_stock_id_regulation_reference_id_name_of_insider" on
+  "public"."insider_trades" using btree ("category_of_insider", "exchange", "intimation_date", "is_buy", "mode_of_transaction", "name_of_insider", "number_of_securities_after_transaction", "number_of_securities_before_transaction", "number_of_securities_transacted", "regulation_reference_id", "shareholding_after_transaction", "shareholding_before_transaction", "stock_id", "transaction_date", "type_of_security", "value_of_securities_transacted");

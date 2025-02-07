@@ -1,0 +1,3 @@
+alter table "public"."insider_trades" add constraint "insider_trades_stock_id_regulation_reference_id_name_of_insider" unique (intimation_date, exchange, stock_id, regulation_reference_id, name_of_insider, category_of_insider, type_of_security, is_buy, mode_of_transaction, number_of_securities_before_transaction, number_of_securities_transacted, number_of_securities_after_transaction, value_of_securities_transacted, shareholding_before_transaction, shareholding_after_transaction, transaction_date);
+alter table "public"."insider_trades" alter column "is_buy" drop not null;
+alter table "public"."insider_trades" add column "is_buy" bool;

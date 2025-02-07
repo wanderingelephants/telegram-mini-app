@@ -1,3 +1,35 @@
 - table:
+    name: insider_trades
+    schema: public
+  object_relationships:
+    - name: stock
+      using:
+        foreign_key_constraint_on: stock_id
+- table:
+    name: stock
+    schema: public
+  array_relationships:
+    - name: insider_trades
+      using:
+        foreign_key_constraint_on:
+          column: stock_id
+          table:
+            name: insider_trades
+            schema: public
+    - name: stock_announcements
+      using:
+        foreign_key_constraint_on:
+          column: stock_id
+          table:
+            name: stock_announcements
+            schema: public
+- table:
+    name: stock_announcements
+    schema: public
+  object_relationships:
+    - name: stock
+      using:
+        foreign_key_constraint_on: stock_id
+- table:
     name: users
     schema: public

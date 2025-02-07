@@ -134,12 +134,15 @@ class LLMResponseHandler {
     if (this.type === 'NoOp') {
       return response;
     } else if (this.type === 'JavaScript') {
-      let result = await this.executeJavaScript(response, sessionID);
+      let jsExecResponse = await this.executeJavaScript(response, sessionID);
+      let {result, functionName} = jsExecResponse
+      if (functionName.toLowerCase().indexOf("mutual_fund") === -1) return result
       if (result == "Sorry, No Response") return result;
       result = this.removeDuplicates(result)
       if (result.length == 0) return "Sorry, No Results"
         if (result.length > 10)  result = result.slice(0, MAX_RESULTS_TO_FORMAT)
         let resultString = JSON.stringify(result)
+        if (resultString.toLocaleLowerCase().indexOf("javascript") > -1) return "Sorry, No Response"
         let formattingPrompt = `
         You are a result formatter for indian mutual fund data. 
         In response to a User's query, create a natural response from the Result.  
@@ -153,17 +156,15 @@ class LLMResponseHandler {
                 "content": [
                 {
                     "type": "text",
-                    //"text": this.formatContext
-                    "text": "Please format the query results"
+                    "text": this.formatContext
+                    //"text": "Please format the query results"
                 }
             ]
         }
         ]
       const formattedResponse = await this.llmClient.sendToLLM(formattingPrompt, messages)
       return formattedResponse
-    } else if (this.type === 'SQL') {
-      return this.executeSQL(response);
-    }
+    } 
     throw new Error(`Unsupported handler type: ${this.type}`);
   }
   async convertToConstFormat(functionText, sessionId) {
@@ -244,7 +245,7 @@ class LLMResponseHandler {
         console.error(e)
         result = "Sorry, No Response"
       }
-      return result
+      return {functionName, result}
   }
 
   async executeSQL(query) {
