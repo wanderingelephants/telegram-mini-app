@@ -140,7 +140,8 @@ class LLMClient {
   "impact": jsonObj.Announcement_Impact_On_Business,
   "sentiment": jsonObj.Announcement_Sentiment
 } 
-            await postToGraphQL({"query": summaryMutation, "variables": summaryObj})  
+            const resp = await postToGraphQL({"query": summaryMutation, "variables": summaryObj})  
+            console.log(resp)
         
         }
         catch(e){
