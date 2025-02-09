@@ -85,14 +85,13 @@ const route = async (req, res) => {
                         "object": {
     "annoucement_document_link": row.attachment,
     "announcement_date": yyyymmdd,
-    
+    "announcement_text_summary": "",
+    "announcement_sentiment": "",
+    "announcement_impact": "",
     "stock": {
       "data": {
         "symbol": row.symbol,
-        "company_name": row.companyName,
-        "announcement_text_summary": "",
-        "announcement_sentiment": "",
-        "announcement_impact": ""
+        "company_name": row.companyName
       },
       "on_conflict": {
         "constraint": "stock_symbol_key",
