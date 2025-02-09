@@ -119,8 +119,11 @@ class LLMClient {
     id
   }
 }`
-                const queryStockIdResp = await postToGraphQL(queryStockId, {
-                    "symbol": customData.stock_symbol
+                const queryStockIdResp = await postToGraphQL({
+                    "query" : queryStockId, 
+                    "variables": {
+                        "symbol": customData.stock_symbol
+                    }
                 })
                 const stock_id = queryStockIdResp.data.stock.id
             const summaryMutation = `
