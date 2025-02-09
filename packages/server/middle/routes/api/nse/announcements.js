@@ -89,7 +89,7 @@ const route = async (req, res) => {
     "stock": {
       "data": {
         "symbol": row.symbol,
-        "company_name": row.company_name
+        "company_name": row.companyName
       },
       "on_conflict": {
         "constraint": "stock_symbol_key",
