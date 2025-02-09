@@ -113,36 +113,26 @@ class LLMClient {
               });
           }
             try{
+                const queryStockId = `
+                query GetStockId($symbol: String!) {
+  stock(where: {symbol: {_eq: $symbol}}) {
+    id
+  }
+}`
+                const queryStockIdResp = await postToGraphQL(queryStockId, {
+                    "symbol": customData.stock_symbol
+                })
+                const stock_id = queryStockIdResp.data.stock.id
             const summaryMutation = `
-                mutation InsertAnnouncements($objects: [stock_announcements_insert_input!]!) {
-  insert_stock_announcements(
-    objects: $objects
-  ) {
-    returning {
-      id
-      announcement_date
-      announcement_text_summary
-      stock {
-        id
-        symbol
-        company_name
-      }
-    }
-    affected_rows
+                mutation StockAnnouncementInsertOne($object: stock_announcements_insert_input!) {
+  insert_stock_announcements_one(object: $object) {
+    id
   }
 }`
             const summaryObj = {
-  "objects": [
+  "object": 
     {
-      "stock": {
-        "data": {
-          "symbol": customData.stock_symbol
-        },
-        "on_conflict": {
-          "constraint": "stock_symbol_key",
-          "update_columns": ["company_name"]
-        }
-      },
+      "stock_id": stock_id,
       "announcement_date": customData.announcement_date,
       "announcement_text_summary": jsonObj.Announcement_Summary,
       "announcement_impact": jsonObj.Announcement_Impact_On_Business,
@@ -151,8 +141,6 @@ class LLMClient {
       "announcement_sub_category": "",
       "annoucement_document_link": ""
     }
-    
-  ]
 } 
             await postToGraphQL({"query": summaryMutation, "variables": summaryObj})  
         

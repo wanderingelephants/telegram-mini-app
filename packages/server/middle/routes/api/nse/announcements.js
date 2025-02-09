@@ -47,7 +47,7 @@ const route = async (req, res) => {
             })
             .map(({ symbol, subject, attachment, dissemination }) => ({ symbol, subject, attachment, dissemination }));*/
 
-        console.log(`Found ${filteredResults.length} matching records to download`);
+        //console.log(`Found ${filteredResults.length} matching records to download`);
 
         // Download files sequentially
         for (const row of results) {
@@ -69,7 +69,12 @@ const route = async (req, res) => {
                     continue;
                 }
                 console.log(`Downloading file for ${row.symbol}...at ${downloadPdfPath}/${fileName}`);
-                await fetchPDF(row.attachment, downloadPdfPath + '/' + fileName);
+                if (!fs.existsSync(downloadPdfPath + '/' + fileName)){
+                    console.log("PDF does not exist, download")
+                    await fetchPDF(row.attachment, downloadPdfPath + '/' + fileName);
+                }
+                else console.log("PDF exists, skip download", downloadPdfPath + '/' + fileName)
+                
                 await postToGraphQL({
                     query: `mutation InsertStockOne($object: stock_insert_input!) {
   insert_stock_one(
@@ -111,10 +116,14 @@ const route = async (req, res) => {
             res.status(200).json("CSV already exists")
             return;
         }*/
-        const puppet = new Puppet(baseUrl, urlSuffix, downloadDateFolder, downloadFileName)
-        await puppet.downloadFile()
+            if (!fs.existsSync(path.join(downloadDateFolder, downloadFileName))) {
+                console.log("CSV does not exist, download")
+                const puppet = new Puppet(baseUrl, urlSuffix, downloadDateFolder, downloadFileName)
+                await puppet.downloadFile()
+            }
+            else console.log("CSV Exists, no download needed")
         const filepath = path.join(downloadDateFolder, downloadFileName);
-
+          
         processCSVAndDownload(filepath, downloadDateFolder).then(() => console.log('Processing completed'))
             .catch(error => console.error('Error:', error));
         res.status(200).json("CSV Downloaded and Processed")
