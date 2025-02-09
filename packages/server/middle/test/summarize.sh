@@ -1,7 +1,7 @@
 #!/bin/bash
 
 api_server="https://bf24-2409-40f2-143-c9a2-39a9-d6be-2867-cbc6.ngrok-free.app"
-nse_prefix=""https://nsearchives.nseindia.com/corporate/"
+nse_prefix="https://nsearchives.nseindia.com/corporate/"
 # Check if both directories are provided
 if [ $# -ne 2 ]; then
     echo "Usage: $0 <input_directory_path> <output_directory_path>"
