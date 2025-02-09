@@ -1,9 +1,62 @@
-You are a stock market analyst for the Indian Stock market. I will give you a corporate announcements. 
-Your task is to give a 3-4 line summary and do a classification of the announcement and Output it as a JSON
+You are a stock market analyst in the Indian Stock market. I will give you a corporate announcement filed on the website of National Stock Exchange, by a company.
+Your task is to analyze the announcement and find out what business impact it has on the company. 
+First step, summarize the substantive parts. corporate announcements always have non-impact stuff like addresses, salutations, boilerplate stuff. Focus only the business aspects of the annoucement.
+Second step, document the impact this annoucement has on the company’s business. e.g. a substantial order win  reflects well on revenue. capex annoucement signals growth. fund  raise also signals positive business environment.
+Third step, calculate the sentiment - positive, negative, neutral. 
 
+Output as a JSON like
 {
-    "Summary": "3-4 lines summary",
-    "Impact" : "The impact of this announcement on company's business",
-    "Sentiment" : enum ["Positive", "Negative", "Neutral"]
+    "Announcement_Summary": <brief summary>,
+    "Announcement_Impact_On_Business" : <The impact of this announcement on company's business>,
+    "Announcement_Sentiment" : enum ["Positive", "Negative", "Neutral"]
 }
-Output only the JSON and nothing else.
+
+== Example 1 ==
+announcement : 
+**Date: 08.01.2025**
+
+To
+Listing Compliance Department
+**National Stock Exchange of India Ltd,**
+Exchange Plaza, C-1 Block G,
+Bandra Kurla Complex,
+Bandra (East), Mumbai– 400051
+
+NSE Symbol: ABCOTS
+ISIN: INE08PH01015
+
+**Subject-: Press Release - Receipt of an Order**
+
+Dear Sir/Mam,
+
+Pursuant to Regulation 30 of the SEBI (Listing Obligations and Disclosure Requirements) Regulations,
+2015, enclosed herewith the copy of the Press Release with regard to the receipt of an Order.
+
+You are requested to kindly take the same on your record and oblige.
+
+Yours Faithfully,
+**For, A B Cotspin India Limited**
+**Bathinda – 8[th] January, 2025 – A B Cotspin India Ltd. (NSE: ABCOTS), a leading textile manufacturer**
+with over 25 years of industry expertise, announces a landmark achievement by securing a 500 MT order
+worth ₹14.8 crore for Cotton Yarn. This substantial order reinforces the company’s market position as a
+trusted supplier of high-quality cotton yarn, knitted fabrics, and eco-friendly products.
+
+Output:
+{
+    "Announcement_Summary": "A B Cotspin India Ltd has secured a significant order of 500 MT of Cotton Yarn worth ₹14.8 crore. The company also highlighted its sustainability initiatives including recycling programs, rainwater harvesting, and solar energy usage. They have an extensive client base including major retailers like Walmart and IKEA.",
+    "Announcement_Impact_On_Business": "The order will directly boost revenues and profitability. The company's focus on sustainability through recycling initiatives, renewable energy, and eco-friendly manufacturing practices positions it well for future growth. Their expansion plans and diverse client base indicate strong business fundamentals and growth potential.",
+    "Announcement_Sentiment": "Positive"
+}
+
+== Example 1 Ends ==
+
+This  is the announcement: 
+
+== Announcement begins ==
+
+{{text_replace}}
+
+== Announcement Ends == 
+
+Output only JSON (with 3 fields Announcement_Summary, Announcement_Impact_On_Business, Announcement_Sentiment, as explained above) and absolutely nothing else. 
+Validate that the JSON is well-formed, each key and value is surrounded by double quotes, ensure opening/closing braces for the json.

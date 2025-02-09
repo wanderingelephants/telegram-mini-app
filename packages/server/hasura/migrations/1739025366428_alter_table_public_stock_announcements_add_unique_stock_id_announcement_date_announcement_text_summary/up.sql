@@ -1,0 +1,1 @@
+alter table "public"."stock_announcements" add constraint "stock_announcements_stock_id_announcement_date_announcement_text_summary_key" unique ("stock_id", "announcement_date", "announcement_text_summary");

@@ -108,12 +108,13 @@ export default{
  },
         async sendMessage() {
       if (!this.userInput.trim()) return;
+      if  (this.userInput.length > 1000) this.userInput = this.userInput.substring(0, 1000)
       this.suggestions = [];
       const userMessage = {
         role: 'user',
         content: this.userInput.trim()
       };
-
+     
       // Add user message to chat
       this.messages.push(userMessage);
       this.userInput = '';

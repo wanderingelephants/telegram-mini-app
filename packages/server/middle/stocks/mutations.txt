@@ -1,0 +1,53 @@
+mutation InsertInsiderTrades($objects: [insider_trades_insert_input!]!) {
+  insert_insider_trades(
+    objects: $objects
+  ) {
+    returning {
+      id
+      name_of_insider
+      category_of_insider
+      type_of_security
+      number_of_securities_before_transaction
+      stock {
+        id
+        symbol
+        company_name
+      }
+    }
+    affected_rows
+  }
+}
+
+# Query Variables
+{
+  "objects": [
+    {
+      "stock": {
+        "data": {
+          "symbol": "krishana",
+          "company_name": "Krishana Phoschem Limited"
+        },
+        "on_conflict": {
+          "constraint": "stock_symbol_key",
+          "update_columns": ["company_name"]
+        }
+      },
+      "regulation_reference_id": 1,
+      "name_of_insider": "OSTWAL PHOSCHEM ( INDIA) LIMITED",
+      "category_of_insider": 1,
+      "type_of_security": 1,
+      "is_buy": true,
+      "mode_of_transaction": 1,
+      "number_of_securities_before_transaction": 41137778,
+      "number_of_securities_transacted": 12946,
+      "number_of_securities_after_transaction": 41150724,
+      "value_of_securities_transacted": 2593181,
+      "shareholding_before_transaction": 66.54,
+      "shareholding_after_transaction": 66.56,
+      "transaction_date": "01-Feb-2025",
+      "intimation_date": "04-Feb-2025",
+      "exchange": 1
+    }
+    # Add more objects here as needed
+  ]
+} 

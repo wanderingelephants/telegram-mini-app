@@ -3,10 +3,11 @@ const axios = require("axios")
 const path = require('path');
 const {getMutualFundHoldingsJSONArray, normalizeMutualFundsData} = require('../mutualfunds/getData')
 const MAX_RESULTS_TO_FORMAT = 10
-
+const {postToGraphQL} = require("../../../lib/helper")
 const { Anthropic } = require('@anthropic-ai/sdk');
 const util = require('util');
 const { report } = require('process');
+const { json } = require('stream/consumers');
 const mkdir = util.promisify(fs.mkdir);
 const writeFile = util.promisify(fs.writeFile);
 const readFile = util.promisify(fs.readFile);
@@ -63,8 +64,7 @@ class LLMClient {
     this.temperature = 0;
   }
 
-  async sendToLLM(systemPrompt, messages) {
-    console.log("sendtoLLM", JSON.stringify(messages))
+  async sendToLLM(systemPrompt, messages, customData) {
     const formattedMessages = messages.map(msg => ({
         role: msg.role,
         content: msg.content[0].text // dynamically wrapping in a string
@@ -83,20 +83,85 @@ class LLMClient {
       return resp.content[0].text;
     }
     if (this.llmToUse === "Ollama"){
-        const formattedArray = [
-            { role: "system", content: systemPrompt },
-            ...messages.map(entry => ({
-              role: entry.role,
-              content: entry.content.map(item => item.text).join("")
-            }))
-          ];
-        const { data } = await axios.post(`${process.env.OLLAMA_URL}/v1/chat/completions`, {
-            model: process.env.OLLAMA_MODEL,
-            max_tokens: 1024,
-            messages: formattedArray,
-            temperature: this.temperature
-        });
-        return data.response;
+        let model = process.env.OLLAMA_MODEL
+        const finalPrompt = systemPrompt.replace("{{text_replace}}", messages[0].content)
+        //console.log(finalPrompt)
+        const response = await axios.post(`${process.env.OLLAMA_URL}/api/generate`, {
+                model,
+                prompt: finalPrompt,
+                stream: false,
+                //temperature: this.temperature
+              });
+        let jsonResp = response.data.response.trim() 
+        let jsonObj;
+        try {
+            jsonObj = JSON.parse(jsonResp);
+          } catch (e) {
+            jsonObj = {};
+          
+            jsonResp
+              .trim()
+              .replace(/(^[{},\s]+|[{},\s]+$)/g, '') // Remove leading/trailing braces and spaces
+              .split(',')
+              .forEach(pair => {
+                let [key, ...valueParts] = pair.split(':');
+                key = key.trim().replace(/^"+|"+$/g, '');
+                const value = valueParts.join(':').trim().replace(/^"+|"+$/g, '');
+          
+                if (key) {
+                  jsonObj[key] = value;
+                }
+              });
+          }
+            try{
+            const summaryMutation = `
+                mutation InsertAnnouncements($objects: [stock_announcements_insert_input!]!) {
+  insert_stock_announcements(
+    objects: $objects
+  ) {
+    returning {
+      id
+      announcement_date
+      announcement_text_summary
+      stock {
+        id
+        symbol
+        company_name
+      }
+    }
+    affected_rows
+  }
+}`
+            const summaryObj = {
+  "objects": [
+    {
+      "stock": {
+        "data": {
+          "symbol": customData.stock_symbol
+        },
+        "on_conflict": {
+          "constraint": "stock_symbol_key",
+          "update_columns": ["company_name"]
+        }
+      },
+      "announcement_date": customData.announcement_date,
+      "announcement_text_summary": jsonObj.Announcement_Summary,
+      "announcement_impact": jsonObj.Announcement_Impact_On_Business,
+      "announcement_category": "",
+      "announcement_sentiment": jsonObj.Announcement_Sentiment,
+      "announcement_sub_category": "",
+      "annoucement_document_link": ""
+    }
+    
+  ]
+} 
+            await postToGraphQL({"query": summaryMutation, "variables": summaryObj})  
+        
+        }
+        catch(e){
+            console.error(e)
+        }
+        return jsonResp    
       }
     throw new Error(`Unsupported LLM: ${this.llmToUse}`);
   }
@@ -255,9 +320,9 @@ class LLMResponseHandler {
 
 const route = async (req, res) => {
   const sessionId = req.sessionId;
-  const { distilledModel, messages , streaming = false } = req.body;
-  const LLMToUse = process.env.LLM_TO_USE;
-
+  const { distilledModel, messages , llm, streaming = false, singleShotPrompt = false, customData } = req.body;
+  const LLMToUse = llm ? llm : process.env.LLM_TO_USE;
+    console.log("reasoning route customData", customData)
   try {
     const PROMPTS_FOLDER = path.join(__dirname, 'prompts');
     const systemPromptPath = path.join(PROMPTS_FOLDER, `${distilledModel}_system_prompt.txt`);
@@ -268,9 +333,10 @@ const route = async (req, res) => {
 
     const llmClient = new LLMClient(LLMToUse);
     
+    let messagesToSend;
     //const llmResponse = await llmClient.sendToLLM(systemPrompt, [{ "role": 'user', content: [{ "type": 'text', "text": messages[messages.length - 1].content }] }]);
-    const allMessages = await messageManager.getMessages(sessionId)
-    const llmResponse = await llmClient.sendToLLM(systemPrompt, allMessages);
+    messagesToSend = singleShotPrompt === false ? await messageManager.getMessages(sessionId) : [messages[messages.length - 1]]
+    const llmResponse = await llmClient.sendToLLM(systemPrompt, messagesToSend, customData);
     
     console.log("llmResponse", llmResponse)
     await messageManager.saveMessage(sessionId, { "role": 'assistant', "content": [{ "type": 'text', "text": llmResponse }] });

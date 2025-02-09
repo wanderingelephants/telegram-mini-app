@@ -19,11 +19,13 @@
       <v-col cols="12" md="6" order="last" order-md="last" class="right-panel">
         <v-card-text v-if="loggedInGoogle === true">Welcome {{userGoogle.displayName}}</v-card-text>
             <v-card>
-              <v-card-title>Select 2 or More Funds</v-card-title>
-              <v-card-subtitle class="subtitle-wrap ">
+              <v-card-title>We are NOT registered with SEBI.</v-card-title>
+              <v-card-title class="subtitle-wrap">No Investment advice. Only providing DIY query tools.</v-card-title>
+              <v-card-title class="subtitle-wrap">Select 2 or More Funds</v-card-title>
+              <v-card-subtitle class="subtitle-wrap">
                 Reduce Overlap
               </v-card-subtitle>
-              <v-card-subtitle class="subtitle-wrap ">
+              <v-card-subtitle class="subtitle-wrap">
                 Fee of ETFs can be 10X lower than Mutual Funds. 
                 <a href="/etfList">See ETFs</a>
               </v-card-subtitle>
