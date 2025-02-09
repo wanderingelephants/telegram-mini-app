@@ -92,6 +92,7 @@ class LLMClient {
                 //temperature: this.temperature
               });
         let jsonResp = response.data.response.trim() 
+        jsonResp = jsonResp.replace("```", "")
         let jsonObj;
         try {
             jsonObj = JSON.parse(jsonResp);
