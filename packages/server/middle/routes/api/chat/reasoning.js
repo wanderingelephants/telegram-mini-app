@@ -125,7 +125,7 @@ class LLMClient {
                         "symbol": customData.stock_symbol
                     }
                 })
-                const stock_id = queryStockIdResp.data.stock.id
+                const stock_id = queryStockIdResp.data.stock[0].id
             const summaryMutation = `
                 mutation StockAnnouncementInsertOne($object: stock_announcements_insert_input!) {
   insert_stock_announcements_one(object: $object) {
