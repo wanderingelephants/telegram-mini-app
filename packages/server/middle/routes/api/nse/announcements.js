@@ -16,7 +16,7 @@ const route = async (req, res) => {
             .replace(/[^a-zA-Z0-9]+(.)/g, (_, chr) => chr.toUpperCase())
             .replace(/[^a-zA-Z0-9]/g, '');
     }
-    async function processCSVAndDownload(csvPath, downloadPdfPath) {
+    async function processCSVAndDownload(csvPath, downloadPdfPath,  yyyymmdd) {
         const results = [];
         const wordsToCheck = [];
         //const wordsToCheck = ['Resignation'];
@@ -63,7 +63,7 @@ const route = async (req, res) => {
                     fs.mkdirSync(dateFolder, { recursive: true });
                 }*/
                 const fileToks = row.attachment.split('/')
-                const fileName = row.symbol + "_" + fileToks[fileToks.length - 1]
+                const fileName = fileToks[fileToks.length - 1]
                 if (!fileName.endsWith('.pdf')) {
                     console.log("SKIPING non-pdf.................", row)
                     continue;
@@ -76,19 +76,27 @@ const route = async (req, res) => {
                 else console.log("PDF exists, skip download", downloadPdfPath + '/' + fileName)
                 
                 await postToGraphQL({
-                    query: `mutation InsertStockOne($object: stock_insert_input!) {
-  insert_stock_one(
-    object: $object
-  ) {
+                    query: `mutation StockAnnouncementInsertOne($object: stock_announcements_insert_input!) {
+  insert_stock_announcements_one(object: $object) {
     id
-    company_name
   }
 }`,
                     variables: {
                         "object": {
-                            "symbol": row.symbol,
-                            "company_name": row.companyName
-                        }
+    "annoucement_document_link": row.attachment,
+    "announcement_date": yyyymmdd,
+    
+    "stock": {
+      "data": {
+        "symbol": row.symbol,
+        "company_name": row.company_name
+      },
+      "on_conflict": {
+        "constraint": "stock_symbol_key",
+        "update_columns": ["symbol", "company_name"]
+      }
+    }
+  }
                     }
                 })
                 await delay(1000)
@@ -124,7 +132,7 @@ const route = async (req, res) => {
             else console.log("CSV Exists, no download needed")
         const filepath = path.join(downloadDateFolder, downloadFileName);
           
-        processCSVAndDownload(filepath, downloadDateFolder).then(() => console.log('Processing completed'))
+        processCSVAndDownload(filepath, downloadDateFolder, year+"-"+month+"-"+day).then(() => console.log('Processing completed'))
             .catch(error => console.error('Error:', error));
         res.status(200).json("CSV Downloaded and Processed")
 

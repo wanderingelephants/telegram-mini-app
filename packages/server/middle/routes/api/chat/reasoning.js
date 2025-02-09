@@ -113,37 +113,32 @@ class LLMClient {
               });
           }
             try{
-                const queryStockId = `
-                query GetStockId($symbol: String!) {
-  stock(where: {symbol: {_eq: $symbol}}) {
-    id
-  }
-}`
-                const queryStockIdResp = await postToGraphQL({
-                    "query" : queryStockId, 
-                    "variables": {
-                        "symbol": customData.stock_symbol
-                    }
-                })
-                const stock_id = queryStockIdResp.data.stock[0].id
-            const summaryMutation = `
-                mutation StockAnnouncementInsertOne($object: stock_announcements_insert_input!) {
-  insert_stock_announcements_one(object: $object) {
-    id
-  }
-}`
-            const summaryObj = {
-  "object": 
-    {
-      "stock_id": stock_id,
-      "announcement_date": customData.announcement_date,
-      "announcement_text_summary": jsonObj.Announcement_Summary,
-      "announcement_impact": jsonObj.Announcement_Impact_On_Business,
-      "announcement_category": "",
-      "announcement_sentiment": jsonObj.Announcement_Sentiment,
-      "announcement_sub_category": "",
-      "annoucement_document_link": ""
+                
+            const summaryMutation = `mutation StockAnnouncementUpdate(
+  $link: String!, 
+  $textSummary: String, 
+  $impact: String, 
+  $sentiment: String
+) {
+  update_stock_announcements(
+    where: {annoucement_document_link: {_eq: $link}}, 
+    _set: {
+      announcement_text_summary: $textSummary, 
+      announcement_impact: $impact, 
+      announcement_sentiment: $sentiment
     }
+  ) {
+    returning {
+      id
+    }
+  }
+}
+`
+            const summaryObj = {
+                "link": customData.attachment,
+  "textSummary": jsonObj.Announcement_Summary,
+  "impact": jsonObj.Announcement_Impact_On_Business,
+  "sentiment": jsonObj.Announcement_Sentiment
 } 
             await postToGraphQL({"query": summaryMutation, "variables": summaryObj})  
         
