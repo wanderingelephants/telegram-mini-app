@@ -135,7 +135,7 @@ class LLMClient {
 }
 `
             const summaryObj = {
-                "link": customData.attachment,
+                "annoucement_document_link": customData.attachment,
   "textSummary": jsonObj.Announcement_Summary,
   "impact": jsonObj.Announcement_Impact_On_Business,
   "sentiment": jsonObj.Announcement_Sentiment

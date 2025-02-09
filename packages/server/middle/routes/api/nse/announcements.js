@@ -83,7 +83,7 @@ const route = async (req, res) => {
 }`,
                     variables: {
                         "object": {
-    "annoucement_document_link": row.attachment,
+    "annoucement_document_link": row.attachment.trim(),
     "announcement_date": yyyymmdd,
     "announcement_text_summary": "",
     "announcement_sentiment": "",
