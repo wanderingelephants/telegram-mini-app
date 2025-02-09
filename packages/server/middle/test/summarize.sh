@@ -45,7 +45,9 @@ for file in "$input_directory"/*.txt; do
     # Escape special characters in the content for JSON
     escaped_content=$(echo "$content" | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
     filename=$(basename "$file")
-    fullattachment="${nse_prefix}${filename}"
+    filename_no_ext="${filename%.*}"
+    fullattachment="${nse_prefix}${filename_no_ext}"
+    
     first_token="${filename%%_*}"
     # Prepare JSON payload with the exact structure specified
     json_data="{
