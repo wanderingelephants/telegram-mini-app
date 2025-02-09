@@ -115,13 +115,13 @@ class LLMClient {
             try{
                 
             const summaryMutation = `mutation StockAnnouncementUpdate(
-  $link: String!, 
+  $attachment: String!, 
   $textSummary: String, 
   $impact: String, 
   $sentiment: String
 ) {
   update_stock_announcements(
-    where: {annoucement_document_link: {_eq: $link}}, 
+    where: {annoucement_document_link: {_like: $attachment}}, 
     _set: {
       announcement_text_summary: $textSummary, 
       announcement_impact: $impact, 
@@ -135,7 +135,7 @@ class LLMClient {
 }
 `
             const summaryObj = {
-                "annoucement_document_link": customData.attachment,
+                "attachment": customData.attachment.trim(),
   "textSummary": jsonObj.Announcement_Summary,
   "impact": jsonObj.Announcement_Impact_On_Business,
   "sentiment": jsonObj.Announcement_Sentiment
