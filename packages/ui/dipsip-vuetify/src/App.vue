@@ -60,6 +60,7 @@ const menuItems = [
   { title: 'Mutual Funds', path: '/mutualfunds' },
   { title: 'ETFs', path: '/etfList' },
   { title: 'Stocks', path: '/stocks' },
+  { title: 'Tools', path: '/tools' },
   { title: 'Pricing', path: '/pricing' }
 ]
 

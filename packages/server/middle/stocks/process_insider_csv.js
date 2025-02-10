@@ -4,58 +4,7 @@ const csv = require('csv-parse');
 const {postToGraphQL} = require("../lib/helper")
 let failedLogFile;
 // Lookup mappings for various columns
-const mapping_category_of_insider = {
-  "Promoters": 1,
-  "Key Management Personnel": 2,
-  "Relative": 3,
-  "-": 4,
-  "Promoter Group": 5,
-  "Employees/Designated Employees": 6,
-  "Director": 7,
-  "Other": 8,
-  "Immediate relative": 9,
-  "Key Managerial Personnel": 10
-};
-
-const mapping_regulation = {
-  "7(2)": 1,
-  "7(3)": 2,
-};
-
-const mapping_type_of_security = {
-  "Equity Shares": 1,
-  "Convertible Debentures": 2,
-  "Warrants": 3
-};
-
-const mapping_mode_of_transaction = {
-  "ESOP": 1,
-  "Gift": 2,
-  "Invocation of Pledge": 3,
-  "Market Purchase": 4,
-  "Market Sale": 5,
-  "Off Market": 6,
-  "Others": 7,
-  "Pledge Creation": 8,
-  "Preferential Offer": 9,
-  "Revokation of Pledge": 10,
-  "Scheme of Amalgamation/Merger/Demerger/Arrangement": 11,
-  "Inter-se-Transfer": 12
-};
-const mapping_transaction_type = {
-    "Buy": 1,
-    "Sell": 2,
-    "Pledge": 3,
-    "Pledge Revoke": 4,
-    "Invocation of Pledge": 5,
-  };
-  
-const mapping_exchange = {
-  "NSE": 1,
-  "BSE": 2,
-  "MSEI": 3,
-  "NA": 4
-};
+const {mapping_category_of_insider, mapping_regulation, mapping_type_of_security, mapping_mode_of_transaction, mapping_transaction_type, mapping_exchange} = require("./mappings")
 
 // Clean header by removing newlines, extra spaces, and UTF-8 BOM
 const cleanHeader = (header) => {

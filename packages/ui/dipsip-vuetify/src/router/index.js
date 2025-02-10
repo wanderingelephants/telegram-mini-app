@@ -8,6 +8,7 @@ import SettingsPage from '@/views/SettingsPage.vue'
 import WebScraper from '@/views/WebScraper.vue'
 import Utils from '@/views/Utils.vue'
 import Stocks from '@/views/Stocks.vue'
+import Tools from '@/views/Tools.vue'
 import PromptInstruct from '@/views/PromptInstruct.vue'
 import PromptChat from '@/views/PromptChat.vue'
 import Pricing from '@/views/Pricing.vue'
@@ -73,6 +74,11 @@ const routes = [
     path: '/utils',
     name: 'Utils',
     component: Utils
+  },
+  {
+    path: '/tools',
+    name: 'Tools',
+    component: Tools
   },
   {
     path: '/stocks',
