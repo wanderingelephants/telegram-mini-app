@@ -92,13 +92,21 @@ class LLMClient {
                 //temperature: this.temperature
               });
         let jsonResp = response.data.response.trim() 
-        jsonResp = jsonResp.replace("```", "")
+        console.log("Raw Response from LLM", jsonResp)
+        //jsonResp = jsonResp.replaceAll("```", "")
         let jsonObj;
         try {
             jsonObj = JSON.parse(jsonResp);
           } catch (e) {
             jsonObj = {};
-          
+            let firstIdx = jsonResp.indexOf("{")
+            if (firstIdx == -1) {
+              let idxOfSummary = jsonResp.indexOf("\"Announcement_Summary\"")
+              jsonResp = jsonResp.substring(idxOfSummary, jsonResp.length)
+              jsonResp = "{" + jsonResp
+            }
+            let lastIdx = jsonResp.indexOf("}")
+            if (lastIdx == -1) jsonResp += "}"
             jsonResp
               .trim()
               .replace(/(^[{},\s]+|[{},\s]+$)/g, '') // Remove leading/trailing braces and spaces
@@ -113,13 +121,23 @@ class LLMClient {
                 }
               });
           }
+          let sentiment = -1
+          switch (jsonObj.Announcement_Sentiment.toLowerCase()){
+            case "positive" : sentiment = 0; break;
+            case "negative" : sentiment = 1; break;
+            case "neutral"  : sentiment = 2;  break;
+          }
+          if (true){
+            console.log(jsonObj, sentiment)
+            return;
+          }
             try{
                 
             const summaryMutation = `mutation StockAnnouncementUpdate(
   $attachment: String!, 
   $textSummary: String, 
   $impact: String, 
-  $sentiment: String
+  $sentiment: Int
 ) {
   update_stock_announcements(
     where: {annoucement_document_link: {_like: $attachment}}, 
@@ -139,9 +157,9 @@ class LLMClient {
                 "attachment": customData.attachment.trim()+"%",
   "textSummary": jsonObj.Announcement_Summary,
   "impact": jsonObj.Announcement_Impact_On_Business,
-  "sentiment": jsonObj.Announcement_Sentiment
-} 
-            const resp = await postToGraphQL({"query": summaryMutation, "variables": summaryObj})  
+  "sentiment": sentiment
+}   
+            //const resp = await postToGraphQL({"query": summaryMutation, "variables": summaryObj})  
             console.log(resp)
         
         }
