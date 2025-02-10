@@ -6,6 +6,7 @@ const MAX_RESULTS_TO_FORMAT = 10
 const { postToGraphQL } = require("../../../lib/helper")
 const { Anthropic } = require('@anthropic-ai/sdk');
 const util = require('util');
+let messageManager;
 //const { json } = require('stream/consumers');
 const mkdir = util.promisify(fs.mkdir);
 const writeFile = util.promisify(fs.writeFile);
@@ -34,8 +35,8 @@ class MessageManager {
     this.basePath = basePath;
   }
 
-  async saveMessage(sessionId, message) {
-    const filePath = _getFilePath(this.basePath, sessionId, 'messages.json');
+  async saveMessage(sessionId, message, filename) {
+    const filePath = _getFilePath(this.basePath, sessionId, filename);
     await _ensureDirectory(filePath);
 
     let messages = [];
@@ -48,8 +49,8 @@ class MessageManager {
     messages.push(message);
     await writeFile(filePath, JSON.stringify(messages, null, 2));
   }
-  async getMessages(sessionId) {
-    const filePath = _getFilePath(this.basePath, sessionId, 'messages.json');
+  async getMessages(sessionId, filename) {
+    const filePath = _getFilePath(this.basePath, sessionId, filename);
     let messages = [];
     try {
       const data = await readFile(filePath, 'utf-8');
@@ -211,11 +212,11 @@ class LLMResponseHandler {
       return [...new Set(array)];
     }
   }
-  async handleResponse(response, sessionID) {
+  async handleResponse(response, sessionId) {
     if (this.type === 'NoOp') {
       return response;
     } else if (this.type === 'JavaScript') {
-      let jsExecResponse = await this.executeJavaScript(response, sessionID);
+      let jsExecResponse = await this.executeJavaScript(response, sessionId);
       if (testAgainstFunction !== "") return JSON.stringify(jsExecResponse)
       let { result, functionName } = jsExecResponse
       if (result.length == 0) return "Sorry, No Results"
@@ -230,25 +231,33 @@ class LLMResponseHandler {
       if (resultString.toLocaleLowerCase().indexOf("javascript") > -1) return "Sorry, No Response"
       let formattingPrompt = `
         You are a result formatter for indian stock market data. 
-        In response to a User's query, create a natural response from the Result.  
-        Output only your formatted response text, and nothing else.
-        This is the Result: ${resultString}\n
-        Use the User question message as context to craft the formatted response.
+        In response to a User's Question, the system has generated a Result.  
+        create a natural response from the Result, considering the   
+        User Question as context, to craft the formatted response.
         `
-      const messages = [
+      /*const messages = [
         {
           "role": "user",
           "content": [
             {
               "type": "text",
-              "text": this.formatContext
-              //"text": "Please format the query results"
+              "text": `This was the User Question: ${this.formatContext}\n
+                      and in response, system generated this Result: ${resultString}
+                      Output only your formatted response text, and nothing else. `
+              
             }
           ]
         }
-      ]
+      ]*/
+      await messageManager.saveMessage(sessionId, { "role": 'user', content: [{ "type": 'text', "text": `This was the User Question: ${this.formatContext}\n
+                      and in response, system generated this Result: ${resultString}
+                      Output only your formatted response text, and nothing else. ` }] }, 'messages_formatted.json');
+
+      const messages =  await messageManager.getMessages(sessionId, 'messages_formatted.json')
       console.log("formattingPrompt", formattingPrompt, messages)
       const formattedResponse = await this.llmClient.sendToLLM(formattingPrompt, messages)
+      await messageManager.saveMessage(sessionId, { "role": 'assistant', content: [{ "type": 'text', "text": formattedResponse }] }, 'messages_formatted.json');
+
       console.log("formattedResponse", formattedResponse)
       return formattedResponse
     }
@@ -285,7 +294,7 @@ class LLMResponseHandler {
       return functionText.substring(0, lastIdx)
     else return functionText
   }
-  async executeJavaScript(functionText, sessionID) {
+  async executeJavaScript(functionText, sessionId) {
     let result;
     functionText = this.stripJSTicks(functionText, '```')
     functionText = this.stripJSTicks(functionText, '```javascript')
@@ -300,7 +309,7 @@ class LLMResponseHandler {
       functionName = toks[toks.length - 1].split("_")[0]
     }
     else {
-      const functionAndPath = await this.convertToConstFormat(functionText, sessionID)
+      const functionAndPath = await this.convertToConstFormat(functionText, sessionId)
       functionName = functionAndPath.functionName
       generatedFilePath = functionAndPath.generatedFilePath
     }
@@ -438,18 +447,18 @@ const route = async (req, res) => {
     const systemPromptPath = path.join(PROMPTS_FOLDER, `${distilledModel}_system_prompt.txt`);
     const systemPrompt = await readFile(systemPromptPath, 'utf-8');
 
-    const messageManager = new MessageManager(process.env.LLM_GENERATED_CODE);
-    await messageManager.saveMessage(sessionId, { "role": 'user', content: [{ "type": 'text', "text": messages[messages.length - 1].content }] });
-
+    messageManager = new MessageManager(process.env.LLM_GENERATED_CODE);
+    await messageManager.saveMessage(sessionId, { "role": 'user', content: [{ "type": 'text', "text": messages[messages.length - 1].content }] }, 'messages.json');
+    
     const llmClient = new LLMClient(LLMToUse);
 
     let messagesToSend;
     //const llmResponse = await llmClient.sendToLLM(systemPrompt, [{ "role": 'user', content: [{ "type": 'text', "text": messages[messages.length - 1].content }] }]);
-    messagesToSend = singleShotPrompt === false ? await messageManager.getMessages(sessionId) : [messages[messages.length - 1]]
+    messagesToSend = singleShotPrompt === false ? await messageManager.getMessages(sessionId, 'messages.json') : [messages[messages.length - 1]]
   
     const llmResponse = await llmClient.sendToLLM(systemPrompt, messagesToSend, customData);
     console.log("llmResponse", llmResponse)
-    await messageManager.saveMessage(sessionId, { "role": 'assistant', "content": [{ "type": 'text', "text": llmResponse }] });
+    await messageManager.saveMessage(sessionId, { "role": 'assistant', "content": [{ "type": 'text', "text": llmResponse }] }, 'messages.json');
 
     const handlerType = distilledModel.includes('mutual_funds') || distilledModel.includes('stocks') ? 'JavaScript' : 'NoOp';
     const formatContext = messages[messages.length - 1].content; // Pass user query context
