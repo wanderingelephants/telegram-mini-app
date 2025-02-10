@@ -107,19 +107,8 @@ class LLMClient {
             }
             let lastIdx = jsonResp.indexOf("}")
             if (lastIdx == -1) jsonResp += "}"
-            jsonResp
-              .trim()
-              .replace(/(^[{},\s]+|[{},\s]+$)/g, '') // Remove leading/trailing braces and spaces
-              .split(',')
-              .forEach(pair => {
-                let [key, ...valueParts] = pair.split(':');
-                key = key.trim().replace(/^"+|"+$/g, '');
-                const value = valueParts.join(':').trim().replace(/^"+|"+$/g, '');
-          
-                if (key) {
-                  jsonObj[key] = value;
-                }
-              });
+            jsonObj = JSON.parse(jsonResp)
+            
           }
           let sentiment = -1
           switch (jsonObj.Announcement_Sentiment.toLowerCase()){
@@ -127,10 +116,10 @@ class LLMClient {
             case "negative" : sentiment = 1; break;
             case "neutral"  : sentiment = 2;  break;
           }
-          if (true){
+          /*if (true){
             console.log(jsonObj, sentiment)
             return;
-          }
+          }*/
             try{
                 
             const summaryMutation = `mutation StockAnnouncementUpdate(
@@ -159,7 +148,7 @@ class LLMClient {
   "impact": jsonObj.Announcement_Impact_On_Business,
   "sentiment": sentiment
 }   
-            //const resp = await postToGraphQL({"query": summaryMutation, "variables": summaryObj})  
+            const resp = await postToGraphQL({"query": summaryMutation, "variables": summaryObj})  
             console.log(resp)
         
         }
