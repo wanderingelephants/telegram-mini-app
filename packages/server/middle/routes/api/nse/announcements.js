@@ -86,7 +86,7 @@ const route = async (req, res) => {
     "annoucement_document_link": row.attachment.trim(),
     "announcement_date": yyyymmdd,
     "announcement_text_summary": "",
-    "announcement_sentiment": "",
+    "announcement_sentiment": -1,
     "announcement_impact": "",
     "stock": {
       "data": {
