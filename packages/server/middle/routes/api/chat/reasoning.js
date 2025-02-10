@@ -62,7 +62,14 @@ class LLMClient {
     this.llmToUse = llmToUse;
     this.temperature = 0;
   }
-
+  stripJSTicks(functionText, stringToStrip) {
+    const idx = functionText.indexOf(stringToStrip)
+    if (idx > -1) functionText =functionText.substring(idx+stringToStrip.length)
+    const lastIdx = functionText.lastIndexOf(stringToStrip)
+    if (lastIdx > -1)
+      return functionText.substring(0, lastIdx)
+    else return functionText
+  }
   async sendToLLM(systemPrompt, messages, customData) {
     const formattedMessages = messages.map(msg => ({
         role: msg.role,
@@ -93,7 +100,7 @@ class LLMClient {
               });
         let jsonResp = response.data.response.trim() 
         console.log("Raw Response from LLM", jsonResp)
-        //jsonResp = jsonResp.replaceAll("```", "")
+        jsonResp = this.stripJSTicks(jsonResp, "```")
         let jsonObj;
         try {
             jsonObj = JSON.parse(jsonResp);
