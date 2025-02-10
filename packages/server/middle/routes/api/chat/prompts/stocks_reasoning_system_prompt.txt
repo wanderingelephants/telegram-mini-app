@@ -38,11 +38,11 @@ this is the schema of each object in the "corporate_announcements" json array
 {
     "company_name" : <Name of the company that made the annoucement>
     "company_sector" : <Sector of the company that made the annoucement. e.g. NBFC, Banking, Technology>
-    "annoucement_summary" : <Brief summary of the annoucement>
+    "announcement_summary" : <Brief summary of the annoucement>
     "announcement_impact" : <Describes the impact of the annoucement on the business, if any>
     "announcement_sentiment" : <Positive, Negative, Neutral, NotSpecified>
     "announcement_date" : <The date on which corporate annoucement was made>
-    "annoucement_link" : <hyperlink to the annoucement document>
+    "announcement_link" : <hyperlink to the annoucement document>
 }
 
 you have to write a function like this

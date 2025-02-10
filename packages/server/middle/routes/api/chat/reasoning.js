@@ -17,7 +17,11 @@ const _getFilePath = function (basePath, sessionId, filename) {
   const day = String(date.getDate()).padStart(2, '0');
   return path.join(basePath, year, month, day, sessionId, filename);
 }
-const {reverse_mapping_category_of_insider, reverse_mapping_regulation, reverse_mapping_type_of_security, reverse_mapping_mode_of_transaction, reverse_mapping_transaction_type, reverse_mapping_exchange} = require("../../../stocks/mappings")
+const testAgainstFunction = ""; // process.env.LLM_GENERATED_CODE + "/2025/02/10/8622f154-26ea-47d5-b52d-b3d36fd531ce/processAnnouncements_1739197659572.js";
+const {reverse_mapping_category_of_insider, reverse_mapping_regulation, 
+  reverse_mapping_type_of_security, reverse_mapping_mode_of_transaction, 
+  reverse_mapping_transaction_type, reverse_mapping_exchange,
+  mapping_announcement_sentiment, reverse_mapping_announcement_sentiment} = require("../../../stocks/mappings")
 
 const _ensureDirectory = async function (filePath) {
   const dir = path.dirname(filePath);
@@ -79,6 +83,7 @@ class LLMClient {
       content: msg.content[0].text // dynamically wrapping in a string
     }));
     console.log(formattedMessages)
+    if (testAgainstFunction !== "") return ""
     //return "function mutual_fund_query(){}"
     if (this.llmToUse === 'Claude') {
       const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_API_KEY });
@@ -211,6 +216,7 @@ class LLMResponseHandler {
       return response;
     } else if (this.type === 'JavaScript') {
       let jsExecResponse = await this.executeJavaScript(response, sessionID);
+      if (testAgainstFunction !== "") return JSON.stringify(jsExecResponse)
       let { result, functionName } = jsExecResponse
       if (result.length == 0) return "Sorry, No Results"
       if (!(functionName.toLowerCase().indexOf("mutual_fund") > -1 || 
@@ -285,7 +291,18 @@ class LLMResponseHandler {
     let lastIdx = functionText.lastIndexOf("}")
     functionText = functionText.substring(0, lastIdx + 1)
     functionText = functionText.trim()
-    const { functionName, generatedFilePath } = await this.convertToConstFormat(functionText, sessionID)
+    let functionName;
+    let generatedFilePath;
+    if (testAgainstFunction !== "") {
+      generatedFilePath = testAgainstFunction
+      const toks = generatedFilePath.split("/")
+      functionName = toks[toks.length - 1].split("_")[0]
+    }
+    else {
+      const functionAndPath = await this.convertToConstFormat(functionText, sessionID)
+      functionName = functionAndPath.functionName
+      generatedFilePath = functionAndPath.generatedFilePath
+    }
     //const generatedFilePath = path.join(process.env.LLM_GENERATED_CODE, "2025", "02", "06", "8622f154-26ea-47d5-b52d-b3d36fd531ce", "mutual_fund_query_1738834611243.js")
     //const functionName = "mutual_fund_query"
     let mutualFunds = [];
@@ -314,6 +331,7 @@ class LLMResponseHandler {
     announcement_text_summary
     announcement_impact
     announcement_sentiment
+    announcement_document_link
   }
 }`
       let resp = await postToGraphQL({"query": announcementQuery, "variables": {
@@ -323,7 +341,12 @@ class LLMResponseHandler {
         return {
           company_name: a.stock.company_name,
           company_sector: a.stock.company_sector,
-          ...a,
+          announcement_date: a.announcement_date,
+    announcement_summary: a.announcement_text_summary,
+    announcement_impact: a.announcement_impact,
+    announcement_sentiment: reverse_mapping_announcement_sentiment[a.announcement_sentiment],
+    announcement_link : a.annoucement_document_link
+
         }
       })
 
@@ -401,10 +424,6 @@ insider_trades = resp.data.insider_trades.map(a => {
     }
     return { functionName, result }
   }
-
-  async executeSQL(query) {
-
-  }
 }
 
 const route = async (req, res) => {
@@ -425,8 +444,8 @@ const route = async (req, res) => {
     let messagesToSend;
     //const llmResponse = await llmClient.sendToLLM(systemPrompt, [{ "role": 'user', content: [{ "type": 'text', "text": messages[messages.length - 1].content }] }]);
     messagesToSend = singleShotPrompt === false ? await messageManager.getMessages(sessionId) : [messages[messages.length - 1]]
+  
     const llmResponse = await llmClient.sendToLLM(systemPrompt, messagesToSend, customData);
-
     console.log("llmResponse", llmResponse)
     await messageManager.saveMessage(sessionId, { "role": 'assistant', "content": [{ "type": 'text', "text": llmResponse }] });
 
