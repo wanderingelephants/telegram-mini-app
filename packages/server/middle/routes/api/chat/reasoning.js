@@ -17,7 +17,7 @@ const _getFilePath = function (basePath, sessionId, filename) {
   const day = String(date.getDate()).padStart(2, '0');
   return path.join(basePath, year, month, day, sessionId, filename);
 }
-const testAgainstFunction = ""; // process.env.LLM_GENERATED_CODE + "/2025/02/10/8622f154-26ea-47d5-b52d-b3d36fd531ce/processAnnouncements_1739197659572.js";
+const testAgainstFunction = ""; //process.env.LLM_GENERATED_CODE + "/2025/02/10/8622f154-26ea-47d5-b52d-b3d36fd531ce/processAnnouncements_1739200686466.js";
 const {reverse_mapping_category_of_insider, reverse_mapping_regulation, 
   reverse_mapping_type_of_security, reverse_mapping_mode_of_transaction, 
   reverse_mapping_transaction_type, reverse_mapping_exchange,
@@ -151,7 +151,7 @@ class LLMClient {
   $sentiment: Int
 ) {
   update_stock_announcements(
-    where: {annoucement_document_link: {_like: $attachment}}, 
+    where: {announcement_document_link: {_like: $attachment}}, 
     _set: {
       announcement_text_summary: $textSummary, 
       announcement_impact: $impact, 
@@ -247,6 +247,7 @@ class LLMResponseHandler {
           ]
         }
       ]
+      console.log("formattingPrompt", formattingPrompt, messages)
       const formattedResponse = await this.llmClient.sendToLLM(formattingPrompt, messages)
       console.log("formattedResponse", formattedResponse)
       return formattedResponse
@@ -345,7 +346,7 @@ class LLMResponseHandler {
     announcement_summary: a.announcement_text_summary,
     announcement_impact: a.announcement_impact,
     announcement_sentiment: reverse_mapping_announcement_sentiment[a.announcement_sentiment],
-    announcement_link : a.annoucement_document_link
+    announcement_link : a.announcement_document_link
 
         }
       })
@@ -414,6 +415,7 @@ insider_trades = resp.data.insider_trades.map(a => {
         case "processAnnouncements":
             const processAnnouncements = require(generatedFilePath)
             result = await processAnnouncements(corporate_announcements)
+            console.log("announcement results", result)
             break;   
       }
 
