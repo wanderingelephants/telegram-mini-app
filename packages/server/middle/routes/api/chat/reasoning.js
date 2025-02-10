@@ -100,11 +100,14 @@ class LLMClient {
               });
         let jsonResp = response.data.response.trim() 
         console.log("Raw Response from LLM", jsonResp)
+        jsonResp = jsonResp.replace(/\\/g, '\\\\');
         jsonResp = this.stripJSTicks(jsonResp, "```")
+        console.log("after js tocks removal", jsonResp)
         let jsonObj;
         try {
             jsonObj = JSON.parse(jsonResp);
           } catch (e) {
+            console.error(e)
             jsonObj = {};
             let firstIdx = jsonResp.indexOf("{")
             if (firstIdx == -1) {
@@ -112,17 +115,22 @@ class LLMClient {
               jsonResp = jsonResp.substring(idxOfSummary, jsonResp.length)
               jsonResp = "{" + jsonResp
             }
-            let lastIdx = jsonResp.indexOf("}")
+            let lastIdx = jsonResp.lastIndexOf("}")
             if (lastIdx == -1) jsonResp += "}"
+            jsonResp = jsonResp.replace(/\\u[\dA-Fa-f]{4}/g, '');
+            console.log("post massage", jsonResp)
             jsonObj = JSON.parse(jsonResp)
             
           }
           let sentiment = -1
-          switch (jsonObj.Announcement_Sentiment.toLowerCase()){
-            case "positive" : sentiment = 0; break;
-            case "negative" : sentiment = 1; break;
-            case "neutral"  : sentiment = 2;  break;
+          if (jsonObj.Announcement_Sentiment){
+            switch (jsonObj.Announcement_Sentiment.toLowerCase()){
+              case "positive" : sentiment = 0; break;
+              case "negative" : sentiment = 1; break;
+              case "neutral"  : sentiment = 2;  break;
+            }
           }
+          
           /*if (true){
             console.log(jsonObj, sentiment)
             return;

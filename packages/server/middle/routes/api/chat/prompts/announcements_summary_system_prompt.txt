@@ -6,7 +6,7 @@ Third step, calculate the sentiment - positive, negative, neutral.
 
 Output as a JSON like
 {
-    "Announcement_Summary": <brief summary>,
+    "Announcement_Summary": <one paragraph summary of the annoucement text>,
     "Announcement_Impact_On_Business" : <The impact of this announcement on company's business>,
     "Announcement_Sentiment" : enum ["Positive", "Negative", "Neutral"]
 }
