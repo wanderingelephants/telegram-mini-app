@@ -58,5 +58,4 @@ This  is the announcement:
 
 == Announcement Ends == 
 
-Output only JSON (with 3 fields Announcement_Summary, Announcement_Impact_On_Business, Announcement_Sentiment, as explained above) and absolutely nothing else. 
-Validate that the JSON is well-formed, each key and value is surrounded by double quotes, ensure opening/closing braces for the json.
+Output only JSON (with 3 fields Announcement_Summary, Announcement_Impact_On_Business, Announcement_Sentiment (Positive, Negative or Neutral), as explained above) and absolutely nothing else. 

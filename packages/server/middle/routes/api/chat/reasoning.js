@@ -108,6 +108,7 @@ class LLMClient {
       });
       let jsonResp = response.data.response.trim()
       console.log("Raw Response from LLM", jsonResp)
+      jsonResp = jsonResp.replace(/\\+/g, '')
       jsonResp = jsonResp.replace(/\\/g, '\\\\');
       jsonResp = this.stripJSTicks(jsonResp, "```")
       console.log("after js tocks removal", jsonResp)
@@ -126,6 +127,7 @@ class LLMClient {
         let lastIdx = jsonResp.lastIndexOf("}")
         if (lastIdx == -1) jsonResp += "}"
         jsonResp = jsonResp.replace(/\\u[\dA-Fa-f]{4}/g, '');
+        
         console.log("post massage", jsonResp)
         jsonObj = JSON.parse(jsonResp)
 
