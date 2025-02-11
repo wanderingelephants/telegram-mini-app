@@ -51,3 +51,21 @@ mutation InsertInsiderTrades($objects: [insider_trades_insert_input!]!) {
     # Add more objects here as needed
   ]
 } 
+
+mutation insertMutualFund($object: mutual_fund_insert_input!){
+  insert_mutual_fund_one(object: $object, on_conflict:{
+    constraint: mutual_fund_scheme_code_key,
+    update_columns: [scheme_code]
+  }){
+    id
+    
+  }
+}
+
+{
+  "object": {
+    "scheme_code": "",
+    "name": ""
+    
+  }
+}
