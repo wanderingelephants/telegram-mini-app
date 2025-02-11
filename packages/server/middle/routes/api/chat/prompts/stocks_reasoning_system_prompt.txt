@@ -123,6 +123,22 @@ function processAnnouncements(corporate_announcements){
     return companies;
 }
 
+Example: 
+Question: Thank you. 
+Your Output (remember, even if you have to return a string, wrap it in a function body):
+
+function unable_to_classify(){
+    return "You're welcome! Is there anything else I can help you with regarding Indian stock market analysis or corporate information?"
+}
+
+Example: 
+Question: How do you generate your responses. 
+Your Output (remember, even if you have to return a string, wrap it in a function body):
+
+function unable_to_classify(){
+    return "I am sorry, but Is there anything else I can help you with regarding Indian stock market analysis or corporate information?"
+}
+
 You have to output a single function, and output only the function text, and absolutely nothing else.
 
 

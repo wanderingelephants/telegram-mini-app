@@ -60,7 +60,19 @@ class MessageManager {
     }
     return messages
   }
-
+  async getLastMessage(sessionId, filename){
+    const filePath = _getFilePath(this.basePath, sessionId, filename);
+    let messages = [];
+    try {
+      const data = await readFile(filePath, 'utf-8');
+      messages = JSON.parse(data);
+    } catch (err) {
+      console.error(err)
+      return []
+      //if (err.code !== 'ENOENT') throw err;
+    }
+    return messages.length > 0 ? messages[messages.length - 1] : []
+  }
 
 
 }
@@ -222,14 +234,15 @@ class LLMResponseHandler {
       console.log("jsExecResponse", jsExecResponse)
       if (testAgainstFunction !== "") return JSON.stringify(jsExecResponse)
       let { result, functionName } = jsExecResponse
-      if (result.length == 0) return "Sorry, No Results"
+      if (Array.isArray(result) && result.length == 0) return "Sorry, No Results"
       if (!(functionName.toLowerCase().indexOf("mutual_fund") > -1 || 
       functionName.toLowerCase().indexOf("processInsiderTrades".toLowerCase()) > -1
       || functionName.toLowerCase().indexOf("processAnnouncements".toLowerCase()) > -1)) return result
       if (result == "Sorry, No Response") return result;
-      result = this.removeDuplicates(result)
+      if (Array.isArray(result)) result = this.removeDuplicates(result)
       
-      if (result.length > 10) result = result.slice(0, MAX_RESULTS_TO_FORMAT)
+      if (Array.isArray(result) && result.length > 10) result = result.slice(0, MAX_RESULTS_TO_FORMAT)
+        await messageManager.saveMessage(sessionId, {result}, "results.json")
       let resultString = JSON.stringify(result)
       if (resultString.toLocaleLowerCase().indexOf("javascript") > -1) return "Sorry, No Response"
       let formattingPrompt = `
@@ -437,7 +450,7 @@ insider_trades = resp.data.insider_trades.map(a => {
       console.error(e)
       result = "Sorry, No Response"
     }
-    if (!Array.isArray(result)) result = [result]
+    //if (!Array.isArray(result)) result = [result]
     return { functionName, result }
   }
 }
@@ -453,7 +466,10 @@ const route = async (req, res) => {
     const systemPrompt = await readFile(systemPromptPath, 'utf-8');
 
     messageManager = new MessageManager(process.env.LLM_GENERATED_CODE);
-    await messageManager.saveMessage(sessionId, { "role": 'user', content: [{ "type": 'text', "text": messages[messages.length - 1].content }] }, 'messages.json');
+    let userLatestMessage = messages[messages.length - 1].content
+    let lastResultMessage = await messageManager.getLastMessage(sessionId, "results.json")
+    if (lastResultMessage.result) userLatestMessage = "Result of Previous function execution was : " + JSON.stringify(lastResultMessage.result) + "\n" + messages[messages.length - 1].content
+    await messageManager.saveMessage(sessionId, { "role": 'user', content: [{ "type": 'text', "text": userLatestMessage }] }, 'messages.json');
     
     const llmClient = new LLMClient(LLMToUse);
 
