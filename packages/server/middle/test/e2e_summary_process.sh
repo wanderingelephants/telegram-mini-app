@@ -1,6 +1,7 @@
-fromDate="07-02-2025"
-toDate="07-02-2025"
-index="sme"
+fromDate="09-02-2025"
+toDate="09-02-2025"
+index="equities"
+#index="sme"
 data_folder=/var/poc/temp/crypto_buddies/sample/data/nse_announcements
 
 curl -X POST http://localhost:3000/api/nse/announcements \
