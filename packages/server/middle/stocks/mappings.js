@@ -76,6 +76,16 @@ const mapping_exchange = {
   "MSEI": 3,
   "NA": 4
 };
+const mapping_nse_segment = {
+  "Main": 0,
+  "SME": 1,
+};
+const reverse_mapping_nse_segment = Object.entries(mapping_nse_segment)
+  .reduce((acc, [key, value]) => {
+    acc[value] = key;
+    return acc;
+  }, {});
+
 const reverse_mapping_exchange = Object.entries(mapping_exchange)
   .reduce((acc, [key, value]) => {
     acc[value] = key;
@@ -97,4 +107,4 @@ module.exports = {mapping_category_of_insider, mapping_regulation, mapping_type_
   mapping_transaction_type, mapping_exchange,
   reverse_mapping_category_of_insider, reverse_mapping_regulation, reverse_mapping_type_of_security, reverse_mapping_mode_of_transaction, 
   reverse_mapping_transaction_type, reverse_mapping_exchange, 
-  mapping_announcement_sentiment, reverse_mapping_announcement_sentiment}
+  mapping_announcement_sentiment, reverse_mapping_announcement_sentiment, mapping_nse_segment, reverse_mapping_nse_segment}

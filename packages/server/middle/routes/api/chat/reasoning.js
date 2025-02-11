@@ -217,6 +217,7 @@ class LLMResponseHandler {
       return response;
     } else if (this.type === 'JavaScript') {
       let jsExecResponse = await this.executeJavaScript(response, sessionId);
+      console.log("jsExecResponse", jsExecResponse)
       if (testAgainstFunction !== "") return JSON.stringify(jsExecResponse)
       let { result, functionName } = jsExecResponse
       if (result.length == 0) return "Sorry, No Results"
@@ -233,7 +234,8 @@ class LLMResponseHandler {
         You are a result formatter for indian stock market data. 
         In response to a User's Question, the system has generated a Result.  
         create a natural response from the Result, considering the   
-        User Question as context, to craft the formatted response.
+        User Question as context, to craft the formatted response. If the Question was not related
+        to Indian Stock Market, then format a polite refusal.
         `
       /*const messages = [
         {
@@ -433,6 +435,7 @@ insider_trades = resp.data.insider_trades.map(a => {
       console.error(e)
       result = "Sorry, No Response"
     }
+    if (!Array.isArray(result)) result = [result]
     return { functionName, result }
   }
 }

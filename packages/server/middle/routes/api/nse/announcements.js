@@ -16,7 +16,7 @@ const route = async (req, res) => {
             .replace(/[^a-zA-Z0-9]+(.)/g, (_, chr) => chr.toUpperCase())
             .replace(/[^a-zA-Z0-9]/g, '');
     }
-    async function processCSVAndDownload(csvPath, downloadPdfPath,  yyyymmdd) {
+    async function processCSVAndDownload(csvPath, downloadPdfPath,  yyyymmdd, index) {
         const results = [];
         const wordsToCheck = [];
         //const wordsToCheck = ['Resignation'];
@@ -91,7 +91,8 @@ const route = async (req, res) => {
     "stock": {
       "data": {
         "symbol": row.symbol,
-        "company_name": row.companyName
+        "company_name": row.companyName,
+        "segment": index.toLowerCase() === "sme" ? 1 : 0
       },
       "on_conflict": {
         "constraint": "stock_symbol_key",
@@ -134,7 +135,7 @@ const route = async (req, res) => {
             else console.log("CSV Exists, no download needed")
         const filepath = path.join(downloadDateFolder, downloadFileName);
           
-        processCSVAndDownload(filepath, downloadDateFolder, year+"-"+month+"-"+day).then(() => console.log('Processing completed'))
+        processCSVAndDownload(filepath, downloadDateFolder, year+"-"+month+"-"+day, index).then(() => console.log('Processing completed'))
             .catch(error => console.error('Error:', error));
         res.status(200).json("CSV Downloaded and Processed")
 
