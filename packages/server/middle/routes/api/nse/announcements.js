@@ -114,7 +114,7 @@ const route = async (req, res) => {
         const { fromDate, toDate, index } = req.body
         const baseUrl = "https://www.nseindia.com"
         const urlSuffix = `/api/corporate-announcements?index=${index}&from_date=${fromDate}&to_date=${toDate}&csv=true`
-        const downloadFileName = `nse_announcements_${fromDate}_${toDate}.csv`
+        const downloadFileName = `nse_announcements_${index}_${fromDate}_${toDate}.csv`
         //const {baseUrl, urlSuffix, downloadFileName} = req.body
         console.log('recd download req', { baseUrl, urlSuffix, downloadFileName })
         const toks = fromDate.split("-")
