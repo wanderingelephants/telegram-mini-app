@@ -122,6 +122,7 @@ class LLMClient {
           "docLink": customData.attachment.trim() + "%"
         }
       })
+      console.log(sentimentQueryResponse)
       const sentimentValue = sentimentQueryResponse.data.stock_announcements[0].announcement_sentiment
       if (sentimentValue > -1){
         console.log("Summary already exists for ", customData.attachment.trim())
