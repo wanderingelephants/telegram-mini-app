@@ -92,17 +92,6 @@ class LLMClient {
     else return functionText
   }
   async sendToLLM(systemPrompt, messages, customData) {
-    const sentimentQueryResponse = await postToGraphQL({
-      query: sentimentQuery, 
-      variables: {
-        "docLink": customData.attachment.trim() + "%"
-      }
-    })
-    const sentimentValue = sentimentQueryResponse.data.stock_announcements[0].announcement_sentiment
-    if (sentimentValue > -1){
-      console.log("Summary already exists for ", customData.attachment.trim())
-      return;
-    }
     const formattedMessages = messages.map(msg => ({
       role: msg.role,
       content: msg.content[0].text // dynamically wrapping in a string
@@ -122,6 +111,22 @@ class LLMClient {
       return resp.content[0].text;
     }
     if (this.llmToUse === "Ollama") {
+      const sentimentQuery = `query stock_announcements($docLink: String!){
+        stock_announcements(where: {announcement_document_link: {_like: $docLink}}){
+          announcement_sentiment
+        }
+      }`
+      const sentimentQueryResponse = await postToGraphQL({
+        query: sentimentQuery, 
+        variables: {
+          "docLink": customData.attachment.trim() + "%"
+        }
+      })
+      const sentimentValue = sentimentQueryResponse.data.stock_announcements[0].announcement_sentiment
+      if (sentimentValue > -1){
+        console.log("Summary already exists for ", customData.attachment.trim())
+        return;
+      }
       let model = process.env.OLLAMA_MODEL
       const finalPrompt = systemPrompt.replace("{{text_replace}}", messages[0].content)
       const response = await axios.post(`${process.env.OLLAMA_URL}/api/generate`, {
@@ -164,11 +169,7 @@ class LLMClient {
           case "neutral": sentiment = 2; break;
         }
       }
-      const sentimentQuery = `query stock_announcements($docLink: String!){
-  stock_announcements(where: {announcement_document_link: {_like: $docLink}}){
-    announcement_sentiment
-  }
-}`
+      
       
       /*if (true){
         console.log(jsonObj, sentiment)
