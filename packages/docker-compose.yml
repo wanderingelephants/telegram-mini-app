@@ -29,7 +29,7 @@ services:
         - POSTGRES_URL=$POSTGRES_URL
         - HASURA_ADMIN_SECRET=$HASURA_ADMIN_SECRET
     ports:
-    - "8081:8080"
+    - "8080:8080"
     restart: always
   api:
     build:
@@ -69,14 +69,14 @@ services:
   #    - "11434:11434"
   #  volumes:
   #    - ${OLLAMA_MODELS:-/home/ec2-user/data/ollama/ollama_models}:/root/.ollama/models
-  sqlite-web:
-    image: coleifer/sqlite-web
-    ports:
-      - "8080:8080"
-    volumes:
-      - ${SQLITE_DB:-/home/ec2-user/data/sqlite_db}:/data
-    environment:
-      - SQLITE_DATABASE=/data/dipsip.db  # Replace 'your_database.db' with your actual database filename
-      - SQLITE_WEB_PASSWORD=dipsip_password       # Optional: set a password for basic authentication
-      - SQLITE_WEB_USERNAME=admin_dipsip              # Optional: set a username for basic authentication
-    restart: unless-stopped    
+  #sqlite-web:
+  #  image: coleifer/sqlite-web
+  #  ports:
+  #    - "8080:8080"
+  #  volumes:
+  #    - ${SQLITE_DB:-/home/ec2-user/data/sqlite_db}:/data
+  #  environment:
+  #    - SQLITE_DATABASE=/data/dipsip.db  # Replace 'your_database.db' with your actual database filename
+  #    - SQLITE_WEB_PASSWORD=dipsip_password       # Optional: set a password for basic authentication
+  #    - SQLITE_WEB_USERNAME=admin_dipsip              # Optional: set a username for basic authentication
+  #  restart: unless-stopped    
