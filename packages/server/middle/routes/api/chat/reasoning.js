@@ -122,7 +122,7 @@ class LLMClient {
           "docLink": customData.attachment.trim() + "%"
         }
       })
-      console.log(sentimentQueryResponse)
+      console.log(sentimentQueryResponse, customData.attachment.trim()+".pdf")
       const sentimentValue = sentimentQueryResponse.data.stock_announcements[0].announcement_sentiment
       if (sentimentValue > -1){
         console.log("Summary already exists for ", customData.attachment.trim())
@@ -484,6 +484,10 @@ const route = async (req, res) => {
   
     const llmResponse = await llmClient.sendToLLM(systemPrompt, messagesToSend, customData);
     console.log("llmResponse", llmResponse)
+    if (this.llmToUse === "Ollama"){
+      res.json("ok")
+      return
+    }
     await messageManager.saveMessage(sessionId, modelName, { "role": 'assistant', "content": [{ "type": 'text', "text": llmResponse }] }, 'messages.json');
 
     const handlerType = distilledModel.includes('mutual_funds') || distilledModel.includes('stocks') ? 'JavaScript' : 'NoOp';
