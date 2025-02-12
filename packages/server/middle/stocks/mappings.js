@@ -71,14 +71,14 @@ const mapping_transaction_type = {
   }, {});
   
 const mapping_exchange = {
-  "NSE": 1,
-  "BSE": 2,
-  "MSEI": 3,
-  "NA": 4
+  "nse": 1,
+  "bse": 2,
+  "msei": 3,
+  "na": 4
 };
 const mapping_nse_segment = {
-  "Main": 0,
-  "SME": 1,
+  "main": 0,
+  "sme": 1,
 };
 const reverse_mapping_nse_segment = Object.entries(mapping_nse_segment)
   .reduce((acc, [key, value]) => {
@@ -93,9 +93,9 @@ const reverse_mapping_exchange = Object.entries(mapping_exchange)
   }, {});
   const mapping_announcement_sentiment = {
     "": -1,
-    "Positive": 0,
-    "Negative": 1,
-    "Neutral": 2
+    "positive": 0,
+    "negative": 1,
+    "neutral": 2
   };
   const reverse_mapping_announcement_sentiment = Object.entries(mapping_announcement_sentiment)
   .reduce((acc, [key, value]) => {

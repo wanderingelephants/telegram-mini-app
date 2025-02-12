@@ -11,18 +11,19 @@ let messageManager;
 const mkdir = util.promisify(fs.mkdir);
 const writeFile = util.promisify(fs.writeFile);
 const readFile = util.promisify(fs.readFile);
-const _getFilePath = function (basePath, sessionId, filename) {
+const _getFilePath = function (basePath, sessionId, modelName, filename) {
   const date = new Date();
   const year = date.getFullYear() + "";
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
-  return path.join(basePath, year, month, day, sessionId, filename);
+  return path.join(basePath, year, month, day, sessionId, modelName, filename);
 }
 const testAgainstFunction = ""; //process.env.LLM_GENERATED_CODE + "/2025/02/10/8622f154-26ea-47d5-b52d-b3d36fd531ce/processAnnouncements_1739200686466.js";
 const {reverse_mapping_category_of_insider, reverse_mapping_regulation, 
   reverse_mapping_type_of_security, reverse_mapping_mode_of_transaction, 
   reverse_mapping_transaction_type, reverse_mapping_exchange,
-  mapping_announcement_sentiment, reverse_mapping_announcement_sentiment} = require("../../../stocks/mappings")
+  mapping_announcement_sentiment, reverse_mapping_announcement_sentiment} = require("../../../stocks/mappings");
+const { query } = require('express');
 
 const _ensureDirectory = async function (filePath) {
   const dir = path.dirname(filePath);
@@ -35,8 +36,8 @@ class MessageManager {
     this.basePath = basePath;
   }
 
-  async saveMessage(sessionId, message, filename) {
-    const filePath = _getFilePath(this.basePath, sessionId, filename);
+  async saveMessage(sessionId, modelName, message, filename) {
+    const filePath = _getFilePath(this.basePath, sessionId, modelName, filename);
     await _ensureDirectory(filePath);
 
     let messages = [];
@@ -49,8 +50,8 @@ class MessageManager {
     messages.push(message);
     await writeFile(filePath, JSON.stringify(messages, null, 2));
   }
-  async getMessages(sessionId, filename) {
-    const filePath = _getFilePath(this.basePath, sessionId, filename);
+  async getMessages(sessionId, modelName, filename) {
+    const filePath = _getFilePath(this.basePath, sessionId, modelName, filename);
     let messages = [];
     try {
       const data = await readFile(filePath, 'utf-8');
@@ -60,8 +61,8 @@ class MessageManager {
     }
     return messages
   }
-  async getLastMessage(sessionId, filename){
-    const filePath = _getFilePath(this.basePath, sessionId, filename);
+  async getLastMessage(sessionId, modelName, filename){
+    const filePath = _getFilePath(this.basePath, sessionId, modelName, filename);
     let messages = [];
     try {
       const data = await readFile(filePath, 'utf-8');
@@ -91,6 +92,17 @@ class LLMClient {
     else return functionText
   }
   async sendToLLM(systemPrompt, messages, customData) {
+    const sentimentQueryResponse = await postToGraphQL({
+      query: sentimentQuery, 
+      variables: {
+        "docLink": customData.attachment.trim() + "%"
+      }
+    })
+    const sentimentValue = sentimentQueryResponse.data.stock_announcements[0].announcement_sentiment
+    if (sentimentValue > -1){
+      console.log("Summary already exists for ", customData.attachment.trim())
+      return;
+    }
     const formattedMessages = messages.map(msg => ({
       role: msg.role,
       content: msg.content[0].text // dynamically wrapping in a string
@@ -152,7 +164,12 @@ class LLMClient {
           case "neutral": sentiment = 2; break;
         }
       }
-
+      const sentimentQuery = `query stock_announcements($docLink: String!){
+  stock_announcements(where: {announcement_document_link: {_like: $docLink}}){
+    announcement_sentiment
+  }
+}`
+      
       /*if (true){
         console.log(jsonObj, sentiment)
         return;
@@ -226,11 +243,11 @@ class LLMResponseHandler {
       return [...new Set(array)];
     }
   }
-  async handleResponse(response, sessionId) {
+  async handleResponse(response, sessionId, modelName) {
     if (this.type === 'NoOp') {
       return response;
     } else if (this.type === 'JavaScript') {
-      let jsExecResponse = await this.executeJavaScript(response, sessionId);
+      let jsExecResponse = await this.executeJavaScript(response, sessionId, modelName);
       console.log("jsExecResponse", jsExecResponse)
       if (testAgainstFunction !== "") return JSON.stringify(jsExecResponse)
       let { result, functionName } = jsExecResponse
@@ -242,7 +259,7 @@ class LLMResponseHandler {
       if (Array.isArray(result)) result = this.removeDuplicates(result)
       
       if (Array.isArray(result) && result.length > 10) result = result.slice(0, MAX_RESULTS_TO_FORMAT)
-        await messageManager.saveMessage(sessionId, {result}, "results.json")
+        await messageManager.saveMessage(sessionId, modelName, {result}, "results.json")
       let resultString = JSON.stringify(result)
       if (resultString.toLocaleLowerCase().indexOf("javascript") > -1) return "Sorry, No Response"
       let formattingPrompt = `
@@ -252,35 +269,21 @@ class LLMResponseHandler {
         User Question as context, to craft the formatted response. If the Question was not related
         to Indian Stock Market, then format a polite refusal.
         `
-      /*const messages = [
-        {
-          "role": "user",
-          "content": [
-            {
-              "type": "text",
-              "text": `This was the User Question: ${this.formatContext}\n
-                      and in response, system generated this Result: ${resultString}
-                      Output only your formatted response text, and nothing else. `
-              
-            }
-          ]
-        }
-      ]*/
-      await messageManager.saveMessage(sessionId, { "role": 'user', content: [{ "type": 'text', "text": `This was the User Question: ${this.formatContext}\n
+      await messageManager.saveMessage(sessionId, modelName, { "role": 'user', content: [{ "type": 'text', "text": `This was the User Question: ${this.formatContext}\n
                       and in response, system generated this Result: ${resultString}
                       Output only your formatted response text, and nothing else. ` }] }, 'messages_formatted.json');
 
-      const messages =  await messageManager.getMessages(sessionId, 'messages_formatted.json')
+      const messages =  await messageManager.getMessages(sessionId, modelName, 'messages_formatted.json')
       console.log("formattingPrompt", formattingPrompt, messages)
       const formattedResponse = await this.llmClient.sendToLLM(formattingPrompt, messages)
-      await messageManager.saveMessage(sessionId, { "role": 'assistant', content: [{ "type": 'text', "text": formattedResponse }] }, 'messages_formatted.json');
+      await messageManager.saveMessage(sessionId, modelName, { "role": 'assistant', content: [{ "type": 'text', "text": formattedResponse }] }, 'messages_formatted.json');
 
       console.log("formattedResponse", formattedResponse)
       return formattedResponse
     }
     throw new Error(`Unsupported handler type: ${this.type}`);
   }
-  async convertToConstFormat(functionText, sessionId) {
+  async convertToConstFormat(functionText, sessionId, modelName) {
     // Extract the function name and parameters
     const functionMatch = functionText.match(/function\s+(\w+)\s*\((.*?)\)/);
     if (!functionMatch) {
@@ -296,7 +299,7 @@ class LLMResponseHandler {
     let newFunctionText = `const ${functionName} = function(${params})${functionBody}`
     newFunctionText += `\nmodule.exports = ${functionName}`
     const generatedFileName = `${functionName}_${(new Date()).getTime()}.js`;
-    const generatedFilePath = _getFilePath(process.env.LLM_GENERATED_CODE, sessionId, generatedFileName);
+    const generatedFilePath = _getFilePath(process.env.LLM_GENERATED_CODE, sessionId, modelName, generatedFileName);
     await _ensureDirectory(generatedFilePath);
 
     //let generatedFilePath = path.join(GENERATED_FUNCTIONS_PATH, generatedFileName);
@@ -311,7 +314,7 @@ class LLMResponseHandler {
       return functionText.substring(0, lastIdx)
     else return functionText
   }
-  async executeJavaScript(functionText, sessionId) {
+  async executeJavaScript(functionText, sessionId, modelName) {
     let result;
     functionText = this.stripJSTicks(functionText, '```')
     functionText = this.stripJSTicks(functionText, '```javascript')
@@ -326,7 +329,7 @@ class LLMResponseHandler {
       functionName = toks[toks.length - 1].split("_")[0]
     }
     else {
-      const functionAndPath = await this.convertToConstFormat(functionText, sessionId)
+      const functionAndPath = await this.convertToConstFormat(functionText, sessionId, modelName)
       functionName = functionAndPath.functionName
       generatedFilePath = functionAndPath.generatedFilePath
     }
@@ -373,7 +376,6 @@ class LLMResponseHandler {
     announcement_impact: a.announcement_impact,
     announcement_sentiment: reverse_mapping_announcement_sentiment[a.announcement_sentiment],
     announcement_link : a.announcement_document_link
-
         }
       })
 
@@ -458,6 +460,7 @@ insider_trades = resp.data.insider_trades.map(a => {
 const route = async (req, res) => {
   const sessionId = req.sessionId;
   const { distilledModel, messages, llm, streaming = false, singleShotPrompt = false, customData } = req.body;
+  const modelName = distilledModel
   const LLMToUse = llm ? llm : process.env.LLM_TO_USE;
   console.log("reasoning route customData", customData)
   try {
@@ -467,25 +470,25 @@ const route = async (req, res) => {
 
     messageManager = new MessageManager(process.env.LLM_GENERATED_CODE);
     let userLatestMessage = messages[messages.length - 1].content
-    let lastResultMessage = await messageManager.getLastMessage(sessionId, "results.json")
+    let lastResultMessage = await messageManager.getLastMessage(sessionId, modelName, "results.json")
     if (lastResultMessage.result) userLatestMessage = "Result of Previous function execution was : " + JSON.stringify(lastResultMessage.result) + "\n" + messages[messages.length - 1].content
-    await messageManager.saveMessage(sessionId, { "role": 'user', content: [{ "type": 'text', "text": userLatestMessage }] }, 'messages.json');
+    await messageManager.saveMessage(sessionId, modelName, { "role": 'user', content: [{ "type": 'text', "text": userLatestMessage }] }, 'messages.json');
     
     const llmClient = new LLMClient(LLMToUse);
 
     let messagesToSend;
     //const llmResponse = await llmClient.sendToLLM(systemPrompt, [{ "role": 'user', content: [{ "type": 'text', "text": messages[messages.length - 1].content }] }]);
-    messagesToSend = singleShotPrompt === false ? await messageManager.getMessages(sessionId, 'messages.json') : [messages[messages.length - 1]]
+    messagesToSend = singleShotPrompt === false ? await messageManager.getMessages(sessionId, modelName, 'messages.json') : [messages[messages.length - 1]]
   
     const llmResponse = await llmClient.sendToLLM(systemPrompt, messagesToSend, customData);
     console.log("llmResponse", llmResponse)
-    await messageManager.saveMessage(sessionId, { "role": 'assistant', "content": [{ "type": 'text', "text": llmResponse }] }, 'messages.json');
+    await messageManager.saveMessage(sessionId, modelName, { "role": 'assistant', "content": [{ "type": 'text', "text": llmResponse }] }, 'messages.json');
 
     const handlerType = distilledModel.includes('mutual_funds') || distilledModel.includes('stocks') ? 'JavaScript' : 'NoOp';
     const formatContext = messages[messages.length - 1].content; // Pass user query context
 
     const responseHandler = new LLMResponseHandler(handlerType, llmClient, formatContext);
-    const formattedResponse = await responseHandler.handleResponse(llmResponse, sessionId);
+    const formattedResponse = await responseHandler.handleResponse(llmResponse, sessionId, modelName);
     console.log("formattedResponse", formattedResponse)
     if (true == streaming)
       res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive' });
@@ -495,7 +498,15 @@ const route = async (req, res) => {
       let json;
       const lines = formattedResponse.split("\n")
       for (const line of lines) {
-        json = { "response": line, "done": false }
+        let sendLine = line;
+        if (line.indexOf("https://") > -1) {
+          sendLine = line.replace(
+              /(https?:\/\/[^\s.]+(?:\.[^\s.]+)*)(?=\.*\s|$)/g,
+              '<a href="$1" class="links data-link" target="_blank" rel="noopener noreferrer">$1</a>'
+          );
+      }
+      
+        json = { "response": sendLine, "done": false }
         res.write(`data: ${JSON.stringify(json)}\n\n`);
       }
       json = { "response": "", "done": true }

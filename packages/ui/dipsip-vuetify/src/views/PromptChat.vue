@@ -25,8 +25,7 @@
       <v-card-title class="text-caption pb-1">
         {{ message.role === 'user' ? 'You' : 'Assistant' }}
       </v-card-title>
-      <v-card-text class="white-space-pre pt-0">
-        {{ message.content }}
+      <v-card-text class="white-space-pre pt-0" v-html="message.content">
       </v-card-text>
     </v-card>
   </v-list-item>

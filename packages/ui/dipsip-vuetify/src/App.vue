@@ -61,7 +61,8 @@ const menuItems = [
   { title: 'ETFs', path: '/etfList' },
   { title: 'Stocks', path: '/stocks' },
   { title: 'Tools', path: '/tools' },
-  { title: 'Pricing', path: '/pricing' }
+  { title: 'Pricing', path: '/pricing' },
+  { title: 'About Us', path: '/about' }
 ]
 
 const socialIcons = [
