@@ -19,7 +19,7 @@
       <v-col cols="12" md="6" order="last" order-md="last" class="right-panel">
         <v-card-text v-if="loggedInGoogle === true">Welcome {{userGoogle.displayName}}</v-card-text>
             <v-card>
-              <v-card-title>We are NOT registered with SEBI.</v-card-title>
+              <v-card-title class="subtitle-wrap">We are NOT registered with SEBI. We do not execute any trades, or take any deposits.</v-card-title>
               <v-card-title class="subtitle-wrap">No Investment advice. Only providing DIY query tools.</v-card-title>
             </v-card>
         </v-col> 

@@ -1,8 +1,8 @@
 const Database = require('better-sqlite3');
 const db = new Database(process.env.SQLITE_DB + '/dipsip.db', {});
 const { postToGraphQL } = require("../../../lib/helper")
-async function migrate() {
 
+const route = async(req, res) => {
     const mf_mutation_query = `
         mutation insertMutualFund($object: mutual_fund_insert_input!){
   insert_mutual_fund_one(object: $object, on_conflict:{
@@ -17,6 +17,7 @@ async function migrate() {
     // Execute the fund query with combined parameters
     const funds = db.prepare("select *  from mutual_fund").all();
     for (const fund of funds) {
+        console.log("migrating fund", fund.name)
         await postToGraphQL({
             query: mf_mutation_query,
             variables: {
@@ -59,6 +60,8 @@ async function migrate() {
         `
     const holdings = db.prepare("select mfh.*, mf.name  as scheme_name, mf.category_key, mf.category from mutual_fund_holdings mfh, mutual_fund mf where mfh.scheme_code=mf.scheme_code").all()
     for (const holding of holdings) {
+        console.log("migrating holding", holding.scheme_code, holding.stock_name)
+        
         await postToGraphQL({
             query: holdingMutation,
             variables: {
@@ -100,4 +103,4 @@ async function migrate() {
         })
     }
 }
-migrate().then(console.log("migrated"))
+module.exports = route
