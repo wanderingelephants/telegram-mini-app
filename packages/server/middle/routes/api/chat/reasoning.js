@@ -269,7 +269,9 @@ class LLMResponseHandler {
         In response to a User's Question, the system has generated a Result.  
         create a natural response from the Result, considering the   
         User Question as context, to craft the formatted response. If the Question was not related
-        to Indian Stock Market, then format a polite refusal.
+        to Indian Stock Market, then format a polite refusal. Some times system generated response may 
+        contain software terms like function javascript. Remove them before crafting your response. End users are non-technical
+        non-programming background, hence response needs to be plain english.
         `
       await messageManager.saveMessage(sessionId, modelName, { "role": 'user', content: [{ "type": 'text', "text": `This was the User Question: ${this.formatContext}\n
                       and in response, system generated this Result: ${resultString}
