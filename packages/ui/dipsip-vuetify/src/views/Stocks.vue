@@ -72,7 +72,7 @@ export default {
       compareData: {},
       searchText: '',
       title: 'Stocks Helper Agent',
-      subTitles: ['Ask what Google/ChatGPT cannot answer. E.g.', 'In which companies, employees or management bought shares in the open market, in the last 3 months', 'Last one month, which companies made preferential offer announcements', '** Trained on Indian data, can make mistakes'],
+      subTitles: ['Ask what Google/ChatGPT cannot answer. E.g.', 'Which companies reported insider trades in last one month', 'Last one month, which companies made preferential offer announcements', '** Trained on Indian data, can make mistakes'],
       userInputLabel: "This is an AI tool. Double Check",
       debug: false,
       distilledModel: "stocks_reasoning",
