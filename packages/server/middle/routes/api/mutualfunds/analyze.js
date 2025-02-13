@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const getData = require("./getData.js")
+const {getData} = require("./getData.js")
 const MINIMUM_OVERLAP_THRESHOLD = process.env.ETF_RECOMMENDED_OVERALP ? process.env.ETF_RECOMMENDED_OVERALP : 50;
 const getLatestHoldingsDate = (holdings) => {
     return new Date(Math.max(...holdings.map(h => new Date(h.stock_holding_reporting_date))));
