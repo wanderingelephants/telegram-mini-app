@@ -213,7 +213,7 @@ const processCSVFile = async (filePath) => {
     console.error('Error processing file:', error);
   }
 };
-processCSVFile(process.env.DOWNLOADS + "/insider_trades/CF-Insider-Trading-equities-07-Feb-2025.csv")
+processCSVFile(process.env.DOWNLOADS + "/insider_trades/CF-Insider-Trading-equities-13-Feb-2025.csv")
 module.exports = {
   processCSVFile
 };

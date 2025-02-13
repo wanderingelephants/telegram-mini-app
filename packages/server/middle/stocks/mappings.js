@@ -71,10 +71,10 @@ const mapping_transaction_type = {
   }, {});
   
 const mapping_exchange = {
-  "nse": 1,
-  "bse": 2,
-  "msei": 3,
-  "na": 4
+  "NSE": 1,
+  "BSE": 2,
+  "MSEI": 3,
+  "NA": 4
 };
 const mapping_nse_segment = {
   "main": 0,

@@ -3,7 +3,8 @@ You are a stock market analyst in the Indian market. You have to write a javascr
 Step 1 : Classify the question into one of the three classifications
     1. Insider_Trades_Question  : This relates to insiders who transact company shares and report to exchanges
     2. Corporate_Announcements_Question : This relates to various annoucements that companies publish on stock exchanges
-    3. Unable_To_Classify : If you are unable to determine whether Question belongs to either 1 or 2.
+    3. Multi_hop_Question : This relates to processing both data sets i.e. insider_trades and corporate_announcements
+    4. Unable_To_Classify : If you are unable to determine whether Question belongs to either 1 or 2.
 
 Insider_Trades_Question category of questions will be answered by a JSON Array called insider_trades
 Corporate_Announcements_Question category of questions will be answered by a JSON array called corporate_announcements
@@ -121,6 +122,45 @@ function processAnnouncements(corporate_announcements){
     const companies = [...new Set(preferentialOffers.map(announcement => announcement.company_name))];
     
     return companies;
+}
+Example:
+Question: which companies reported insider trades and also positive corporate announcements
+Your Output:
+function processInsiderTradesAndAnnouncements(insider_trades, corporate_announcements){
+    //Step 1: Get today's date
+    const today = new Date();
+    
+    //Step 2: Calculate date 1 month ago
+    const oneMonthAgo = new Date(today.getTime() - (30 * 24 * 60 * 60 * 1000));
+    
+    //Step 3: Filter positive corporate announcements from last month
+    const positiveAnnouncements = corporate_announcements.filter(announcement => {
+        const announcementDate = new Date(announcement.announcement_date);
+        return announcementDate >= oneMonthAgo && 
+               announcementDate <= today && 
+               announcement.announcement_sentiment.toLowerCase() === 'positive';
+    });
+    
+    //Step 4: Get company names from positive announcements
+    const positiveAnnouncementCompanies = positiveAnnouncements.map(announcement => 
+        announcement.company_name.toLowerCase()
+    );
+    
+    //Step 5: Filter insider trades from last month
+    const recentInsiderTrades = insider_trades.filter(trade => {
+        const tradeDate = new Date(trade.transaction_date);
+        return tradeDate >= oneMonthAgo && tradeDate <= today;
+    });
+    
+    //Step 6: Find companies with both insider trades and positive announcements
+    const matchedCompanies = recentInsiderTrades.filter(trade => 
+        positiveAnnouncementCompanies.includes(trade.company_name.toLowerCase())
+    );
+    
+    //Step 7: Extract unique company names
+    const uniqueMatchedCompanies = [...new Set(matchedCompanies.map(trade => trade.company_name))];
+    
+    return uniqueMatchedCompanies;
 }
 
 Example: 

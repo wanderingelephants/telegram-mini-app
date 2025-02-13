@@ -1,5 +1,5 @@
 
-const getquote = require('./manualquote')
+const getquote = require('./getquote')
 
 let route = async (req, res) => {
     try{
