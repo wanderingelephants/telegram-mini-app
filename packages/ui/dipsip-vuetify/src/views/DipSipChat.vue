@@ -140,13 +140,13 @@
           </v-row>
           <v-row v-if="loggedInGoogle">
             <v-col v-if="userGoogle.tg_id == ''">
-                <v-card>
+                <!--<v-card>
                     <v-card-text>This service sends notification using Telegram, being more reliable and performant than e-mail. One time setup</v-card-text>
                     <TelegramLogin
                   :botName="botName"
                   @telegram-auth="handleTelegramAuth"
                 />
-                </v-card>
+                </v-card> -->
             </v-col>
           </v-row>
         <v-row no-gutters class="mt-1">
@@ -199,9 +199,9 @@
       </v-row>
         </v-card>
       </v-col>
-      <v-col cols="12" md="6" order="last" order-md="last" class="right-panel">
+      <!--<v-col cols="12" md="6" order="last" order-md="last" class="right-panel">
         <prompt-chat :systemPrompt="systemPrompt" :title="title" :subTitles="subTitles" :userInputLabel="userInputLabel" :debug="debug"></prompt-chat>
-      </v-col>
+      </v-col> -->
     </v-row>
     </v-responsive>
   </v-container>
