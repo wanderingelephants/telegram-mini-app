@@ -451,7 +451,7 @@ insider_trades = resp.data.insider_trades.map(a => {
             break;
         case "processInsiderTradesAndAnnouncements":
               const processInsiderTradesAndAnnouncements = require(generatedFilePath)
-              result = await processInsiderTradesAndAnnouncements(insiderTrades, corporate_announcements)
+              result = await processInsiderTradesAndAnnouncements(insider_trades, corporate_announcements)
               console.log("announcement results", result)
               break;        
       }
