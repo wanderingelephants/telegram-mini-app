@@ -413,7 +413,10 @@ insider_trades = resp.data.insider_trades.map(a => {
     exchange: a.exchange,
     transaction_date: a.transaction_date,
     intimation_date: a.intimation_date,
-    transaction_type: reverse_mapping_transaction_type[a.transaction_type]
+    shareholding_before_transaction : a.shareholding_before_transaction, 
+    shareholding_after_transaction : a.shareholding_after_transaction,
+    insider_trades_transaction_mode: reverse_mapping_mode_of_transaction[a.mode_of_transaction],
+    insider_trades_transaction_type: reverse_mapping_transaction_type[a.transaction_type]
   }
 })
 
