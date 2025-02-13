@@ -60,7 +60,7 @@ const route = async(req, res) => {
         `
     const holdings = db.prepare("select mfh.*, mf.name  as scheme_name, mf.category_key, mf.category from mutual_fund_holdings mfh, mutual_fund mf where mfh.scheme_code=mf.scheme_code").all()
     for (const holding of holdings) {
-        console.log("migrating holding", holding.scheme_code, holding.stock_name)
+        console.log("migrating holding", holding.scheme_code, holding.stock_name, holding.stock_sector)
         
         await postToGraphQL({
             query: holdingMutation,
@@ -70,7 +70,8 @@ const route = async(req, res) => {
                         "stock_mf": {
                             "data": {
                                 "company_name": holding.stock_name.replace("Ltd.", "Limited"),
-                                "symbol": holding.stock_name.replace("Ltd.", "Limited")
+                                "symbol": holding.stock_name.replace("Ltd.", "Limited"),
+                                "company_sector": holding.stock_sector
                             }, "on_conflict": {
                                 "constraint": "stock_mf_company_name_key",
                                 "update_columns": ["company_name"]
