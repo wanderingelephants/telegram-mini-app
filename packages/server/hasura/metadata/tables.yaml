@@ -23,7 +23,7 @@
     - name: mutual_fund
       using:
         foreign_key_constraint_on: mutual_fund_id
-    - name: stock
+    - name: stock_mf
       using:
         foreign_key_constraint_on: stock_id
 - table:
@@ -36,13 +36,6 @@
           column: stock_id
           table:
             name: insider_trades
-            schema: public
-    - name: mutual_fund_holdings
-      using:
-        foreign_key_constraint_on:
-          column: stock_id
-          table:
-            name: mutual_fund_holdings
             schema: public
     - name: stock_announcements
       using:
@@ -58,6 +51,17 @@
     - name: stock
       using:
         foreign_key_constraint_on: stock_id
+- table:
+    name: stock_mf
+    schema: public
+  array_relationships:
+    - name: mutual_fund_holdings
+      using:
+        foreign_key_constraint_on:
+          column: stock_id
+          table:
+            name: mutual_fund_holdings
+            schema: public
 - table:
     name: users
     schema: public

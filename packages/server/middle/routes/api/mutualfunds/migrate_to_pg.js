@@ -16,7 +16,7 @@ const route = async(req, res) => {
         `
     // Execute the fund query with combined parameters
     const funds = db.prepare("select *  from mutual_fund").all();
-    for (const fund of funds) {
+    /*for (const fund of funds) {
         console.log("migrating fund", fund.name)
         await postToGraphQL({
             query: mf_mutation_query,
@@ -46,7 +46,7 @@ const route = async(req, res) => {
                 }
             }
         })
-    }
+    }*/
     const holdingMutation = `
         mutation insertMutualFundHolding($object: mutual_fund_holdings_insert_input!){
   insert_mutual_fund_holdings_one(object: $object, on_conflict:{
@@ -67,12 +67,12 @@ const route = async(req, res) => {
             variables: {
                 object: {
                     
-                        "stock": {
+                        "stock_mf": {
                             "data": {
                                 "company_name": holding.stock_name.replace("Ltd.", "Limited"),
                                 "symbol": holding.stock_name.replace("Ltd.", "Limited")
                             }, "on_conflict": {
-                                "constraint": "stock_company_name_key",
+                                "constraint": "stock_mf_company_name_key",
                                 "update_columns": ["company_name"]
                             }
                         },
