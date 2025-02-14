@@ -1,0 +1,1 @@
+CREATE TABLE "public"."stock_price_daily" ("id" serial NOT NULL, "stock_id" integer NOT NULL, "open" numeric, "close" numeric, "low" numeric, "high" numeric, "volume" numeric, "price_date" date NOT NULL, PRIMARY KEY ("id") , FOREIGN KEY ("stock_id") REFERENCES "public"."stock"("id") ON UPDATE restrict ON DELETE restrict);

@@ -44,6 +44,13 @@
           table:
             name: stock_announcements
             schema: public
+    - name: stock_price_dailies
+      using:
+        foreign_key_constraint_on:
+          column: stock_id
+          table:
+            name: stock_price_daily
+            schema: public
 - table:
     name: stock_announcements
     schema: public
@@ -62,6 +69,13 @@
           table:
             name: mutual_fund_holdings
             schema: public
+- table:
+    name: stock_price_daily
+    schema: public
+  object_relationships:
+    - name: stock
+      using:
+        foreign_key_constraint_on: stock_id
 - table:
     name: users
     schema: public

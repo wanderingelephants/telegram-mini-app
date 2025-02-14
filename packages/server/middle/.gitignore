@@ -3,3 +3,4 @@ node_modules/
 sqlite_db
 *.env
 *firebase*.json
+failed_records*

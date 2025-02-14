@@ -62,7 +62,8 @@ const routes = {
                 success: require("./api/kite/login/success")
             },
             instrument: {
-                quote: require("./api/kite/instrument/quote")
+                quote: require("./api/kite/instrument/quote"),
+                eod: require("./api/kite/instrument/eod")
             }
         },
         mutualfunds: {
@@ -102,7 +103,8 @@ router.post("/api/db/updateuser", routes.api.db.updateuser)
 router.post("/api/db/saveconfig", routes.api.db.saveconfig)
 router.get("/api/kite/order/create", routes.api.kite.order.create)
 router.get("/api/kite/login/success", routes.api.kite.login.success)
-router.get("/api/kite/instrument/quote", routes.api.kite.instrument.quote)
+router.get("/api/kite/instrument/quote", routes.api.kite.instrument.eod)
+router.get("/api/kite/instrument/eod", routes.api.kite.instrument.eod)
 router.post("/api/mutualfunds/compare", routes.api.mutualfunds.analyze)
 router.post("/api/mutualfunds/recommend", routes.api.mutualfunds.recommend)
 router.get("/api/mutualfunds/list", routes.api.mutualfunds.list)

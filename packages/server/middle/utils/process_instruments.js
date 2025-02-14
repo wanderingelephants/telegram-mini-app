@@ -11,29 +11,43 @@ async function main() {
     
     // Get all records
     const records = processor.getRecords();
-    //console.log(records);
+    console.log(records.length);
     const equities = records.filter(r => r.instrument_type === "EQ")
     console.log(equities.length)
-    for (const [index, record] of equities.entries()) {
-        const mutationQuery = `
-            mutation insertStocks($object: stock_insert_input!) {
-  insert_stock_one(object: $object, on_conflict:{
-    constraint: stock_symbol_key, 
-    update_columns: [exchange_token, instrument_token, ticker_exchange]
-  }){
-    id
+
+    const stockResp = await postToGraphQL({
+        query: `query GetEquitySymbols{
+  stock{
     symbol
   }
-}`
-        await postToGraphQL({query: mutationQuery, variables: {
-            "object": {
-    "symbol": record.tradingsymbol,
-    "exchange_token": record.exchange_token,
-    "instrument_token": record.instrument_token,
-    "ticker_exchange": record.exchange,
-    "company_name": record.name
+}`,
+        variables: {}
+    })
+    const equities_symbols = stockResp.data.stock
+
+    for (const [index, dbRecord] of equities_symbols.entries()) {
+        const mutationQuery = `
+        mutation updateStock($symbol: String!, $instrument_token: Int!, $exchange_token: Int!){
+  update_stock(_set: {instrument_token: $instrument_token, exchange_token: $exchange_token},where: {symbol: {_eq: $symbol}}){
+    returning{
+      id
+    }
   }
-        }})
+}`
+
+const csvRecord = equities.find(r => r.tradingsymbol === dbRecord.symbol)
+//console.log("update tokens for ", r.tradingsymbol, csvRecord)
+if (csvRecord === undefined){
+    console.log("csv record not found for", dbRecord.symbol)    
+    continue;
+}
+        await postToGraphQL({query: mutationQuery, variables: {
+            
+    "symbol": dbRecord.symbol,
+    "exchange_token": csvRecord.exchange_token,
+    "instrument_token": csvRecord.instrument_token
+  }
+        })
     }
     // Find specific record
     //const record = processor.getRecordByInstrumentToken(270018310);
