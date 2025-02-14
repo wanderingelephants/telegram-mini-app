@@ -4,7 +4,7 @@ const axios = require('axios');
 
 
 async function processSummaries(inputFolder, outputFolder) {
-    const API_SERVER = process.env.API_SERVER;
+    const API_SERVER = process.env.API_SERVER_URL;
     const NSE_PREFIX = "https://nsearchives.nseindia.com/corporate/";
 
     // Extract date from input folder path
