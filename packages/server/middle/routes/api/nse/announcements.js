@@ -102,7 +102,7 @@ const route = async (req, res) => {
   }
                     }
                 })
-                await delay(1000)
+                await delay(500)
                 console.log(`Successfully downloaded for : ${row.symbol}`);
             } catch (error) {
                 console.error(`Error downloading file for ${row.symbol}:`, error.message);
@@ -135,7 +135,7 @@ const route = async (req, res) => {
             else console.log("CSV Exists, no download needed")
         const filepath = path.join(downloadDateFolder, downloadFileName);
           
-        processCSVAndDownload(filepath, downloadDateFolder, year+"-"+month+"-"+day, index).then(() => console.log('Processing completed'))
+        await processCSVAndDownload(filepath, downloadDateFolder, year+"-"+month+"-"+day, index).then(() => console.log('Processing completed'))
             .catch(error => console.error('Error:', error));
         res.status(200).json("CSV Downloaded and Processed")
 
