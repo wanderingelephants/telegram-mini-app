@@ -199,18 +199,21 @@ const processCSVFile = async (filePath) => {
 
       // Process each record
       for (const [index, record] of records.entries()) {
+        let mutationObject
         try {
-          const mutationObject = transformToMutationObject(record);
+          mutationObject = transformToMutationObject(record);
           await persist(mutationObject);
-          console.log(`\n--- Mutation Object for Record ${index + 1} ---`);
-          console.log(JSON.stringify(mutationObject, null, 2));
+          //console.log(`\n--- Mutation Object for Record ${index + 1} ---`);
+          //console.log(JSON.stringify(mutationObject, null, 2));
         } catch (error) {
           console.error(`Error processing record ${index + 1}:`, error.message);
+          console.log(mutationObject)
         }
       }
     });
   } catch (error) {
     console.error('Error processing file:', error);
+   
   }
 };
 processCSVFile(process.env.DOWNLOADS + "/insider_trades/CF-Insider-Trading-equities-13-Feb-2025.csv")

@@ -29,7 +29,8 @@ const reverse_mapping_regulation = Object.entries(mapping_regulation)
 const mapping_type_of_security = {
   "Equity Shares": 1,
   "Convertible Debentures": 2,
-  "Warrants": 3
+  "Warrants": 3,
+  "ADR/GDR/FCCB": 4
 };
 const reverse_mapping_type_of_security = Object.entries(mapping_type_of_security)
   .reduce((acc, [key, value]) => {
@@ -49,7 +50,8 @@ const mapping_mode_of_transaction = {
   "Preferential Offer": 9,
   "Revokation of Pledge": 10,
   "Scheme of Amalgamation/Merger/Demerger/Arrangement": 11,
-  "Inter-se-Transfer": 12
+  "Inter-se-Transfer": 12,
+  "Conversion of security" : 13
 };
 const reverse_mapping_mode_of_transaction = Object.entries(mapping_mode_of_transaction)
   .reduce((acc, [key, value]) => {
