@@ -3,10 +3,11 @@ const processSummaries = require('./processSummaries');
 
 const route = async(req, res) => {
     //"13-02-2025"
+    const apiServer = process.env.API_SERVER
     const summaryDate = req.query.summaryDate
     const index = req.query.index
     if (!summaryDate || !index) res.status(500).json("specify summaryDate and index=equities/sme")
-    await axios.post("/api/nse/announcements", {
+    await axios.post(`http://${apiServer}/api/nse/announcements`, {
         fromDate: summaryDate,
         toDate: summaryDate,
         index,
