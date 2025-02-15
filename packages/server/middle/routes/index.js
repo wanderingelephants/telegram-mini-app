@@ -45,7 +45,7 @@ const routes = {
             callback: require("./api/auth/callback")
         },
         chat: {
-            reasoning: require("./api/chat/reasoning")
+            reasoning: require("./api/chat/reasoning_v1")
         },
         db: {
             create: require("./api/db/create"),

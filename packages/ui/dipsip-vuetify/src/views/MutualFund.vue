@@ -127,7 +127,7 @@ export default {
       subTitles: ['Ask what Google/ChatGPT cannot answer. E.g.', 'Find - किन म्यूचुअल फंडों में रिटर्न 20% से अधिक है, शुल्क 0.5% से कम है', 'Stock Discovery - Which stocks are present in only 1 small cap fund', 'Reasoning - Define Churn as stocks bought plus stocks sold in a fund. Which funds had highest churn', '** Trained on Indian data, can make mistakes'],
       userInputLabel: "This is an AI tool. Double Check",
       debug: false,
-      distilledModel: "mutual_funds_reasoning",
+      distilledModel: "analysis_reasoning",
       analysisTypes: [
       {
         name: 'Overlap',

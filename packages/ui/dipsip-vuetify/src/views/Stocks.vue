@@ -75,7 +75,7 @@ export default {
       subTitles: ['Ask what Google/ChatGPT cannot answer. E.g.', 'Which companies reported insider trades in last one month', 'Last one month, which companies made preferential offer announcements', '** Trained on Indian data, can make mistakes'],
       userInputLabel: "This is an AI tool. Double Check",
       debug: false,
-      distilledModel: "stocks_reasoning",
+      distilledModel: "analysis_reasoning",
       analysisTypes: [
       {
         name: 'Overlap',
