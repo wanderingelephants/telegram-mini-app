@@ -7,10 +7,12 @@ const { postToGraphQL } = require("../../../lib/helper")
 const { Anthropic } = require('@anthropic-ai/sdk');
 const util = require('util');
 let messageManager;
-let mutualFunds = [];
-    let stockHoldings = [];
+let mutual_funds = [];
+    let mutual_fund_stock_holdings = [];
     let mutual_fund_data = []
-    let reporting_dates = []
+    let holding_reporting_dates = []
+    let corporate_announcements = []
+    let insider_trades = []
     let daily_stock_prices_by_company_name = []
 
 //const { json } = require('stream/consumers');
@@ -52,10 +54,10 @@ const { reverse_mapping_category_of_insider, reverse_mapping_regulation,
 const initAllData = async function () {
     const mutualFundsAndReportingDates = getMutualFundHoldingsJSONArray()
     mutual_fund_data = mutualFundsAndReportingDates.mutual_fund_data
-    reporting_dates = mutualFundsAndReportingDates.reporting_dates
+    holding_reporting_dates = mutualFundsAndReportingDates.reporting_dates
     const normalizedMutualFundsData = normalizeMutualFundsData(mutual_fund_data)
-    mutualFunds = normalizedMutualFundsData.mutualFunds
-    stockHoldings = normalizedMutualFundsData.stockHoldings
+    mutual_funds = normalizedMutualFundsData.mutualFunds
+    mutual_fund_stock_holdings = normalizedMutualFundsData.stockHoldings
     const today = new Date();
     const toDate = today.toISOString().split("T")[0]
     const fromDate = (new Date(today.getTime() - (30 * 24 * 60 * 60 * 1000))).toISOString().split("T")[0]
@@ -155,16 +157,15 @@ const closingPriceResp = await postToGraphQL({
   query: closingPriceQuery,
   variables: closingPriceVariables
 })
-daily_stock_prices_by_company_name = transformStockData(closingPriceQuery.data.stock_price_daily)
+daily_stock_prices_by_company_name = transformStockData(closingPriceResp.data.stock_price_daily)
 
 }
+initAllData().then(r => console.log(r)).catch(e => console.error(e))
 
 const _ensureDirectory = async function (filePath) {
   const dir = path.dirname(filePath);
   await mkdir(dir, { recursive: true });
 }
-let corporate_announcements = []
-let insider_trades = []
 class MessageManager {
   constructor(basePath) {
     this.basePath = basePath;
@@ -415,7 +416,7 @@ class LLMResponseHandler {
 
       const messages = await messageManager.getMessages(sessionId, modelName, 'messages_formatted.json')
       console.log("formattingPrompt", formattingPrompt, messages)
-      
+
       let formattedResponse;
       if (functionName === "analysis")
         formattedResponse = await this.llmClient.sendToLLM(formattingPrompt, messages)
@@ -429,26 +430,25 @@ class LLMResponseHandler {
     throw new Error(`Unsupported handler type: ${this.type}`);
   }
   async convertToConstFormat(functionText, sessionId, modelName) {
-    // Extract the function name and parameters
-    const functionMatch = functionText.match(/function\s+(\w+)\s*\((.*?)\)/);
+    /*const functionMatch = functionText.match(/function\s+(\w+)\s*\((.*?)\)/);
     if (!functionMatch) {
       throw new Error("Invalid function format");
     }
 
     const [_, functionName, params] = functionMatch;
-
-    // Get the function body (everything between the first { and the last })
     const bodyStart = functionText.indexOf('{');
     const bodyEnd = functionText.lastIndexOf('}');
     const functionBody = functionText.substring(bodyStart, bodyEnd + 1);
-    let newFunctionText = `const ${functionName} = function(${params})${functionBody}`
-    newFunctionText += `\nmodule.exports = ${functionName}`
+    let newFunctionText = `const ${functionName} = function(${params})${functionBody}`*/
+    let functionName = "general_query"
+    if (functionText.indexOf("const analysis") > -1) functionName = "analysis"
+    functionText += `\nmodule.exports = ${functionName}`
     const generatedFileName = `${functionName}_${(new Date()).getTime()}.js`;
     const generatedFilePath = _getFilePath(process.env.LLM_GENERATED_CODE, sessionId, modelName, generatedFileName);
     await _ensureDirectory(generatedFilePath);
 
     //let generatedFilePath = path.join(GENERATED_FUNCTIONS_PATH, generatedFileName);
-    fs.writeFileSync(generatedFilePath, newFunctionText);
+    fs.writeFileSync(generatedFilePath, functionText);
     return { functionName, generatedFilePath }
   }
   stripJSTicks(functionText, stringToStrip) {
@@ -478,6 +478,9 @@ class LLMResponseHandler {
       functionName = functionAndPath.functionName
       generatedFilePath = functionAndPath.generatedFilePath
     }
+    console.log({
+      functionName, generatedFilePath
+    })
     //const generatedFilePath = path.join(process.env.LLM_GENERATED_CODE, "2025", "02", "06", "8622f154-26ea-47d5-b52d-b3d36fd531ce", "mutual_fund_query_1738834611243.js")
     //const functionName = "mutual_fund_query"
     
@@ -490,7 +493,7 @@ class LLMResponseHandler {
           break;
         case "analysis":
           const analysis = require(generatedFilePath)
-          result = await analysis(mutual_funds, mutual_funds_stock_holdings, holding_reporting_dates, insider_trades, corporate_announcements, daily_stock_prices_by_company_name)
+          result = await analysis(mutual_funds, mutual_fund_stock_holdings, holding_reporting_dates, insider_trades, corporate_announcements, daily_stock_prices_by_company_name)
           break;
       }
 
@@ -535,7 +538,7 @@ const route = async (req, res) => {
     }
     await messageManager.saveMessage(sessionId, modelName, { "role": 'assistant', "content": [{ "type": 'text', "text": llmResponse }] }, 'messages.json');
 
-    const handlerType = distilledModel.includes('mutual_funds') || distilledModel.includes('stocks') ? 'JavaScript' : 'NoOp';
+    const handlerType = "JavaScript"; //distilledModel === "analysis_reasoning" ? 'JavaScript' : 'NoOp';
     const formatContext = messages[messages.length - 1].content; // Pass user query context
 
     const responseHandler = new LLMResponseHandler(handlerType, llmClient, formatContext);
