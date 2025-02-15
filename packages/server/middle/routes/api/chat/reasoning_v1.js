@@ -387,15 +387,14 @@ class LLMResponseHandler {
       console.log("jsExecResponse", jsExecResponse)
       if (testAgainstFunction !== "") return JSON.stringify(jsExecResponse)
       let { result, functionName } = jsExecResponse
-      if (Array.isArray(result) && result.length == 0) return "Sorry, No Results"
-      if (!(functionName.toLowerCase().indexOf("mutual_fund") > -1 ||
-        functionName.toLowerCase().indexOf("processInsiderTrades".toLowerCase()) > -1
-        || functionName.toLowerCase().indexOf("processAnnouncements".toLowerCase()) > -1)) return result
-      if (result == "Sorry, No Response") return result;
-      if (Array.isArray(result)) result = this.removeDuplicates(result)
-
+      
+      //if (Array.isArray(result)) result = this.removeDuplicates(result)
       if (Array.isArray(result) && result.length > 10) result = result.slice(0, MAX_RESULTS_TO_FORMAT)
       await messageManager.saveMessage(sessionId, modelName, { result }, "results.json")
+
+      if (functionName === "analysis"){
+
+      }
       let resultString = JSON.stringify(result)
       if (resultString.toLocaleLowerCase().indexOf("javascript") > -1) return "Sorry, No Response"
       let formattingPrompt = `
@@ -416,7 +415,12 @@ class LLMResponseHandler {
 
       const messages = await messageManager.getMessages(sessionId, modelName, 'messages_formatted.json')
       console.log("formattingPrompt", formattingPrompt, messages)
-      const formattedResponse = await this.llmClient.sendToLLM(formattingPrompt, messages)
+      
+      let formattedResponse;
+      if (functionName === "analysis")
+        formattedResponse = await this.llmClient.sendToLLM(formattingPrompt, messages)
+      else if (functionName === "general_query") formattedResponse = result
+      else formattedResponse = "No Response"
       await messageManager.saveMessage(sessionId, modelName, { "role": 'assistant', content: [{ "type": 'text', "text": formattedResponse }] }, 'messages_formatted.json');
 
       console.log("formattedResponse", formattedResponse)
@@ -479,39 +483,14 @@ class LLMResponseHandler {
     
     try {
       switch (functionName) {
-        case "mutual_fund_query":
-          const mutual_fund_query = require(generatedFilePath)
-          result = await mutual_fund_query(mutualFunds)
-          break;
-        case "mutual_fund_stock_holding_query":
-          const mutual_fund_stock_holding_query = require(generatedFilePath)
-          result = await mutual_fund_stock_holding_query(stockHoldings, reporting_dates)
-          break;
+        
         case "general_query":
           const general_query = require(generatedFilePath)
           result = await general_query()
           break;
-        case "input_not_recognized":
-          const input_not_recognized = require(generatedFilePath)
-          result = await input_not_recognized()
-          break;
-        case "unable_to_classify":
-          const unable_to_classify = require(generatedFilePath)
-          result = await unable_to_classify()
-          break;
-        case "processInsiderTrades":
-          const processInsiderTrades = require(generatedFilePath)
-          result = await processInsiderTrades(insider_trades)
-          break;
-        case "processAnnouncements":
-          const processAnnouncements = require(generatedFilePath)
-          result = await processAnnouncements(corporate_announcements)
-          console.log("announcement results", result)
-          break;
-        case "processInsiderTradesAndAnnouncements":
-          const processInsiderTradesAndAnnouncements = require(generatedFilePath)
-          result = await processInsiderTradesAndAnnouncements(insider_trades, corporate_announcements)
-          console.log("announcement results", result)
+        case "analysis":
+          const analysis = require(generatedFilePath)
+          result = await analysis(mutual_funds, mutual_funds_stock_holdings, holding_reporting_dates, insider_trades, corporate_announcements, daily_stock_prices_by_company_name)
           break;
       }
 
