@@ -16,11 +16,9 @@ const route = async (req, res) => {
             .replace(/[^a-zA-Z0-9]+(.)/g, (_, chr) => chr.toUpperCase())
             .replace(/[^a-zA-Z0-9]/g, '');
     }
-    async function processCSVAndDownload(csvPath, downloadPdfPath,  yyyymmdd, index) {
+    async function processCSVAndDownload(csvPath, downloadPath,  yyyymmdd, index) {
         const results = [];
-        const wordsToCheck = [];
-        //const wordsToCheck = ['Resignation'];
-
+        const downloadPdfPath = downloadPath + "/" + index
         // Create download directory if it doesn't exist
         if (!fs.existsSync(downloadPdfPath)) {
             fs.mkdirSync(downloadPdfPath, { recursive: true });
@@ -38,19 +36,7 @@ const route = async (req, res) => {
         for await (const row of parser) {
             results.push(row);
         }
-
-        // Filter and map results
-        /*const filteredResults = results
-            .filter(row => {
-                const subject = row.subject.toLowerCase();
-                return wordsToCheck.length == 0 ? true : wordsToCheck.some(word => subject.includes(word.toLowerCase()));
-            })
-            .map(({ symbol, subject, attachment, dissemination }) => ({ symbol, subject, attachment, dissemination }));*/
-
-        //console.log(`Found ${filteredResults.length} matching records to download`);
-
-        // Download files sequentially
-        for (const row of results) {
+          for (const row of results) {
             try {
                 console.log(row.symbol, row.dissemination)
                 const dateToks = row.dissemination.split(' ')
