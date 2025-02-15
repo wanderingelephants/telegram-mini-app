@@ -1,16 +1,16 @@
 const fs = require("fs")
 const axios = require("axios")
 const { postToGraphQL } = require("../../../../lib/helper");
-const { query } = require("express");
 const route = async (req, res) => {
     let access_token_data;
     access_token_data = require(process.env.ACCESS_TOKEN_PATH)
     if (fs.existsSync(process.env.ACCESS_TOKEN_PATH)) access_token_data = require(process.env.ACCESS_TOKEN_PATH)
     else return ({ status: 'fail', message: 'no_access_token' })
 
-    const todayStr = (new Date()).toISOString().split("T")[0]
-    const fromTime = `${todayStr} 09:15:00`
-    const toTime = `${todayStr} 15:30:00`
+    const dateStr = req.dateStr
+    console.log("Process EOD for ", dateStr)
+    const fromTime = `${dateStr} 09:15:00`
+    const toTime = `${dateStr} 15:30:00`
 
     const queryResp = await postToGraphQL({
         query: `query GetEquitySymbols{

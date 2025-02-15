@@ -6,7 +6,7 @@ const cron = require('node-cron');
 const crypto = require('crypto')
 const cookieParser = require('cookie-parser');
 const ProcessETFQuotes = require('./routes/api/nse/processETFQuotes')
-
+const route = require("../middle/routes/api/kite/instrument/eod")
 const { promisify } = require('util');
 
 
@@ -17,18 +17,31 @@ const { promisify } = require('util');
   await processor.process()
 }, {timezone: "Asia/Kolkata"});
 */
-/*const serviceAccount = process.env.NODE_ENV === 'production'
-  ? require('./config/firebase-admin-prod.json')
-  : require('./config/dipsip2025-firebase-admin-dev.json');*/
-
-/*app.post('/api/auth/google', async (req, res) => {
-  
+cron.schedule('32 15 * * 1-5', async () => {
+  console.log('end of market', new Date());
+  const todayStr = (new Date()).toISOString().split("T")[0]
+  let req = {"dateStr": todayStr}
+  let res = {status: (code) => {console.log(code)}, json: (msg) => {console.log(msg)}}
+  await route(req, res)  
+}, {timezone: "Asia/Kolkata"});
+cron.schedule('5 0 * * *', async () => {
+  try {
+    // Compute yesterday's date
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const formattedDate = yesterday.toLocaleDateString('en-GB').split('/').join('-'); // Converts to dd-mm-yyyy
+    let summaryUrl = `${process.env.SUMMARY_SERVICE_URL}/api/nse/summaries?summaryDate=${formattedDate}&index=sme`;
+    console.log(`Invoking: ${summaryUrl}`);
+    let response = await axios.get(summaryUrl);
+    console.log('SME Summary API response:', response.data);
+    summaryUrl = `${process.env.SUMMARY_SERVICE_URL}/api/nse/summaries?summaryDate=${formattedDate}&index=equities`;
+    console.log(`Invoking: ${summaryUrl}`);
+    response = await axios.get(summaryUrl);
+    console.log('Equities Summary API response:', response.data);
+  } catch (error) {
+    console.error('Error calling summary API:', error);
+  }
 });
-
-// Protected route example
-app.get('/api/protected', verifyToken, (req, res) => {
-  res.json({ message: 'Access granted', user: req.user });
-});*/
 app.use([
   bodyParser.urlencoded({limit: '5mb', extended: true}),
   express.json({limit: '5mb'})
