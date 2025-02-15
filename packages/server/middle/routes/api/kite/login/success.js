@@ -22,7 +22,7 @@ let route = async (req, res) => {
             }
           })
         const data = await resp.data
-        fs.writeFileSync('access_token.json', JSON.stringify(data))
+        fs.writeFileSync(process.env.TOKEN_DATA + '/access_token.json', JSON.stringify(data))
         return res.status(200).json({
             message: "OK"
         })
