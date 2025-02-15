@@ -19,6 +19,16 @@ def process_pdf(input_pdf_path, output_folder):
     Process a single PDF file and save its text content to the output folder
     """
     try:
+        # Create output path with same name but .txt extension
+        output_filename = input_pdf_path.stem + ".txt"
+        output_path = output_folder / output_filename
+        
+        # Check if output file already exists
+        if output_path.exists():
+            logger.info(f"Output file already exists: {output_path}, skipping processing.")
+            return True, None
+
+        
         # Convert PDF to markdown text
         md_text = pymupdf4llm.to_markdown(
             doc=str(input_pdf_path),
@@ -27,10 +37,6 @@ def process_pdf(input_pdf_path, output_folder):
             image_format="png",
             dpi=300,
         )
-        
-        # Create output path with same name but .txt extension
-        output_filename = input_pdf_path.stem + ".txt"
-        output_path = output_folder / output_filename
         
         # Write the output
         with open(output_path, "w", encoding="utf-8") as output:

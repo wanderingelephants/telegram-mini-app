@@ -38,6 +38,20 @@ async function processSummaries(inputFolder, outputFolder) {
             const content = await fs.readFile(filePath, 'utf-8');
             
             const filenameNoExt = path.parse(file).name;
+            // Generate output filename
+            const outputFile = path.join(outputFolder, `${filenameNoExt}_api_response.txt`);
+            try {
+                // Check if the output file already exists
+                await fs.access(outputFile);
+                console.log(`Output file already exists: ${outputFile}, skipping processing.`);
+                return;
+            } catch (err) {
+                // If error is because file does not exist, proceed with processing
+                if (err.code !== 'ENOENT') {
+                    console.error(`Error checking file existence: ${err.message}`);
+                    return;
+                }
+            }
             const fullAttachment = `${NSE_PREFIX}${filenameNoExt}`;
             const firstToken = file.split('_')[0];
 
@@ -60,9 +74,7 @@ async function processSummaries(inputFolder, outputFolder) {
                 ]
             };
 
-            // Generate output filename
-            const outputFile = path.join(outputFolder, `${filenameNoExt}_api_response.txt`);
-
+            
             try {
                 // Make API call
                 const response = await axios.post(
