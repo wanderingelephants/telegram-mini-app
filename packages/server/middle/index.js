@@ -24,7 +24,7 @@ cron.schedule('32 15 * * 1-5', async () => {
   let res = {status: (code) => {console.log(code)}, json: (msg) => {console.log(msg)}}
   await route(req, res)  
 }, {timezone: "Asia/Kolkata"});
-cron.schedule('35 10 * * *', async () => {
+cron.schedule('40 10 * * *', async () => {
   try {
     const t1 = Date.now(); 
     if (!summaryServiceUrl) {
@@ -50,7 +50,7 @@ cron.schedule('35 10 * * *', async () => {
   } catch (error) {
     console.error('Error calling summary API:', error);
   }
-});
+}, {timezone: "Asia/Kolkata"});
 app.use([
   bodyParser.urlencoded({limit: '5mb', extended: true}),
   express.json({limit: '5mb'})
