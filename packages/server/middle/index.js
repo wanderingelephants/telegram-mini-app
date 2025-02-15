@@ -1,5 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser');
+const axios = require("axios")
 const app = express()
 const port = process.env.PORT || 3000;
 const cron = require('node-cron');
@@ -24,7 +25,7 @@ cron.schedule('32 15 * * 1-5', async () => {
   let res = {status: (code) => {console.log(code)}, json: (msg) => {console.log(msg)}}
   await route(req, res)  
 }, {timezone: "Asia/Kolkata"});
-cron.schedule('40 10 * * *', async () => {
+cron.schedule('42 10 * * *', async () => {
   try {
     const t1 = Date.now(); 
     if (!summaryServiceUrl) {
