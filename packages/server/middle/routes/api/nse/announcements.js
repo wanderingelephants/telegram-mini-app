@@ -59,7 +59,10 @@ const route = async (req, res) => {
                     console.log("PDF does not exist, download")
                     await fetchPDF(row.attachment, downloadPdfPath + '/' + fileName);
                 }
-                else console.log("PDF exists, skip download", downloadPdfPath + '/' + fileName)
+                else {
+                    console.log("PDF exists, skip download", downloadPdfPath + '/' + fileName)
+                    return
+                }
                 
                 await postToGraphQL({
                     query: `mutation StockAnnouncementInsertOne($object: stock_announcements_insert_input!) {
