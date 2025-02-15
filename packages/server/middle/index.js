@@ -6,7 +6,7 @@ const cron = require('node-cron');
 const crypto = require('crypto')
 const cookieParser = require('cookie-parser');
 const ProcessETFQuotes = require('./routes/api/nse/processETFQuotes')
-const route = require("../middle/routes/api/kite/instrument/eod")
+const route = require("./routes/api/kite/instrument/eod")
 const { promisify } = require('util');
 
 
