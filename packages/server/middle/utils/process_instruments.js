@@ -5,16 +5,17 @@ async function main() {
     const processor = new CSVProcessor();
     
     // Process from file
-    await processor.processFile(process.env.DOWNLOADS + '/instruments.csv');
+    //await processor.processFile(process.env.DOWNLOADS + '/instruments.csv');
     
     // Or process from string
     
     // Get all records
-    const records = processor.getRecords();
-    console.log(records.length);
-    const equities = records.filter(r => r.instrument_type === "EQ")
-    console.log(equities.length)
-
+    //const records = processor.getRecords();
+    //console.log(records.length);
+    //const equities = records.filter(r => r.instrument_type === "EQ")
+    const equities = require(process.env.DOWNLOADS + "/equities.json")
+    //console.log(JSON.stringify(equities))
+    //if  (true) return
     const stockResp = await postToGraphQL({
         query: `query GetEquitySymbols{
   stock{
