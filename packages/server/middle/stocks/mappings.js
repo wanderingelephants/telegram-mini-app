@@ -94,10 +94,10 @@ const reverse_mapping_exchange = Object.entries(mapping_exchange)
     return acc;
   }, {});
   const mapping_announcement_sentiment = {
-    "": -1,
-    "positive": 0,
-    "negative": 1,
-    "neutral": 2
+    "Not_Specified": -1,
+    "Positive": 0,
+    "Negative": 1,
+    "Neutral": 2
   };
   const reverse_mapping_announcement_sentiment = Object.entries(mapping_announcement_sentiment)
   .reduce((acc, [key, value]) => {
