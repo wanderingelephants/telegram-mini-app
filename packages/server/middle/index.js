@@ -18,7 +18,7 @@ const processInstruments = require("./utils/process_instruments")
   await processor.process()
 }, {timezone: "Asia/Kolkata"});
 */
-cron.schedule('43 16 * * *', async () => {
+cron.schedule('33 15 * * 1-5', async () => {
   console.log('end of market', new Date());
   //await processInstruments()
   const todayStr = (new Date()).toISOString().split("T")[0]
