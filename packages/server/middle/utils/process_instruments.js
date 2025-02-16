@@ -2,7 +2,7 @@ const { query } = require('express');
 const { postToGraphQL } = require('../lib/helper');
 const CSVProcessor = require('./CSVProcessor');
 
-const processInstruments = async () => {
+async function processInstruments(){
     const processor = new CSVProcessor();
     
     // Process from file
@@ -16,7 +16,7 @@ const processInstruments = async () => {
     const records = require(process.env.DOWNLOADS + "/equities.json")
     const equities = records.filter(r => r.instrument_type === "EQ" &&  r.segment === "NSE")
     //const equities = require(process.env.DOWNLOADS + "/equities.json")
-    //console.log(equities.length)
+    console.log(equities.length)
     function groupStockCategories(stockData) {
       return Object.entries(stockData.map(stock => {
           let [symbol, category] = stock.tradingsymbol.split('-');
@@ -54,6 +54,9 @@ let filtered = filterStockCategories(equities)
     const equities_symbols = stockResp.data.stock
 
     for (const [index, csvRecord] of filtered.entries()) {
+      if (!csvRecord.name){
+        console.log("name is null continue", csvRecord)
+      }
         await postToGraphQL({
           query: `mutation insertStock($object: stock_insert_input!){
   insert_stock_one(object: $object,
@@ -75,5 +78,5 @@ variables: {
     }
 }
 processInstruments()
-module.exports = processInstruments
+//module.exports = processInstruments
 //main().catch(console.error);
