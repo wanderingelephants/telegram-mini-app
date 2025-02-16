@@ -22,7 +22,7 @@ const testAgainstFunction = ""; //process.env.LLM_GENERATED_CODE + "/2025/02/10/
 const {reverse_mapping_category_of_insider, reverse_mapping_regulation, 
   reverse_mapping_type_of_security, reverse_mapping_mode_of_transaction, 
   reverse_mapping_transaction_type, reverse_mapping_exchange,
-  mapping_announcement_sentiment, reverse_mapping_announcement_sentiment} = require("../../../stocks/mappings");
+  mapping_announcement_sentiment, reverse_mapping_announcement_sentiment} = require("../nse/mappings");
 const { query } = require('express');
 
 const _ensureDirectory = async function (filePath) {

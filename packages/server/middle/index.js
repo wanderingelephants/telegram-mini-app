@@ -10,6 +10,7 @@ const ProcessETFQuotes = require('./routes/api/nse/processETFQuotes')
 const route = require("./routes/api/kite/instrument/eod")
 const { promisify } = require('util');
 const summaryServiceUrl = process.env.SUMMARY_SERVICE_URL
+const processInsiderCSV = require("./routes/api/nse/process_insider_csv")
 const processInstruments = require("./utils/process_instruments")
 /*cron.schedule('0 12 * * 1-5', async () => {
   console.log('running a task during market hours of NSE', new Date());
@@ -29,26 +30,30 @@ cron.schedule('33 15 * * 1-5', async () => {
 cron.schedule('5 0 * * *', async () => {
   try {
     const t1 = Date.now(); 
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const formattedDateYday = yesterday.toLocaleDateString('en-GB').split('/').join('-'); 
+    
     if (!summaryServiceUrl) {
       console.log("Summary Service url not found")
       return;
     }
     // Compute yesterday's date
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-    const formattedDate = yesterday.toLocaleDateString('en-GB').split('/').join('-'); // Converts to dd-mm-yyyy
-    let summaryUrl = `${summaryServiceUrl}/api/nse/summaries?summaryDate=${formattedDate}&index=sme`;
+    let summaryUrl = `${summaryServiceUrl}/api/nse/summaries?summaryDate=${formattedDateYday}&index=sme`;
     console.log(`Invoking: ${summaryUrl}`);
     let response = await axios.get(summaryUrl);
     const t2 = Date.now(); // End time
     console.log('SME Summary API response:', response.data);
     console.log(`SME Execution time: ${(t2 - t1)} ms`); 
-    summaryUrl = `${summaryServiceUrl}/api/nse/summaries?summaryDate=${formattedDate}&index=equities`;
+    summaryUrl = `${summaryServiceUrl}/api/nse/summaries?summaryDate=${formattedDateYday}&index=equities`;
     console.log(`Invoking: ${summaryUrl}`);
     response = await axios.get(summaryUrl);
     console.log('Equities Summary API response:', response.data);
     const t3 = Date.now();
     console.log(`Equities Execution time: ${(t3 - t2)} ms`); // Log time taken
+    await processInsiderCSV(formattedDateYday)
+    console.log("Processed insider trades")
+    
   } catch (error) {
     console.error('Error calling summary API:', error);
   }

@@ -1,7 +1,11 @@
 const fs = require('fs');
 const crypto = require('crypto')
 const csv = require('csv-parse');
-const {postToGraphQL} = require("../lib/helper")
+const {postToGraphQL} = require("../../../lib/helper")
+const Puppet = require('./puppet.js')
+const downloadFolder = process.env.NSE_ANNOUNCEMENTS_DOWNLOAD
+const path = require("path")
+
 let failedLogFile;
 // Lookup mappings for various columns
 const {mapping_category_of_insider, mapping_regulation, mapping_type_of_security, mapping_mode_of_transaction, mapping_transaction_type, mapping_exchange} = require("./mappings")
@@ -180,9 +184,17 @@ const persist = async(mutationData) => {
         "variables": mutationData
     })
 }
-const processCSVFile = async (filePath) => {
+//dateStr 15-02-2025
+const processInsiderCSV = async (dateStr) => {
     failedLogFile = "failed_records-" + (new Date()).toISOString()
   try {
+    const fileName = dateStr + "_insider_trades.csv"
+    const filePath = path.join(downloadFolder, fileName)
+    const baseUrl = "https://www.nseindia.com"
+    const urlSuffix = `/api/corporates-pit?index=equities&from_date=${dateStr}&to_date=${dateStr}&csv=true`
+    const puppet = new Puppet(baseUrl, urlSuffix, downloadFolder, fileName)
+    await puppet.downloadFile()
+            
     // First preprocess to get clean headers and data
     const { headers, dataContent } = preprocessCSV(filePath);
     console.log(headers)
@@ -216,7 +228,5 @@ const processCSVFile = async (filePath) => {
    
   }
 };
-processCSVFile(process.env.DOWNLOADS + "/insider_trades/CF-Insider-Trading-equities-13-Feb-2025.csv")
-module.exports = {
-  processCSVFile
-};
+//processInsiderCSV(process.env.DOWNLOADS + "/insider_trades/CF-Insider-Trading-equities-13-Feb-2025.csv")
+module.exports = processInsiderCSV
