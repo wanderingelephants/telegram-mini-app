@@ -231,7 +231,6 @@ class LLMClient {
       role: msg.role,
       content: msg.content[0].text // dynamically wrapping in a string
     }));
-    console.log(formattedMessages)
     if (testAgainstFunction !== "") return ""
     //return "function mutual_fund_query(){}"
     if (this.llmToUse === 'Claude') {
@@ -257,7 +256,6 @@ class LLMClient {
           "docLink": customData.attachment.trim() + "%"
         }
       })
-      console.log(sentimentQueryResponse, customData.attachment.trim() + ".pdf")
       const sentimentValue = sentimentQueryResponse.data.stock_announcements[0].announcement_sentiment
       if (sentimentValue > -1) {
         console.log("Summary already exists for ", customData.attachment.trim())
@@ -293,7 +291,6 @@ class LLMClient {
         if (lastIdx == -1) jsonResp += "}"
         jsonResp = jsonResp.replace(/\\u[\dA-Fa-f]{4}/g, '');
 
-        console.log("post massage", jsonResp)
         jsonObj = JSON.parse(jsonResp)
 
       }
@@ -306,11 +303,6 @@ class LLMClient {
         }
       }
 
-
-      /*if (true){
-        console.log(jsonObj, sentiment)
-        return;
-      }*/
       try {
 
         const summaryMutation = `mutation StockAnnouncementUpdate(
@@ -340,8 +332,7 @@ class LLMClient {
           "sentiment": sentiment
         }
         const resp = await postToGraphQL({ "query": summaryMutation, "variables": summaryObj })
-        console.log(resp)
-
+        
       }
       catch (e) {
         console.error(e)
@@ -385,7 +376,7 @@ class LLMResponseHandler {
       return response;
     } else if (this.type === 'JavaScript') {
       let jsExecResponse = await this.executeJavaScript(response, sessionId, modelName);
-      console.log("jsExecResponse", jsExecResponse)
+      console.log("jsExecResponse.length", jsExecResponse.length)
       if (testAgainstFunction !== "") return JSON.stringify(jsExecResponse)
       let { result, functionName } = jsExecResponse
       
@@ -415,8 +406,7 @@ class LLMResponseHandler {
       }, 'messages_formatted.json');
 
       const messages = await messageManager.getMessages(sessionId, modelName, 'messages_formatted.json')
-      console.log("formattingPrompt", formattingPrompt, messages)
-
+      
       let formattedResponse;
       if (functionName === "analysis")
         formattedResponse = await this.llmClient.sendToLLM(formattingPrompt, messages)
@@ -512,7 +502,6 @@ const route = async (req, res) => {
   const { distilledModel, messages, llm, streaming = false, singleShotPrompt = false, customData } = req.body;
   const modelName = distilledModel
   const LLMToUse = llm ? llm : process.env.LLM_TO_USE;
-  console.log("reasoning route customData", customData)
   try {
     const PROMPTS_FOLDER = path.join(__dirname, 'prompts');
     const systemPromptPath = path.join(PROMPTS_FOLDER, `${distilledModel}_system_prompt.txt`);
