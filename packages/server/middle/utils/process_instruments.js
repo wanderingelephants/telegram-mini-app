@@ -34,7 +34,7 @@ async function processInstruments(){
         let [symbol, category] = stock.tradingsymbol.split('-');
         return !category || ["SM", "BE", "ST"].includes(category);
     }).map(stock => {
-        return { tradingsymbol: stock.tradingsymbol.split('-')[0] };
+        return { ...stock, tradingsymbol: stock.tradingsymbol.split('-')[0] };
     });
 }
 
@@ -56,6 +56,7 @@ let filtered = filterStockCategories(equities)
     for (const [index, csvRecord] of filtered.entries()) {
       if (!csvRecord.name){
         console.log("name is null continue", csvRecord)
+        continue;
       }
         await postToGraphQL({
           query: `mutation insertStock($object: stock_insert_input!){
