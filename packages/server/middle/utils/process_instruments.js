@@ -33,8 +33,11 @@ const processInstruments = async () => {
     return stockData.filter(stock => {
         let [symbol, category] = stock.tradingsymbol.split('-');
         return !category || ["SM", "BE", "ST"].includes(category);
+    }).map(stock => {
+        return { tradingsymbol: stock.tradingsymbol.split('-')[0] };
     });
 }
+
 let filtered = filterStockCategories(equities)
   console.log(filtered.length)
   //console.log(groupStockCategories(equities));
