@@ -78,6 +78,6 @@ variables: {
         })
     }
 }
-processInstruments()
+//processInstruments()
 //module.exports = processInstruments
 //main().catch(console.error);
