@@ -36,7 +36,7 @@ const processInstruments = async () => {
   }
 }`
 
-const csvRecord = equities.find(r => r.tradingsymbol === dbRecord.symbol)
+const csvRecord = equities.find(r => r.tradingsymbol === dbRecord.symbol || r.tradingsymbol === dbRecord.symbol + "-BE")
 //console.log("update tokens for ", r.tradingsymbol, csvRecord)
 if (csvRecord === undefined){
     console.log("csv record not found for", dbRecord.symbol)    
