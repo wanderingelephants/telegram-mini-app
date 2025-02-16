@@ -1,7 +1,7 @@
 const { postToGraphQL } = require('../lib/helper');
 const CSVProcessor = require('./CSVProcessor');
 
-async function main() {
+const processInstruments = async () => {
     const processor = new CSVProcessor();
     
     // Process from file
@@ -54,5 +54,5 @@ if (csvRecord === undefined){
     //const record = processor.getRecordByInstrumentToken(270018310);
     //console.log(record);
 }
-
-main().catch(console.error);
+module.exports = processInstruments
+//main().catch(console.error);

@@ -10,7 +10,7 @@ const ProcessETFQuotes = require('./routes/api/nse/processETFQuotes')
 const route = require("./routes/api/kite/instrument/eod")
 const { promisify } = require('util');
 const summaryServiceUrl = process.env.SUMMARY_SERVICE_URL
-
+const processInstruments = require("./utils/process_instruments")
 /*cron.schedule('0 12 * * 1-5', async () => {
   console.log('running a task during market hours of NSE', new Date());
   let jsonFileName = new Date().toISOString().split('T')[0]
@@ -20,8 +20,9 @@ const summaryServiceUrl = process.env.SUMMARY_SERVICE_URL
 */
 cron.schedule('32 15 * * 1-5', async () => {
   console.log('end of market', new Date());
+  await processInstruments()
   const todayStr = (new Date()).toISOString().split("T")[0]
-  let req = {"dateStr": todayStr}
+  let req = {"query": {"dateStr": todayStr}}
   let res = {status: (code) => {console.log(code)}, json: (msg) => {console.log(msg)}}
   await route(req, res)  
 }, {timezone: "Asia/Kolkata"});

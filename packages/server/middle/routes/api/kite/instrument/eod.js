@@ -1,17 +1,19 @@
 const fs = require("fs")
 const axios = require("axios")
 const { postToGraphQL } = require("../../../../lib/helper");
+
+//https://api.kite.trade/instruments/historical/136413956/day?from=2025-02-01+09:15:00&to=2025-02-12+15:30:00
 const route = async (req, res) => {
+    const dateStr = req.query.dateStr
+    const fromTime = `${dateStr} 09:15:00`
+    const toTime = `${dateStr} 15:30:00`
+    console.log("Process EOD for ", dateStr, fromTime, toTime)
     let access_token_data;
     access_token_data = require(process.env.ACCESS_TOKEN_PATH)
     if (fs.existsSync(process.env.ACCESS_TOKEN_PATH)) access_token_data = require(process.env.ACCESS_TOKEN_PATH)
     else return ({ status: 'fail', message: 'no_access_token' })
 
-    const dateStr = req.dateStr
-    console.log("Process EOD for ", dateStr)
-    const fromTime = `${dateStr} 09:15:00`
-    const toTime = `${dateStr} 15:30:00`
-
+    
     const queryResp = await postToGraphQL({
         query: `query GetEquitySymbols{
   stock{
@@ -69,7 +71,7 @@ const route = async (req, res) => {
             await postToGraphQL({ query: insertMutation, variables: mutationVariables })
         }
         catch(e){
-            console.log(e, record)
+            console.log(e.message, record)
         }
         
     }
