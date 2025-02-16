@@ -18,13 +18,13 @@ const processInstruments = require("./utils/process_instruments")
   await processor.process()
 }, {timezone: "Asia/Kolkata"});
 */
-cron.schedule('32 15 * * 1-5', async () => {
+cron.schedule('43 16 * * *', async () => {
   console.log('end of market', new Date());
   await processInstruments()
   const todayStr = (new Date()).toISOString().split("T")[0]
   let req = {"query": {"dateStr": todayStr}}
   let res = {status: (code) => {console.log(code)}, json: (msg) => {console.log(msg)}}
-  await route(req, res)  
+  //await route(req, res)  
 }, {timezone: "Asia/Kolkata"});
 cron.schedule('5 0 * * *', async () => {
   try {
