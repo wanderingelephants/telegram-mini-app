@@ -6,13 +6,14 @@ const processInstruments = async () => {
     const processor = new CSVProcessor();
     
     // Process from file
-    await processor.processFile(process.env.DOWNLOADS + '/instruments.csv');
+    //await processor.processFile(process.env.DOWNLOADS + '/instruments.csv');
     
     // Or process from string
     
     // Get all records
-    const records = processor.getRecords();
+    //const records = processor.getRecords();
     //console.log(records.length);
+    const records = require(process.env.DOWNLOADS + "/equities.json")
     const equities = records.filter(r => r.instrument_type === "EQ" &&  r.segment === "NSE")
     //const equities = require(process.env.DOWNLOADS + "/equities.json")
     //console.log(equities.length)
