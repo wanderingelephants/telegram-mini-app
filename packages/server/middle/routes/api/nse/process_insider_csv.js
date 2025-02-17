@@ -189,6 +189,7 @@ const processInsiderCSV = async (dateStr) => {
     failedLogFile = "failed_records-" + (new Date()).toISOString()
   try {
     const fileName = dateStr + "_insider_trades.csv"
+    console.log(downloadFolder, fileName)
     const filePath = path.join(downloadFolder, fileName)
     const baseUrl = "https://www.nseindia.com"
     const urlSuffix = `/api/corporates-pit?index=equities&from_date=${dateStr}&to_date=${dateStr}&csv=true`

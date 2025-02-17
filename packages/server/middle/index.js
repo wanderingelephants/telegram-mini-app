@@ -27,19 +27,19 @@ cron.schedule('33 15 * * 1-5', async () => {
   let res = {status: (code) => {console.log(code)}, json: (msg) => {console.log(msg)}}
   //await route(req, res)  
 }, {timezone: "Asia/Kolkata"});
-cron.schedule('5 0 * * *', async () => {
+cron.schedule('5 14 * * *', async () => {
   try {
     const t1 = Date.now(); 
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
-    const formattedDateYday = yesterday.toLocaleDateString('en-GB').split('/').join('-'); 
-    
+    const formattedDateYday = yesterday.toLocaleDateString('en-US', { timeZone: 'Asia/Kolkata' }).split('/').join('-'); 
+    console.log("Running post midnight job for date", formattedDateYday)
     if (!summaryServiceUrl) {
       console.log("Summary Service url not found")
       return;
     }
     // Compute yesterday's date
-    let summaryUrl = `${summaryServiceUrl}/api/nse/summaries?summaryDate=${formattedDateYday}&index=sme`;
+    /*let summaryUrl = `${summaryServiceUrl}/api/nse/summaries?summaryDate=${formattedDateYday}&index=sme`;
     console.log(`Invoking: ${summaryUrl}`);
     let response = await axios.get(summaryUrl);
     const t2 = Date.now(); // End time
@@ -50,7 +50,7 @@ cron.schedule('5 0 * * *', async () => {
     response = await axios.get(summaryUrl);
     console.log('Equities Summary API response:', response.data);
     const t3 = Date.now();
-    console.log(`Equities Execution time: ${(t3 - t2)} ms`); // Log time taken
+    console.log(`Equities Execution time: ${(t3 - t2)} ms`); */
     await processInsiderCSV(formattedDateYday)
     console.log("Processed insider trades")
     
