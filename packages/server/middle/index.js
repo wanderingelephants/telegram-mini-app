@@ -32,7 +32,7 @@ cron.schedule('15 14 * * *', async () => {
     const t1 = Date.now(); 
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
-    const formattedDateYday = yesterday.toLocaleDateString('en-US', { timeZone: 'Asia/Kolkata' }).split('/').join('-'); 
+    const formattedDateYday = yesterday.toLocaleDateString('en-GB', { timeZone: 'Asia/Kolkata' }).split('/').join('-'); 
     console.log("Running post midnight job for date", formattedDateYday)
     if (!summaryServiceUrl) {
       console.log("Summary Service url not found")
@@ -51,7 +51,8 @@ cron.schedule('15 14 * * *', async () => {
     console.log('Equities Summary API response:', response.data);
     const t3 = Date.now();
     console.log(`Equities Execution time: ${(t3 - t2)} ms`); */
-    await processInsiderCSV(formattedDateYday)
+    //await processInsiderCSV(formattedDateYday)
+    let response = await axios.get(process.env.API_SERVER_URL + "/api/nse/insider?dateStr=" + formattedDateYday);
     console.log("Processed insider trades")
     
   } catch (error) {

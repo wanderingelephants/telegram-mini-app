@@ -229,5 +229,17 @@ const processInsiderCSV = async (dateStr) => {
    
   }
 };
+const route = async(req, res) => {
+  try{
+    await processInsiderCSV(req.query.dateStr) 
+    res.status(200).json("ProcessedInsider")
+  }
+  catch(e){
+    console.error(e)
+    res.status(500).json(e)
+  }
+ 
+}
+module.exports = route
+
 //processInsiderCSV(process.env.DOWNLOADS + "/insider_trades/CF-Insider-Trading-equities-13-Feb-2025.csv")
-module.exports = processInsiderCSV

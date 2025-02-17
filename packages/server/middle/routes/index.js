@@ -79,7 +79,8 @@ const routes = {
             process: require("./api/nse/process"),
             announcements: require("./api/nse/announcements"),
             instruments: require("./api/nse/instruments"),
-            summaries: require("./api/nse/summaries")
+            summaries: require("./api/nse/summaries"),
+            insider: require("./api/nse/process_insider_csv")
         },
         /*ollama:{
             singleShotStream: require("./api/ollama/singleShotStream"),
@@ -113,6 +114,7 @@ router.get("/api/mutualfunds/list", routes.api.mutualfunds.list)
 router.post("/api/nse/receive", routes.api.nse.receive)
 router.post("/api/nse/announcements", routes.api.nse.announcements)
 router.post("/api/nse/process", routes.api.nse.process)
+router.get("/api/nse/insider", routes.api.nse.insider)
 router.get("/api/nse/instruments", routes.api.nse.instruments)
 router.get("/api/nse/summaries", routes.api.nse.summaries)
 
