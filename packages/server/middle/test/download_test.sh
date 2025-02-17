@@ -3,11 +3,11 @@ curl -X POST http://51.158.62.147:3000/api/chat \
 -d '{"messages": [], "model": "llama3.2"}'
 
 
-curl -X POST http://localhost:3000/api/nse/announcements \
+curl -X POST http://51.158.62.147:3000/api/nse/announcements \
 -H "Content-Type: application/json" \
 -d '{
-  "fromDate": "05-02-2025",
-  "toDate": "05-02-2025",
+  "fromDate": "16-02-2025",
+  "toDate": "16-02-2025",
   "index": "sme"
 }'
 #baseUrl, urlSuffix, etfFileName
