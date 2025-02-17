@@ -52,6 +52,7 @@ const { reverse_mapping_category_of_insider, reverse_mapping_regulation,
     return Array.from(stockMap.values());
   }
 const initAllData = async function () {
+  const t1 = Date.now()
     const mutualFundsAndReportingDates = getMutualFundHoldingsJSONArray()
     mutual_fund_data = mutualFundsAndReportingDates.mutual_fund_data
     holding_reporting_dates = mutualFundsAndReportingDates.reporting_dates
@@ -158,7 +159,8 @@ const closingPriceResp = await postToGraphQL({
   variables: closingPriceVariables
 })
 daily_stock_prices_by_company_name = transformStockData(closingPriceResp.data.stock_price_daily)
-
+const t2 = Date.now()
+console.log("Time Take to initData reasoning_v1", (t2-t1))
 }
 initAllData().then(r => console.log(r)).catch(e => console.error(e))
 
