@@ -16,6 +16,13 @@
           table:
             name: mutual_fund_holdings
             schema: public
+    - name: portfolio_mutual_funds
+      using:
+        foreign_key_constraint_on:
+          column: mutual_fund_id
+          table:
+            name: portfolio_mutual_funds
+            schema: public
 - table:
     name: mutual_fund_holdings
     schema: public
@@ -27,6 +34,55 @@
       using:
         foreign_key_constraint_on: stock_id
 - table:
+    name: portfolio_mutual_funds
+    schema: public
+  object_relationships:
+    - name: mutual_fund
+      using:
+        foreign_key_constraint_on: mutual_fund_id
+    - name: user
+      using:
+        foreign_key_constraint_on: user_id
+- table:
+    name: portfolio_stocks
+    schema: public
+  object_relationships:
+    - name: stock
+      using:
+        foreign_key_constraint_on: stock_id
+    - name: user
+      using:
+        foreign_key_constraint_on: user_id
+  insert_permissions:
+    - role: user
+      permission:
+        check:
+          user:
+            email:
+              _eq: X-Hasura-User-Id
+        columns:
+          - purchase_date
+          - stock_id
+          - updated_at
+          - user_id
+  select_permissions:
+    - role: user
+      permission:
+        columns:
+          - stock_id
+          - user_id
+        filter:
+          user:
+            email:
+              _eq: X-Hasura-User-Id
+  delete_permissions:
+    - role: user
+      permission:
+        filter:
+          user:
+            email:
+              _eq: X-Hasura-User-Id
+- table:
     name: stock
     schema: public
   array_relationships:
@@ -36,6 +92,13 @@
           column: stock_id
           table:
             name: insider_trades
+            schema: public
+    - name: portfolio_stocks
+      using:
+        foreign_key_constraint_on:
+          column: stock_id
+          table:
+            name: portfolio_stocks
             schema: public
     - name: stock_announcements
       using:
@@ -51,6 +114,23 @@
           table:
             name: stock_price_daily
             schema: public
+  select_permissions:
+    - role: user
+      permission:
+        columns:
+          - company_name
+          - company_sector
+          - id
+          - last_traded_price
+          - market_cap
+          - price_to_book_ratio
+          - price_to_earnings_ratio
+          - return_on_capital_employed
+          - return_on_equity
+          - segment
+          - symbol
+          - ticker_exchange
+        filter: {}
 - table:
     name: stock_announcements
     schema: public
@@ -79,3 +159,51 @@
 - table:
     name: users
     schema: public
+  array_relationships:
+    - name: portfolio_mutual_funds
+      using:
+        foreign_key_constraint_on:
+          column: user_id
+          table:
+            name: portfolio_mutual_funds
+            schema: public
+    - name: portfolio_stocks
+      using:
+        foreign_key_constraint_on:
+          column: user_id
+          table:
+            name: portfolio_stocks
+            schema: public
+  insert_permissions:
+    - role: user
+      permission:
+        check:
+          email:
+            _eq: X-Hasura-User-Id
+        columns:
+          - email
+          - google_id
+          - id
+  select_permissions:
+    - role: user
+      permission:
+        columns:
+          - display_name
+          - email
+          - google_id
+          - status
+        filter:
+          email:
+            _eq: X-Hasura-User-Id
+        limit: 1
+  update_permissions:
+    - role: user
+      permission:
+        columns:
+          - email
+          - google_id
+          - id
+        filter:
+          email:
+            _eq: X-Hasura-User-Id
+        check: null
