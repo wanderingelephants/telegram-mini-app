@@ -101,8 +101,7 @@ const route = async (req, res) => {
 
     try {
         const { fromDate, toDate, index } = req.body
-        const scraper_api_key = process.env.SCRAPER_API_KEY
-        const baseUrl = `https://api.scraperapi.com/?api_key=${scraper_api_key}&url=https://www.nseindia.com`
+        const baseUrl = "https://www.nseindia.com"
         const urlSuffix = `/api/corporate-announcements?index=${index}&from_date=${fromDate}&to_date=${toDate}&csv=true`
         const downloadFileName = `nse_announcements_${index}_${fromDate}_${toDate}.csv`
         //const {baseUrl, urlSuffix, downloadFileName} = req.body
