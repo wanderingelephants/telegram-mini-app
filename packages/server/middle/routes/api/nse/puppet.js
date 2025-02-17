@@ -76,13 +76,13 @@ class Puppet {
             });
             console.log('page.setExtraHttpHeaders')
             // Visit main site first
-            console.log('Visiting main site...');
+            console.log('Visiting main site...', this.baseUrl);
             await page.goto(this.baseUrl, {
                 waitUntil: ['networkidle0', 'domcontentloaded'],
                 timeout: 60000
             });
     
-            await delay(5000);
+            await delay(2000);
     
             // Log cookies before CSV request
             const cookies = await page.cookies();
