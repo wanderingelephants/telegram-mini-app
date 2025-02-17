@@ -27,7 +27,7 @@ cron.schedule('33 15 * * 1-5', async () => {
   let res = {status: (code) => {console.log(code)}, json: (msg) => {console.log(msg)}}
   //await route(req, res)  
 }, {timezone: "Asia/Kolkata"});
-cron.schedule('5 14 * * *', async () => {
+cron.schedule('15 14 * * *', async () => {
   try {
     const t1 = Date.now(); 
     const yesterday = new Date();
