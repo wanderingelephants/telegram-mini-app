@@ -43,6 +43,7 @@ class Puppet {
                 '--disable-setuid-sandbox',
                 '--enable-javascript',
                 '--window-size=1920,1080',
+                '--disable-dev-shm-usage', 
                 '--disable-gpu', '--disable-setuid-sandbox'
             ]
         });

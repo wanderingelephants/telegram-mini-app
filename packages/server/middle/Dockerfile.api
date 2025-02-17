@@ -1,5 +1,4 @@
 FROM node:20-alpine
-
 # Install Chromium and its dependencies
 RUN apk add --no-cache \
     chromium \
@@ -10,7 +9,17 @@ RUN apk add --no-cache \
     ca-certificates \
     ttf-freefont \
     nodejs \
-    yarn
+    yarn \
+    libstdc++ \
+    harfbuzz \
+    freetype \
+    wqy-zenhei 
+
+    # Create a new user
+RUN addgroup -S pptruser && adduser -S -g pptruser pptruser
+
+# Use non-root user
+USER pptruser
 
 # Tell Puppeteer to skip installing Chrome and use installed Chromium
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
