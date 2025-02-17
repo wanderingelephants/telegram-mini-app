@@ -27,7 +27,7 @@ cron.schedule('33 15 * * 1-5', async () => {
   let res = {status: (code) => {console.log(code)}, json: (msg) => {console.log(msg)}}
   //await route(req, res)  
 }, {timezone: "Asia/Kolkata"});
-cron.schedule('15 14 * * *', async () => {
+cron.schedule('5 0 * * *', async () => {
   try {
     const t1 = Date.now(); 
     const yesterday = new Date();
@@ -39,7 +39,7 @@ cron.schedule('15 14 * * *', async () => {
       return;
     }
     // Compute yesterday's date
-    /*let summaryUrl = `${summaryServiceUrl}/api/nse/summaries?summaryDate=${formattedDateYday}&index=sme`;
+    let summaryUrl = `${summaryServiceUrl}/api/nse/summaries?summaryDate=${formattedDateYday}&index=sme`;
     console.log(`Invoking: ${summaryUrl}`);
     let response = await axios.get(summaryUrl);
     const t2 = Date.now(); // End time
@@ -50,9 +50,9 @@ cron.schedule('15 14 * * *', async () => {
     response = await axios.get(summaryUrl);
     console.log('Equities Summary API response:', response.data);
     const t3 = Date.now();
-    console.log(`Equities Execution time: ${(t3 - t2)} ms`); */
+    console.log(`Equities Execution time: ${(t3 - t2)} ms`); 
     //await processInsiderCSV(formattedDateYday)
-    let response = await axios.get(process.env.API_SERVER_URL + "/api/nse/insider?dateStr=" + formattedDateYday);
+    response = await axios.get(summaryServiceUrl + "/api/nse/insider?dateStr=" + formattedDateYday);
     console.log("Processed insider trades")
     
   } catch (error) {
