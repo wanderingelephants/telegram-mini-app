@@ -15,12 +15,6 @@ RUN apk add --no-cache \
     freetype \
     wqy-zenhei 
 
-    # Create a new user
-RUN addgroup -S pptruser && adduser -S -g pptruser pptruser
-
-# Use non-root user
-USER pptruser
-
 # Tell Puppeteer to skip installing Chrome and use installed Chromium
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
