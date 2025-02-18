@@ -9,7 +9,7 @@ import { mapState } from "vuex";
 import {
   GoogleAuthProvider,
   signInWithPopup,
-  onAuthStateChanged,
+  onIdTokenChanged,
 } from "firebase/auth";
 import { initializeFirebase } from "@/plugins/firebase";
 
@@ -43,7 +43,7 @@ export default {
       this.isInitialized = true;
 
       // Set up auth state listener
-      this.unsubscribeAuth = onAuthStateChanged(auth, async (user) => {
+      this.unsubscribeAuth = onIdTokenChanged(auth, async (user) => {
         if (user) {
           // User is signed in
           const idToken = await user.getIdToken(true);
@@ -85,13 +85,6 @@ export default {
           console.error("Token verification error:", error);
         }
       }
-      if (this.authInstance?.currentUser) {
-        // Refresh token every 45 minutes
-        setInterval(async () => {
-          const token = await this.authInstance.currentUser.getIdToken(true);
-          localStorage.setItem("jwtGoogle", token);
-        }, 45 * 60 * 1000);
-      }
     } catch (error) {
       console.error("Failed to initialize Firebase:", error);
     }
@@ -132,8 +125,8 @@ export default {
           const json = await response.json();
           console.log("SignIn", json)
           this.showDialog = false;
-          localStorage.setItem("AUTH_TOKEN ", json.token);
-          localStorage.setItem("jwtGoogle ", idToken);
+          localStorage.setItem("AUTH_TOKEN", json.token);
+          localStorage.setItem("jwtGoogle", idToken);
           this.$store.commit("setloggedInGoogle", true);
           //this.$store.commit("setUserGoogle", json.userGoogle);
         }
