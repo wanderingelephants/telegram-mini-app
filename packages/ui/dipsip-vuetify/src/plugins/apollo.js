@@ -10,13 +10,13 @@ const getIdToken = () => {
     return `Bearer ${localStorage.getItem('AUTH_TOKEN')}` || null;
 }
 const endpoint = import.meta.env.VITE_GRAPHQL_ENDPOINT
-const wsendpoint = import.meta.env.VITE_GRAPHQL_SOCKET_ENDPOINT
+//const wsendpoint = import.meta.env.VITE_GRAPHQL_SOCKET_ENDPOINT
 // HTTP connection to the API
 const httpLink = createHttpLink({
     uri: `${endpoint}/v1/graphql`,
 })
 
-const wsLink = new WebSocketLink({
+/*const wsLink = new WebSocketLink({
     uri: `${wsendpoint}/v1/graphql`,
     options: {
         reconnect: false,
@@ -28,7 +28,7 @@ const wsLink = new WebSocketLink({
             }
         }
     }
-});
+});*/
 
 const authMiddleware = setContext((_, { headers }) => {
     const token = localStorage.getItem("AUTH_TOKEN")
@@ -48,7 +48,7 @@ const splitLink = split(
             definition.operation === "subscription"
         );
     },
-    wsLink,
+    //wsLink,
     httpLink
 );
 
@@ -56,7 +56,7 @@ const cache = new InMemoryCache()
 
 // Create the apollo client
 export const apolloClient = new ApolloClient({
-    link: authMiddleware.concat(splitLink),
+    link: authMiddleware.concat(httpLink),
     cache,
 })
 
