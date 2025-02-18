@@ -52,7 +52,8 @@ const mapping_mode_of_transaction = {
   "Scheme of Amalgamation/Merger/Demerger/Arrangement": 11,
   "Inter-se-Transfer": 12,
   "Conversion of security" : 13,
-  "Bonus": 14
+  "Bonus": 14,
+  "-": 15
 };
 const reverse_mapping_mode_of_transaction = Object.entries(mapping_mode_of_transaction)
   .reduce((acc, [key, value]) => {

@@ -33,7 +33,11 @@ const validateLookup = (value, mapping, fieldName) => {
   }
   return mapping[value];
 };
-
+const parseNumber = (value) => {
+  if (typeof value !== 'string') return isNaN(value) ? 0 : value;
+  const num = parseFloat(value.replace(/,/g, ''));
+  return isNaN(num) ? 0 : num;
+};
 // Transform CSV data to mutation object
 const transformToMutationObject = (record) => {
   try {
@@ -94,14 +98,12 @@ const transformToMutationObject = (record) => {
         type_of_security: typeOfSecurityId,
         transaction_type: transactionTypeId,//record['ACQUISITION/DISPOSAL TRANSACTION TYPE'].toLowerCase() === "buy" ? true:false,
         mode_of_transaction: modeOfTransactionId,
-        number_of_securities_before_transaction: parseFloat(record['NO. OF SECURITY (PRIOR)'].replace(/,/g, '')),
-        number_of_securities_transacted: record['NO. OF SECURITIES (ACQUIRED/DISPLOSED)'] ? 
-          parseFloat(record['NO. OF SECURITIES (ACQUIRED/DISPLOSED)'].replace(/,/g, '')) : 0,
-        number_of_securities_after_transaction: record['NO. OF SECURITY (POST)'] === 'Nil' ? 
-          0 : parseFloat(record['NO. OF SECURITY (POST)'].replace(/,/g, '')),
-        value_of_securities_transacted: parseFloat(record['VALUE OF SECURITY (ACQUIRED/DISPLOSED)'].replace(/,/g, '')),
-        shareholding_before_transaction : parseFloat(record['% SHAREHOLDING (PRIOR)']),
-        shareholding_after_transaction: parseFloat(record['% POST']),
+        number_of_securities_before_transaction: parseNumber(record['NO. OF SECURITY (PRIOR)'].replace(/,/g, '')),
+        number_of_securities_transacted: parseNumber(record['NO. OF SECURITIES (ACQUIRED/DISPLOSED)'].replace(/,/g, '')),
+        number_of_securities_after_transaction: parseNumber(record['NO. OF SECURITY (POST)'].replace(/,/g, '')),
+        value_of_securities_transacted: parseNumber(record['VALUE OF SECURITY (ACQUIRED/DISPLOSED)'].replace(/,/g, '')),
+        shareholding_before_transaction : parseNumber(record['% SHAREHOLDING (PRIOR)']),
+        shareholding_after_transaction: parseNumber(record['% POST']),
         transaction_date: record['DATE OF ALLOTMENT/ACQUISITION FROM'],
         intimation_date: record['DATE OF INITMATION TO COMPANY'],
         exchange: exchangeId 
@@ -185,7 +187,7 @@ const persist = async(mutationData) => {
     })
 }
 //dateStr 15-02-2025
-const processInsiderCSV = async (dateStr) => {
+const processInsiderCSV = async (dateStr, download = true) => {
     failedLogFile = "failed_records-" + (new Date()).toISOString()
   try {
     const fileName = dateStr + "_insider_trades.csv"
@@ -193,12 +195,13 @@ const processInsiderCSV = async (dateStr) => {
     const filePath = path.join(downloadFolder, fileName)
     const baseUrl = "https://www.nseindia.com"
     const urlSuffix = `/api/corporates-pit?index=equities&from_date=${dateStr}&to_date=${dateStr}&csv=true`
-    const puppet = new Puppet(baseUrl, urlSuffix, downloadFolder, fileName)
-    await puppet.downloadFile()
+    if (download === true){
+      const puppet = new Puppet(baseUrl, urlSuffix, downloadFolder, fileName)
+      await puppet.downloadFile()
+    }
             
     // First preprocess to get clean headers and data
     const { headers, dataContent } = preprocessCSV(filePath);
-    console.log(headers)
     // Now parse the data with the clean headers
     csv.parse(dataContent, {
       columns: headers,
@@ -220,7 +223,7 @@ const processInsiderCSV = async (dateStr) => {
           //console.log(JSON.stringify(mutationObject, null, 2));
         } catch (error) {
           console.error(`Error processing record ${index + 1}:`, error.message);
-          console.log(mutationObject)
+          console.log(JSON.stringify(mutationObject))
         }
       }
     });
@@ -231,7 +234,7 @@ const processInsiderCSV = async (dateStr) => {
 };
 const route = async(req, res) => {
   try{
-    await processInsiderCSV(req.query.dateStr) 
+    await processInsiderCSV(req.query.dateStr, false) 
     res.status(200).json("ProcessedInsider")
   }
   catch(e){
@@ -242,4 +245,4 @@ const route = async(req, res) => {
 }
 module.exports = route
 
-//processInsiderCSV(process.env.DOWNLOADS + "/insider_trades/CF-Insider-Trading-equities-13-Feb-2025.csv")
+//processInsiderCSV("17-02-2025", false)
