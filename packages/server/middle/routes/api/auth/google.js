@@ -10,8 +10,6 @@ const route = async(req, res) => {
   try {
     const { idToken } = req.body;
     const customClaims = await admin.auth().verifyIdToken(idToken);
-    console.log("api/auth/google VerifyIdToken")
-    console.log(customClaims)
             if(!customClaims.email) {
                 let user = await firebase.auth().getUser(customClaims.uid);
                 customClaims.email = user.providerData[0].email;
