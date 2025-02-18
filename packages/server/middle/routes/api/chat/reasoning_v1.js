@@ -529,7 +529,7 @@ const route = async (req, res) => {
     }
     await messageManager.saveMessage(sessionId, modelName, { "role": 'assistant', "content": [{ "type": 'text', "text": llmResponse }] }, 'messages.json');
 
-    const handlerType = "JavaScript"; //distilledModel === "analysis_reasoning" ? 'JavaScript' : 'NoOp';
+    const handlerType = distilledModel === "announcements_summary" ? 'NoOp' : 'JavaScript'
     const formatContext = messages[messages.length - 1].content; // Pass user query context
 
     const responseHandler = new LLMResponseHandler(handlerType, llmClient, formatContext);
