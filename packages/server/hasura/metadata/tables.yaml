@@ -5,6 +5,30 @@
     - name: stock
       using:
         foreign_key_constraint_on: stock_id
+  select_permissions:
+    - role: user
+      permission:
+        columns:
+          - category_of_insider
+          - created_at
+          - exchange
+          - hash
+          - intimation_date
+          - mode_of_transaction
+          - name_of_insider
+          - number_of_securities_after_transaction
+          - number_of_securities_before_transaction
+          - number_of_securities_transacted
+          - regulation_reference_id
+          - shareholding_after_transaction
+          - shareholding_before_transaction
+          - stock_id
+          - transaction_date
+          - transaction_type
+          - type_of_security
+          - updated_at
+          - value_of_securities_transacted
+        filter: {}
 - table:
     name: mutual_fund
     schema: public
@@ -138,6 +162,20 @@
     - name: stock
       using:
         foreign_key_constraint_on: stock_id
+  select_permissions:
+    - role: user
+      permission:
+        columns:
+          - announcement_category
+          - announcement_date
+          - announcement_document_link
+          - announcement_impact
+          - announcement_sentiment
+          - announcement_sub_category
+          - announcement_text
+          - announcement_text_summary
+          - stock_id
+        filter: {}
 - table:
     name: stock_mf
     schema: public
@@ -156,6 +194,18 @@
     - name: stock
       using:
         foreign_key_constraint_on: stock_id
+  select_permissions:
+    - role: user
+      permission:
+        columns:
+          - close
+          - high
+          - low
+          - open
+          - price_date
+          - stock_id
+          - volume
+        filter: {}
 - table:
     name: users
     schema: public

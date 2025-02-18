@@ -106,7 +106,7 @@ const reverse_mapping_exchange = Object.entries(mapping_exchange)
     acc[value] = key;
     return acc;
   }, {});
-    
+
 module.exports = {mapping_category_of_insider, mapping_regulation, mapping_type_of_security, mapping_mode_of_transaction, 
   mapping_transaction_type, mapping_exchange,
   reverse_mapping_category_of_insider, reverse_mapping_regulation, reverse_mapping_type_of_security, reverse_mapping_mode_of_transaction, 

@@ -75,10 +75,49 @@
                 </template>
               </v-autocomplete>
             </v-card-text>
+            <v-card-text>
+              <v-row>
+                <v-col cols="12" sm="4">
+  <v-select
+    v-model="selectedPeriod"
+    :items="dateRangePeriods"
+    item-title="text"
+    item-value="value"
+    label="Select Period"
+    @update:model-value="handlePeriodChange"
+  ></v-select>
+</v-col>
+
+<v-col cols="12" sm="8" v-if="showCustomDatePicker">
+  <v-row>
+    <v-col cols="12" sm="6">
+      <v-date-picker show-adjacent-months v-model="fromDate"></v-date-picker>
+    </v-col>
+    <v-col cols="12" sm="6">
+     <v-date-picker show-adjacent-months v-model="toDate"></v-date-picker>
+    </v-col>
+  </v-row>
+</v-col>
+
+<!--<v-col cols="12">
+  <v-text-field
+    :value="dateRangeText"
+    label="Selected Date Range"
+    readonly
+    dense
+  ></v-text-field>
+</v-col> -->
+              </v-row>
+              <v-btn @click="getAnnouncements" color="primary">Fetch</v-btn>
+            <stock-watch-list :announcements="announcements" :insiderTrades="insiderTrades" :candles="candles"/>
+            </v-card-text>
           </v-card>
         </v-col>
       </v-row>
-
+      <!-- INFORMATIOn DISPLAY FOR THE WATCH LIST -->
+      <!--<v-row>
+        <stock-watch-list :announcements="announcements" :insiderTrades="insiderTrades"/>
+      </v-row> -->
       <!-- Error Snackbar -->
       <v-snackbar v-model="showError" color="error" timeout="3000">
         {{ errorMessage }}
@@ -92,16 +131,19 @@
 
 <script>
 import { mapState } from "vuex";
-
+import { reverse_mapping_category_of_insider, reverse_mapping_regulation,
+  reverse_mapping_type_of_security, reverse_mapping_mode_of_transaction,
+  reverse_mapping_transaction_type, reverse_mapping_exchange,
+  reverse_mapping_announcement_sentiment } from "./mappings";
 import GoogleSignIn from "../components/GoogleSignIn";
-import api from "./api";
+import StockWatchList from "./StockWatchList.vue"
 import MutualFundAnalysis from "../components/MutualFundAnalysis.vue";
 import PromptChat from "./PromptChat.vue";
 import {
   GET_STOCK_LIST,
   INSERT_PORTLFOLIO_STOCK,
   GET_USER_STOCK_PORTFOLIO,
-  DELETE_USER_STOCK_PORTFOLIO,
+  DELETE_USER_STOCK_PORTFOLIO,GET_PORTFOLIO_ANNOUNCEMENTS
 } from "../lib/helper/queries";
 export default {
   name: "ChatApp",
@@ -109,6 +151,7 @@ export default {
     MutualFundAnalysis,
     PromptChat,
     GoogleSignIn,
+    StockWatchList
   },
   data() {
     return {
@@ -123,6 +166,17 @@ export default {
       compareData: {},
       inserts: [],
       deletes: [],
+      fromDate: new Date(),
+      toDate: new Date(),
+      selectedPeriod: 'yesterday',
+      showCustomDatePicker: false,
+      dateRangePeriods: [
+        //{ text: 'Today', value: 'today' },
+        { text: 'Yesterday', value: 'yesterday' },
+        { text: 'Last 7 Days', value: 'last7' },
+        { text: 'Last 15 Days', value: 'last15' },
+        { text: 'Custom', value: 'custom' }
+      ],
       searchText: "",
       title: "Stocks Helper Agent",
       subTitles: [
@@ -134,6 +188,10 @@ export default {
       userInputLabel: "This is an AI tool. Double Check",
       debug: false,
       distilledModel: "analysis_reasoning",
+      announcementHeaders: [{ text: "Sentiment", value: "sentiment" },],
+      announcements: [],
+      insiderTrades: [],
+      candles: [],
       analysisTypes: [
         {
           name: "Overlap",
@@ -161,21 +219,156 @@ export default {
   watch: {
     async loggedInGoogle(newVal) {},
     async userGoogle(newVal) {
-      if (newVal.email) await this.getUserStockPortfolio();
+      if (newVal && newVal.email) await this.getUserStockPortfolio();
     },
   },
-  computed: mapState([
-    // map this.count to store.state.count
+  computed: {
+  ...mapState([
     "loggedInGoogle",
     "userGoogle",
   ]),
+  dateRangeText() {
+    return `${this.fromDate} to ${this.toDate}`;
+  }
+},
+  
   methods: {
+    async getAnnouncements(){
+      try{
+        const resp = await this.$apollo.query({
+          query: GET_PORTFOLIO_ANNOUNCEMENTS,
+          variables: {
+            fromDate: this.fromDate.toISOString().split("T")[0],
+            toDate: this.toDate.toISOString().split("T")[0],
+            email: this.userGoogle.email
+          }
+        })
+        const flattened = this.extractArraysFromResponse(resp)
+        this.announcements = flattened.announcements
+        
+        this.insiderTrades = flattened.insiderTrades
+        this.candles = flattened.candles
+      }
+      catch(e){
+        console.error(e)
+      }
+
+    },
+  extractArraysFromResponse(jsonResponse) {
+  const stocks = jsonResponse.data.portfolio_stocks;
+  
+  // Initialize result arrays
+  const announcements = [];
+  const insiderTrades = [];
+  const candles = [];
+  
+  // Process each stock
+  stocks.forEach(stockData => {
+    const stock = stockData.stock;
+    const companyName = stock.company_name;
+    
+    // Extract announcements
+    stock.stock_announcements.forEach(announcement => {
+      announcements.push({
+        company_name: companyName,
+        announcement_date: announcement.announcement_date,
+        announcement_text_summary: announcement.announcement_text_summary,
+        announcement_impact: announcement.announcement_impact,
+        announcement_document_link: announcement.announcement_document_link,
+        announcement_sentiment: reverse_mapping_announcement_sentiment[announcement.announcement_sentiment]
+      });
+    });
+    
+    // Extract insider trades
+    stock.insider_trades.forEach(trade => {
+      insiderTrades.push({
+        company_name: companyName,
+        intimation_date: trade.intimation_date,
+        name_of_insider: trade.name_of_insider,
+        number_of_securities_transacted: trade.number_of_securities_transacted,
+        number_of_securities_after_transaction: trade.number_of_securities_after_transaction,
+        number_of_securities_before_transaction: trade.number_of_securities_before_transaction,
+        type_of_security: reverse_mapping_type_of_security[trade.type_of_security],
+        shareholding_before_transaction: trade.shareholding_before_transaction,
+        shareholding_after_transaction: trade.shareholding_after_transaction,
+        mode_of_transaction: reverse_mapping_mode_of_transaction[trade.mode_of_transaction],
+        transaction_type: reverse_mapping_transaction_type[trade.transaction_type],
+        category_of_insider: reverse_mapping_category_of_insider[trade.category_of_insider]
+      });
+    });
+    
+    // Extract candles
+    stock.stock_price_dailies.forEach(candle => {
+      if (candle.open !== undefined) {  // Check if price data exists
+        candles.push({
+          company_name: companyName,
+          open: candle.open,
+          high: candle.high,
+          low: candle.low,
+          volume: candle.volume,
+          price_date: candle.price_date
+        });
+      }
+    });
+  });
+  
+  return {
+    announcements,
+    insiderTrades,
+    candles
+  };
+},
     customFilter(item, queryText) {
       const itemText = item.toLowerCase();
       const searchText = queryText.toLowerCase();
       const searchWords = searchText.split(/\s+/);
       return searchWords.every((word) => itemText.includes(word));
     },
+    formatDate(date) {
+    return date.toISOString().substr(0, 10);
+  },
+  
+  handlePeriodChange() {
+    const today = new Date();
+    
+    switch (this.selectedPeriod) {
+      case 'today':
+        this.fromDate = new Date();
+        this.toDate = new Date();
+        this.showCustomDatePicker = false;
+        break;
+        
+      case 'yesterday':
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        this.fromDate = yesterday;
+        this.toDate = yesterday;
+        this.showCustomDatePicker = false;
+        break;
+        
+      case 'last7':
+        this.toDate = new Date();
+        const last7 = new Date();
+        last7.setDate(last7.getDate() - 6);
+        this.fromDate = last7;
+        this.showCustomDatePicker = false;
+        break;
+        
+      case 'last15':
+        this.toDate = new Date();
+        const last15 = new Date();
+        last15.setDate(last15.getDate() - 14);
+        this.fromDate = last15;
+        this.showCustomDatePicker = false;
+        break;
+        
+      case 'custom':
+        this.fromDate = new Date();
+        this.toDate = new Date();
+        this.showCustomDatePicker = true;
+        break;
+    }
+  },
     async updateWatchList() {
       const previousStocks = new Set(this.portfolio.map((stock) => stock.id)); // Old selection
       const currentStocks = new Set(

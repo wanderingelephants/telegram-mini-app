@@ -10,6 +10,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   onIdTokenChanged,
+  setPersistence, browserLocalPersistence, onAuthStateChanged
 } from "firebase/auth";
 import { initializeFirebase } from "@/plugins/firebase";
 
@@ -39,36 +40,24 @@ export default {
   async mounted() {
     try {
       const { auth } = await initializeFirebase();
+      setPersistence(auth, browserLocalPersistence); // Keeps user signed in across page reloads
+
       this.authInstance = auth;
       this.isInitialized = true;
 
-      // Set up auth state listener
-      this.unsubscribeAuth = onIdTokenChanged(auth, async (user) => {
-        if (user) {
-          // User is signed in
-          const idToken = await user.getIdToken(true);
-          localStorage.setItem("jwtGoogle", idToken);
-          this.$store.commit("setloggedInGoogle", true);
-          this.$store.commit("setUserGoogle", user);
-        } else {
-          // User is signed out
-          localStorage.removeItem("jwtGoogle");
-          this.$store.commit("setloggedInGoogle", false);
-          this.$store.commit("setUserGoogle", null);
-        }
-      });
-
-      // Check for existing token and validate it
-      const existingToken = localStorage.getItem("jwtGoogle");
-      if (existingToken) {
-        try {
+      onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    // No need to manually store the token in localStorage
+    const idToken = await user.getIdToken(true); // Force refresh if needed
+    // You can now send this fresh token to your backend
+    try {
           // Verify token with your backend
           const response = await fetch("/api/auth/google", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ idToken: existingToken }),
+            body: JSON.stringify({ idToken }),
           });
           const json = await response.json();
           console.log("Mountted", json)
@@ -84,7 +73,31 @@ export default {
         } catch (error) {
           console.error("Token verification error:", error);
         }
-      }
+  } else {
+    // User is signed out, handle accordingly
+  }
+});
+      // Set up auth state listener
+      this.unsubscribeAuth = onIdTokenChanged(auth, async (user) => {
+        if (user) {
+          // User is signed in
+          const idToken = await user.getIdToken(true);
+          //localStorage.setItem("jwtGoogle", idToken);
+          this.$store.commit("setloggedInGoogle", true);
+          this.$store.commit("setUserGoogle", user);
+        } else {
+          // User is signed out
+          //localStorage.removeItem("jwtGoogle");
+          this.$store.commit("setloggedInGoogle", false);
+          this.$store.commit("setUserGoogle", null);
+        }
+      });
+
+      // Check for existing token and validate it
+      //const existingToken = localStorage.getItem("jwtGoogle");
+      //if (existingToken) {
+        
+      //}
     } catch (error) {
       console.error("Failed to initialize Firebase:", error);
     }

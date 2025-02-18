@@ -7,7 +7,7 @@ import AboutUs from '@/views/AboutUs.vue'
 import SettingsPage from '@/views/SettingsPage.vue'
 import WebScraper from '@/views/WebScraper.vue'
 import Utils from '@/views/Utils.vue'
-import Stocks from '@/views/Stocks.vue'
+//import Stocks from '@/views/Stocks.vue'
 import Tools from '@/views/Tools.vue'
 import PromptInstruct from '@/views/PromptInstruct.vue'
 import PromptChat from '@/views/PromptChat.vue'
@@ -83,7 +83,7 @@ const routes = [
   {
     path: '/stocks',
     name: 'Stocks',
-    component: Stocks
+    component: () => import('@/views/Stocks.vue')
   },
   {
     path: '/trade',
