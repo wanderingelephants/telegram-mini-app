@@ -41,7 +41,7 @@ export default defineConfig({
       template: 'treemap' // or 'sunburst', 'network'
     })*/
   ],
-  define: { 'process.env': {"VUE_APP_GRAPHQL_ENDPOINT": "http://localhost:8081", "NODE_ENV": "development"} },
+  //define: { 'process.env': {"VUE_APP_GRAPHQL_ENDPOINT": "http://localhost:8081", "NODE_ENV": "development"} },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))

@@ -9,14 +9,15 @@ import { createApolloProvider } from '@vue/apollo-option'
 const getIdToken = () => {
     return `Bearer ${localStorage.getItem('AUTH_TOKEN')}` || null;
 }
-
+const endpoint = import.meta.env.VITE_GRAPHQL_ENDPOINT
+const wsendpoint = import.meta.env.VITE_GRAPHQL_SOCKET_ENDPOINT
 // HTTP connection to the API
 const httpLink = createHttpLink({
-    uri: `${process.env.VUE_APP_GRAPHQL_ENDPOINT}/v1/graphql`,
+    uri: `${endpoint}/v1/graphql`,
 })
 
 const wsLink = new WebSocketLink({
-    uri: `${process.env.VUE_APP_GRAPHQL_SOCKET_ENDPOINT}/v1/graphql`,
+    uri: `${wsendpoint}/v1/graphql`,
     options: {
         reconnect: false,
         connectionParams: () => {
