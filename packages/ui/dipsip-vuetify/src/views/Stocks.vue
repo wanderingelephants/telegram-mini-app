@@ -234,7 +234,6 @@ export default {
   
   methods: {
     async getAnnouncements(){
-      console.log("getAnnouncements", new Date())
       try{
         const resp = await this.$apollo.query({
           query: GET_PORTFOLIO_ANNOUNCEMENTS,
@@ -244,6 +243,7 @@ export default {
             email: this.userGoogle.email
           }
         })
+        console.log(new Date(), "getAnnouncements", this.fromDate.toISOString().split("T")[0], this.toDate.toISOString().split("T")[0])
         const flattened = this.extractArraysFromResponse(resp)
         this.announcements = flattened.announcements
         
@@ -344,6 +344,7 @@ export default {
         yesterday.setDate(yesterday.getDate() - 1);
         this.fromDate = yesterday;
         this.toDate = yesterday;
+        console.log("Yday", this.fromDate, this.toDate)
         this.showCustomDatePicker = false;
         break;
         
@@ -471,6 +472,11 @@ export default {
   },
 
   async mounted() {
+    const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        this.fromDate = yesterday;
+        this.toDate = yesterday;
+        
     if (this.stocks.length == 0) await this.getStocks();
   },
 };
