@@ -156,7 +156,7 @@ const route = async (req, res) => {
           announcement_sentiment
           announcement_document_link
         }
-        insider_trades(where: {intimation_date: {_eq: $summaryDate}}){
+        insider_trades(where: {created_at: {_gt: $summaryDate}}){
           name_of_insider
           category_of_insider
           transaction_type
