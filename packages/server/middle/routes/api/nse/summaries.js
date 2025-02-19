@@ -1,8 +1,8 @@
 const axios = require("axios")
 const processSummaries = require('./processSummaries');
-const apiServer = process.env.API_SERVER_URL
     
 const process = async(summaryDate, index, processOnlySubscriptions) =>{
+    const apiServer = process.env.API_SERVER_URL
     await axios.post(`${apiServer}/api/nse/announcements`, {
         fromDate: summaryDate,
         toDate: summaryDate,
