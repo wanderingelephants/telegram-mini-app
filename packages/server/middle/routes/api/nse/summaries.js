@@ -1,7 +1,7 @@
 const axios = require("axios")
 const processSummaries = require('./processSummaries');
     
-const process = async(summaryDate, index, processOnlySubscriptions) =>{
+const processSummary = async(summaryDate, index, processOnlySubscriptions) =>{
     const apiServer = process.env.API_SERVER_URL
     await axios.post(`${apiServer}/api/nse/announcements`, {
         fromDate: summaryDate,
@@ -22,7 +22,7 @@ const route = async(req, res) => {
     const processOnlySubscriptions = req.query.processOnlySubscriptions
 
     if (!summaryDate || !index) res.status(500).json("specify summaryDate and index=equities/sme")
-    await process(summaryDate, index, processOnlySubscriptions)
+    await processSummary(summaryDate, index, processOnlySubscriptions)
     
     res.status(200).json("ok")
 }
