@@ -49,7 +49,7 @@ cron.schedule('5 0 * * *', async () => {
     console.log(`Invoking: ${summaryUrl}`);
     response = await axios.get(summaryUrl);
     console.log('Equities Summary API response:', response.data);
-    response = await axios.get(summaryServiceUrl + "/api/nse/insider?dateStr=" + formattedDateYday);
+    response = await axios.get(summaryServiceUrl + "/api/nse/insider?dateStr=" + formattedDateYday + "&download=true");
     console.log("Processed insider trades")
 
     summaryUrl = `${summaryServiceUrl}/api/nse/summaries?summaryDate=${formattedDateYday}&index=sme&processOnlySubscriptions=false`;
