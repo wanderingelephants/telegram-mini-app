@@ -48,7 +48,7 @@ query UserStockPortfolio($email: String!, $fromDate: date!, $toDate: date!){
         volume
         price_date
       }
-      stock_announcements (where: {announcement_date: {_gte: $fromDate, _lte: $toDate}}){
+      stock_announcements (where: {announcement_sentiment:{_gt:-1}, announcement_date: {_gte: $fromDate, _lte: $toDate}}){
         announcement_date
         announcement_text_summary
         announcement_impact
