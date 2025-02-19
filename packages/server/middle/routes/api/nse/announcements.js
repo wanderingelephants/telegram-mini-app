@@ -16,8 +16,9 @@ const route = async (req, res) => {
             .replace(/[^a-zA-Z0-9]+(.)/g, (_, chr) => chr.toUpperCase())
             .replace(/[^a-zA-Z0-9]/g, '');
     }
-    async function processCSVAndDownload(csvPath, downloadPath,  yyyymmdd, index) {
+    async function processCSVAndDownload(csvPath, downloadPath,  yyyymmdd, index, processOnlySubscriptions = true) {
         const results = [];
+        let filteredResults = [];
         const downloadPdfPath = downloadPath + "/" + index
         // Create download directory if it doesn't exist
         if (!fs.existsSync(downloadPdfPath)) {
@@ -31,12 +32,48 @@ const route = async (req, res) => {
                 skip_empty_lines: true,
                 trim: true
             }));
+            let uniqueSymbolSet = []
+            let subscribedSymbols = []
+            let subscriberEmails = []
+            const subscribedSymbolsQuery = `query getSubscribedSymbols{
+  portfolio_stocks{
+    stock{
+      symbol
+      company_name
+    }
+    user{
+      email
+    }
+  }
+}`
+            try{
+                const resp = await postToGraphQL({
+                    query: subscribedSymbolsQuery,
+                    variables: {}
+                })
+                uniqueSymbolSet = new Set(resp.data.portfolio_stocks.map(stock => stock.stock.symbol));
 
+// Extract unique investor emails
+subscriberEmails = [...new Set(resp.data.portfolio_stocks.map(stock => stock.user.email))];
+
+console.log("Unique Stock Symbols:", uniqueSymbolSet);
+console.log("Unique Investor Emails:", subscriberEmails);
+
+            }catch(e){
+                console.error(e)
+            }
         // Collect all rows
         for await (const row of parser) {
             results.push(row);
         }
-          for (const row of results) {
+        processOnlySubscriptions === true ? filteredResults = results.filter(r => uniqueSymbolSet.has(r.symbol)  ) : filteredResults = results
+        if (true){
+            console.log("Filtered Results", filteredResults.length)
+            console.log(filteredResults)
+            console.log("unique subscribers", subscriberEmails)
+            return;
+        }
+          for (const row of filteredResults) {
             try {
                 console.log(row.symbol, row.dissemination)
                 const dateToks = row.dissemination.split(' ')
@@ -100,7 +137,7 @@ const route = async (req, res) => {
     }
 
     try {
-        const { fromDate, toDate, index } = req.body
+        const { fromDate, toDate, index, processOnlySubscriptions } = req.body
         const baseUrl = "https://www.nseindia.com"
         const urlSuffix = `/api/corporate-announcements?index=${index}&from_date=${fromDate}&to_date=${toDate}&csv=true`
         const downloadFileName = `nse_announcements_${index}_${fromDate}_${toDate}.csv`
@@ -124,7 +161,7 @@ const route = async (req, res) => {
             else console.log("CSV Exists, no download needed")
         const filepath = path.join(downloadDateFolder, downloadFileName);
           
-        await processCSVAndDownload(filepath, downloadDateFolder, year+"-"+month+"-"+day, index).then(() => console.log('Processing completed'))
+        await processCSVAndDownload(filepath, downloadDateFolder, year+"-"+month+"-"+day, index, processOnlySubscriptions).then(() => console.log('Processing completed'))
             .catch(error => console.error('Error:', error));
         res.status(200).json("CSV Downloaded and Processed")
 
