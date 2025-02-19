@@ -55,7 +55,7 @@ query UserStockPortfolio($email: String!, $fromDate: date!, $toDate: date!){
         announcement_document_link
         announcement_sentiment
       }
-      insider_trades (where: {intimation_date: {_gte: $fromDate, _lte: $toDate}}){
+      insider_trades (where: {created_at: {_gte: $fromDate, _lte: $toDate}}){
         intimation_date
         name_of_insider
         number_of_securities_transacted
