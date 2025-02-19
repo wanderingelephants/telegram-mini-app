@@ -142,7 +142,7 @@ const route = async (req, res) => {
     const summaryDate = req.query.dateStr
 
     const portfolioQuery = `
-    query getPortfolios($summaryDate: date!){
+    query getPortfolios($summaryDate: date!, $summaryDateTime: timestamptz!){
   users{
     email
     portfolio_stocks{
@@ -156,7 +156,7 @@ const route = async (req, res) => {
           announcement_sentiment
           announcement_document_link
         }
-        insider_trades(where: {created_at: {_gt: $summaryDate}}){
+        insider_trades(where: {created_at: {_gte: $summaryDateTime}}){
           name_of_insider
           category_of_insider
           transaction_type
@@ -171,9 +171,10 @@ const route = async (req, res) => {
     }
   }
 }`
+const summaryDateTime = `${summaryDate}T00:00:00.000Z`
 const resp = await postToGraphQL({
     query: portfolioQuery,
-    variables: {summaryDate}
+    variables: {summaryDate, summaryDateTime}
 })
 console.log(resp.data)
 const subscribers = resp.data.users

@@ -240,6 +240,8 @@ export default {
           variables: {
             fromDate: this.fromDate.toISOString().split("T")[0],
             toDate: this.toDate.toISOString().split("T")[0],
+            fromDateTime: this.fromDate.toISOString(),
+            toDateTime: this.toDate.toISOString(),
             email: this.userGoogle.email
           }
         })

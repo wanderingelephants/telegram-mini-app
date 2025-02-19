@@ -37,7 +37,7 @@ mutation deleteUserStockPortfolio($stock_id: Int!, $email: String!){
 }
 `
 const GET_PORTFOLIO_ANNOUNCEMENTS = gql`
-query UserStockPortfolio($email: String!, $fromDate: date!, $toDate: date!){
+query UserStockPortfolio($email: String!, $fromDate: date!, $toDate: date!, $fromDateTime: timestamptz!, $toDateTime: timestamptz!){
   portfolio_stocks(where: {user:{email: {_eq: $email}}}){
     stock{
       company_name
@@ -55,7 +55,7 @@ query UserStockPortfolio($email: String!, $fromDate: date!, $toDate: date!){
         announcement_document_link
         announcement_sentiment
       }
-      insider_trades (where: {created_at: {_gte: $fromDate, _lte: $toDate}}){
+      insider_trades (where: {created_at: {_gte: $fromDateTime, _lte: $toDateTime}}){
         intimation_date
         name_of_insider
         number_of_securities_transacted
