@@ -1,5 +1,7 @@
 const { postToGraphQL } = require("../../../lib/helper");
 const sendEmail = require("../../../utils/sendMail");
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
 const { reverse_mapping_category_of_insider, reverse_mapping_regulation,
     reverse_mapping_type_of_security, reverse_mapping_mode_of_transaction,
     reverse_mapping_transaction_type, reverse_mapping_exchange,
@@ -177,8 +179,9 @@ console.log(resp.data)
 const subscribers = resp.data.users
 for (const subscriber of subscribers){
     const BodyText  = draftEmail(subscriber.portfolio_stocks)
-    console.log("BodyText", BodyText)
+    console.log("Sending Mail", new Date(), subscriber.email, BodyText)
     await sendEmail([subscriber.email], "Watch List Updates", BodyText)
+    await delay(2000)
 }   
 res.status(200).json("OK")
 }
