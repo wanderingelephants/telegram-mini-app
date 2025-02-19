@@ -234,7 +234,8 @@ const processInsiderCSV = async (dateStr, download = true) => {
 };
 const route = async(req, res) => {
   try{
-    await processInsiderCSV(req.query.dateStr, false) 
+    let download = "true" === req.query.download ? true : false
+    await processInsiderCSV(req.query.dateStr, download) 
     res.status(200).json("ProcessedInsider")
   }
   catch(e){
