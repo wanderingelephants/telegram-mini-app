@@ -39,22 +39,34 @@ cron.schedule('5 0 * * *', async () => {
       return;
     }
     // Compute yesterday's date
-    let summaryUrl = `${summaryServiceUrl}/api/nse/summaries?summaryDate=${formattedDateYday}&index=sme`;
+    let summaryUrl = `${summaryServiceUrl}/api/nse/summaries?summaryDate=${formattedDateYday}&index=sme&processOnlySubscriptions=true`;
     console.log(`Invoking: ${summaryUrl}`);
     let response = await axios.get(summaryUrl);
     const t2 = Date.now(); // End time
     console.log('SME Summary API response:', response.data);
     console.log(`SME Execution time: ${(t2 - t1)} ms`); 
-    summaryUrl = `${summaryServiceUrl}/api/nse/summaries?summaryDate=${formattedDateYday}&index=equities`;
+    summaryUrl = `${summaryServiceUrl}/api/nse/summaries?summaryDate=${formattedDateYday}&index=equities&processOnlySubscriptions=true`;
     console.log(`Invoking: ${summaryUrl}`);
     response = await axios.get(summaryUrl);
     console.log('Equities Summary API response:', response.data);
+    response = await axios.get(summaryServiceUrl + "/api/nse/insider?dateStr=" + formattedDateYday);
+    console.log("Processed insider trades")
+
+    summaryUrl = `${summaryServiceUrl}/api/nse/summaries?summaryDate=${formattedDateYday}&index=sme&processOnlySubscriptions=false`;
+    console.log(`Invoking: ${summaryUrl}`);
+    response = await axios.get(summaryUrl);
+
+    summaryUrl = `${summaryServiceUrl}/api/nse/summaries?summaryDate=${formattedDateYday}&index=equities&processOnlySubscriptions=false`;
+    console.log(`Invoking: ${summaryUrl}`);
+    response = await axios.get(summaryUrl);
+    console.log('Equities Summary API response:', response.data);
+    
+    
+
     const t3 = Date.now();
     console.log(`Equities Execution time: ${(t3 - t2)} ms`); 
     //await processInsiderCSV(formattedDateYday)
-    response = await axios.get(summaryServiceUrl + "/api/nse/insider?dateStr=" + formattedDateYday);
-    console.log("Processed insider trades")
-    
+        
   } catch (error) {
     console.error('Error calling summary API:', error);
   }

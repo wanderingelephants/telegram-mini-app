@@ -66,7 +66,7 @@ console.log("Unique Investor Emails:", subscriberEmails);
         for await (const row of parser) {
             results.push(row);
         }
-        processOnlySubscriptions === true ? filteredResults = results.filter(r => uniqueSymbolSet.has(r.symbol)  ) : filteredResults = results
+        processOnlySubscriptions.toLowerCase() === "true" ? filteredResults = results.filter(r => uniqueSymbolSet.has(r.symbol)  ) : filteredResults = results
         if (true){
             console.log("Filtered Results", filteredResults.length)
             console.log(filteredResults)
@@ -138,6 +138,8 @@ console.log("Unique Investor Emails:", subscriberEmails);
 
     try {
         const { fromDate, toDate, index, processOnlySubscriptions } = req.body
+        console.log("Received announcment post")
+        console.log({ fromDate, toDate, index, processOnlySubscriptions })
         const baseUrl = "https://www.nseindia.com"
         const urlSuffix = `/api/corporate-announcements?index=${index}&from_date=${fromDate}&to_date=${toDate}&csv=true`
         const downloadFileName = `nse_announcements_${index}_${fromDate}_${toDate}.csv`

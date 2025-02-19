@@ -234,6 +234,7 @@ export default {
   
   methods: {
     async getAnnouncements(){
+      console.log("getAnnouncements", new Date())
       try{
         const resp = await this.$apollo.query({
           query: GET_PORTFOLIO_ANNOUNCEMENTS,
