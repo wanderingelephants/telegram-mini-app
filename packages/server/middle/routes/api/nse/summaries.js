@@ -1,4 +1,5 @@
 const axios = require("axios")
+const Puppet = require('./puppet.js')
 const fs = require('fs');
 const { parse } = require('csv-parse');
 
@@ -153,7 +154,7 @@ const processSummary = async (summaryDate, index, processOnlySubscriptions) => {
     const downloadDateFolder = await downloadMasterCSV(summaryDate, downloadFileName)
     console.log("processSummary CSV Done")
     if (downloadDateFolder == "") {
-        res.status(200).json("Master CSV Processing Failed")
+        console.log("downloadDateFolder is blank, no further processing")
         return
     }
     const filteredRecords = await getRecordsToProcess(path.join(downloadDateFolder, downloadFileName), processOnlySubscriptions)
