@@ -49,6 +49,8 @@ const route = async (req, res) => {
             console.log(JSON.stringify(resp.data.data.candles))
             const candle = resp.data.data.candles[0]
             console.log("candle", candle)
+            const dt = new Date(candle[0])
+            console.log(dt, dt.toISOString(), dt.toLocaleDateString('en-GB', { timeZone: 'Asia/Kolkata' }).split('/').join('-'))
             const mutationVariables = {
                 "object": {
                     "stock_id": record.id,
