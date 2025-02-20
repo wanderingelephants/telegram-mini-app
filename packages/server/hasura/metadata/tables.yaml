@@ -58,6 +58,9 @@
       using:
         foreign_key_constraint_on: stock_id
 - table:
+    name: nse_nifty_prices
+    schema: public
+- table:
     name: portfolio_mutual_funds
     schema: public
   object_relationships:

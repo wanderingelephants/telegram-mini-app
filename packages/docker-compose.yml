@@ -54,7 +54,7 @@ services:
     build:
       context: ./server/pdf_to_text
       dockerfile: Dockerfile
-    container_name: pdf-processor
+    container_name: pdf-to-text
     ports:
       - "3500:3500"
     volumes:

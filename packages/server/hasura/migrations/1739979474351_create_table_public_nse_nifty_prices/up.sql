@@ -1,0 +1,1 @@
+CREATE TABLE "public"."nse_nifty_prices" ("id" serial NOT NULL, "price_date" date NOT NULL, "close" Numeric NOT NULL, "open" numeric NOT NULL, "high" numeric NOT NULL, "low" numeric NOT NULL, "volume_millions" Numeric NOT NULL, "percentage_change" numeric NOT NULL, PRIMARY KEY ("id") , UNIQUE ("price_date"));
