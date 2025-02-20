@@ -89,6 +89,7 @@ const getRecordsToProcess = async (csvPath, processOnlySubscriptions) => {
         console.error(e)
     }
     console.log("filteredResults", filteredResults.length)
+    return filteredResults
 }
 const getPdfFileName = (row) => {
     const fileToks = row.attachment.split('/')
@@ -168,13 +169,13 @@ const processSummary = async (summaryDate, index, processOnlySubscriptions) => {
         console.log("downloadDateFolder is blank, no further processing")
         return
     }
-    const filteredRecords = await getRecordsToProcess(path.join(downloadDateFolder, downloadFileName), processOnlySubscriptions)
-    if (filteredRecords.length == 0){
+    const filteredResults = await getRecordsToProcess(path.join(downloadDateFolder, downloadFileName), processOnlySubscriptions)
+    if (filteredResults.length == 0){
         res.status(200).json("No Master CSV Records to Process")
         return    
     }
     const pdfBasePath = path.join(downloadDateFolder, "pdfs")
-    await downloadPDFs(filteredRecords, pdfBasePath)
+    await downloadPDFs(filteredResults, pdfBasePath)
     const toks = summaryDate.split("-")
     const formattedDate = toks[0] + "/" + toks[1] + "/" + toks[2] + "/" + index
     for (const row of filteredResults) {
