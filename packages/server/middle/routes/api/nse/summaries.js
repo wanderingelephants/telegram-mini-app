@@ -8,7 +8,7 @@ const announcement_data_folder = process.env.NSE_ANNOUNCEMENTS_DOWNLOAD
 const { postToGraphQL } = require("../../../lib/helper");
 const path = require("path");
 
-const downloadMasterCSV = async (summaryDate, downloadFileName) => {
+const downloadMasterCSV = async (summaryDate, downloadFileName, index) => {
     try {
         const toks = summaryDate.split("-")
         const year = toks[0]
@@ -19,6 +19,11 @@ const downloadMasterCSV = async (summaryDate, downloadFileName) => {
         const fullPath = path.join(downloadDateFolder, downloadFileName)
         if (!fs.existsSync(fullPath)) {
             console.log("CSV does not exist, download")
+            const baseUrl = "https://www.nseindia.com"
+            const fromDate = day + "-" + month + "-" + year
+
+            const urlSuffix = `/api/corporate-announcements?index=${index}&from_date=${fromDate}&to_date=${fromDate}&csv=true`
+            console.log("urlSuffix", urlSuffix)
             const puppet = new Puppet(baseUrl, urlSuffix, downloadDateFolder, downloadFileName)
             await puppet.downloadFile()
         }
@@ -151,7 +156,7 @@ const processSummary = async (summaryDate, index, processOnlySubscriptions) => {
     })*/
     const downloadFileName = `nse_announcements_${index}_${summaryDate}.csv`
         
-    const downloadDateFolder = await downloadMasterCSV(summaryDate, downloadFileName)
+    const downloadDateFolder = await downloadMasterCSV(summaryDate, downloadFileName, index)
     console.log("processSummary CSV Done")
     if (downloadDateFolder == "") {
         console.log("downloadDateFolder is blank, no further processing")
