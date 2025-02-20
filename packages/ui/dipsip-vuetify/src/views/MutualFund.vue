@@ -11,7 +11,7 @@
             
           >
           
-              <!--<google-sign-in/>  -->
+       <google-sign-in/>
        <prompt-chat :distilledModel="distilledModel" :title="title" :subTitles="subTitles" :userInputLabel="userInputLabel" :debug="debug"></prompt-chat>
       
               
@@ -101,7 +101,7 @@
 <script>
 import { mapState } from "vuex";
 
-//import GoogleSignIn from '../components/GoogleSignIn'
+import GoogleSignIn from '../components/GoogleSignIn'
 import api from './api'
 import MutualFundAnalysis from '../components/MutualFundAnalysis.vue'
 import PromptChat from "./PromptChat.vue"
@@ -109,7 +109,7 @@ import PromptChat from "./PromptChat.vue"
 export default {
   name: 'ChatApp',
   components: {
-    MutualFundAnalysis, PromptChat
+    MutualFundAnalysis, PromptChat, GoogleSignIn
   },  
   data() {
     return {

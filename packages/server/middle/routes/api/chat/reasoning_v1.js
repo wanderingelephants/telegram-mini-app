@@ -13,8 +13,9 @@ let mutual_funds = [];
     let holding_reporting_dates = []
     let corporate_announcements = []
     let insider_trades = []
-    let daily_stock_prices_by_company_name = []
-
+    let daily_closing_stock_prices_by_company_name = []
+    let market_nse_nifty_closing_prices = []
+    let user_stock_portfolio = []
 //const { json } = require('stream/consumers');
 const mkdir = util.promisify(fs.mkdir);
 const writeFile = util.promisify(fs.writeFile);
@@ -26,7 +27,7 @@ const _getFilePath = function (basePath, sessionId, modelName, filename) {
   const day = String(date.getDate()).padStart(2, '0');
   return path.join(basePath, year, month, day, sessionId, modelName, filename);
 }
-const testAgainstFunction = ""; //process.env.LLM_GENERATED_CODE + "/2025/02/10/8622f154-26ea-47d5-b52d-b3d36fd531ce/processAnnouncements_1739200686466.js";
+const testAgainstFunction = ""; //process.env.LLM_GENERATED_CODE + "/2025/02/20/3c39f48c-c571-4e8a-a53b-9e5ea44707f7/analysis_reasoning/analysis_1740049593955.js";
 const { reverse_mapping_category_of_insider, reverse_mapping_regulation,
   reverse_mapping_type_of_security, reverse_mapping_mode_of_transaction,
   reverse_mapping_transaction_type, reverse_mapping_exchange,
@@ -34,7 +35,7 @@ const { reverse_mapping_category_of_insider, reverse_mapping_regulation,
   const transformStockData = function(stockPriceDaily) {
     const stockMap = new Map();
   
-    stockPriceDaily.forEach(({ stock, price_date, open, high, low, close }) => {
+    stockPriceDaily.forEach(({ stock, price_date, close }) => {
       const { company_name } = stock;
   
       if (!stockMap.has(company_name)) {
@@ -45,7 +46,7 @@ const { reverse_mapping_category_of_insider, reverse_mapping_regulation,
       }
   
       stockMap.get(company_name).stock_prices.push({ 
-        price_date, open, high, low, close 
+        price_date, close 
       });
     });
   
@@ -143,8 +144,13 @@ const initAllData = async function () {
     low
     close
   }
-}`
+   
+  nse_nifty_prices(where: {price_date: {_gte: $start_date}}){
+    close
+    price_date
+  }
 
+}`
 const date = new Date();
 date.setDate(date.getDate() - 15);
 const startDate = date.toISOString().split("T")[0]; // Formats to YYYY-MM-DD
@@ -158,7 +164,8 @@ const closingPriceResp = await postToGraphQL({
   query: closingPriceQuery,
   variables: closingPriceVariables
 })
-daily_stock_prices_by_company_name = transformStockData(closingPriceResp.data.stock_price_daily)
+daily_closing_stock_prices_by_company_name = transformStockData(closingPriceResp.data.stock_price_daily)
+market_nse_nifty_closing_prices = closingPriceResp.data.nse_nifty_prices
 const t2 = Date.now()
 console.log("Time Take to initData reasoning_v1", (t2-t1))
 }
@@ -473,8 +480,6 @@ class LLMResponseHandler {
     console.log({
       functionName, generatedFilePath
     })
-    //const generatedFilePath = path.join(process.env.LLM_GENERATED_CODE, "2025", "02", "06", "8622f154-26ea-47d5-b52d-b3d36fd531ce", "mutual_fund_query_1738834611243.js")
-    //const functionName = "mutual_fund_query"
     
     try {
       switch (functionName) {
@@ -485,7 +490,7 @@ class LLMResponseHandler {
           break;
         case "analysis":
           const analysis = require(generatedFilePath)
-          result = await analysis(mutual_funds, mutual_fund_stock_holdings, holding_reporting_dates, insider_trades, corporate_announcements, daily_stock_prices_by_company_name)
+          result = await analysis(mutual_funds, mutual_fund_stock_holdings, holding_reporting_dates, insider_trades, corporate_announcements, daily_closing_stock_prices_by_company_name,market_nse_nifty_closing_prices,user_stock_portfolio)
           break;
       }
 
@@ -501,10 +506,24 @@ class LLMResponseHandler {
 
 const route = async (req, res) => {
   const sessionId = req.sessionId;
-  const { distilledModel, messages, llm, streaming = false, singleShotPrompt = false, customData } = req.body;
+  const { email, distilledModel, messages, llm, streaming = false, singleShotPrompt = false, customData } = req.body;
   const modelName = distilledModel
   const LLMToUse = llm ? llm : process.env.LLM_TO_USE;
   try {
+    const user_stock_portfolio_query = `query userStocks($email: String!){
+      portfolio_stocks(where: {user: {email: {_eq: $email}}}){
+        stock{
+          company_name
+          company_sector
+        }
+      }
+    }`
+    const stock_portfolio_resp = await postToGraphQL({
+      query: user_stock_portfolio_query,
+      variables: {"email": email}
+    })
+    user_stock_portfolio = stock_portfolio_resp.data.portfolio_stocks.map(s => s.stock.company_name)
+    
     const PROMPTS_FOLDER = path.join(__dirname, 'prompts');
     const systemPromptPath = path.join(PROMPTS_FOLDER, `${distilledModel}_system_prompt.txt`);
     const systemPrompt = await readFile(systemPromptPath, 'utf-8');

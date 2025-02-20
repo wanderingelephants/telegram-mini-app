@@ -219,7 +219,10 @@ export default {
   watch: {
     async loggedInGoogle(newVal) {},
     async userGoogle(newVal) {
-      if (newVal && newVal.email) await this.getUserStockPortfolio();
+      if (newVal && newVal.email){
+        if (this.stocks.length === 0) await this.getStocks()
+        await this.getUserStockPortfolio();
+      } 
     },
   },
   computed: {
@@ -479,7 +482,7 @@ export default {
         this.fromDate = yesterday;
         this.toDate = yesterday;
         
-    if (this.stocks.length == 0) await this.getStocks();
+    if (this.stocks.length == 0 && this.userGoogle) await this.getStocks();
   },
 };
 </script>

@@ -45,7 +45,7 @@ This data set can be used to answer standalone User questions around insider tra
 
 5. holding_reporting_dates - this is simple array of dates, which corresponds to when mutual funds reported their holdings. This is used only for mutual fund stock holding queries.
 
-6. daily_stock_prices_by_company_name -  this an array of stocks,  with each stock itself having an array of dates and closing price on that date.
+6. daily_closing_stock_prices_by_company_name -  this an array of stocks,  with each stock itself having an array of dates and closing price on that date.
 
 [
   {
@@ -53,23 +53,29 @@ This data set can be used to answer standalone User questions around insider tra
     "stock_prices": [
       {
         "price_date": "2025-02-13",
-        "open": 751.8,
-        "high": 753.3,
-        "low": 715.75,
         "close": 723
       },
       {
         "price_date": "2025-02-12",
-        "open": 731.8,
-        "high": 723.3,
-        "low": 705.75,
         "close": 733
       }
     ]
   },
 ]
 
-This data set may be used for standalone questions,  but will often be used  in conjunction with other data sets. i.e. multi-hop questions
+7. market_nse_nifty_closing_prices - this is an array of closing market prices of NSE Nifty 50 index, also widely referred to as "market". Use this when User question is relative to market. e.g. on days when market was down by 2%, which stocks closed in the green ?
+The market_nse_nifty_closing_prices has a simple object - {market_date, closing_price, volume_in_millions, percentage_change_over_prevous_closing}
+
+{
+"market_date" : "2025-02-28", //yyyy-mm-dd
+"closing_price": 23000,
+"volume_in_millions": 345,
+"percentage_change_over_prevous_closing": -0.5
+}
+
+market_nse_nifty_closing_prices data set may be used for standalone questions,  but will often be used  in conjunction with other data sets. i.e. multi-hop questions
+
+8. user_stock_portfolio - this is an array of company stock names that the user has in his/her watch list or portfolio. Questions having phrases like "my portfolio" or "my watchlist" will need to filter the stock list to what is in the user_stock_portfolio array. e.g. user_stock_portfolio = ["Infosys", "V2 Retail Ltd", "Reliance Industries", "Bajaj Auto Ltd"]
 
 So far, so good. While standalone questions that can be answered by respective data sets is relatively easy, 
 the User may often ask questions that traverse multiple data sets. In such cases also, document why you picked the first data set, 
@@ -87,14 +93,14 @@ Coding Guidelines
 
 Output the function as a const
 
-const analysis = function(mutual_funds, mutual_fund_stock_holdings, reporting_dates, insider_trades, corporate_announcements, daily_stock_prices_by_company_name){
+const analysis = function(mutual_funds, mutual_fund_stock_holdings, reporting_dates, insider_trades, corporate_announcements, daily_stock_prices_by_company_name, market_nse_nifty_closing_prices, user_stock_portfolio){
 	//your code and reasoning steps as comments
 }
 
 Example:
 User_Query: Which mutual funds have star rating of 3 or above
 Response:
-const analysis = function(mutual_funds, mutual_fund_stock_holdings, reporting_dates, insider_trades, corporate_announcements, daily_stock_prices_by_company_name){
+const analysis = function(mutual_funds, mutual_fund_stock_holdings, reporting_dates, insider_trades, corporate_announcements, daily_stock_prices_by_company_name, market_nse_nifty_closing_prices, user_stock_portfolio){
     //REASONING STEPS
     //filter property identified as mutual_fund_star_rating
     const threeStarRatedMutualFunds = mutual_funds.filter(mf => 
@@ -109,7 +115,7 @@ const analysis = function(mutual_funds, mutual_fund_stock_holdings, reporting_da
 Example:
 User_Query: which funds have stock holding in V2 Retail
 Response:
-const analysis = function(mutual_funds, mutual_funds_stock_holdings, holding_reporting_dates, insider_trades, corporate_announcements, daily_stock_prices_by_company_name){
+const analysis = function(mutual_funds, mutual_funds_stock_holdings, holding_reporting_dates, insider_trades, corporate_announcements, daily_stock_prices_by_company_name, market_nse_nifty_closing_prices, user_stock_portfolio){
 //get latest reporting date
 const latestReportingDate = holding_reporting_dates[0];
 //filter holdings for latest date and V2 Retail stock

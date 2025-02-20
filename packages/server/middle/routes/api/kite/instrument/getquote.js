@@ -21,7 +21,7 @@ let getquote = async (instrumentList, sendNotification) => {
     for (let i = 0; i < instrumentList.length; i++) {
         kiteQuoteUrl += (i == 0) ? 'i=' + 'NSE:' + instrumentList[i] : '&i=' + 'NSE:' + instrumentList[i]
     }
-    console.log({ kiteQuoteUrl })
+    //console.log({ kiteQuoteUrl })
     let access_token_data;
     access_token_data = require(process.env.ACCESS_TOKEN_PATH)
     if (fs.existsSync(process.env.ACCESS_TOKEN_PATH)) access_token_data = require(process.env.ACCESS_TOKEN_PATH)

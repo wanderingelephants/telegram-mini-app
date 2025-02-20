@@ -67,10 +67,15 @@
         </v-card-actions>
       </div>
     </v-card>
+    <v-snackbar
+        v-model="snackbar.show"
+        :timeout="snackbar.timeout"
+        :color="snackbar.color">{{ snackbar.message }}</v-snackbar>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 
 export default{
   name: 'PromptChat',
@@ -106,6 +111,13 @@ export default{
    this.sendMessage();
  },
         async sendMessage() {
+      if (!this.userGoogle){
+        this.snackbar.color = "error"
+        this.snackbar.message = "Sign In needed"
+        this.snackbar.show = true
+        return
+      }
+      console.log("send message for user", this.userGoogle.email)    
       if (!this.userInput.trim()) return;
       if  (this.userInput.length > 1000) this.userInput = this.userInput.substring(0, 1000)
       this.suggestions = [];
@@ -129,7 +141,8 @@ export default{
       body: JSON.stringify({
         distilledModel: this.distilledModel,
         messages: [...this.messages],
-        streaming: true
+        streaming: true,
+        email: this.userGoogle.email
       })
     });
 
@@ -224,6 +237,13 @@ export default{
     });
     }
     },
+    computed: {
+  ...mapState([
+    "loggedInGoogle",
+    "userGoogle",
+  ]),
+  
+},
     data(){
         return {
             model: 'llama3.2:latest',
@@ -236,7 +256,13 @@ export default{
             userInput: '',
             suggestions: [],
             company_names_list: [],
-            hideNoData: true
+            hideNoData: true,
+            snackbar: {
+              show: false,
+              message: "",
+              timeout: 3000,
+              color: "orange",
+            },
             
         }
     }
