@@ -3,7 +3,8 @@ const path = require('path');
 const axios = require('axios');
 
 
-async function processSummaries(inputFolder, outputFolder) {
+async function processSummaries(inputFolder, outputFolder, fileToSummarize) {
+    console.log("Recevied text to summary", inputFolder, outputFolder, fileToSummarize)
     const API_SERVER = process.env.API_SERVER_URL;
     const NSE_PREFIX = "https://nsearchives.nseindia.com/corporate/";
 
@@ -31,10 +32,17 @@ async function processSummaries(inputFolder, outputFolder) {
             .filter(file => file.endsWith('.txt') && !file.includes('_api_response.txt'));
 
         for (const file of files) {
-            console.log(`Processing file: ${file}`);
+            console.log(`Checking file: ${file}`);
             
             // Read file content
             const filePath = path.join(inputFolder, file);
+            if (fileToSummarize && filePath !== fileToSummarize){
+                console.log("Skipping file", filePath)
+                continue;
+            }
+            else {
+                console.log("Will process summary for file", filePath)
+            }
             const content = await fs.readFile(filePath, 'utf-8');
             
             const filenameNoExt = path.parse(file).name;
