@@ -50,11 +50,14 @@ const route = async (req, res) => {
             const candle = resp.data.data.candles[0]
             console.log("candle", candle)
             const dt = new Date(candle[0])
+            const toks = dt.toLocaleDateString('en-GB', { timeZone: 'Asia/Kolkata' }).split('/')
+
+            const yyyyymmdd = toks[2] + "-" + toks[1] + "-" + toks[0] 
             console.log(dt, dt.toISOString(), dt.toLocaleDateString('en-GB', { timeZone: 'Asia/Kolkata' }).split('/').join('-'))
             const mutationVariables = {
                 "object": {
                     "stock_id": record.id,
-                    "price_date": new Date(candle[0]),
+                    "price_date": yyyyymmdd,
                     "open": candle[1],
                     "high": candle[2],
                     "low": candle[3],
