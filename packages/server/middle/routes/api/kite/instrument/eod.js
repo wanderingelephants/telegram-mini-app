@@ -15,15 +15,15 @@ const route = async (req, res) => {
 
     
     const queryResp = await postToGraphQL({
-        query: `query GetEquitySymbols{
-  stock{
+        query: `query GetEquitySymbols($symbol: String!){
+  stock(where: {symbol: {_eq: $symbol}}){
   id
     symbol
     instrument_token
     exchange_token
   }
 }`,
-        variables: {}
+        variables: {"symbol": "VLINFRA"}
     })
 
     const stocks = queryResp.data.stock
@@ -68,7 +68,8 @@ const route = async (req, res) => {
         id
       }
     }`
-            await postToGraphQL({ query: insertMutation, variables: mutationVariables })
+         const insertResp =  await postToGraphQL({ query: insertMutation, variables: mutationVariables })
+         console.log(insertResp)
         }
         catch(e){
             console.log(e.message, record)
