@@ -66,8 +66,9 @@ const route = async (req, res) => {
         for await (const row of parser) {
             results.push(row);
         }
+        console.log("results", results.length)
         processOnlySubscriptions.toLowerCase() === "true" ? filteredResults = results.filter(r => uniqueSymbolSet.has(r.symbol)) : filteredResults = results
-
+        console.log("filteredResults", filteredResults.length)
         for (const row of filteredResults) {
             try {
                 console.log(row.symbol, row.dissemination)
@@ -165,7 +166,7 @@ const route = async (req, res) => {
     }
     catch (e) {
         console.log('err in  processing', e)
-        res.status(500).json("ETF did not process")
+        res.status(500).json("announcements did not process")
     }
 
 }
