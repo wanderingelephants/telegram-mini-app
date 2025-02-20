@@ -1,7 +1,7 @@
 const axios = require("axios")
 const processSummaries = require('./processSummaries');
-    
-const processSummary = async(summaryDate, index, processOnlySubscriptions) =>{
+
+const processSummary = async (summaryDate, index, processOnlySubscriptions) => {
     const apiServer = process.env.API_SERVER_URL
     await axios.post(`${apiServer}/api/nse/announcements`, {
         fromDate: summaryDate,
@@ -9,13 +9,28 @@ const processSummary = async(summaryDate, index, processOnlySubscriptions) =>{
         index,
         processOnlySubscriptions
     })
+    console.log("processSummary CSV Done")
     const announcement_data_folder = process.env.NSE_ANNOUNCEMENTS_DOWNLOAD
     const toks = summaryDate.split("-")
     const formattedDate = toks[2] + "/" + toks[1] + "/" + toks[0] + "/" + index
-    await axios.get(process.env.PDF_PROCESS_URL + `/api/processPDFs?inputFolder=${formattedDate}&outputFolder=${formattedDate}`)
-    await processSummaries(announcement_data_folder+"/to_text/" + formattedDate, announcement_data_folder+"/summaries/" + formattedDate)
+    try {
+        await axios.get(process.env.PDF_PROCESS_URL + `/api/processPDFs?inputFolder=${formattedDate}&outputFolder=${formattedDate}`)
+
+    }
+    catch (e) {
+        console.error(e)
+    }
+    console.log("processSummary pdf-to-text done")
+    try {
+        await processSummaries(announcement_data_folder + "/to_text/" + formattedDate, announcement_data_folder + "/summaries/" + formattedDate)
+
+    }
+    catch (e) {
+        console.error(e)
+    }
+    console.log("processSummary summaries done")
 }
-const route = async(req, res) => {
+const route = async (req, res) => {
     //"13-02-2025"
     const summaryDate = req.query.summaryDate
     const index = req.query.index
@@ -23,7 +38,7 @@ const route = async(req, res) => {
 
     if (!summaryDate || !index) res.status(500).json("specify summaryDate and index=equities/sme")
     await processSummary(summaryDate, index, processOnlySubscriptions)
-    
+
     res.status(200).json("ok")
 }
 module.exports = route

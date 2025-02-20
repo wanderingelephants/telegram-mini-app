@@ -159,7 +159,7 @@ const route = async (req, res) => {
         else console.log("CSV Exists, no download needed")
         const filepath = path.join(downloadDateFolder, downloadFileName);
 
-        await processCSVAndDownload(filepath, downloadDateFolder, year + "-" + month + "-" + day, index, processOnlySubscriptions).then(() => console.log('Processing completed'))
+        await processCSVAndDownload(filepath, downloadDateFolder, year + "-" + month + "-" + day, index, processOnlySubscriptions).then(() => console.log('csv Processing completed'))
             .catch(error => console.error('Error:', error));
         res.status(200).json("CSV Downloaded and Processed")
 

@@ -98,7 +98,7 @@ def process_single_pdf():
         return jsonify({
             'success': False,
             'error': f'Input PDF does not exist: {pdf_path}'
-        }), 404
+        }), 200
     
     # Validate input is a PDF
     if pdf_path.suffix.lower() != '.pdf':
@@ -164,7 +164,7 @@ def process_pdfs():
             'success': False,
             'error': f'No PDF files found in {pdf_dir}',
             'note': 'Directory exists but contains no PDF files'
-        }), 404
+        }), 200
     
     # Process results
     results = {
