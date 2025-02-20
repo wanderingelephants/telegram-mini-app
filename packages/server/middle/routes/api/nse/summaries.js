@@ -171,7 +171,7 @@ const processSummary = async (summaryDate, index, processOnlySubscriptions) => {
     }
     const filteredResults = await getRecordsToProcess(path.join(downloadDateFolder, downloadFileName), processOnlySubscriptions)
     if (filteredResults.length == 0){
-        res.status(200).json("No Master CSV Records to Process")
+        console.log("No Master CSV Records to Process")
         return    
     }
     const pdfBasePath = path.join(downloadDateFolder, "pdfs")
