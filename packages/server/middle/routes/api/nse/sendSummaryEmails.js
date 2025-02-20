@@ -39,8 +39,22 @@ const { reverse_mapping_category_of_insider, reverse_mapping_regulation,
             });
         });
     
-        // Start building email body
         let emailBody = `
+        <div style="background-color: #fff3e6; padding: 15px; margin: 20px 0; border-radius: 5px;">
+            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                <span style="font-size: 24px; margin-right: 10px;">💡</span>
+                <h2 style="font-weight: bold; font-size: 20px; margin: 0;">Did You Know ?</h2>
+            </div>
+            <p style="margin: 10px 0;">
+                On <a href="https://dipsip.co.in/stocks" style="color: #0066cc; text-decoration: underline;">DipSip.co.in</a>, 
+                you can search for hidden gems by making nested and complex queries.<br/><br/>
+                <em>For example:</em> "Which companies made positive announcements last week, and whose stock price went up next day, 
+                and is now below the announcement day price"
+            </p>
+        </div>
+    `;
+        // Start building email body
+        emailBody += `
             <h1 style="font-weight: bold; font-size: 24px;">Latest Updates</h1>
             
             <h2 style="font-weight: bold; font-size: 20px; margin-top: 20px;">Announcements</h2>
@@ -120,20 +134,7 @@ const { reverse_mapping_category_of_insider, reverse_mapping_regulation,
             }
         });
         
-        emailBody += `
-        <div style="background-color: #fff3e6; padding: 15px; margin: 20px 0; border-radius: 5px;">
-            <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                <span style="font-size: 24px; margin-right: 10px;">💡</span>
-                <h2 style="font-weight: bold; font-size: 20px; margin: 0;">Did You Know ?</h2>
-            </div>
-            <p style="margin: 10px 0;">
-                On <a href="https://dipsip.co.in/stocks" style="color: #0066cc; text-decoration: underline;">DipSip.co.in</a>, 
-                you can search for hidden gems by making nested and complex queries.<br/><br/>
-                <em>For example:</em> "Which companies made positive announcements last week, and whose stock price went up next day, 
-                and is now below the announcement day price"
-            </p>
-        </div>
-    `;
+        
 
         return emailBody;
     }

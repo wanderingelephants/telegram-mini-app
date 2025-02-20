@@ -1,20 +1,19 @@
 require('dotenv').config();
-const AWS = require('aws-sdk');
+const { SESClient, SendEmailCommand } = require('@aws-sdk/client-ses');
 
-// Configure AWS SES
-AWS.config.update({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+const sesClient = new SESClient({
   region: process.env.AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  },
 });
-
-const ses = new AWS.SES({ apiVersion: '2010-12-01' });
 
 const sendEmail = async(ToAddresses, SubjectLine, BodyText) => {
   const params = {
     Source: process.env.SENDER_EMAIL, // Must be a verified sender
     Destination: {
-      ToAddresses//: ['sachet.singh@gmail.com'], // Change this to the actual recipient
+      ToAddresses
     },
     Message: {
       Subject: { Data: `${SubjectLine}` },
@@ -33,7 +32,8 @@ const sendEmail = async(ToAddresses, SubjectLine, BodyText) => {
   };
   console.log(params)
   try {
-    const result = await ses.sendEmail(params).promise();
+    const command = new SendEmailCommand(params);
+    const result = await sesClient.send(command);
     console.log('Email sent:', result);
   } catch (error) {
     console.error('Error sending email:', error);
