@@ -15,15 +15,15 @@ const route = async (req, res) => {
 
     
     const queryResp = await postToGraphQL({
-        query: `query GetEquitySymbols($symbol: String!){
-  stock(where: {symbol: {_eq: $symbol}}){
+        query: `query GetEquitySymbols{
+  stock{
   id
     symbol
     instrument_token
     exchange_token
   }
 }`,
-        variables: {"symbol": "VLINFRA"}
+        variables: {}
     })
 
     const stocks = queryResp.data.stock
@@ -33,7 +33,7 @@ const route = async (req, res) => {
                 console.log("instrument_token not found for ", record)
                 continue;
             }
-            console.log("fetching", `https://api.kite.trade/instruments/historical/${record.instrument_token}/day?from=${fromTime}&to=${toTime}`)
+            //console.log("fetching", `https://api.kite.trade/instruments/historical/${record.instrument_token}/day?from=${fromTime}&to=${toTime}`)
             const kiteQuoteUrl = `https://api.kite.trade/instruments/historical/${record.instrument_token}/day?from=${fromTime}&to=${toTime}`
             const resp = await axios.get(kiteQuoteUrl, {
                 headers: {
@@ -41,19 +41,19 @@ const route = async (req, res) => {
                     'Authorization': `token ${access_token_data.data.api_key}:${access_token_data.data.access_token}` // Overrides any defaults that are set
                 }
             })
-            console.log(resp.data)
+            //console.log(resp.data)
             if (resp.data.data.candles.length == 0) {
                 console.log("no candles found", record)
                 continue;
             }
-            console.log(JSON.stringify(resp.data.data.candles))
+            //console.log(JSON.stringify(resp.data.data.candles))
             const candle = resp.data.data.candles[0]
             console.log("candle", candle)
             const dt = new Date(candle[0])
             const toks = dt.toLocaleDateString('en-GB', { timeZone: 'Asia/Kolkata' }).split('/')
 
             const yyyyymmdd = toks[2] + "-" + toks[1] + "-" + toks[0] 
-            console.log(dt, dt.toISOString(), dt.toLocaleDateString('en-GB', { timeZone: 'Asia/Kolkata' }).split('/').join('-'))
+            //console.log(dt, dt.toISOString(), dt.toLocaleDateString('en-GB', { timeZone: 'Asia/Kolkata' }).split('/').join('-'))
             const mutationVariables = {
                 "object": {
                     "stock_id": record.id,
