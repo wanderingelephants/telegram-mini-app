@@ -101,7 +101,7 @@ const getPdfFileName = (row) => {
     const fileName = fileToks[fileToks.length - 1]
     return fileName
 }
-const downloadPDFs = async(filteredResults, downloadPdfPath) => {
+const downloadPDFs = async(filteredResults, downloadPdfPath, yyyymmdd) => {
     for (const row of filteredResults) {
         try {
             console.log(row.symbol, row.dissemination)
@@ -180,10 +180,10 @@ const processSummary = async (summaryDate, index, processOnlySubscriptions) => {
         return    
     }
     const pdfBasePath = path.join(downloadDateFolder, index, "pdfs")
-    fs.mkdirSync(pdfBasePath, { recursive: true })
-    await downloadPDFs(filteredResults, pdfBasePath)
     const toks = summaryDate.split("-")
-    const formattedDate = toks[0] + "/" + toks[1] + "/" + toks[2] + "/" + index
+    const formattedDate = toks[0] + "/" + toks[1] + "/" + toks[2]
+    fs.mkdirSync(pdfBasePath, { recursive: true })
+    await downloadPDFs(filteredResults, pdfBasePath, toks[0]+"-"+toks[1]+"-"+toks[2])
     for (const row of filteredResults) {
         const fileName = getPdfFileName(row)
         if (!fileName.endsWith('.pdf')) {
