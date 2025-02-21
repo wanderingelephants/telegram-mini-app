@@ -25,7 +25,7 @@ cron.schedule('33 15 * * 1-5', async () => {
   const todayStr = (new Date()).toISOString().split("T")[0]
   let req = {"query": {"dateStr": todayStr}}
   let res = {status: (code) => {console.log(code)}, json: (msg) => {console.log(msg)}}
-  //await route(req, res)  
+  await route(req, res)  
 }, {timezone: "Asia/Kolkata"});
 cron.schedule('5 0 * * *', async () => {
   try {

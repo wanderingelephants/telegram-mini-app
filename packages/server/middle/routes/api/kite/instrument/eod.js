@@ -5,6 +5,7 @@ const { postToGraphQL } = require("../../../../lib/helper");
 //https://api.kite.trade/instruments/historical/136413956/day?from=2025-02-01+09:15:00&to=2025-02-12+15:30:00
 const route = async (req, res) => {
     const dateStr = req.query.dateStr
+    let symbol = req.query.symbol ? req.query.symbol.toUpperCase() : "%%"
     const fromTime = `${dateStr} 09:15:00`
     const toTime = `${dateStr} 15:30:00`
     console.log("Process EOD for ", dateStr, fromTime, toTime)
@@ -15,15 +16,15 @@ const route = async (req, res) => {
 
     
     const queryResp = await postToGraphQL({
-        query: `query GetEquitySymbols{
-  stock{
+        query: `query GetEquitySymbols($symbol: String!){
+  stock(where: {symbol: {_like: $symbol}}){
   id
     symbol
     instrument_token
     exchange_token
   }
 }`,
-        variables: {}
+        variables: {symbol}
     })
 
     const stocks = queryResp.data.stock
