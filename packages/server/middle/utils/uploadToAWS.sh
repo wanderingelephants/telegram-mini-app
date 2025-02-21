@@ -1,12 +1,11 @@
 #!/bin/bash
 
 # --- CONFIGURATION ---
-PROXY_IP="gate.smartproxy.com"
+PROXY_IP=""
 PROXY_PORT="10001"
-PROXY_USER="sp40poazdp"
-PROXY_PASS="3xCxz90sTTler8Z=sn"
+PROXY_USER=""
+PROXY_PASS=""
 PROXY_URL="http://$PROXY_USER:$PROXY_PASS@$PROXY_IP:$PROXY_PORT"
-#PROXY_URL=http://gate.smartproxy.com:10001:sp40poazdp:3xCxz90sTTler8Z=sn
 downloadFolder=~/Downloads
 baseFolder=~/announcementsnse
 #indices=("equities" "sme")
@@ -115,10 +114,5 @@ node --env-file=.env utils/s3Upload.js "$localSavePath"
 
 echo "Task completed successfully!"
 
-
-#sp40poazdp
-#3xCxz90sTTler8Z=sn
-
-#curl -U "sp40poazdp:3xCxz90sTTler8Z=sn" -x "in.smartproxy.com:10000" "https://ip.smartproxy.com/json"
 
 
