@@ -16,12 +16,12 @@ const downloadMasterCSV = async (summaryDate, downloadFileName, index) => {
         const month = toks[1]
         const day = toks[2]
         let downloadDateFolder = path.join(announcement_data_folder, year, month, day)
-        fs.mkdirSync(path.join(downloadDateFolder, "csv"), { recursive: true });
-        fs.mkdirSync(path.join(downloadDateFolder, "pdf"), { recursive: true });
-        fs.mkdirSync(path.join(downloadDateFolder, "txt"), { recursive: true });
-        fs.mkdirSync(path.join(downloadDateFolder, "summaries"), { recursive: true });
+        fs.mkdirSync(path.join(downloadDateFolder, index, "csv"), { recursive: true });
+        fs.mkdirSync(path.join(downloadDateFolder, index, "pdf"), { recursive: true });
+        fs.mkdirSync(path.join(downloadDateFolder, index, "txt"), { recursive: true });
+        fs.mkdirSync(path.join(downloadDateFolder, index, "summaries"), { recursive: true });
 
-        const fullPath = path.join(downloadDateFolder, "csv", downloadFileName)
+        const fullPath = path.join(downloadDateFolder, index, "csv", downloadFileName)
         if (!fs.existsSync(fullPath)) {
             console.log("CSV does not exist, download")
             const baseUrl = "https://www.nseindia.com"
@@ -29,7 +29,7 @@ const downloadMasterCSV = async (summaryDate, downloadFileName, index) => {
 
             const urlSuffix = `/api/corporate-announcements?index=${index}&from_date=${fromDate}&to_date=${fromDate}&csv=true`
             console.log("urlSuffix", urlSuffix)
-            const puppet = new Puppet(baseUrl, urlSuffix, path.join(downloadDateFolder, "csv"), downloadFileName)
+            const puppet = new Puppet(baseUrl, urlSuffix, path.join(downloadDateFolder, index, "csv"), downloadFileName)
             await puppet.downloadFile()
         }
         else console.log("CSV Exists, no download needed")
@@ -174,12 +174,12 @@ const processSummary = async (summaryDate, index, processOnlySubscriptions) => {
         console.log("downloadDateFolder is blank, no further processing")
         return
     }
-    const filteredResults = await getRecordsToProcess(path.join(downloadDateFolder, "csv", downloadFileName), processOnlySubscriptions)
+    const filteredResults = await getRecordsToProcess(path.join(downloadDateFolder, index, "csv", downloadFileName), processOnlySubscriptions)
     if (filteredResults.length == 0){
         console.log("No Master CSV Records to Process")
         return    
     }
-    const pdfBasePath = path.join(downloadDateFolder, "pdfs")
+    const pdfBasePath = path.join(downloadDateFolder, index, "pdfs")
     fs.mkdirSync(pdfBasePath, { recursive: true })
     await downloadPDFs(filteredResults, pdfBasePath)
     const toks = summaryDate.split("-")
@@ -193,7 +193,7 @@ const processSummary = async (summaryDate, index, processOnlySubscriptions) => {
         const fullPdfPath = path.join(pdfBasePath, fileName)
         
         try {
-            const outputPath = path.join(formattedDate, "txt")
+            const outputPath = path.join(formattedDate, index, "txt")
             await axios.get(process.env.PDF_PROCESS_URL + `/api/processSinglePDF?inputPDFPath=${fullPdfPath}&outputFolder=${outputPath}`)
         }
         catch (e) {
@@ -201,7 +201,7 @@ const processSummary = async (summaryDate, index, processOnlySubscriptions) => {
         }    
     }
     console.log("processSummary pdf-to-text done")
-    const textBasePath = path.join(announcement_data_folder,formattedDate, "txt")
+    const textBasePath = path.join(announcement_data_folder,formattedDate, index, "txt")
     for (const row of filteredResults) {
         const fileName = getPdfFileName(row)
         if (!fileName.endsWith('.pdf')) {
@@ -210,7 +210,7 @@ const processSummary = async (summaryDate, index, processOnlySubscriptions) => {
         }
         const textFilePath = path.join(textBasePath, fileName.replace(".pdf", ".txt"))
         try {
-            await processSummaries(textBasePath, path.join(announcement_data_folder, formattedDate, "summaries"), textFilePath)
+            await processSummaries(textBasePath, path.join(announcement_data_folder, formattedDate, index, "summaries"), textFilePath)
         }
         catch (e) {
             console.error(e)
