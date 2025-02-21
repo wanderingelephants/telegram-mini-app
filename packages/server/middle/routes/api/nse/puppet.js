@@ -48,7 +48,7 @@ class Puppet {
                 '--disable-gpu', '--disable-setuid-sandbox'
             ]
         });
-        console.log('Browser initialized')
+        console.log('Browser initialized', args)
         try {
             const page = await browser.newPage();
             console.log('newPage done')
