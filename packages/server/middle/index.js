@@ -27,7 +27,7 @@ cron.schedule('33 15 * * 1-5', async () => {
   let res = {status: (code) => {console.log(code)}, json: (msg) => {console.log(msg)}}
   await route(req, res)  
 }, {timezone: "Asia/Kolkata"});
-/*cron.schedule('5 0 * * *', async () => {
+cron.schedule('5 0 * * *', async () => {
   try {
     const t1 = Date.now(); 
     const yesterday = new Date();
@@ -49,7 +49,7 @@ cron.schedule('33 15 * * 1-5', async () => {
     console.log(`Invoking: ${summaryUrl}`);
     response = await axios.get(summaryUrl);
     console.log('Equities Summary API response:', response.data);
-    response = await axios.get(summaryServiceUrl + "/api/nse/insider?dateStr=" + formattedDateYday + "&download=true");
+    /*response = await axios.get(summaryServiceUrl + "/api/nse/insider?dateStr=" + formattedDateYday + "&download=true");
     console.log("Processed insider trades")
 
     summaryUrl = `${summaryServiceUrl}/api/nse/summaries?summaryDate=${formattedDateYday}&index=sme&processOnlySubscriptions=false`;
@@ -61,13 +61,13 @@ cron.schedule('33 15 * * 1-5', async () => {
     response = await axios.get(summaryUrl);
     console.log('Equities Summary API response:', response.data);
     const t3 = Date.now();
-    console.log(`Equities Execution time: ${(t3 - t2)} ms`); 
-    //await processInsiderCSV(formattedDateYday)
+    console.log(`Equities Execution time: ${(t3 - t2)} ms`); */
+    await processInsiderCSV(formattedDateYday)
         
   } catch (error) {
     console.error('Error calling summary API:', error);
   }
-}, {timezone: "Asia/Kolkata"});*/
+}, {timezone: "Asia/Kolkata"});
 app.use([
   bodyParser.urlencoded({limit: '5mb', extended: true}),
   express.json({limit: '5mb'})
