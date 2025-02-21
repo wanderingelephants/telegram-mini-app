@@ -2,6 +2,7 @@ const axios = require("axios")
 const Puppet = require('./puppet.js')
 const fs = require('fs');
 const { parse } = require('csv-parse');
+const fetchPDF = require('./pdfFetcher');
 
 const processSummaries = require('./processSummaries');
 const announcement_data_folder = process.env.NSE_ANNOUNCEMENTS_DOWNLOAD
