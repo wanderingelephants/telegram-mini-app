@@ -35,7 +35,7 @@ class Puppet {
     
     async  downloadFile() {
         await fs.mkdir(this.downloadPath, { recursive: true });
-    
+        console.log("SMART_PROXY_URL", SMART_PROXY_URL)
         const browser = await puppeteer.launch({
             headless: 'new',
             args: [
@@ -48,7 +48,7 @@ class Puppet {
                 '--disable-gpu', '--disable-setuid-sandbox'
             ]
         });
-        console.log('Browser initialized', args)
+        console.log('Browser initialized')
         try {
             const page = await browser.newPage();
             console.log('newPage done')
