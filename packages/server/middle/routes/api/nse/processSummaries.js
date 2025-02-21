@@ -69,6 +69,7 @@ async function processSummaries(inputFolder, outputFolder, fileToSummarize) {
                 llm: "Ollama",
                 singleShotPrompt: true,
                 streaming: false,
+                email: "dummy@dummy.com",
                 customData: {
                     stock_symbol: firstToken,
                     announcement_date: announcementDate,
