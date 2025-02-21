@@ -101,7 +101,7 @@ const getPdfFileName = (row) => {
     const fileName = fileToks[fileToks.length - 1]
     return fileName
 }
-const downloadPDFs = async(filteredResults, downloadPdfPath, yyyymmdd) => {
+const downloadPDFs = async(filteredResults, downloadPdfPath, yyyymmdd, index) => {
     for (const row of filteredResults) {
         try {
             console.log(row.symbol, row.dissemination)
@@ -119,7 +119,7 @@ const downloadPDFs = async(filteredResults, downloadPdfPath, yyyymmdd) => {
             if (!fs.existsSync(downloadPdfPath + '/' + fileName)) {
                 console.log("PDF does not exist, download")
                 await fetchPDF(row.attachment, downloadPdfPath + '/' + fileName);
-                await postToGraphQL({
+                const resp = await postToGraphQL({
                     query: `mutation StockAnnouncementInsertOne($object: stock_announcements_insert_input!) {
     insert_stock_announcements_one(object: $object) {
     id
@@ -146,6 +146,7 @@ const downloadPDFs = async(filteredResults, downloadPdfPath, yyyymmdd) => {
                         }
                     }
                 })
+                console.log("gql resp, insert doc link", resp)
             }
             else {
                 console.log("PDF exists, skip download", downloadPdfPath + '/' + fileName)
@@ -183,7 +184,7 @@ const processSummary = async (summaryDate, index, processOnlySubscriptions) => {
     const toks = summaryDate.split("-")
     const formattedDate = toks[0] + "/" + toks[1] + "/" + toks[2]
     fs.mkdirSync(pdfBasePath, { recursive: true })
-    await downloadPDFs(filteredResults, pdfBasePath, toks[0]+"-"+toks[1]+"-"+toks[2])
+    await downloadPDFs(filteredResults, pdfBasePath, toks[0]+"-"+toks[1]+"-"+toks[2], index)
     for (const row of filteredResults) {
         const fileName = getPdfFileName(row)
         if (!fileName.endsWith('.pdf')) {
