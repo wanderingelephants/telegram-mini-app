@@ -29,7 +29,7 @@ const downloadMasterCSV = async (summaryDate, downloadFileName, index) => {
 
             const urlSuffix = `/api/corporate-announcements?index=${index}&from_date=${fromDate}&to_date=${fromDate}&csv=true`
             console.log("urlSuffix", urlSuffix)
-            const puppet = new Puppet(baseUrl, urlSuffix, downloadDateFolder, downloadFileName)
+            const puppet = new Puppet(baseUrl, urlSuffix, path.join(downloadDateFolder, "csv"), downloadFileName)
             await puppet.downloadFile()
         }
         else console.log("CSV Exists, no download needed")
