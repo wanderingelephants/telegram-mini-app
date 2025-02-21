@@ -195,7 +195,7 @@ const processSummary = async (summaryDate, index, processOnlySubscriptions) => {
         
         try {
             const outputPath = path.join(formattedDate, index, "txt")
-            const pdfToTextInputPath = path.join(formattedDate, index, "pdf")
+            const pdfToTextInputPath = path.join(formattedDate, index, "pdf", fileName)
             await axios.get(process.env.PDF_PROCESS_URL + `/api/processSinglePDF?inputPDFPath=${pdfToTextInputPath}&outputFolder=${outputPath}`)
         }
         catch (e) {
