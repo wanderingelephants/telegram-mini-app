@@ -1,7 +1,7 @@
 <template>
 <v-card class="ma-2">
   <v-card-title class="text-h6">
-    <v-icon start>mdi-compare</v-icon>
+    <v-icon start>$mdiCompare</v-icon>
     Overlap Analysis
   </v-card-title>
   
@@ -104,7 +104,7 @@
   <v-card>
     <v-card-title class="d-flex align-center">Common Holdings
       <v-btn
-        icon="mdi-close"
+        icon="$mdiClose"
         variant="text"
         size="small"
         @click="holdingsDialog.show = false"

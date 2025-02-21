@@ -2,21 +2,19 @@
 <v-responsive>
   <v-container fluid class="fill-height pa-0">
     <v-row no-gutters class="fill-height">
-      <v-col
+      <!--<v-col
             cols="12"
             md="6"
             order="first"
             order-md="first"
             class="left-panel"
-            
           >
           
-       <google-sign-in/>
        <prompt-chat :distilledModel="distilledModel" :title="title" :subTitles="subTitles" :userInputLabel="userInputLabel" :debug="debug"></prompt-chat>
-      
-              
-      </v-col>
-      <v-col cols="12" md="6" order="last" order-md="last" class="right-panel">
+          
+      </v-col> -->
+      <v-col cols="12">
+        <google-sign-in/>
         <v-card-text v-if="loggedInGoogle === true">Welcome {{userGoogle.displayName}}</v-card-text>
             <v-card>
               <v-card-title>We are NOT registered with SEBI.</v-card-title>
@@ -37,7 +35,7 @@
                   :color="type.color"
                   variant="outlined"
                 >
-                  <v-icon start>{{ type.icon }}</v-icon>
+                  <v-icon>{{ type.icon }}</v-icon>
                   {{ type.name }}
                 </v-chip>
               </v-card-text>
@@ -66,7 +64,7 @@
                       :text="item.raw.name"
                       variant="elevated"
                     >
-                      <v-icon start>mdi-chart-line</v-icon>
+                      <v-icon start>$mdiChartLine</v-icon>
                       {{ item.raw.name }}
                     </v-chip>
                   </template>
@@ -104,12 +102,12 @@ import { mapState } from "vuex";
 import GoogleSignIn from '../components/GoogleSignIn'
 import api from './api'
 import MutualFundAnalysis from '../components/MutualFundAnalysis.vue'
-import PromptChat from "./PromptChat.vue"
+//import PromptChat from "./Assistant.vue"
 
 export default {
   name: 'ChatApp',
   components: {
-    MutualFundAnalysis, PromptChat, GoogleSignIn
+    MutualFundAnalysis, GoogleSignIn
   },  
   data() {
     return {
@@ -132,22 +130,22 @@ export default {
       {
         name: 'Overlap',
         color: 'primary',
-        icon: 'mdi-compare'
+        icon: '$mdiCompare'
       },
       {
         name: 'Diversification',
         color: 'success',
-        icon: 'mdi-chart-pie'
+        icon: '$mdiChartPie'
       },
       {
         name: 'Performance',
         color: 'info',
-        icon: 'mdi-chart-line'
+        icon: '$mdiChartLine'
       },
       {
         name: 'Fees',
         color: 'warning',
-        icon: 'mdi-alert-circle-outline'
+        icon: '$mdiCurrencyRupee'
       }
     ]
     

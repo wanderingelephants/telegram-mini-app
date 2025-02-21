@@ -12,7 +12,6 @@
   "dependencies": {
     "@apollo/client": "^3.12.9",
     "@firebase/auth": "^1.8.1",
-    "@mdi/font": "7.4.47",
     "@mdi/js": "^7.4.47",
     "@vue/apollo-option": "^4.2.0",
     "apexcharts": "^4.3.0",

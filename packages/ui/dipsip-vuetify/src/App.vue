@@ -32,7 +32,17 @@
         </router-view>
       </v-container>
     </v-main>
-
+    <v-btn
+      class="chat-fab"
+      color="secondary"
+      icon
+      @click="goToChat"
+      size="large"
+      elevation="4"
+      fixed
+    >
+      <v-icon>$mdiChatProcessing</v-icon>
+    </v-btn>
     <v-footer class="bg-grey-darken-4" v-if="false">
       <v-container fluid>
         <v-row justify="center">
@@ -49,28 +59,29 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 const drawer = ref(false)
+const router = useRouter()
 
 const menuItems = [
   { title: 'Home', path: '/' },
+  { title: 'Assistant', path: '/assistant' },
+  { title: 'Index Funds', path: '/etfList' },
+  { title: 'Mutual Funds', path: '/mutualfunds' },
+  { title: 'Stocks', path: '/stocks' },
   { title: 'DipSip', path: '/dipsip' },
   { title: 'Principles', path: '/principles' },
   { title: 'Risk  Profile', path: '/riskProfile' },
-  { title: 'Mutual Funds', path: '/mutualfunds' },
-  { title: 'ETFs', path: '/etfList' },
-  { title: 'Stocks', path: '/stocks' },
   { title: 'Tools', path: '/tools' },
   { title: 'Pricing', path: '/pricing' },
   { title: 'About Us', path: '/about' }
 ]
 
-const socialIcons = [
-  { icon: 'mdi-facebook', link: 'https://facebook.com' },
-  { icon: 'mdi-twitter', link: 'https://twitter.com' },
-  { icon: 'mdi-linkedin', link: 'https://linkedin.com' },
-  { icon: 'mdi-instagram', link: 'https://instagram.com' }
-]
+const goToChat = () => {
+  router.push('/assistant')
+}
+
 </script>
 
 <style>
@@ -87,5 +98,11 @@ const socialIcons = [
 
 .v-footer a:hover {
   opacity: 0.8;
+}
+.chat-fab {
+  position: fixed !important;
+  bottom: 24px;
+  right: 24px;
+  z-index: 100;
 }
 </style>

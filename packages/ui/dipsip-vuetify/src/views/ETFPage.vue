@@ -32,7 +32,7 @@
             >
               <template v-slot:activator="{ props }">
                 <v-icon v-bind="props" size="small" color="grey" class="ml-1">
-                  mdi-information-outline
+                  $mdiInformationOutline
                 </v-icon>
               </template>
             </v-tooltip>
@@ -58,7 +58,7 @@
             >
               <template v-slot:activator="{ props }">
                 <v-icon v-bind="props" size="small" color="grey" class="ml-1">
-                  mdi-information-outline
+                  $mdiInformationOutline
                 </v-icon>
               </template>
             </v-tooltip>
@@ -86,7 +86,7 @@
               <template v-slot:prepend>
                 <v-btn
                   :color="color"
-                  icon="mdi-minus"
+                  icon="$mdiMinus"
                   size="small"
                   variant="text"
                   @click="decrementTrigger"
@@ -97,7 +97,7 @@
                 <v-btn
                   @click="incrementTrigger"
                   :color="color"
-                  icon="mdi-plus"
+                  icon="$mdiPlus"
                   size="small"
                   variant="text"
                 ></v-btn>
@@ -114,7 +114,7 @@
             >
               <template v-slot:activator="{ props }">
                 <v-icon v-bind="props" size="small" color="grey" class="ml-1">
-                  mdi-information-outline
+                  $mdiInformationOutline
                 </v-icon>
               </template>
             </v-tooltip>
@@ -254,7 +254,6 @@ export default {
           };
         });
       }
-      console.log(this.market['NIFTYBEES'])
       this.updateInvestments()
     } catch (e) {
       console.log(e);

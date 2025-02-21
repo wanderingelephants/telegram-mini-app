@@ -10,7 +10,7 @@ import Utils from '@/views/Utils.vue'
 //import Stocks from '@/views/Stocks.vue'
 import Tools from '@/views/Tools.vue'
 import PromptInstruct from '@/views/PromptInstruct.vue'
-import PromptChat from '@/views/PromptChat.vue'
+import Assistant from '@/views/Assistant.vue'
 import Pricing from '@/views/Pricing.vue'
 import KiteConnectApp from '../components/KiteConnectApp'
 
@@ -36,9 +36,9 @@ const routes = [
     component: WebScraper
   },
   {
-    path: '/promptChat',
-    name: 'PromptChat',
-    component: PromptChat
+    path: '/assistant',
+    name: 'Assistant',
+    component: Assistant
   },
   {
     path: '/promptInstruct',

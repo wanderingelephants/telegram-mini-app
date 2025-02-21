@@ -2,14 +2,13 @@
   <v-responsive>
     <v-container fluid class="fill-height pa-0">
       <v-row no-gutters class="fill-height">
-        <v-col
+        <!--<v-col
           cols="12"
           md="6"
           order="first"
           order-md="first"
           class="left-panel"
         >
-          <!--<google-sign-in/>  -->
           <prompt-chat
             :distilledModel="distilledModel"
             :title="title"
@@ -17,14 +16,15 @@
             :userInputLabel="userInputLabel"
             :debug="debug"
           ></prompt-chat>
-        </v-col>
+        </v-col> 
         <v-col
           cols="12"
           md="6"
           order="last"
           order-md="last"
           class="right-panel"
-        >
+        > -->
+        <v-col cols="12">
           <v-card-text v-if="loggedInGoogle === true"
             >Welcome {{ userGoogle.displayName }}</v-card-text
           >
@@ -69,7 +69,7 @@
                     :text="item.raw.company_name"
                     variant="elevated"
                   >
-                    <v-icon start>mdi-chart-line</v-icon>
+                    <v-icon start>$mdiChartLine</v-icon>
                     {{ item.raw.company_name }}
                   </v-chip>
                 </template>
@@ -138,7 +138,7 @@ import { reverse_mapping_category_of_insider, reverse_mapping_regulation,
 import GoogleSignIn from "../components/GoogleSignIn";
 import StockWatchList from "./StockWatchList.vue"
 import MutualFundAnalysis from "../components/MutualFundAnalysis.vue";
-import PromptChat from "./PromptChat.vue";
+//import PromptChat from "./Assistant.vue";
 import {
   GET_STOCK_LIST,
   INSERT_PORTLFOLIO_STOCK,
@@ -149,7 +149,7 @@ export default {
   name: "ChatApp",
   components: {
     MutualFundAnalysis,
-    PromptChat,
+  //  PromptChat,
     GoogleSignIn,
     StockWatchList
   },
@@ -192,28 +192,6 @@ export default {
       announcements: [],
       insiderTrades: [],
       candles: [],
-      analysisTypes: [
-        {
-          name: "Overlap",
-          color: "primary",
-          icon: "mdi-compare",
-        },
-        {
-          name: "Diversification",
-          color: "success",
-          icon: "mdi-chart-pie",
-        },
-        {
-          name: "Performance",
-          color: "info",
-          icon: "mdi-chart-line",
-        },
-        {
-          name: "Fees",
-          color: "warning",
-          icon: "mdi-alert-circle-outline",
-        },
-      ],
     };
   },
   watch: {

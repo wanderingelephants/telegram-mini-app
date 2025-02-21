@@ -28,7 +28,7 @@
               v-model="currentSlide"
               :show-arrows="true"
               hide-delimiter-background
-              delimiter-icon="mdi-circle"
+              delimiter-icon="$mdiCircle"
               height="500"
               interval="5000"
               class="wealth-carousel"

@@ -5,16 +5,6 @@
       <v-card-title class="d-flex flex-wrap">
         <span class="text-h6">Stock Overlap Analysis</span>
         <v-spacer></v-spacer>
-        <!--<v-btn
-          color="primary"
-          @click="downloadCompleteReport"
-          :loading="downloading"
-          density="comfortable"
-          class="ml-2"
-        >
-          Download Report
-          <v-icon right>mdi-file-pdf</v-icon>
-        </v-btn> -->
       </v-card-title>
 
       <v-card-text>
@@ -222,7 +212,7 @@
           Overlap Details
           <v-spacer></v-spacer>
           <v-btn icon @click="showDialog = false">
-            <v-icon>mdi-close</v-icon>
+            <v-icon>$mdiClose</v-icon>
           </v-btn>
         </v-card-title>
 

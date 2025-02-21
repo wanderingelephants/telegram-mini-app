@@ -26,7 +26,7 @@
             
             <v-list-item-content>
               <v-list-item-title class="text-left text-wrap">
-                {{ feature }}&nbsp;<v-icon color="success">mdi-check-circle</v-icon>
+                {{ feature }}&nbsp;<v-icon color="success">$mdiCurrencyRupee</v-icon>
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>

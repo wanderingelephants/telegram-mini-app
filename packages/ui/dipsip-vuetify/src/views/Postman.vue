@@ -1,28 +1,6 @@
 <template>
   <v-container fluid theme="light">
     <v-row>
-        
-    <!--<v-col cols="6" v-if="loggedIn == false">
-          <v-tooltip
-            v-model="showTooltip_tg"
-            location="top"
-            :open-on-click="true"
-            :open-on-hover="false"
-          >
-            <template v-slot:activator="{ props }">
-              <div v-bind="props" @click.stop="toggleTooltip">
-                <TelegramLogin
-                  :botName="botName"
-                  @telegram-auth="handleTelegramAuth"
-                />
-                <v-icon size="small" color="grey" class="ml-1">
-                  mdi-information-outline
-                </v-icon>
-              </div>
-            </template>
-            
-          </v-tooltip>
-        </v-col> -->
     <v-col cols="3"  v-if="showSubmit == true">
           <v-select
             max-width="150px"

@@ -12,7 +12,7 @@ import WarrenBuffetIcon from './icons/IconWarrenBuffet.vue'
 <div>
     <WelcomeItem>
     <template #icon>
-      <icon-warren-buffet />
+       <DocumentationIcon />
     </template>
     <template #heading>Principles</template>
     Long Term Investing, Low Cost Index Funds, Margin of Safety. 

@@ -138,34 +138,7 @@
               </v-card>
             </v-col>
           </v-row>
-          <v-row v-if="loggedInGoogle">
-            <v-col v-if="userGoogle.tg_id == ''">
-                <!--<v-card>
-                    <v-card-text>This service sends notification using Telegram, being more reliable and performant than e-mail. One time setup</v-card-text>
-                    <TelegramLogin
-                  :botName="botName"
-                  @telegram-auth="handleTelegramAuth"
-                />
-                </v-card> -->
-            </v-col>
-          </v-row>
-        <v-row no-gutters class="mt-1">
-        <!--<v-col v-if="loggedInGoogle == true && userGoogle.tg_id !== ''" >
-          <button
-            @click="saveConfig"
-            class="v-btn v-theme--light text-primary v-btn--density-default v-btn--size-default v-btn--variant-outlined"
-          >
-            Save
-          </button>
-        </v-col>
-        <v-col v-if="loggedInGoogle == true && userGoogle.tg_id !== ''" >
-          <button
-            @click="deleteConfig"
-            class="v-btn v-theme--light text-primary v-btn--density-default v-btn--size-default v-btn--variant-outlined"
-          >
-            Unsubscribe
-          </button>
-        </v-col> -->
+          <v-row no-gutters class="mt-1">
         <v-dialog v-model="showSaveConfigDialog" max-width="430px">
         <v-card theme="light" color="secondary" dense>
           <v-card-title class="d-flex justify-space-between align-center">
@@ -209,12 +182,9 @@
 <script>
 import { mapState } from "vuex";
 import api from "./api";
-import TelegramLogin from "../components/TelegramLogin.vue";
-import PromptChat from "./PromptChat.vue"
 
 export default {
   components: {
-    TelegramLogin, PromptChat
   },
   computed: mapState([
     "loggedInGoogle",
