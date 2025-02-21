@@ -16,8 +16,12 @@ const downloadMasterCSV = async (summaryDate, downloadFileName, index) => {
         const month = toks[1]
         const day = toks[2]
         let downloadDateFolder = path.join(announcement_data_folder, year, month, day)
-        fs.mkdirSync(downloadDateFolder, { recursive: true });
-        const fullPath = path.join(downloadDateFolder, downloadFileName)
+        fs.mkdirSync(path.join(downloadDateFolder, "csv"), { recursive: true });
+        fs.mkdirSync(path.join(downloadDateFolder, "pdf"), { recursive: true });
+        fs.mkdirSync(path.join(downloadDateFolder, "txt"), { recursive: true });
+        fs.mkdirSync(path.join(downloadDateFolder, "summaries"), { recursive: true });
+
+        const fullPath = path.join(downloadDateFolder, "csv", downloadFileName)
         if (!fs.existsSync(fullPath)) {
             console.log("CSV does not exist, download")
             const baseUrl = "https://www.nseindia.com"
@@ -170,12 +174,13 @@ const processSummary = async (summaryDate, index, processOnlySubscriptions) => {
         console.log("downloadDateFolder is blank, no further processing")
         return
     }
-    const filteredResults = await getRecordsToProcess(path.join(downloadDateFolder, downloadFileName), processOnlySubscriptions)
+    const filteredResults = await getRecordsToProcess(path.join(downloadDateFolder, "csv", downloadFileName), processOnlySubscriptions)
     if (filteredResults.length == 0){
         console.log("No Master CSV Records to Process")
         return    
     }
     const pdfBasePath = path.join(downloadDateFolder, "pdfs")
+    fs.mkdirSync(pdfBasePath, { recursive: true })
     await downloadPDFs(filteredResults, pdfBasePath)
     const toks = summaryDate.split("-")
     const formattedDate = toks[0] + "/" + toks[1] + "/" + toks[2] + "/" + index
@@ -188,14 +193,15 @@ const processSummary = async (summaryDate, index, processOnlySubscriptions) => {
         const fullPdfPath = path.join(pdfBasePath, fileName)
         
         try {
-            await axios.get(process.env.PDF_PROCESS_URL + `/api/processSinglePDF?inputPDFPath=${fullPdfPath}&outputFolder=${formattedDate}`)
+            const outputPath = path.join(formattedDate, "txt")
+            await axios.get(process.env.PDF_PROCESS_URL + `/api/processSinglePDF?inputPDFPath=${fullPdfPath}&outputFolder=${outputPath}`)
         }
         catch (e) {
             console.error(e)
         }    
     }
     console.log("processSummary pdf-to-text done")
-    const textBasePath = announcement_data_folder + "/to_text/" + formattedDate
+    const textBasePath = path.join(announcement_data_folder,formattedDate, "txt")
     for (const row of filteredResults) {
         const fileName = getPdfFileName(row)
         if (!fileName.endsWith('.pdf')) {
@@ -204,7 +210,7 @@ const processSummary = async (summaryDate, index, processOnlySubscriptions) => {
         }
         const textFilePath = path.join(textBasePath, fileName.replace(".pdf", ".txt"))
         try {
-            await processSummaries(announcement_data_folder + "/to_text/" + formattedDate, announcement_data_folder + "/summaries/" + formattedDate, textFilePath)
+            await processSummaries(textBasePath, path.join(announcement_data_folder, formattedDate, "summaries"), textFilePath)
         }
         catch (e) {
             console.error(e)
