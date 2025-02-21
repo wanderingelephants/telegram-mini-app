@@ -180,7 +180,7 @@ const processSummary = async (summaryDate, index, processOnlySubscriptions) => {
         console.log("No Master CSV Records to Process")
         return    
     }
-    const pdfBasePath = path.join(downloadDateFolder, index, "pdfs")
+    const pdfBasePath = path.join(downloadDateFolder, index, "pdf")
     const toks = summaryDate.split("-")
     const formattedDate = toks[0] + "/" + toks[1] + "/" + toks[2]
     fs.mkdirSync(pdfBasePath, { recursive: true })

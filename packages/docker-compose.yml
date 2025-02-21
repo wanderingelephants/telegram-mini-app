@@ -58,8 +58,8 @@ services:
     ports:
       - "3500:3500"
     volumes:
-      - ${NSE_ANNOUNCEMENTS_FROM_PDF:-/home/ec2-user/data/nse_announcements/pdf}:/app/input
-      - ${NSE_ANNOUNCEMENTS_TO_TEXT:-/home/ec2-user/data/nse_announcements/to_text}:/app/output
+      - ${NSE_ANNOUNCEMENTS_FROM_PDF:-/home/ec2-user/data/nse_announcements}:/app/input
+      - ${NSE_ANNOUNCEMENTS_TO_TEXT:-/home/ec2-user/data/nse_announcements}:/app/output
     environment:
       - PORT=3500
       - HOST=0.0.0.0
