@@ -18,6 +18,7 @@ def process_pdf(input_pdf_path, output_folder):
     """
     Process a single PDF file and save its text content to the output folder
     """
+    logger.info(f"process_pdf: {input_pdf_path.name}")
     try:
         # Create output path with same name but .txt extension
         output_filename = input_pdf_path.stem + ".txt"
@@ -98,7 +99,7 @@ def process_single_pdf():
         return jsonify({
             'success': False,
             'error': f'Input PDF does not exist: {pdf_path}'
-        }), 200
+        }), 400
     
     # Validate input is a PDF
     if pdf_path.suffix.lower() != '.pdf':
