@@ -192,11 +192,11 @@ const processSummary = async (summaryDate, index, processOnlySubscriptions) => {
                 console.log("SKIPING non-pdf.................", row)
                 continue;
         }
-        const fullPdfPath = path.join(pdfBasePath, fileName)
         
         try {
             const outputPath = path.join(formattedDate, index, "txt")
-            await axios.get(process.env.PDF_PROCESS_URL + `/api/processSinglePDF?inputPDFPath=${fullPdfPath}&outputFolder=${outputPath}`)
+            const pdfToTextInputPath = path.join(formattedDate, index, "pdf")
+            await axios.get(process.env.PDF_PROCESS_URL + `/api/processSinglePDF?inputPDFPath=${pdfToTextInputPath}&outputFolder=${outputPath}`)
         }
         catch (e) {
             console.error(e)
