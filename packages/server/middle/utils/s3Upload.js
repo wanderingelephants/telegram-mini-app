@@ -17,11 +17,11 @@ const s3 = new S3Client({ region: process.env.AWS_REGION });
 
 async function uploadFolderToS3(localPath, s3Prefix) {
   const files = fs.readdirSync(localPath);
-
+  console.log("Copy localpath", localPath)
   for (const file of files) {
     const filePath = path.join(localPath, file);
     const fileKey = path.join(s3Prefix, file).replace(/\\/g, "/");
-
+    console.log("copy file", filePath)
     if (fs.statSync(filePath).isFile()) {
       try {
         const fileContent = fs.readFileSync(filePath);

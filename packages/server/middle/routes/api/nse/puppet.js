@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer-extra');
 const StealthPlugin = require('puppeteer-extra-plugin-stealth')();
 const fs = require('fs/promises');
 const path = require('path');
-
+const SMART_PROXY_URL = process.env.SMART_PROXY_URL
 puppeteer.use(StealthPlugin);
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -39,6 +39,7 @@ class Puppet {
         const browser = await puppeteer.launch({
             headless: 'new',
             args: [
+                `--proxy-server=${SMART_PROXY_URL}`,
                 '--no-sandbox',
                 '--disable-setuid-sandbox',
                 '--enable-javascript',
