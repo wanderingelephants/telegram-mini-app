@@ -509,6 +509,8 @@ const route = async (req, res) => {
   const { email, distilledModel, messages, llm, streaming = false, singleShotPrompt = false, customData } = req.body;
   const modelName = distilledModel
   const LLMToUse = llm ? llm : process.env.LLM_TO_USE;
+  const handlerType = distilledModel === "announcements_summary" ? 'NoOp' : 'JavaScript'
+    
   try {
     const user_stock_portfolio_query = `query userStocks($email: String!){
       portfolio_stocks(where: {user: {email: {_eq: $email}}}){
@@ -548,7 +550,6 @@ const route = async (req, res) => {
     }
     await messageManager.saveMessage(sessionId, modelName, { "role": 'assistant', "content": [{ "type": 'text', "text": llmResponse }] }, 'messages.json');
 
-    const handlerType = distilledModel === "announcements_summary" ? 'NoOp' : 'JavaScript'
     const formatContext = messages[messages.length - 1].content; // Pass user query context
 
     const responseHandler = new LLMResponseHandler(handlerType, llmClient, formatContext);
