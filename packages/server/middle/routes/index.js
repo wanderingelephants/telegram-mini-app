@@ -81,7 +81,8 @@ const routes = {
             instruments: require("./api/nse/instruments"),
             summaries: require("./api/nse/summaries"),
             sendSummaries: require("./api/nse/sendSummaryEmails"),
-            insider: require("./api/nse/process_insider_csv")
+            insider: require("./api/nse/process_insider_csv"),
+            scraper: require("./api/nse/NSEScraper")
         },
         /*ollama:{
             singleShotStream: require("./api/ollama/singleShotStream"),
@@ -116,6 +117,7 @@ router.post("/api/nse/receive", routes.api.nse.receive)
 router.post("/api/nse/announcements", routes.api.nse.announcements)
 router.post("/api/nse/process", routes.api.nse.process)
 router.get("/api/nse/insider", routes.api.nse.insider)
+router.get("/api/nse/scraper", routes.api.nse.scraper)
 router.get("/api/nse/instruments", routes.api.nse.instruments)
 router.get("/api/nse/summaries", routes.api.nse.summaries)
 router.get("/api/nse/sendSummaries", routes.api.nse.sendSummaries)
