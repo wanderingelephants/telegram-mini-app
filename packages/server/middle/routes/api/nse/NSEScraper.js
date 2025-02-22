@@ -72,9 +72,10 @@ class NSEScraper {
 const route = async (req, res) => {
     try{
         const announcement_date = req.query.announcement_date
+        const index = req.query.index
         const scraper = new NSEScraper()
         const useProxy = req.query.useProxy === "true" ? true : false
-        await scraper.scrapeAnnouncements(announcement_date, useProxy)
+        await scraper.scrapeAnnouncements(announcement_date, index, useProxy)
         res.stauts(200).json("ok")
     }
     catch(e){
