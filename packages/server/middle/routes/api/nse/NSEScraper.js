@@ -18,7 +18,7 @@ class NSEScraper {
         
         this.isPaused = false;
     }
-    async scrapeAnnouncements(announcement_date, index) {
+    async scrapeAnnouncements(announcement_date, index, useProxy) {
         if (this.isPaused) return;
         const puppetArgs = [
             '--no-sandbox',
@@ -27,7 +27,7 @@ class NSEScraper {
             '--window-size=1920,1080',
             '--disable-dev-shm-usage', 
             '--disable-gpu', '--disable-setuid-sandbox']
-        const puppetArgsToSend = SMART_PROXY_URL ? [`--proxy-server=${SMART_PROXY_URL}`, ...puppetArgs] : puppetArgs
+        const puppetArgsToSend = useProxy === true ? [`--proxy-server=${SMART_PROXY_URL}`, ...puppetArgs] : puppetArgs
         this.browser = await puppeteer.launch({
             headless: true,
             args: puppetArgsToSend
@@ -44,9 +44,11 @@ class NSEScraper {
             if (this.isPaused) break;
             const data = await this.extractRowData(row);
             console.log("Extracted data", data)
-            if (data.pdfLink) {
-                SMART_PROXY_URL ? await fetchPDF(data.pdfLink, targetPath, SMART_PROXY_URL) : await fetchPDF(data.pdfLink, targetPath)
-            }
+            console.log("To be downloaded", data.pdfLink)
+            console..log("To be saved to", targetPath)
+            /*if (data.pdfLink) {
+                useProxy === true ? await fetchPDF(data.pdfLink, targetPath, SMART_PROXY_URL) : await fetchPDF(data.pdfLink, targetPath)
+            }*/
         }
     }
     async extractRowData(row) {
@@ -71,7 +73,8 @@ const route = async (req, res) => {
     try{
         const announcement_date = req.query.announcement_date
         const scraper = new NSEScraper()
-        await scraper.scrapeAnnouncements(announcement_date)
+        const useProxy = req.query.useProxy === "true" ? true : false
+        await scraper.scrapeAnnouncements(announcement_date, useProxy)
         res.stauts(200).json("ok")
     }
     catch(e){
