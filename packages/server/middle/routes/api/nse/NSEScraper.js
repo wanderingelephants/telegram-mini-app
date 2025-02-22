@@ -39,17 +39,36 @@ class NSEScraper {
         const toks = announcement_date.split("-")
         const targetPath = path.join(announcement_dir, toks[0], toks[1], toks[2], index)
         const table_id = index === "equities" ? 'CFanncEquityTable' : 'CFanncsmeTable'
-        const rows = await this.page.$x(`//table[@id=$table_id]//tr`);
-        for (let row of rows.slice(1)) { // Skipping header
+        const announcementData = await page.evaluate(() => {
+            const table = document.querySelector(`#${table_id}`);
+            console.log("Table for", table_id, table)
+            if (!table) return null;
+            const headers = Array.from(table.querySelectorAll('thead th'))
+                .map(th => th.textContent.trim());
+                const record = Array.from(table.querySelectorAll('tbody tr'))
+                .map(row => {
+                    const cells = Array.from(row.querySelectorAll('td'));
+                    const record = {};
+                    headers.forEach((header, index) => {
+                        if (cells[index]) {
+                            record[header] = cells[index].textContent.trim();
+                        }
+                    })
+                })
+                return record    
+        })
+        console.log(announcementData)    
+        /*const rows = await this.page.ev(`//table[@id=$table_id]//tr`);
+        for (let row of rows.slice(1)) { 
             if (this.isPaused) break;
             const data = await this.extractRowData(row);
             console.log("Extracted data", data)
             console.log("To be downloaded", data.pdfLink)
             console.log("To be saved to", targetPath)
-            /*if (data.pdfLink) {
+            if (data.pdfLink) {
                 useProxy === true ? await fetchPDF(data.pdfLink, targetPath, SMART_PROXY_URL) : await fetchPDF(data.pdfLink, targetPath)
-            }*/
-        }
+            }
+        }*/
     }
     async extractRowData(row) {
         const getText = async (xpath) => {
