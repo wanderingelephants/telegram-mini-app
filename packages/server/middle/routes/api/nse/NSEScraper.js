@@ -45,7 +45,7 @@ class NSEScraper {
             const data = await this.extractRowData(row);
             console.log("Extracted data", data)
             console.log("To be downloaded", data.pdfLink)
-            console..log("To be saved to", targetPath)
+            console.log("To be saved to", targetPath)
             /*if (data.pdfLink) {
                 useProxy === true ? await fetchPDF(data.pdfLink, targetPath, SMART_PROXY_URL) : await fetchPDF(data.pdfLink, targetPath)
             }*/
