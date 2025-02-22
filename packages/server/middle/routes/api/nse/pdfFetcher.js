@@ -1,5 +1,7 @@
 const fs = require('fs');
 const https = require('https');
+const { HttpsProxyAgent } = require('https-proxy-agent');
+
 
 async function fetchWithRetry(url, options, maxRetries = 3) {
     for (let i = 0; i < maxRetries; i++) {
@@ -13,14 +15,15 @@ async function fetchWithRetry(url, options, maxRetries = 3) {
     }
 }
 
-async function fetchPDF(pdfUrl, targetPath) {
+async function fetchPDF(pdfUrl, targetPath, proxyUrl) {
     try {
-        const agent = new https.Agent({
-            keepAlive: true,
-            timeout: 60000,
-            rejectUnauthorized: false
-        });
-
+        const agent = proxyUrl 
+            ? new HttpsProxyAgent(proxyUrl)
+            : new https.Agent({
+                keepAlive: true,
+                timeout: 60000,
+                rejectUnauthorized: false
+            });
         const response = await fetchWithRetry(
             pdfUrl,
             {
