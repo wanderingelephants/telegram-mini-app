@@ -12,14 +12,14 @@
           <thead>
             <tr>
               <th class="text-left">Product</th>
-              <th class="text-left">Fee (pm)</th>
+              <th class="text-left nowrap">Fee (pm)</th>
               <th class="text-left">Who is it for?</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(item, index) in pricingData" :key="index">
               <td class="text-h6 font-weight-bold">{{ item.product_name }}</td>
-              <td class="text-subtitle-1">
+              <td class="text-subtitle-1 nowrap">
                 <span class="strikeout">{{ item.strikeoutpricing }}</span>
                 <span class="discounted">{{ item.pricing }}</span>
               </td>
@@ -59,7 +59,7 @@ export default {
           product_name: "Enterprise",
           pricing: "Rs. 9999",
           strikeoutpricing: "Rs. 19999",
-          suitability: "Your Data, Our Software. Your AI"
+          suitability: "Your Data, Our Software. Your AI."
         }
       ]
     };
@@ -88,12 +88,11 @@ td {
   font-size: 1em;
   border-bottom: 1px solid #ddd;
 }
-.subtitle-wrap {
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  word-break: break-word;
-  overflow-wrap: break-word;
+
+.nowrap {
+  white-space: nowrap;
 }
+
 .strikeout {
   text-decoration: line-through;
   color: grey;
