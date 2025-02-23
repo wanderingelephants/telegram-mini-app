@@ -11,6 +11,11 @@ class WebsiteTrafficSimulator extends NSEScraper {
     }
 
     async simulateTraffic() {
+        console.log(process.env.PDF_DOWNLOAD_ENABLED)
+        if (process.env.PDF_DOWNLOAD_ENABLED.toLowerCase() !== "true"){
+            console.log("PDF not enabled on this env")
+            return;
+        }
         try {
             const { band, config } = getCurrentActivityBand();
             console.log("simulate traffic band", {band, config})
