@@ -20,11 +20,11 @@ const WebsiteTrafficSimulator = require("./routes/api/nse/WebsiteTrafficSimulato
   await processor.process()
 }, {timezone: "Asia/Kolkata"});
 */
-/*cron.schedule('15,35,55 * * * *', async () => {
+cron.schedule('15,35,55 * * * *', async () => {
   console.log('Starting traffic simulation at:', new Date().toISOString());
   const simulator = new WebsiteTrafficSimulator();
   await simulator.simulateTraffic();
-});*/
+});
 cron.schedule('33 15 * * 1-5', async () => {
   console.log('end of market', new Date());
   //await processInstruments()
