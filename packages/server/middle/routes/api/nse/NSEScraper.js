@@ -162,7 +162,7 @@ class NSEScraper {
                 else {
                     await fetchPDF(announcement.ATTACHMENT, path.join(targetPath, fileName), SMART_PROXY_URL)
                     try{
-                        await uploadFileToS3(this.announcement_dir,path.join(year, month, day, index, fileName))
+                        await uploadFileToS3(this.announcement_dir,path.join(year, month, day, index, "pdf", fileName))
                     }
                     catch(e){
                         console.log("Upload to S3 failed")
