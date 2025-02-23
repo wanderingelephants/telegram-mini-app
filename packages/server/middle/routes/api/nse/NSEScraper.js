@@ -144,7 +144,7 @@ class NSEScraper {
             const targetPath = path.join(this.announcement_dir, year, month, day, index, "pdf")
         
         for (const announcement of announcementData[index]){
-            if (announcement.SUBJECT.toLowerCase().indexOf("newspaper")){
+            if (announcement.SUBJECT.toLowerCase().indexOf("newspaper") > -1){
                 console.log("Skipping newspaper record", announcement)
                 continue;
             }

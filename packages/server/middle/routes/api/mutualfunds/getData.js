@@ -194,7 +194,6 @@ const getData = async (fundList = [], categoryList = []) => {
 };*/
 const getMutualFundHoldingsJSONArray = async  function () {
     let mutual_fund_data = await getData([], [])
-    console.log("getData", mutual_fund_data)
     // Create a Set of unique date strings
     const unique_dates = new Set();
     mutual_fund_data.forEach(mf => {
