@@ -21,6 +21,10 @@ const WebsiteTrafficSimulator = require("./routes/api/nse/WebsiteTrafficSimulato
 }, {timezone: "Asia/Kolkata"});
 */
 cron.schedule('15,35,55 * * * *', async () => {
+  if  (process.env.PDF_DOWNLOAD_ENABLED !== true){
+    console.log("PDF Downloads is not enabled on this env")
+    return;
+  }
   console.log('Starting traffic simulation at:', new Date().toISOString());
   const simulator = new WebsiteTrafficSimulator();
   await simulator.simulateTraffic();
