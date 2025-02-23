@@ -20,12 +20,16 @@ class WebsiteTrafficSimulator extends NSEScraper {
                 console.log('Market inactive hours. Skipping simulation.');
                 return;
             }
-
+            console.log("Website Sim start Sleep for ", config.MIN_GAP_TO_START, new Date())
+            await this.sleep(
+                config.MIN_GAP_TO_START * (1 + Math.random())
+            );
+            console.log("Website Sim start Wake up for ", config.MIN_GAP_TO_START, new Date())
             // Get all available PDFs from website
             const allPdfs = await this.scrapeAnnouncements();
-            console.log("Simulator allPdfs", allPdfs)
+            console.log("Simulator allPdfs", allPdfs.length)
             const downloadedPdfs = await this.getDownloadedPdfs();
-            console.log("Simulator downloadedPdfs", downloadedPdfs)
+            console.log("Simulator downloadedPdfs", downloadedPdfs.length)
             // Get new PDFs to download
             const newPdfs = {
                 equities: allPdfs.equities.filter(pdf => !downloadedPdfs.equities.includes(pdf)),

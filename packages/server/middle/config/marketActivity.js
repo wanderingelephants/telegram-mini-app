@@ -6,6 +6,7 @@ const getMarketActivityConfig = () => {
       startTime: '09:00',
       endTime: '16:00',
       weekdays: true,
+      MIN_GAP_TO_START: 120000,
       MAX_PERSONS_TO_SIMULATE: 5,
       MIN_PERSONS_TO_SIMULATE: 2,
       MIN_GAP_BETWEEN_PERSONS: 60000, // 1 minute in ms
@@ -33,6 +34,7 @@ const getMarketActivityConfig = () => {
         startTime: '08:00',
         endTime: '23:55'
       },
+      MIN_GAP_TO_START: 120000,
       MAX_PERSONS_TO_SIMULATE: 3,
       MIN_PERSONS_TO_SIMULATE: 1,
       MIN_GAP_BETWEEN_PERSONS: 120000, // 2 minutes in ms
