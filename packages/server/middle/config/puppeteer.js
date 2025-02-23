@@ -28,10 +28,6 @@ const getPuppeteerConfig = () => {
           executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
         }),
         
-        // Linux-specific options
-        ...(isLinux && {
-          executablePath: process.env.CHROME_PATH || '/usr/bin/google-chrome'
-        })
       }
     };
   
