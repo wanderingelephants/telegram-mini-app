@@ -82,7 +82,7 @@ const routes = {
             summaries: require("./api/nse/summaries"),
             sendSummaries: require("./api/nse/sendSummaryEmails"),
             insider: require("./api/nse/process_insider_csv"),
-            scraper: require("./api/nse/NSEScraper")
+            scraper: require("./api/nse/scraper")
         },
         /*ollama:{
             singleShotStream: require("./api/ollama/singleShotStream"),

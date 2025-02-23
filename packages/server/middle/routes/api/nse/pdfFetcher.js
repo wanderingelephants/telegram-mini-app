@@ -16,6 +16,9 @@ async function fetchWithRetry(url, options, maxRetries = 3) {
 }
 
 async function fetchPDF(pdfUrl, targetPath, proxyUrl) {
+    if (fs.existsSync(targetPath)){
+        console.log("Target PDF exists. Skip", targetPath)
+    }
     try {
         const agent = proxyUrl 
             ? new HttpsProxyAgent(proxyUrl)
