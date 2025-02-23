@@ -1,107 +1,108 @@
 <template>
   <v-container class="pricing-container">
-    <v-card class="mx-auto my-8 text-center" max-width="600">
+    <v-card class="mx-auto my-8 text-center" max-width="800">
       <v-card-title class="text-h4 font-weight-bold justify-center py-4">
-        Pricing Plan
+        Offerings
       </v-card-title>
-
-      <v-card-text>
-        <!-- Pricing Section -->
-        <div class="pricing-section mb-6">
-          <div class="text-decoration-line-through text-grey">
-            <span class="text-h5">₹599</span>/month
-          </div>
-          <div class="text-h3 primary--text font-weight-bold">
-            ₹299<span class="text-h5">/month</span>
-          </div>
-        </div>
-
-        <!-- Features Section -->
-        <v-card-title class="text-h5 justify-center">
-          What you get
-        </v-card-title>
-
-        <v-list class="transparent">
-          <v-list-item v-for="(feature, index) in features" :key="index">
-            
-            <v-list-item-content>
-              <v-list-item-title class="text-left text-wrap">
-                {{ feature }}&nbsp;<v-icon color="success">$mdiCurrencyRupee</v-icon>
-              </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-
-        <!-- Coming Soon Section -->
-        <v-alert
-          class="mt-6"
-          color="info"
-          border="left"
-          prominent
-        >
-          <div class="text-h6">Coming Soon!</div>
-          <div>Additional Premium Service to track Smart Money movements in individial Stocks</div>
-          <div class="font-weight-bold mt-2">Additional ₹499/month</div>
-        </v-alert>
-
-        <!-- Subscribe Button -->
-        <v-btn
-          class="mt-6"
-          x-large
-          color="primary"
-          rounded
-          @click="subscribe"
-          v-if="false"
-        >
-          Subscribe Now
-        </v-btn>
-      </v-card-text>
     </v-card>
+
+    <v-row justify="center">
+      <v-col cols="12" md="8">
+        <v-table class="pricing-table">
+          <thead>
+            <tr>
+              <th class="text-left">Product</th>
+              <th class="text-left">Fee (pm)</th>
+              <th class="text-left">Who is it for?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, index) in pricingData" :key="index">
+              <td class="text-h6 font-weight-bold">{{ item.product_name }}</td>
+              <td class="text-subtitle-1">
+                <span class="strikeout">{{ item.strikeoutpricing }}</span>
+                <span class="discounted">{{ item.pricing }}</span>
+              </td>
+              <td>{{ item.suitability }}</td>
+            </tr>
+          </tbody>
+        </v-table>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
 <script>
 export default {
-  name: 'PricingPage',
   data() {
     return {
-      features: [
-        'Smart Mutual Fund Analysis',
-        'DipSIP alerts',
-        'Quarterly Portfolio Health Check-up',
-        'Yearly rebalancing recommendations, based on Risk Profile',
-        'Research on REITs, InvITs, Crypto',
+      pricingData: [
+        {
+          product_name: "Index Funds",
+          pricing: "Rs. 99",
+          strikeoutpricing: "Rs. 199",
+          suitability: "New investors, with 0-3 years exposure in the Stock Markets. Keep it simple, passive index investing with 3-5 years plus horizon"
+        },
+        {
+          product_name: "Mutual Funds",
+          pricing: "Rs. 199",
+          strikeoutpricing: "Rs. 299",
+          suitability: "Investors, with 3-5 years plus exposure in the Stock Markets. Get some exposure to good quality mutual funds with 3-5 years plus horizon"
+        },
+        {
+          product_name: "Stocks",
+          pricing: "Rs. 499",
+          strikeoutpricing: "Rs. 999",
+          suitability: "You understand volatility, risk, business/market cycles. Have read and re-read Nassim Taleb multiple times 😎"
+        },
+        {
+          product_name: "Enterprise",
+          pricing: "Rs. 9999",
+          strikeoutpricing: "Rs. 19999",
+          suitability: "Your Data, Our Software. Your AI"
+        }
       ]
-    }
-  },
-  methods: {
-    subscribe() {
-      // Implement subscription logic here
-      console.log('Subscribe clicked')
-    }
+    };
   }
-}
+};
 </script>
 
 <style scoped>
-.message-content {
+.pricing-container {
+  text-align: center;
+}
+
+.pricing-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  background-color: #f5f5f5;
+  padding: 12px;
+  font-size: 1.2em;
+}
+
+td {
+  padding: 12px;
+  font-size: 1em;
+  border-bottom: 1px solid #ddd;
+}
+.subtitle-wrap {
   white-space: pre-wrap;
   word-wrap: break-word;
   word-break: break-word;
   overflow-wrap: break-word;
-  line-height: 1.5;
-  max-width: 100%;
 }
-.text-wrap {
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-.pricing-container {
-  padding-top: 2rem;
-  padding-bottom: 2rem;
+.strikeout {
+  text-decoration: line-through;
+  color: grey;
+  margin-right: 8px;
 }
 
-.pricing-section {
-  padding: 1.5rem 0;
+.discounted {
+  font-weight: bold;
+  color: #388e3c;
+  font-size: 1.1em;
 }
 </style>

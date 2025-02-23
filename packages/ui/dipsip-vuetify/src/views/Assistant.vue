@@ -1,5 +1,7 @@
 <template>
   <div class="chat-wrapper">
+    <google-sign-in />
+            
     <v-card class="chat-container">
       <!-- Chat Header - Fixed -->
       <div class="chat-header">
@@ -76,6 +78,7 @@
 
 <script>
 import { mapState } from "vuex";
+import GoogleSignIn from "../components/GoogleSignIn";
 
 export default{
   name: 'PromptChat',
