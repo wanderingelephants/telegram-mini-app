@@ -141,9 +141,13 @@ class NSEScraper {
         //if (this.isMaster)  return announcementData    
         await this.browser.close();
         for (const index of ['equities', 'sme']) {
-            const targetPath = path.join(this.announcement_dir, year, month, day, index)
+            const targetPath = path.join(this.announcement_dir, year, month, day, index, "pdf")
         
         for (const announcement of announcementData[index]){
+            if (announcement.SUBJECT.toLowerCase().indexOf("newspaper")){
+                console.log("Skipping newspaper record", announcement)
+                continue;
+            }
             //console.log(announcement.ATTACHMENT, this.pdfsToDownload[index].indexOf(announcement.ATTACHMENT))
             if (announcement.ATTACHMENT) {
                 pdfLinks[index].push(announcement.ATTACHMENT)
@@ -165,7 +169,7 @@ class NSEScraper {
                         console.error(e)
                     }
                     try{
-                        fs.appendFileSync(path.join(targetPath, "activity.log"), JSON.stringify(announcement)+",\n")
+                        fs.appendFileSync(path.join(this.announcement_dir, year, month, day, index, "activity.log"), JSON.stringify(announcement)+",\n")
                     }   
                     catch(e){
                         console.error(e)
