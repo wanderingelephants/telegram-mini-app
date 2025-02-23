@@ -12,7 +12,7 @@ class WebsiteTrafficSimulator extends NSEScraper {
 
     async simulateTraffic() {
         console.log(process.env.PDF_DOWNLOAD_ENABLED)
-        if (process.env.PDF_DOWNLOAD_ENABLED.toLowerCase() !== "true"){
+        if (process.env.PDF_DOWNLOAD_ENABLED && process.env.PDF_DOWNLOAD_ENABLED.toLowerCase() !== "true"){
             console.log("PDF not enabled on this env")
             return;
         }
@@ -25,10 +25,9 @@ class WebsiteTrafficSimulator extends NSEScraper {
                 console.log('Market inactive hours. Skipping simulation.');
                 return;
             }
-            console.log("Website Sim start Sleep for ", config.MIN_GAP_TO_START, new Date())
-            await this.sleep(
-                config.MIN_GAP_TO_START * (1 + Math.random())
-            );
+            let sleepInterval = config.MIN_GAP_TO_START * (1 + Math.random())
+            console.log("Website Sim start Sleep for ", sleepInterval, new Date())
+            await this.sleep(sleepInterval);
             console.log("Website Sim start Wake up for ", config.MIN_GAP_TO_START, new Date())
             // Get all available PDFs from website
             const allPdfs = await this.scrapeAnnouncements();

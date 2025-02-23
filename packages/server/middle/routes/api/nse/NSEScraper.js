@@ -6,6 +6,7 @@ const { puppeteer, launchOptions } = require("../../../config/puppeteer")();
 //const StealthPlugin = require('puppeteer-extra-plugin-stealth')();
 const fs = require('fs');
 const fetchPDF = require("./pdfFetcher");
+const { uploadFileToS3 } = require('../../../utils/s3Upload');
 const SMART_PROXY_URL = process.env.SMART_PROXY_URL
 //const announcement_url = process.env.ANNOUNCEMENT_URL
 //const announcement_dir = process.env.NSE_ANNOUNCEMENTS_DOWNLOAD
@@ -156,6 +157,13 @@ class NSEScraper {
                 }
                 else {
                     await fetchPDF(announcement.ATTACHMENT, path.join(targetPath, fileName), SMART_PROXY_URL)
+                    try{
+                        await uploadFileToS3(this.announcement_dir,path.join(year, month, day, index, fileName))
+                    }
+                    catch(e){
+                        console.log("Upload to S3 failed")
+                        console.error(e)
+                    }
                     try{
                         fs.appendFileSync(path.join(targetPath, "activity.log"), JSON.stringify(announcement)+",\n")
                     }   

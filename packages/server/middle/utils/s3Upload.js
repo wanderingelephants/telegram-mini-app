@@ -5,16 +5,67 @@ const dotenv = require ("dotenv");
 
 dotenv.config(); // Load AWS credentials from .env file
 
-const bucketName = process.env.S3_BUCKET_NAME; // Define in .env
-const folderPath = process.argv[2];
+const bucketName = process.env.AWS_S3_BUCKET_NAME; // Define in .env
 
-if (!folderPath || !bucketName) {
-  console.error("Usage: node uploadToS3.js <source-folder>");
-  process.exit(1);
-}
 
 const s3 = new S3Client({ region: process.env.AWS_REGION });
 
+function determineContentType(filePath) {
+  const extension = path.extname(filePath).toLowerCase();
+  const contentTypes = {
+      '.pdf': 'application/pdf',
+      '.jpg': 'image/jpeg',
+      '.jpeg': 'image/jpeg',
+      '.png': 'image/png',
+      '.gif': 'image/gif',
+      '.txt': 'text/plain',
+      '.html': 'text/html',
+      '.csv': 'text/csv',
+      '.json': 'application/json',
+      '.xml': 'application/xml',
+      '.doc': 'application/msword',
+      '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      '.xls': 'application/vnd.ms-excel',
+      '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+  };
+
+  return contentTypes[extension] || 'application/octet-stream';
+}
+async function uploadFileToS3(localBaseFolder, localRelativePath) {
+  try {
+      // Construct the full local file path
+      const fullLocalPath = path.join(localBaseFolder, localRelativePath);
+
+      // Check if file exists
+      if (!fs.existsSync(fullLocalPath)) {
+          throw new Error(`File not found at path: ${fullLocalPath}`);
+      }
+
+      // Read the file
+      const fileContent = fs.readFileSync(fullLocalPath);
+
+      // Determine the content type based on file extension
+      const contentType = determineContentType(fullLocalPath);
+
+      // Create the upload parameters
+      const uploadParams = {
+          Bucket: bucketName,
+          Key: localRelativePath.replace(/\\/g, '/'), // Ensure forward slashes for S3 path
+          Body: fileContent,
+          ContentType: contentType
+      };
+
+      // Upload to S3
+      const command = new PutObjectCommand(uploadParams);
+      const response = await s3.send(command);
+
+      console.log(`Successfully uploaded ${localRelativePath} to S3`);
+      return response;
+  } catch (error) {
+      console.error('Error uploading file to S3:', error);
+      throw error;
+  }
+}
 async function uploadFolderToS3(localPath, s3Prefix) {
   const files = fs.readdirSync(localPath);
   console.log("Copy localpath", localPath)
@@ -38,5 +89,5 @@ async function uploadFolderToS3(localPath, s3Prefix) {
   }
 }
 
-const s3TargetPath = folderPath.replace(/^.*pdfs\//, "");
-uploadFolderToS3(folderPath, s3TargetPath);
+
+module.exports =  {uploadFileToS3}
