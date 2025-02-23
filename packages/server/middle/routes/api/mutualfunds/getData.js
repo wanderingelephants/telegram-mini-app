@@ -1,6 +1,73 @@
 const Database = require('better-sqlite3');
 const db = new Database(process.env.SQLITE_DB + '/dipsip.db', {  });
-
+const {postToGraphQL} = require("../../../lib/helper")
+const getMutualFundsFiltered = `query getMutualFundsFiltered($fundList: [String!], $categoryList: [String!]) {
+    mutual_fund(where: {
+      _or: [
+        {
+          _and: [
+            { name: { _in: $fundList } },
+            { category: { _in: $categoryList } }
+          ]
+        },
+        {
+          name: { _in: $fundList }
+        },
+        {
+          category: { _in: $categoryList }
+        }
+      ]
+    }) {
+      mutual_fund_name: name
+      mutual_fund_category: category
+      mutual_fund_star_rating: star_rating
+      mutual_fund_aum: aum
+      mutual_fund_return_1Y: return_1Y
+      mutual_fund_return_2Y: return_2Y
+      mutual_fund_return_3Y: return_3Y
+      mutual_fund_return_5Y: return_5Y
+      mutual_fund_return_10Y: return_10Y
+      mutual_fund_fee_percentage: expenses_ratio
+      mutual_fund_category_fee_percentage: expenses_ratio_cat_avg
+      mutual_fund_stock_holdings: mutual_fund_holdings(
+        order_by: { reporting_date: desc }
+      ) {
+        stock_mf{
+        company_name
+        company_sector
+        }
+        stock_holding_percentage_in_fund: stock_holding_in_percentage
+        stock_holding_reporting_date: reporting_date
+      }
+    }
+  }`
+  
+ 
+  const getMutualFundsAll =`query getMutualFundsAll {
+    mutual_fund {
+      mutual_fund_name: name
+      mutual_fund_category: category
+      mutual_fund_star_rating: star_rating
+      mutual_fund_aum: aum
+      mutual_fund_return_1Y: return_1Y
+      mutual_fund_return_2Y: return_2Y
+      mutual_fund_return_3Y: return_3Y
+      mutual_fund_return_5Y: return_5Y
+      mutual_fund_return_10Y: return_10Y
+      mutual_fund_fee_percentage: expenses_ratio
+      mutual_fund_category_fee_percentage: expenses_ratio_cat_avg
+      mutual_fund_stock_holdings: mutual_fund_holdings(
+        order_by: { reporting_date: desc }
+      ) {
+        stock_mf{
+        company_name
+        company_sector
+        }
+        stock_holding_percentage_in_fund: stock_holding_in_percentage
+        stock_holding_reporting_date: reporting_date
+      }
+    }
+  }`
 const removeRegularFunds = function(holding_data){
     const directFunds = new Set();  
     holding_data.forEach(holding => {
@@ -30,7 +97,30 @@ const filtered_holdings = holding_data.filter(holding => {
 
 return filtered_holdings    
 }
-const getData = (fundList = [], categoryList = []) => {
+const getData = async (fundList = [], categoryList = []) => {
+    try {
+      // Choose which query to use based on filter lists
+      const queryToUse = (fundList.length > 0 || categoryList.length > 0) 
+        ? getMutualFundsFiltered 
+        : getMutualFundsAll;
+      
+      // Variables only needed for filtered query
+      const variables = (fundList.length > 0 || categoryList.length > 0) 
+        ? { fundList, categoryList }
+        : {};
+      
+      const response = await postToGraphQL({
+        query: queryToUse,
+        variables
+      });
+      
+      return response.data.mutual_fund;
+    } catch (error) {
+      console.error('Error in getData:', error);
+      throw new Error('Failed to fetch mutual fund data');
+    }
+  };
+/*const getData = (fundList = [], categoryList = []) => {
     try {
         const conditions = [];
         const params = [];
@@ -101,10 +191,10 @@ const getData = (fundList = [], categoryList = []) => {
         console.error('Error in getData:', error);
         throw new Error('Failed to fetch mutual fund data');
     }
-};
-const getMutualFundHoldingsJSONArray = function () {
-    let mutual_fund_data = getData([], [])
-    //console.log("getData", mutual_fund_data)
+};*/
+const getMutualFundHoldingsJSONArray = async  function () {
+    let mutual_fund_data = await getData([], [])
+    console.log("getData", mutual_fund_data)
     // Create a Set of unique date strings
     const unique_dates = new Set();
     mutual_fund_data.forEach(mf => {

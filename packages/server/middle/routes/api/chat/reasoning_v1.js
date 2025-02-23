@@ -54,7 +54,7 @@ const { reverse_mapping_category_of_insider, reverse_mapping_regulation,
   }
 const initAllData = async function () {
   const t1 = Date.now()
-    const mutualFundsAndReportingDates = getMutualFundHoldingsJSONArray()
+    const mutualFundsAndReportingDates = await getMutualFundHoldingsJSONArray()
     mutual_fund_data = mutualFundsAndReportingDates.mutual_fund_data
     holding_reporting_dates = mutualFundsAndReportingDates.reporting_dates
     const normalizedMutualFundsData = normalizeMutualFundsData(mutual_fund_data)
