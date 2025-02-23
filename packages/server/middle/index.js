@@ -24,15 +24,37 @@ cron.schedule('15,35,55 * * * *', async () => {
   console.log('Starting traffic simulation at:', new Date().toISOString());
   const simulator = new WebsiteTrafficSimulator();
   await simulator.simulateTraffic();
-}, {timezone: "Asia/Kolkata"});
+}, { timezone: "Asia/Kolkata" });
+cron.schedule('*/15 * * * *', async () => {
+  console.log("pdf to text")
+  if (process.env.PDF_DOWNLOAD_ENABLED && process.env.PDF_DOWNLOAD_ENABLED.toLowerCase() !== "true"){
+    console.log("PDF not enabled on this env")
+    return;
+  }
+  try {
+    const now = DateTime.now().setZone('Asia/Kolkata');
+            const date = now.toFormat('yyyy-MM-dd');
+            const [year, month, day] = date.split('-');
+            const announcement_dir = process.env.NSE_ANNOUNCEMENTS_DOWNLOAD;
+            for (const index of ['equities', 'sme']) {
+              const outputPath = path.join(announcement_dir, year, month, day, index, "txt")
+              await fstat.mkDirSync(outputPath, {recursive: true})
+              const pdfToTextInputPath = path.join(announcement_dir, year, month, day, index, "pdf")
+              await axios.get(process.env.PDF_PROCESS_URL + `/api/processPDF?inputFolder=${pdfToTextInputPath}&outputFolder=${outputPath}`)
+            }        
+    }
+  catch (e) {
+    console.error(e)
+  }
+})
 cron.schedule('33 15 * * 1-5', async () => {
   console.log('end of market', new Date());
   //await processInstruments()
   const todayStr = (new Date()).toISOString().split("T")[0]
-  let req = {"query": {"dateStr": todayStr}}
-  let res = {status: (code) => {console.log(code)}, json: (msg) => {console.log(msg)}}
-  await route(req, res)  
-}, {timezone: "Asia/Kolkata"});
+  let req = { "query": { "dateStr": todayStr } }
+  let res = { status: (code) => { console.log(code) }, json: (msg) => { console.log(msg) } }
+  await route(req, res)
+}, { timezone: "Asia/Kolkata" });
 /*cron.schedule('5 0 * * *', async () => {
   try {
     const t1 = Date.now(); 
@@ -62,34 +84,34 @@ cron.schedule('33 15 * * 1-5', async () => {
   }
 }, {timezone: "Asia/Kolkata"});*/
 app.use([
-  bodyParser.urlencoded({limit: '5mb', extended: true}),
-  express.json({limit: '5mb'})
-  ]);
-  app.use(async (err, req, res, next) => {
-    if (err.code === 'auth/id-token-expired') {
-      return res.status(401).json({ 
-        error: 'Token expired', 
-        code: 'TOKEN_EXPIRED'
-      })
-    }
-    next(err)
-  })  
-  app.use(cookieParser());
-  app.use((req, res, next) => {
-    // Check if session cookie exists
-    let sessionId = req.cookies?.dSessionID;
-    console.log("sesionID recd", sessionId)
-    if (!sessionId) {
-      // Generate a simple session ID
-      sessionId = crypto.randomUUID();
-      res.cookie('dSessionID', sessionId, { httpOnly: true });
-    }
-  
-    req.sessionId = sessionId;
-    next();
-  });
+  bodyParser.urlencoded({ limit: '5mb', extended: true }),
+  express.json({ limit: '5mb' })
+]);
+app.use(async (err, req, res, next) => {
+  if (err.code === 'auth/id-token-expired') {
+    return res.status(401).json({
+      error: 'Token expired',
+      code: 'TOKEN_EXPIRED'
+    })
+  }
+  next(err)
+})
+app.use(cookieParser());
+app.use((req, res, next) => {
+  // Check if session cookie exists
+  let sessionId = req.cookies?.dSessionID;
+  console.log("sesionID recd", sessionId)
+  if (!sessionId) {
+    // Generate a simple session ID
+    sessionId = crypto.randomUUID();
+    res.cookie('dSessionID', sessionId, { httpOnly: true });
+  }
+
+  req.sessionId = sessionId;
+  next();
+});
 app.use('/', require('./routes'));
 
 app.listen(port, () => {
-    console.log(`api server running on port: ${port}`)
+  console.log(`api server running on port: ${port}`)
 })
