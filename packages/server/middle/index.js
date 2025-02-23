@@ -28,7 +28,7 @@ cron.schedule('15,35,55 * * * *', async () => {
   const simulator = new WebsiteTrafficSimulator();
   await simulator.simulateTraffic();
 }, { timezone: "Asia/Kolkata" });
-cron.schedule('*/15 * * * *', async () => {
+cron.schedule('*/10 * * * *', async () => {
   console.log("pdf to text")
   if (process.env.PDF_DOWNLOAD_ENABLED && process.env.PDF_DOWNLOAD_ENABLED.toLowerCase() !== "true"){
     console.log("PDF not enabled on this env")
@@ -43,7 +43,7 @@ cron.schedule('*/15 * * * *', async () => {
               const outputPath = path.join(announcement_dir, year, month, day, index, "txt")
               await fs.mkdirSync(outputPath, {recursive: true})
               const pdfToTextInputPath = path.join(announcement_dir, year, month, day, index, "pdf")
-              await axios.get(process.env.PDF_PROCESS_URL + `/api/processPDF?inputFolder=${pdfToTextInputPath}&outputFolder=${outputPath}`)
+              await axios.get(process.env.PDF_PROCESS_URL + `/api/processPDFs?inputFolder=${pdfToTextInputPath}&outputFolder=${outputPath}`)
             }        
     }
   catch (e) {
