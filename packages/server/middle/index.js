@@ -41,7 +41,7 @@ cron.schedule('*/15 * * * *', async () => {
             const announcement_dir = process.env.NSE_ANNOUNCEMENTS_DOWNLOAD;
             for (const index of ['equities', 'sme']) {
               const outputPath = path.join(announcement_dir, year, month, day, index, "txt")
-              await fs.mkDirSync(outputPath, {recursive: true})
+              await fs.mkdirSync(outputPath, {recursive: true})
               const pdfToTextInputPath = path.join(announcement_dir, year, month, day, index, "pdf")
               await axios.get(process.env.PDF_PROCESS_URL + `/api/processPDF?inputFolder=${pdfToTextInputPath}&outputFolder=${outputPath}`)
             }        
