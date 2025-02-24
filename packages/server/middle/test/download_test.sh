@@ -11,13 +11,26 @@ curl -X POST http://51.158.62.147:3000/api/nse/announcements \
   "index": "sme"
 }'
 #baseUrl, urlSuffix, etfFileName
-curl -X POST http://localhost:3000/api/nse/process \
+curl -X POST http://localhost:3000/api/chat/reasoning \
 -H "Content-Type: application/json" \
 -d '{
-  "baseUrl": "https://www.nseindia.com",
-  "urlSuffix": "/api/etf",
-  "etfFileName": "2025-01-23.json"
-}'
+                "distilledModel": "announcements_summary",
+                "llm": "Ollama",
+                "singleShotPrompt": true,
+                "streaming": false,
+                "email": "dummy@dummy.com",
+                "customData": {
+                    "stock_symbol": "KPEL",
+                    "announcement_date": "2024-02-24",
+                    "attachment": "https://nsearchives.com"
+                },
+                "messages": [
+                    {
+                        "role": "user",
+                        "content": "This is the Quarterly Results where we have shown 100% yoy growth in  revenue and 50% yoy growht in PAT. Looking to capex  in next 4 quarters"
+                    }
+                ]
+            }'
 
 curl -X POST http://localhost:3000/api/mutualfunds/recommend \
 -H "Content-Type: application/json" \

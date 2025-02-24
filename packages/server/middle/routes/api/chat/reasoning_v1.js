@@ -518,6 +518,8 @@ class LLMResponseHandler {
 const route = async (req, res) => {
   const sessionId = req.sessionId;
   const { email, distilledModel, messages, llm, streaming = false, singleShotPrompt = false, customData } = req.body;
+  console.log("reasoning_v1 recd req")
+  console.log({ email, distilledModel, messages, llm, streaming, singleShotPrompt, customData })
   const modelName = distilledModel
   const LLMToUse = llm ? llm : process.env.LLM_TO_USE;
   const handlerType = distilledModel === "announcements_summary" ? 'NoOp' : 'JavaScript'
@@ -552,7 +554,7 @@ const route = async (req, res) => {
     let messagesToSend;
     //const llmResponse = await llmClient.sendToLLM(systemPrompt, [{ "role": 'user', content: [{ "type": 'text', "text": messages[messages.length - 1].content }] }]);
     messagesToSend = singleShotPrompt === false ? await messageManager.getMessages(sessionId, modelName, 'messages.json') : [messages[messages.length - 1]]
-
+    console.log("messagesToSend", messagesToSend)
     const llmResponse = await llmClient.sendToLLM(systemPrompt, messagesToSend, customData);
     console.log("llmResponse", llmResponse)
     if (this.llmToUse === "Ollama") {
