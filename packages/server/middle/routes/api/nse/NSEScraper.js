@@ -135,8 +135,6 @@ class NSEScraper {
         }
         return data;
         });
-        console.log("announcementData")
-        console.log(announcementData.length)
         //console.log("PDFs length", index, announcementData)
         //if (this.isMaster)  return announcementData    
         await this.browser.close();
@@ -183,7 +181,7 @@ class NSEScraper {
             }
         }
     }
-
+    console.log("Scraping done")
         return pdfLinks;
     }
     
