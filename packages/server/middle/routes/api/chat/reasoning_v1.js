@@ -265,11 +265,20 @@ class LLMClient {
           "docLink": customData.attachment.trim() + "%"
         }
       })
-      const sentimentValue = sentimentQueryResponse.data.stock_announcements[0].announcement_sentiment
+      if (sentimentQueryResponse.data.stock_announcements.length > 0){
+        console.log("Number of Summary Announcements for ",customData.attachment.trim(), sentimentQueryResponse.data.stock_announcements.length)
+        const sentimentValue = sentimentQueryResponse.data.stock_announcements[0].announcement_sentiment
+        if (sentimentValue > -1) {
+          console.log("Summary already exists for ", customData.attachment.trim())
+          return;
+        }
+      }
+      console.log("Will process. Summary Annoucements not found for ", customData.attachment.trim())
+      /*const sentimentValue = sentimentQueryResponse.data.stock_announcements[0].announcement_sentiment
       if (sentimentValue > -1) {
         console.log("Summary already exists for ", customData.attachment.trim())
         return;
-      }
+      }*/
       let model = process.env.OLLAMA_MODEL
       const finalPrompt = systemPrompt.replace("{{text_replace}}", messages[0].content)
       const response = await axios.post(`${process.env.OLLAMA_URL}/api/generate`, {
