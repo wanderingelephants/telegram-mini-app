@@ -1,7 +1,18 @@
-While SIP (System Investment Plan) have long been touted as disciplined way to invest, because they do Rupee Cost Averaging, there 
-are more efficient ways of investing in a disciplined way.
-A powerful variant of SIP is DipSIP, basically Systematic Investment Plans around DIPs in the market. 
-i.e. you invest when market corrects. And if market correction is bigger, you increase the allocation further.
-This works really well for Index strategies and ETFs that are traded on the exchanges, offering investors volatile periods where dips can be purchased.
-In the long run for a growing economy like India, Indexes like NIFTY, Bank Nifty or Nifty Small Cap, will continue to grow over 3-5 years period.
-So, whenever there is a dip, go ahead and buy.
+A note about DipSIP - DipSIP stands for Systematic Investment Plan around market dips or corrections. hence "Dip Sip"
+It is NOT related to Dividend investment. Rather the prefix Dip in DipSIP refers to dip in the markets, 
+or commonly called as correction in the markets. DipSIP is a contra investing strategy, where investor buys in falling markets, 
+and increases the allocation if correction is steeper. This is very different from a convention SIP i.e. Systematic Investment Plan, 
+where the investor invests a fixed amount say Rs 10,000 per month. SIP is also called Rupee Cost Averaging. 
+While Rupee Cost Averaging is good, but buying only on market dips proves far more beneficial. 
+The investment horizon needs to be 3 to 5 years or more. Patience is key. 
+It's Important to note that this strategy works only for broad market indices, and is not suitable for individual stocks. The reason is that broad market indices like Nifty50, BankNifty, SmallCap, MidCap indices  tend to grow over period of 3-5 years. 
+On the other hand, inidividual stocks may never recover from corrections, due to company specific reasons. 
+That is why we recommend DipSIP only on ETFs that track broad market indices. 
+There is a remarkable market event that happened on June 4, 2025 when India's general election counting was happening. 
+Because of election counting, markets became extremely choppy and some broad indices like BankNifty fell upto 8 percentage points. 
+That day a strategy like DipSIP would give handsome rewards, because eventually indices recovered and rose further. 
+The volatlity could not be leveraged by mutual fund investors, because there are cut-off timings, and Mutual funds cannot be traded like ETFs.
+Some key terms or configuration parameters to set up a DipSIP
+1. Amount : This is the amount that will be invested in each of the ETFs the investor selected. e.g. Rs 1000.
+2. Trigger percentage : This is the amount of correction set by investor, to trigger the investment. E.g. if investor sets 1 % as trigger and has Nifty50, BankNifty, NSEIT in his ETF list, then if any of these fall by more than 1 %, then order will be created for that ETF.
+3. Allocation Factor: This is for aggressive investors. As correction deepens, the allocation increases, instead of keeping it a constant. e.g. if amount is  1000, and trigger is 1% and BankNifty corrects by 2%, then system will calculate the amount to be higher than 1000, using an exponential function.
