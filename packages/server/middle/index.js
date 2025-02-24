@@ -58,7 +58,7 @@ cron.schedule('*/10 * * * *', async () => {
       console.log(`PDF Task ${index} time taken: ${(t2 - t1)} ms`); 
     
     }
-    console.log("TRIGGER SUMMARY TASKS NOW")
+    /*console.log("TRIGGER SUMMARY TASKS NOW")
     for (const index of ['equities', 'sme']) {
       const txtPath = path.join(announcement_dir, year, month, day, index, "txt")
       const summaryPath = path.join(announcement_dir, year, month, day, index, "summary")
@@ -67,7 +67,7 @@ cron.schedule('*/10 * * * *', async () => {
       await axios.get(process.env.API_SERVER_URL + `/api/nse/summaries?inputFolder=${txtPath}&outputFolder=${summaryPath}`)
       const t2 = Date.now();
       console.log(`Summary Task ${index} time taken: ${(t2 - t1)} ms`); 
-    }
+    }*/
 
   }
   catch (e) {
