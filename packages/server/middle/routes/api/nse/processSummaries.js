@@ -113,5 +113,10 @@ async function processSummaries(inputFolder, outputFolder, fileToSummarize) {
         throw error;
     }
 }
+const route = async (req, res) => {
+    //2025-02-13
+    await processSummary(req.query.inputFolder, req.query.outputFolder)
 
-module.exports = processSummaries;
+    res.status(200).json("ok")
+}
+module.exports = route;

@@ -41,19 +41,19 @@ export default {
           product_name: "Index Funds",
           pricing: "Rs. 99",
           strikeoutpricing: "Rs. 199",
-          suitability: "New investors, with 0-3 years exposure in the Stock Markets. Keep it simple, passive index investing with 3-5 years plus horizon"
+          suitability: "New investors. Keep it simple, passive investing in Index/REITs/InvITs with 3-5 years plus horizon"
         },
         {
           product_name: "Mutual Funds",
           pricing: "Rs. 199",
           strikeoutpricing: "Rs. 299",
-          suitability: "Investors, with 3-5 years plus exposure in the Stock Markets. Get some exposure to good quality mutual funds with 3-5 years plus horizon"
+          suitability: "Investors, with moderate risk profile. Get some exposure to good quality mutual funds with 3-5 years plus horizon"
         },
         {
           product_name: "Stocks",
           pricing: "Rs. 499",
           strikeoutpricing: "Rs. 999",
-          suitability: "You understand volatility, risk, business/market cycles. Have read and re-read Nassim Taleb multiple times 😎"
+          suitability: "Stock Pickers"
         },
         {
           product_name: "Enterprise",

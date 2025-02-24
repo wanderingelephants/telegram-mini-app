@@ -30,22 +30,35 @@ cron.schedule('15,35,55 * * * *', async () => {
 }, { timezone: "Asia/Kolkata" });
 cron.schedule('*/10 * * * *', async () => {
   console.log("pdf to text")
-  if (process.env.PDF_DOWNLOAD_ENABLED && process.env.PDF_DOWNLOAD_ENABLED.toLowerCase() !== "true"){
+  if (process.env.PDF_DOWNLOAD_ENABLED && process.env.PDF_DOWNLOAD_ENABLED.toLowerCase() !== "true") {
     console.log("PDF not enabled on this env")
     return;
   }
   try {
-    const now = DateTime.now().setZone('Asia/Kolkata');
-            const date = now.toFormat('yyyy-MM-dd');
-            const [year, month, day] = date.split('-');
-            const announcement_dir = process.env.NSE_ANNOUNCEMENTS_DOWNLOAD;
-            for (const index of ['equities', 'sme']) {
-              const outputPath = path.join(announcement_dir, year, month, day, index, "txt")
-              await fs.mkdirSync(outputPath, {recursive: true})
-              const pdfToTextInputPath = path.join(announcement_dir, year, month, day, index, "pdf")
-              await axios.get(process.env.PDF_PROCESS_URL + `/api/processPDFs?inputFolder=${pdfToTextInputPath}&outputFolder=${outputPath}`)
-            }        
+    if (!process.env.PDF_PROCESS_URL) {
+      console.log("PDF_PROCESS_URL not  defined")
+      return
     }
+    const now = DateTime.now().setZone('Asia/Kolkata');
+    const date = now.toFormat('yyyy-MM-dd');
+    const [year, month, day] = date.split('-');
+    const announcement_dir = process.env.NSE_ANNOUNCEMENTS_DOWNLOAD;
+    for (const index of ['equities', 'sme']) {
+      const txtPath = path.join(announcement_dir, year, month, day, index, "txt")
+      await fs.mkdirSync(txtPath, { recursive: true })
+      const pdfToTextInputPath = path.join(announcement_dir, year, month, day, index, "pdf")
+      await axios.get(process.env.PDF_PROCESS_URL + `/api/processPDFs?inputFolder=${pdfToTextInputPath}&outputFolder=${txtPath}`)
+    }
+    for (const index of ['equities', 'sme']) {
+      const txtPath = path.join(announcement_dir, year, month, day, index, "txt")
+      const summaryPath = path.join(announcement_dir, year, month, day, index, "summary")
+      const t1 = Date.now(); 
+      await axios.get(process.env.API_SERVER + `/api/nse/summaries?inputFolder=${txtPath}&outputFolder=${summaryPath}`)
+      const t2 = Date.now();
+      console.log(`Summary Task ${index} time taken: ${(t2 - t1)} ms`); 
+    }
+
+  }
   catch (e) {
     console.error(e)
   }

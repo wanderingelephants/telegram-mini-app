@@ -79,7 +79,7 @@ const routes = {
             process: require("./api/nse/process"),
             announcements: require("./api/nse/announcements"),
             instruments: require("./api/nse/instruments"),
-            summaries: require("./api/nse/summaries"),
+            summaries: require("./api/nse/processSummaries"),
             sendSummaries: require("./api/nse/sendSummaryEmails"),
             insider: require("./api/nse/process_insider_csv"),
             scraper: require("./api/nse/scraper")

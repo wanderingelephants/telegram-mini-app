@@ -204,7 +204,7 @@ const processSummary = async (summaryDate, index, processOnlySubscriptions) => {
     }
     console.log("processSummary pdf-to-text done")
     const textBasePath = path.join(announcement_data_folder,formattedDate, index, "txt")
-    for (const row of filteredResults) {
+    /*for (const row of filteredResults) {
         const fileName = getPdfFileName(row)
         if (!fileName.endsWith('.pdf')) {
                 console.log("SKIPING non-pdf.................", row)
@@ -217,7 +217,7 @@ const processSummary = async (summaryDate, index, processOnlySubscriptions) => {
         catch (e) {
             console.error(e)
         }
-    }
+    }*/
     
     console.log("processSummary summaries done")
 }
