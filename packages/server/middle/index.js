@@ -48,14 +48,15 @@ cron.schedule('*/10 * * * *', async () => {
     const [year, month, day] = date.split('-');
     const announcement_dir = process.env.NSE_ANNOUNCEMENTS_DOWNLOAD;
     for (const index of ['equities', 'sme']) {
-      const txtPath = path.join(announcement_dir, year, month, day, index, "txt")
-      await fs.mkdirSync(txtPath, { recursive: true })
-      const pdfToTextInputPath = path.join(announcement_dir, year, month, day, index, "pdf")
+      const txtPath = path.join(year, month, day, index, "txt")
+      await fs.mkdirSync(path.join(announcement_dir,txtPath), { recursive: true })
+      const pdfToTextInputPath = path.join(year, month, day, index, "pdf")
       await axios.get(process.env.PDF_PROCESS_URL + `/api/processPDFs?inputFolder=${pdfToTextInputPath}&outputFolder=${txtPath}`)
     }
     for (const index of ['equities', 'sme']) {
       const txtPath = path.join(announcement_dir, year, month, day, index, "txt")
       const summaryPath = path.join(announcement_dir, year, month, day, index, "summary")
+      await fs.mkdirSync(summaryPath)
       const t1 = Date.now(); 
       await axios.get(process.env.API_SERVER_URL + `/api/nse/summaries?inputFolder=${txtPath}&outputFolder=${summaryPath}`)
       const t2 = Date.now();
