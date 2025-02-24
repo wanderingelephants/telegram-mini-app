@@ -71,7 +71,7 @@ const routes = {
             list: require("./api/mutualfunds/list"),
             analyze: require("./api/mutualfunds/analyze"),
             recommend: require("./api/mutualfunds/recommend"),
-            //categoryScrape: require("./api/mutualfunds/categoryScrape")
+            categoryScrape: require("./api/mutualfunds/categoryScrape")
         },
         nse: {
             receive: require("./api/nse/receive"),
@@ -112,7 +112,7 @@ router.get("/api/kite/instrument/eod", routes.api.kite.instrument.eod)
 router.post("/api/mutualfunds/compare", routes.api.mutualfunds.analyze)
 router.post("/api/mutualfunds/recommend", routes.api.mutualfunds.recommend)
 router.get("/api/mutualfunds/list", routes.api.mutualfunds.list)
-//router.post("/api/mutualfunds/categoryScrape", routes.api.mutualfunds.categoryScrape)
+router.post("/api/mutualfunds/categoryScrape", routes.api.mutualfunds.categoryScrape)
 router.post("/api/nse/receive", routes.api.nse.receive)
 router.post("/api/nse/announcements", routes.api.nse.announcements)
 router.post("/api/nse/process", routes.api.nse.process)
