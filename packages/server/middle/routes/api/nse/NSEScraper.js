@@ -143,11 +143,11 @@ class NSEScraper {
             fs.mkdirSync(targetPath, {recursive: true})
         for (const announcement of announcementData[index]){
             if (announcement.SUBJECT.toLowerCase().indexOf("newspaper") > -1){
-                console.log("Skipping newspaper record", announcement)
+                console.log("Skipping newspaper record", announcement.ATTACHMENT)
                 continue;
             }
             if (announcement.ATTACHMENT && announcement.ATTACHMENT.endsWith(".xml")) {
-                console.log("Skipping XML announcement", announcement)
+                console.log("Skipping XML announcement", announcement.ATTACHMENT)
                 continue;
             }
             //console.log(announcement.ATTACHMENT, this.pdfsToDownload[index].indexOf(announcement.ATTACHMENT))

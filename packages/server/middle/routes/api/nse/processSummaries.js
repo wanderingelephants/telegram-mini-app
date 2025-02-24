@@ -114,7 +114,7 @@ async function processSummaries(inputFolder, outputFolder, fileToSummarize) {
     }
 }
 const route = async (req, res) => {
-    //2025-02-13
+    console.log(new Date(), "RECEIVED SUMMARY REQUEST", req.query.inputFolder, req.query.outputFolder)
     await processSummaries(req.query.inputFolder, req.query.outputFolder)
 
     res.status(200).json("ok")
