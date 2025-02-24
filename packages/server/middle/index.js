@@ -62,7 +62,7 @@ cron.schedule('*/10 * * * *', async () => {
     for (const index of ['equities', 'sme']) {
       const txtPath = path.join(announcement_dir, year, month, day, index, "txt")
       const summaryPath = path.join(announcement_dir, year, month, day, index, "summary")
-      await fs.mkdirSync(summaryPath)
+      await fs.mkdirSync(summaryPath, {recursive: true})
       const t1 = Date.now(); 
       await axios.get(process.env.API_SERVER_URL + `/api/nse/summaries?inputFolder=${txtPath}&outputFolder=${summaryPath}`)
       const t2 = Date.now();
