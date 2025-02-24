@@ -181,7 +181,7 @@ class NSEScraper {
                             variables: {
                                 "object": {
                                     "announcement_document_link": announcement.ATTACHMENT.trim(),
-                                    "announcement_date": `${yyyy}-${month}-${day}`,
+                                    "announcement_date": `${year}-${month}-${day}`,
                                     "announcement_text_summary": "",
                                     "announcement_sentiment": -1,
                                     "announcement_impact": "",

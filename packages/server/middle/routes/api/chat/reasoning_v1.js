@@ -268,6 +268,8 @@ class LLMClient {
       if (sentimentQueryResponse.data.stock_announcements.length > 0){
         console.log("Number of Summary Announcements for ",customData.attachment.trim(), sentimentQueryResponse.data.stock_announcements.length)
         const sentimentValue = sentimentQueryResponse.data.stock_announcements[0].announcement_sentiment
+        console.log("Number of Summary Announcements for ",customData.attachment.trim(), sentimentQueryResponse.data.stock_announcements.length, sentimentValue)
+        
         if (sentimentValue > -1) {
           console.log("Summary already exists for ", customData.attachment.trim())
           return;
