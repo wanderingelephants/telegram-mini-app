@@ -148,6 +148,10 @@ class NSEScraper {
                 console.log("Skipping newspaper record", announcement)
                 continue;
             }
+            if (announcement.ATTACHMENT && announcement.ATTACHMENT.endsWith(".xml")) {
+                console.log("Skipping XML announcement", announcement)
+                continue;
+            }
             //console.log(announcement.ATTACHMENT, this.pdfsToDownload[index].indexOf(announcement.ATTACHMENT))
             if (announcement.ATTACHMENT) {
                 pdfLinks[index].push(announcement.ATTACHMENT)
