@@ -52,6 +52,14 @@ const { reverse_mapping_category_of_insider, reverse_mapping_regulation,
   
     return Array.from(stockMap.values());
   }
+  const transformKeys = function(obj) {
+    const newObj = {};
+    for (const key in obj) {
+      const newKey = key.replace(/-/g, "_"); // Replace all '-' with '_'
+      newObj[newKey] = obj[key];
+    }
+    return newObj;
+  }
 const initAllData = async function () {
   const t1 = Date.now()
     const mutualFundsAndReportingDates = await getMutualFundHoldingsJSONArray()
@@ -314,6 +322,8 @@ class LLMClient {
         jsonObj = JSON.parse(jsonResp)
 
       }
+      
+      jsonObj = transformKeys(jsonObj)
       let sentiment = -1
       if (jsonObj.Announcement_Sentiment) {
         switch (jsonObj.Announcement_Sentiment.toLowerCase()) {
