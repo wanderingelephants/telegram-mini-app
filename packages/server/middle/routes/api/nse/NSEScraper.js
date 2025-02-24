@@ -188,7 +188,7 @@ class NSEScraper {
                                     "stock": {
                                         "data": {
                                             "symbol": announcement.SYMBOL,
-                                            "company_name": announcement["'COMPANY NAME"],
+                                            "company_name": announcement["COMPANY NAME"],
                                             "segment": index.toLowerCase() === "sme" ? 1 : 0
                                         },
                                         "on_conflict": {
