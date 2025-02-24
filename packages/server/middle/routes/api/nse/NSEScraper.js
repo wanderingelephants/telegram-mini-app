@@ -142,7 +142,7 @@ class NSEScraper {
         await this.browser.close();
         for (const index of ['equities', 'sme']) {
             const targetPath = path.join(this.announcement_dir, year, month, day, index, "pdf")
-        
+            fs.mkdirSync(targetPath, {recursive: true})
         for (const announcement of announcementData[index]){
             if (announcement.SUBJECT.toLowerCase().indexOf("newspaper") > -1){
                 console.log("Skipping newspaper record", announcement)
