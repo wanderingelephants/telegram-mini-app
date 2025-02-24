@@ -1,5 +1,6 @@
 const path = require('path');
 const { DateTime } = require('luxon');
+const { postToGraphQL } = require("../../../lib/helper")
 
 const { puppeteer, launchOptions } = require("../../../config/puppeteer")();
 
@@ -168,6 +169,40 @@ class NSEScraper {
                     }
                     catch(e){
                         console.log("Upload to S3 failed")
+                        console.error(e)
+                    }
+                    try{
+                        await postToGraphQL({
+                            query: `mutation StockAnnouncementInsertOne($object: stock_announcements_insert_input!) {
+          insert_stock_announcements_one(object: $object) {
+            id
+          }
+        }`,
+                            variables: {
+                                "object": {
+                                    "announcement_document_link": announcement.ATTACHMENT.trim(),
+                                    "announcement_date": `${yyyy}-${month}-${day}`,
+                                    "announcement_text_summary": "",
+                                    "announcement_sentiment": -1,
+                                    "announcement_impact": "",
+                                    "stock": {
+                                        "data": {
+                                            "symbol": announcement.SYMBOL,
+                                            "company_name": announcement.COMPANY_NAME,
+                                            "segment": index.toLowerCase() === "sme" ? 1 : 0
+                                        },
+                                        "on_conflict": {
+                                            "constraint": "stock_symbol_key",
+                                            "update_columns": ["symbol", "company_name"]
+                                        }
+                                    }
+                                }
+                            }
+                        })
+                    }
+                    catch(e)
+                    {
+                        console.log("Error Posting GQL", announcement)
                         console.error(e)
                     }
                     try{
