@@ -53,7 +53,7 @@ cron.schedule('*/10 * * * *', async () => {
       const txtPath = path.join(announcement_dir, year, month, day, index, "txt")
       const summaryPath = path.join(announcement_dir, year, month, day, index, "summary")
       const t1 = Date.now(); 
-      await axios.get(process.env.API_SERVER + `/api/nse/summaries?inputFolder=${txtPath}&outputFolder=${summaryPath}`)
+      await axios.get(process.env.API_SERVER_URL + `/api/nse/summaries?inputFolder=${txtPath}&outputFolder=${summaryPath}`)
       const t2 = Date.now();
       console.log(`Summary Task ${index} time taken: ${(t2 - t1)} ms`); 
     }
