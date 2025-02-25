@@ -44,7 +44,7 @@ const getMutualFundsFiltered = `query getMutualFundsFiltered($fundList: [String!
   
  
   const getMutualFundsAll =`query getMutualFundsAll {
-    mutual_fund (where: {aum: {_gt: 2000}}) {
+    mutual_fund (where: {mf_direct_variant_id:{_is_null:true}, aum: {_gt: 2000}}) {
       mutual_fund_name: name
       mutual_fund_category: category
       mutual_fund_star_rating: star_rating
