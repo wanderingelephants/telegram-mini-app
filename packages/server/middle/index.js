@@ -16,7 +16,7 @@ const summaryServiceUrl = process.env.SUMMARY_SERVICE_URL
 const processInsiderCSV = require("./routes/api/nse/process_insider_csv")
 const processInstruments = require("./utils/process_instruments")
 const WebsiteTrafficSimulator = require("./routes/api/nse/WebsiteTrafficSimulator")
-const dbManager = require('../middle/routes/api/chat/DatabaseManager');
+const dbManager = require('./routes/api/chat/DatabaseManager');
 dbManager.getData()
   .then(data => {
     console.log('Database initialized successfully');
