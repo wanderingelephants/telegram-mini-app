@@ -74,7 +74,7 @@ const menuItems = [
   { title: 'Principles', path: '/principles' },
   { title: 'Risk  Profile', path: '/riskProfile' },
   { title: 'Tools', path: '/tools' },
-  { title: 'Offerings', path: '/pricing' },
+  //{ title: 'Offerings', path: '/pricing' },
   { title: 'About Us', path: '/about' }
 ]
 
