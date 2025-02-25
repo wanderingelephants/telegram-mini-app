@@ -18,11 +18,11 @@ async function processSummaries(inputFolder, outputFolder, fileToSummarize) {
     try {
         // Check if input directory exists
         //await fs.access(inputFolder);
-        if (!fs.existsSync(inputFolder)){
+        if (!fs.existsSync(inputFolder)) {
             console.log("input folder does not exist", inputFolder)
             return;
         }
-        fs.mkdirSync(outputFolder, {recursive: true})
+        fs.mkdirSync(outputFolder, { recursive: true })
         // Create output directory if it doesn't exist
         /*try {
             await fs.access(outputFolder);
@@ -32,15 +32,18 @@ async function processSummaries(inputFolder, outputFolder, fileToSummarize) {
         }*/
 
         // Get all .txt files from input directory
-        const files = (await fs.readdirSync(inputFolder, { withFileTypes: true }))
-            .filter(file => file.endsWith('.txt') && !file.includes('_api_response.txt'));
+        const files = fs.readdirSync(inputFolder, { withFileTypes: true })
+            .filter(dirent => dirent.isFile() &&
+                dirent.name.endsWith('.txt') &&
+                !dirent.name.includes('_api_response.txt'))
+            .map(dirent => dirent.name);
 
         for (const file of files) {
             console.log(`Checking file: ${file}`);
-            
+
             // Read file content
             const filePath = path.join(inputFolder, file);
-            if (fileToSummarize && filePath !== fileToSummarize){
+            if (fileToSummarize && filePath !== fileToSummarize) {
                 console.log("Skipping file", filePath)
                 continue;
             }
@@ -48,11 +51,11 @@ async function processSummaries(inputFolder, outputFolder, fileToSummarize) {
                 console.log("Will process summary for file", filePath)
             }
             const content = await fs.readFileSync(filePath, 'utf-8');
-            
+
             const filenameNoExt = path.parse(file).name;
             // Generate output filename
             const outputFile = path.join(outputFolder, `${filenameNoExt}_api_response.txt`);
-            if (fs.existsSync(outputFile)){
+            if (fs.existsSync(outputFile)) {
                 console.log("Output file exists", outputFile)
                 continue
             }
@@ -69,7 +72,7 @@ async function processSummaries(inputFolder, outputFolder, fileToSummarize) {
                 }
             }*/
             const fullAttachment = `${NSE_PREFIX}${filenameNoExt}`;
-            
+
             // Prepare JSON payload
             const jsonData = {
                 activity: "announcements_summary",
@@ -85,7 +88,7 @@ async function processSummaries(inputFolder, outputFolder, fileToSummarize) {
                 ]
             };
 
-            
+
             try {
                 // Make API call
                 const response = await axios.post(
