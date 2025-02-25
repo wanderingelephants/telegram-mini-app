@@ -97,6 +97,9 @@ const analysis = function(mutual_funds, mutual_fund_stock_holdings, reporting_da
 	//your code and reasoning steps as comments
 }
 
+Remember that this is a standalone function and you cannot refer to earlier invocations of the function. Those may be presented to you just to give a good context about the current query. 
+Therefore, you should never use stuff like this.previousResult and so on.
+
 Example:
 User_Query: Which mutual funds have star rating of 3 or above
 Response:
