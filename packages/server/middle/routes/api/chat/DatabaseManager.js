@@ -84,7 +84,7 @@ class DatabaseManager {
         console.log(mutual_fund_stock_holdings.slice(0, 5))
         const today = new Date();
         const toDate = today.toISOString().split("T")[0]
-        const fromDate = (new Date(today.getTime() - (30 * 24 * 60 * 60 * 1000))).toISOString().split("T")[0]
+        const fromDate = (new Date(today.getTime() - (10 * 24 * 60 * 60 * 1000))).toISOString().split("T")[0]
         const announcementQuery = `query stock_announcements($fromDate: date!, $toDate: date!){
         stock_announcements(where: {announcement_date: {_gte: $fromDate, _lte: $toDate}}){
           stock{
@@ -177,7 +177,7 @@ class DatabaseManager {
       
       }`
         const date = new Date();
-        date.setDate(date.getDate() - 15);
+        date.setDate(date.getDate() - 5);
         const startDate = date.toISOString().split("T")[0]; // Formats to YYYY-MM-DD
 
 
