@@ -82,13 +82,13 @@ function  startServer(){
       console.error(e)
     }
   })
-  cron.schedule('33 15 * * 1-5', async () => {
+  /*cron.schedule('33 15 * * 1-5', async () => {
     console.log('end of market', new Date());
     const todayStr = (new Date()).toISOString().split("T")[0]
     let req = { "query": { "dateStr": todayStr } }
     let res = { status: (code) => { console.log(code) }, json: (msg) => { console.log(msg) } }
     await route(req, res)
-  }, { timezone: "Asia/Kolkata" });
+  }, { timezone: "Asia/Kolkata" });*/
   app.use([
     bodyParser.urlencoded({ limit: '5mb', extended: true }),
     express.json({ limit: '5mb' })
