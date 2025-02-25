@@ -14,10 +14,7 @@ curl -X POST http://51.158.62.147:3000/api/nse/announcements \
 curl -X POST http://localhost:3000/api/chat/reasoning \
 -H "Content-Type: application/json" \
 -d '{
-                "distilledModel": "announcements_summary",
-                "llm": "Ollama",
-                "singleShotPrompt": true,
-                "streaming": false,
+                "activity": "announcements_summary",
                 "email": "dummy@dummy.com",
                 "customData": {
                     "stock_symbol": "KPEL",

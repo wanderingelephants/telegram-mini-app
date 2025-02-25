@@ -43,13 +43,7 @@ services:
       #- OLLAMA_URL=http://ollama:11434
     volumes:
       - ./.env:/.env
-      - ${PROMPTS_FOLDER:-/home/ec2-user/data/prompts}:/app/data/prompts
-      - ${GENERATED_FUNCTIONS:-/home/ec2-user/data/generated_functions}:/app/data/generated_functions
-      - ${CONFIG:-/home/ec2-user/data/config}:/app/data/config
-      - /home/ec2-user/data:/app/data
-      - ${DOWNLOADS:-/home/ec2-user/data/downloads}:/app/data/downloads    
-      - ${SQLITE_DB:-/home/ec2-user/data/sqlite_db}:/app/data/sqlite_db  
-      - ${NSE_ANNOUNCEMENTS_DOWNLOAD:-/home/ec2-user/data/nse_announcements/pdf}:/app/downloads/nse_announcements
+      - ${DATA_ROOT_FOLDER:-/home/ec2-user/data}:/app/data
   pdf-to-text:
     build:
       context: ./server/pdf_to_text

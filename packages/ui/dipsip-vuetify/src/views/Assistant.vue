@@ -149,9 +149,8 @@ export default{
         'Accept': 'text/event-stream',
       },
       body: JSON.stringify({
-        distilledModel: this.distilledModel,
+        activity: "stock_market_chat",
         messages: [...this.messages],
-        streaming: true,
         email: this.userGoogle.email
       })
     });

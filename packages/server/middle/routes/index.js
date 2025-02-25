@@ -45,7 +45,7 @@ const routes = {
             callback: require("./api/auth/callback")
         },
         chat: {
-            reasoning: require("./api/chat/reasoning_v1")
+            reasoning: require("./api/chat/reasoning_v2")
         },
         db: {
             create: require("./api/db/create"),
@@ -53,6 +53,21 @@ const routes = {
             getuser: require("./api/db/getuser"),
             updateuser: require("./api/db/updateuser"),
             saveconfig: require("./api/db/saveconfig")
+        },
+        indices: {
+            AUTOBEES: require("./api/indices/AUTOBEES.json"),
+            BANKBEES: require("./api/indices/BANKBEES.json"),
+            etf_funds_data: require("./api/indices/etf_funds_data.json"),
+            GOLDBEES: require("./api/indices/GOLDBEES.json"),
+            ITBEES: require("./api/indices/ITBEES.json"),
+            MAKEINDIA: require("./api/indices/MAKEINDIA.json"),
+            MID150BEES: require("./api/indices/MID150BEES.json"),
+            NIFTYBEES: require("./api/indices/NIFTYBEES.json"),
+            PHARMABEES: require("./api/indices/PHARMABEES.json"),
+            SHARIABEES: require("./api/indices/SHARIABEES.json"),
+            SILVERBEES: require("./api/indices/SILVERBEES.json"),
+            SMALLCAP: require("./api/indices/SMALLCAP.json"),
+            TNIDETF: require("./api/indices/TNIDETF.json"),
         },
         kite:{
             order: {
@@ -71,7 +86,7 @@ const routes = {
             list: require("./api/mutualfunds/list"),
             analyze: require("./api/mutualfunds/analyze"),
             recommend: require("./api/mutualfunds/recommend"),
-            categoryScrape: require("./api/mutualfunds/categoryScrape")
+            scrape: require("./api/mutualfunds/indexFundScraper")
         },
         nse: {
             receive: require("./api/nse/receive"),
@@ -112,7 +127,7 @@ router.get("/api/kite/instrument/eod", routes.api.kite.instrument.eod)
 router.post("/api/mutualfunds/compare", routes.api.mutualfunds.analyze)
 router.post("/api/mutualfunds/recommend", routes.api.mutualfunds.recommend)
 router.get("/api/mutualfunds/list", routes.api.mutualfunds.list)
-router.post("/api/mutualfunds/categoryScrape", routes.api.mutualfunds.categoryScrape)
+router.get("/api/mutualfunds/scrape", routes.api.mutualfunds.scrape)
 router.post("/api/nse/receive", routes.api.nse.receive)
 router.post("/api/nse/announcements", routes.api.nse.announcements)
 router.post("/api/nse/process", routes.api.nse.process)
@@ -121,6 +136,20 @@ router.get("/api/nse/scraper", routes.api.nse.scraper)
 router.get("/api/nse/instruments", routes.api.nse.instruments)
 router.get("/api/nse/summaries", routes.api.nse.summaries)
 router.get("/api/nse/sendSummaries", routes.api.nse.sendSummaries)
+
+router.get("/api/indices/AUTOBEES", (req, res) => {res.status(200).json(routes.api.indices.AUTOBEES)})
+router.get("/api/indices/BANKBEES", (req, res) => {res.status(200).json(routes.api.indices.BANKBEES)})
+router.get("/api/indices/etf_funds_data", (req, res) => {res.status(200).json(routes.api.indices.etf_funds_data)})
+router.get("/api/indices/GOLDBEES", (req, res) => {res.status(200).json(routes.api.indices.GOLDBEES)})
+router.get("/api/indices/ITBEES", (req, res) => {res.status(200).json(routes.api.indices.ITBEES)})
+router.get("/api/indices/MAKEINDIA", (req, res) => {res.status(200).json(routes.api.indices.MAKEINDIA)})
+router.get("/api/indices/MID150BEES", (req, res) => {res.status(200).json(routes.api.indices.MID150BEES)})
+router.get("/api/indices/NIFTYBEES", (req, res) => {res.status(200).json(routes.api.indices.NIFTYBEES)})
+router.get("/api/indices/PHARMABEES", (req, res) => {res.status(200).json(routes.api.indices.PHARMABEES)})
+router.get("/api/indices/SHARIABEES", (req, res) => {res.status(200).json(routes.api.indices.SHARIABEES)})
+router.get("/api/indices/SILVERBEES", (req, res) => {res.status(200).json(routes.api.indices.SILVERBEES)})
+router.get("/api/indices/SMALLCAP", (req, res) => {res.status(200).json(routes.api.indices.SMALLCAP)})
+router.get("/api/indices/TNIDETF", (req, res) => {res.status(200).json(routes.api.indices.TNIDETF)})
 
 //router.post("/api/mutualfunds/chatStream", routes.api.ollama.singleShotStream)
 //router.post("/api/ollama/promptInstruct", routes.api.ollama.promptInstruct)

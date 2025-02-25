@@ -4,14 +4,10 @@ const { postToGraphQL } = require("../../../lib/helper")
 
 const { puppeteer, launchOptions } = require("../../../config/puppeteer")();
 
-//const StealthPlugin = require('puppeteer-extra-plugin-stealth')();
 const fs = require('fs');
 const fetchPDF = require("./pdfFetcher");
 const { uploadFileToS3 } = require('../../../utils/s3Upload');
 const SMART_PROXY_URL = process.env.SMART_PROXY_URL
-//const announcement_url = process.env.ANNOUNCEMENT_URL
-//const announcement_dir = process.env.NSE_ANNOUNCEMENTS_DOWNLOAD
-//puppeteer.use(StealthPlugin);
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -30,37 +26,6 @@ class NSEScraper {
         const now = DateTime.now().setZone('Asia/Kolkata');
                 const date = now.toFormat('yyyy-MM-dd');
                 const [year, month, day] = date.split('-');
-        
-                console.log("NSEScraper", this.pdfsToDownload, this.isMaster)
-                
-        /*const targetPath = path.join(announcement_dir, year, month, day, index)
-        console.log("make dir", targetPath)
-        fs.mkdirSync(targetPath, {recursive: true})
-        
-        let activityLogs = []
-        if (fs.existsSync(path.join(targetPath, "activity.log"))){
-            const content = fs.readFileSync(path.join(targetPath, "activity.log"), "utf-8")
-            activityLogs = JSON.parse("[" + content + "]")
-        }
-        console.log(activityLogs)*/
-        //if (true) return;
-        /*const puppetArgs = [
-            '--no-sandbox',
-            '--disable-setuid-sandbox',
-            '--enable-javascript',
-            '--window-size=1920,1080',
-            '--disable-dev-shm-usage', 
-            '--disable-gpu', '--disable-setuid-sandbox']
-        const puppetArgsToSend = useProxy === true ? [`--proxy-server=${SMART_PROXY_URL}`, ...puppetArgs] : puppetArgs
-        this.browser = await puppeteer.launch({
-            headless: true,
-            args: puppetArgsToSend
-        });
-        this.browser = await puppeteer.launch({
-            channel: 'chrome',     // Use system Chrome
-            headless: false,       // Set to true if you want headless mode
-            executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'  // Path to system Chrome
-          });*/
         this.browser = await puppeteer.launch(launchOptions);  
         this.page = await this.browser.newPage();
         await this.page.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36");
@@ -68,8 +33,6 @@ class NSEScraper {
         await this.page.goto(this.announcement_url, { waitUntil: 'networkidle2' });
         await delay(5000);
         const pdfLinks = {"sme": [], "equities": []}
-        //for (const index of ['equities', 'sme']) {
-        //const table_id = index === "equities" ? 'CFanncEquityTable' : 'CFanncsmeTable'
         let announcementData = []
         announcementData = await this.page.evaluate(() => {
             const tables = {

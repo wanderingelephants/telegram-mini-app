@@ -201,7 +201,7 @@
 import InvestmentChart from '../components/InvestmentChart.vue'
 
 import api from "./api";
-import AUTOBEES from "./indices/AUTOBEES.json";
+/*import AUTOBEES from "./indices/AUTOBEES.json";
 import GOLDBEES from "./indices/GOLDBEES.json";
 import MAKEINDIA from "./indices/MAKEINDIA.json";
 import NIFTYBEES from "./indices/NIFTYBEES.json";
@@ -226,9 +226,9 @@ const etfImports = {
   PHARMABEES,
   SILVERBEES,
   TNIDETF
-};
-const includeList = ['NIFTYBEES', 'BANKBEES', 'AUTOBEES', 'ITBEES', 'MID150BEES', 'SMALLCAP', 'SHARIABEES','PHARMABEES', 'MAKEINDIA','TNIDETF']
-//const includeList = ['NIFTYBEES']
+};*/
+const indicesList = ['NIFTYBEES', 'BANKBEES', 'AUTOBEES', 'ITBEES', 'MID150BEES', 'SMALLCAP', 'SHARIABEES','PHARMABEES', 'MAKEINDIA','TNIDETF']
+//const indicesList = ['AUTOBEES', 'BANKBEES']
 
 export default {
   async mounted() {
@@ -240,10 +240,18 @@ export default {
       }
     });
     try {
+      const responses = await Promise.all(
+        indicesList.map(index => 
+          fetch(`/api/indices/${index}`).then(res => res.json())
+        )
+      );
+      const etfImports = Object.fromEntries(
+        indicesList.map((name, i) => [name, responses[i]])
+      );
       const resp = await api.get("/api/nse/instruments");
-      this.etfList = resp.data.filter(_ => includeList.indexOf(_.symbol) > -1);
+      this.etfList = resp.data.filter(_ => indicesList.indexOf(_.symbol) > -1);
       for (const etf of this.etfList) {
-        if (includeList.indexOf(etf.symbol) == -1) continue;
+        if (indicesList.indexOf(etf.symbol) == -1) continue;
         const etfData = etfImports[etf.symbol];
         this.market[etf.symbol] = etfData.map((_) => {
           const dateToks = _.date.split("-");
