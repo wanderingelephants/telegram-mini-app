@@ -246,6 +246,8 @@ const normalizeMutualFundsData = function(inputData) {
     const stockHoldings = inputData.flatMap(fund => {
         return fund.mutual_fund_stock_holdings.map(holding => ({
             ...holding,
+            company_name: holding.stock_mf.company_name,
+            company_sector: holding.stock_mf.company_sector,
             mutual_fund_name: fund.mutual_fund_name,
             mutual_fund_category: fund.mutual_fund_category,
             mutual_fund_star_rating: fund.mutual_fund_star_rating,

@@ -21,7 +21,7 @@ const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 console.log('Waiting for GraphQL and other services to initialize...');
 
-sleep(20000) // 20 seconds delay
+/*sleep(20000) // 20 seconds delay
   .then(() => {
     console.log('Starting database initialization...');
     return dbManager.getData();
@@ -38,6 +38,7 @@ sleep(20000) // 20 seconds delay
     console.error('Failed to initialize database:', error);
     process.exit(1); // Exit if database initialization fails
   });
+*/
 
 function  startServer(){
   cron.schedule('15,35,55 * * * *', async () => {
@@ -129,4 +130,5 @@ function  startServer(){
     console.log(`api server running on port: ${port}`)
   })
 }
+startServer()
 

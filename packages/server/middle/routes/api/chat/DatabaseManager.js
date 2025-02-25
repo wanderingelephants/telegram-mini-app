@@ -81,6 +81,7 @@ class DatabaseManager {
         const normalizedMutualFundsData = normalizeMutualFundsData(mutual_fund_data)
         mutual_funds = normalizedMutualFundsData.mutualFunds
         mutual_fund_stock_holdings = normalizedMutualFundsData.stockHoldings
+        console.log(mutual_fund_stock_holdings.slice(0, 5))
         const today = new Date();
         const toDate = today.toISOString().split("T")[0]
         const fromDate = (new Date(today.getTime() - (30 * 24 * 60 * 60 * 1000))).toISOString().split("T")[0]

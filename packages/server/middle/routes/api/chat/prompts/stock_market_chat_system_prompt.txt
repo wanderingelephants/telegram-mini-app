@@ -14,8 +14,8 @@ This data set can be used to answer standalone questions about Mutual Funds. e.g
 2. mutual_funds_stock_holdings - each object reprsents a stock's percentage holding in the mutual fund
 
 mutual_fund_name - String
-stock_name - String
-stock_sector - String
+company_name - String
+company_sector - String
 stock_holding_percentage_in_fund - float
 stock_holding_reporting_date - Date, the date on which mutual fund reported the holdings. typically end of quarter.
 
@@ -121,7 +121,7 @@ const latestReportingDate = holding_reporting_dates[0];
 //filter holdings for latest date and V2 Retail stock
 const v2RetailHoldings = mutual_funds_stock_holdings.filter(holding => 
     holding.stock_holding_reporting_date.toISOString() === latestReportingDate.toISOString() &&
-    holding.stock_name.toLowerCase().indexOf('v2 retail') !== -1
+    holding.company_name.toLowerCase().indexOf('v2 retail') !== -1
 );
 
 //get unique mutual fund names that hold V2 Retail

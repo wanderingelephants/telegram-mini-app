@@ -86,7 +86,7 @@ class JavascriptResponseHandler {
         let jsExecResponse = await this.executeJavaScript(llmResponse);
         console.log("jsExecResponse", jsExecResponse)
         let { result, functionName } = jsExecResponse
-        
+        if (result == "Sorry, No Response") return result
         if (Array.isArray(result) && result.length > 10) result = result.slice(0, MAX_RESULTS_TO_FORMAT)
         await this.messageManager.saveMessage(this.customData.sessionId, this.activity, { result }, "results.json")
 
