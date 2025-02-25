@@ -17,11 +17,20 @@ const processInsiderCSV = require("./routes/api/nse/process_insider_csv")
 const processInstruments = require("./utils/process_instruments")
 const WebsiteTrafficSimulator = require("./routes/api/nse/WebsiteTrafficSimulator")
 const dbManager = require('./routes/api/chat/DatabaseManager');
-dbManager.getData()
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+console.log('Waiting for GraphQL and other services to initialize...');
+
+sleep(20000) // 20 seconds delay
+  .then(() => {
+    console.log('Starting database initialization...');
+    return dbManager.getData();
+  })
   .then(data => {
     console.log('Database initialized successfully');
     // Store reference if needed
-    //console.log("App Data", data)
+    const appData = data;
+    
     // Start your server here
     startServer();
   })
