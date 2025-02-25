@@ -63,6 +63,7 @@ class DatabaseManager {
             console.log("Database already initialized")
             return
         }
+        console.log("Initializing Data....")
         let mutual_funds = []
         let mutual_fund_stock_holdings = []
         let mutual_fund_data = []
@@ -81,7 +82,6 @@ class DatabaseManager {
         const normalizedMutualFundsData = normalizeMutualFundsData(mutual_fund_data)
         mutual_funds = normalizedMutualFundsData.mutualFunds
         mutual_fund_stock_holdings = normalizedMutualFundsData.stockHoldings
-        console.log(mutual_fund_stock_holdings.slice(0, 5))
         const today = new Date();
         const toDate = today.toISOString().split("T")[0]
         const fromDate = (new Date(today.getTime() - (10 * 24 * 60 * 60 * 1000))).toISOString().split("T")[0]
@@ -209,5 +209,4 @@ class DatabaseManager {
         return this.data
     }
 }
-//initData().then(resp => console.log("Database Manager initialized with all data"))
 module.exports = new DatabaseManager()

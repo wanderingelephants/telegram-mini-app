@@ -1,6 +1,7 @@
 const path = require("path")
 const fs = require("fs")
 const dataFolder = process.env.DATA_ROOT_FOLDER
+const MAX_RESULTS_TO_FORMAT = 10
 const _getFilePath = function (basePath, sessionId, activity, filename) {
     console.log("_getFilePath", {basePath, sessionId, activity, filename})
   const date = new Date();
@@ -84,7 +85,6 @@ class JavascriptResponseHandler {
     async handleResponse(llmResponse) {
         console.log("JavascriptResponse handleResponse", llmResponse)
         let jsExecResponse = await this.executeJavaScript(llmResponse);
-        console.log("jsExecResponse", jsExecResponse)
         let { result, functionName } = jsExecResponse
         if (result == "Sorry, No Response") return result
         if (Array.isArray(result) && result.length > 10) result = result.slice(0, MAX_RESULTS_TO_FORMAT)
