@@ -49,8 +49,6 @@ const route = async (req, res) => {
         case "announcements_summary": 
             streaming = false
             responseHandler = new AnnouncementSummaryResponseHandler(customData)
-            const content = fs.readFileSync(path.join(dataRootFolder, "test_announcement.txt"), 'utf-8');
-            messages[0].content = content
             messagesToSend =  [messages[messages.length - 1]]
             break    
     }
