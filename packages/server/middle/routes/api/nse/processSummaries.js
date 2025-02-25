@@ -1,4 +1,4 @@
-const fs = require('fs').promises;
+const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
 
@@ -17,18 +17,22 @@ async function processSummaries(inputFolder, outputFolder, fileToSummarize) {
 
     try {
         // Check if input directory exists
-        await fs.access(inputFolder);
-        
+        //await fs.access(inputFolder);
+        if (!fs.existsSync(inputFolder)){
+            console.log("input folder does not exist", inputFolder)
+            return;
+        }
+        fs.mkdirSync(outputFolder, {recursive: true})
         // Create output directory if it doesn't exist
-        try {
+        /*try {
             await fs.access(outputFolder);
         } catch {
             await fs.mkdir(outputFolder, { recursive: true });
             console.log(`Creating output directory: ${outputFolder}`);
-        }
+        }*/
 
         // Get all .txt files from input directory
-        const files = (await fs.readdir(inputFolder))
+        const files = (await fs.readdirSync(inputFolder, { withFileTypes: true }))
             .filter(file => file.endsWith('.txt') && !file.includes('_api_response.txt'));
 
         for (const file of files) {
@@ -43,12 +47,16 @@ async function processSummaries(inputFolder, outputFolder, fileToSummarize) {
             else {
                 console.log("Will process summary for file", filePath)
             }
-            const content = await fs.readFile(filePath, 'utf-8');
+            const content = await fs.readFileSync(filePath, 'utf-8');
             
             const filenameNoExt = path.parse(file).name;
             // Generate output filename
             const outputFile = path.join(outputFolder, `${filenameNoExt}_api_response.txt`);
-            try {
+            if (fs.existsSync(outputFile)){
+                console.log("Output file exists", outputFile)
+                continue
+            }
+            /*try {
                 // Check if the output file already exists
                 await fs.access(outputFile);
                 console.log(`Output file already exists: ${outputFile}, skipping processing.`);
@@ -59,20 +67,14 @@ async function processSummaries(inputFolder, outputFolder, fileToSummarize) {
                     console.error(`Error checking file existence: ${err.message}`);
                     return;
                 }
-            }
+            }*/
             const fullAttachment = `${NSE_PREFIX}${filenameNoExt}`;
-            const firstToken = file.split('_')[0];
-
+            
             // Prepare JSON payload
             const jsonData = {
-                distilledModel: "announcements_summary",
-                llm: "Ollama",
-                singleShotPrompt: true,
-                streaming: false,
+                activity: "announcements_summary",
                 email: "dummy@dummy.com",
                 customData: {
-                    stock_symbol: firstToken,
-                    announcement_date: announcementDate,
                     attachment: fullAttachment
                 },
                 messages: [
@@ -95,7 +97,7 @@ async function processSummaries(inputFolder, outputFolder, fileToSummarize) {
                 );
 
                 // Save response to file
-                await fs.writeFile(outputFile, JSON.stringify(response.data));
+                await fs.writeFileSync(outputFile, JSON.stringify(response.data));
                 console.log(`Response saved to: ${outputFile}`);
 
                 // Wait for 3 seconds before next request
@@ -105,12 +107,7 @@ async function processSummaries(inputFolder, outputFolder, fileToSummarize) {
             }
         }
     } catch (error) {
-        if (error.code === 'ENOENT') {
-            console.error(`Error: Input directory '${inputFolder}' does not exist`);
-        } else {
-            console.error('An error occurred:', error.message);
-        }
-        throw error;
+        console.error(error)
     }
 }
 const route = async (req, res) => {

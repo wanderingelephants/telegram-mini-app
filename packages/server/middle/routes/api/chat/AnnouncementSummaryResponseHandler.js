@@ -87,7 +87,7 @@ class AnnouncementSummaryResponseHandler {
                 "impact": jsonObj.Announcement_Impact_On_Business,
                 "sentiment": sentiment
             }
-            //const resp = await postToGraphQL({ "query": summaryMutation, "variables": summaryObj })
+            const resp = await postToGraphQL({ "query": summaryMutation, "variables": summaryObj })
 
         }
         catch (e) {
