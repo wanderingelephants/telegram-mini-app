@@ -57,7 +57,7 @@ const route = async (req, res) => {
     
     console.log("messagesToSend", messagesToSend)
     const llmResponse = await llmClient.sendMessageToLLM(systemPrompt, messagesToSend, customData);
-    await messageManager.saveMessage(sessionId, modelName, { "role": 'assistant', "content": [{ "type": 'text', "text": llmResponse }] }, chatMessagesFileName);
+    await messageManager.saveMessage(sessionId, activity, { "role": 'assistant', "content": [{ "type": 'text', "text": llmResponse }] }, chatMessagesFileName);
     console.log("llmResponse", llmResponse)
     const formattedResponse = await responseHandler.handleResponse(llmResponse)
     
