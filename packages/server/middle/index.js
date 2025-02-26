@@ -50,7 +50,7 @@ function  startServer(){
     const simulator = new WebsiteTrafficSimulator();
     await simulator.simulateTraffic();
   }, { timezone: "Asia/Kolkata" });
-  cron.schedule('*/15 * * * *', async () => {
+  cron.schedule('50 * * * *', async () => {
     console.log("pdf to text")
     if (process.env.PDF_DOWNLOAD_ENABLED && process.env.PDF_DOWNLOAD_ENABLED.toLowerCase() !== "true") {
       console.log("PDF not enabled on this env")
