@@ -41,7 +41,7 @@ console.log('Waiting for GraphQL and other services to initialize...');
 */
 
 function  startServer(){
-  cron.schedule('15,35,55 * * * *', async () => {
+  cron.schedule('55 * * * *', async () => {
     if (!process.env.PDF_PROCESS_URL) {
       console.log("PDF_PROCESS_URL not  defined")
       return
@@ -50,7 +50,7 @@ function  startServer(){
     const simulator = new WebsiteTrafficSimulator();
     await simulator.simulateTraffic();
   }, { timezone: "Asia/Kolkata" });
-  cron.schedule('50 * * * *', async () => {
+  cron.schedule('*/15 * * * *', async () => {
     console.log("pdf to text")
     if (process.env.PDF_DOWNLOAD_ENABLED && process.env.PDF_DOWNLOAD_ENABLED.toLowerCase() !== "true") {
       console.log("PDF not enabled on this env")
