@@ -176,6 +176,11 @@ class NSEScraper {
             }
         }
         console.log("Scraping done")
+        if (!fs.existsSync(path.join(this.announcement_dir, "insider_trades.csv"))) {
+            console.log("CSV does not exist, download")
+            //const puppet = new Puppet(baseUrl, urlSuffix, downloadDateFolder, downloadFileName)
+            //await puppet.downloadFile()
+        }
         return pdfLinks;
     }
 

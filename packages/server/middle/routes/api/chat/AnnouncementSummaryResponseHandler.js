@@ -84,7 +84,7 @@ class AnnouncementSummaryResponseHandler {
             const summaryObj = {
                 "attachment": this.customData.attachment.trim() + "%",
                 "textSummary": jsonObj.Announcement_Summary,
-                "impact": jsonObj.Announcement_Impact_On_Business,
+                "impact": jsonObj.Announcement_Impact_On_Business_Or_StockPrice,
                 "sentiment": sentiment
             }
             const resp = await postToGraphQL({ "query": summaryMutation, "variables": summaryObj })
