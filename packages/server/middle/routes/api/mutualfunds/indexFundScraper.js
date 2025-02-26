@@ -1,7 +1,7 @@
-const path = require('path');
 const { DateTime } = require('luxon');
 const { postToGraphQL } = require("../../../lib/helper");
 const { isModuleNamespaceObject } = require('util/types');
+const path = require('path');
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 const fs = require("fs")
 const indexFundUrl =  "https://www.moneycontrol.com/mutual-funds/performance-tracker/navs/index-fundsetfs.html"
@@ -13,7 +13,7 @@ const scrape = async function(){
         await this.page.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36");
         
         await this.page.goto(indexFundUrl, { waitUntil: 'networkidle2' });
-        await delay(15000);
+        await delay(5000);
         const indexFundsData = await this.page.evaluate(() => {
             const table = document.querySelector("#dataTableId");
             const rows = table.querySelectorAll('tbody tr[role="row"]');

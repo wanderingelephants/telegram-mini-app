@@ -94,6 +94,9 @@ export default {
       indicesList.map((name, i) => [name, responses[i]])
     );
     console.log("this.etfFunds", this.etfFunds);
+    const resp = await fetch("/api/indices/indexFunds")
+     this.indexFunds = await resp.json()
+    console.log("this.indexFunds", this.indexFunds)
   },
   data() {
     return {
@@ -127,7 +130,7 @@ export default {
         "small-cap-fund",
         "value-fund",
       ],
-      mf_category_selected: "childrens-fund",
+      mf_category_selected: "index-fundsetfs",
       mf_scheme_code: "",
       delay: 3000,
       isProcessing: false,
@@ -140,22 +143,7 @@ export default {
         { text: "Expenses Ratio", value: "expensesRatio" },
         { text: "Category Average", value: "expensesRatioCategoryAverage" },
       ],
-      indexfundsurls: [
-        {
-          scheme_code: "MMOA052",
-          fund_name:
-            "Motilal Oswal Nifty MidSmall India Consumption Index Fund - Direct Plan - Growth",
-          url: "https://www.moneycontrol.com/mutual-funds/nav/motilal-oswal-nifty-midsmall-india-consumption-index-fund-direct-plan-growth/MMOA052",
-          plan: "Direct Plan",
-        },
-        {
-          scheme_code: "MRCA107",
-          fund_name:
-            "Nippon India Nifty 500 Momentum 50 Index Fund - Direct Plan - Growth",
-          url: "https://www.moneycontrol.com/mutual-funds/nav/nippon-india-nifty-500-momentum-50-index-fund-direct-plan-growth/MRCA107",
-          plan: "Direct Plan",
-        },
-      ],
+      indexfundsurls: [],
     };
   },
 
@@ -214,6 +202,7 @@ export default {
         funds = funds.map((f) => ({ ...f, url: this.base_url + f.url }));
         return funds;
       }
+      
       console.log(new Date(), "inputSchemeCodes", inputSchemeCodes);
       const document = await this.fetchWithRetry(mf_category_url);
       console.log("document", document)
@@ -248,7 +237,7 @@ export default {
           "10Y": headers.findIndex((h) => h === "10Y"),
         };
       }
-
+      console.log(columnIndices)
       const funds = [];
       const rows = document.querySelectorAll("table tbody tr");
 
@@ -258,7 +247,7 @@ export default {
           const link = cells[columnIndices.name]?.querySelector("a");
           if (link) {
             const name = link.textContent.trim();
-            //console.log("name", name)
+            console.log("name", name)
             let url;
             let schemeCode;
             let urlCategory;
@@ -304,27 +293,13 @@ export default {
               ) {
                 return;
               }
-            } else {
-              //console.log("Process Index Funds")
-              const fund = this.indexfundsurls.filter(f => f.name.trim() === name.trim())
-              if (fund.length > 0) console.log("Found fund for", fund, name)
-              url = fund.url
-              schemeCode = fund.scheme_code
-              urlCategory = "nav"
-              //console.log({url, schemeCode, urlCategory})
-            }
-
-            // Collect all return periods
+              // Collect all return periods
             const returns = {};
             Object.entries(columnIndices.returns).forEach(([period, index]) => {
               if (index !== -1 && cells[index]) {
                 returns[period] = cells[index].textContent.trim();
               }
             });
-            /*console.log(
-              schemeCode,
-              inputSchemeCodes.findIndex((_) => _ === schemeCode)
-            );*/
             if (
               inputSchemeCodes.length == 0 ||
               inputSchemeCodes.findIndex((_) => _ === schemeCode) > -1
@@ -352,6 +327,41 @@ export default {
                     : "",
                 returns,
               });
+            } else {
+              //console.log("Process Index Funds")
+              const returns = {};
+            Object.entries(columnIndices.returns).forEach(([period, index]) => {
+              if (index !== -1 && cells[index]) {
+                returns[period] = cells[index].textContent.trim();
+              }
+            });
+              const iFunds = this.indexFunds.filter(f => f.name.trim() === name.trim())
+              console.log("Found iFund", iFunds)
+              const ifundToPush = iFunds.map(f => {
+                return {
+                  name: f.name,
+                  schemeCode: f.schemeCode,
+                  url: f.url,
+                  category: f.category,
+                  rating: f.rating,
+                  aum: f.aum,
+                  plan: f.plan,
+                  returns
+                }
+              })
+              if  (iFunds && iFunds.length > 0)
+              funds.push(ifundToPush[0])
+            
+              /*if (funds.length > 0) {
+                console.log("IndexFund Found fund for", funds, name)
+              url = funds[0].url
+              schemeCode = funds[0].scheme_code
+              urlCategory = "nav"
+              }*/
+              //console.log({url, schemeCode, urlCategory})
+            }
+
+            
           }
         }
       });
@@ -458,7 +468,7 @@ export default {
       this.stopProcessing = false;
       const categoryUrl = this.get_category_url(category);
       console.log("categoryUrl", categoryUrl)
-      let funds;
+      let funds=[];
       mf_scheme_code === "" || mf_scheme_code === "All"
         ? (funds = await this.get_funds_for_category_url(
             category,

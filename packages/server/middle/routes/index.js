@@ -58,6 +58,7 @@ const routes = {
             AUTOBEES: require("./api/indices/AUTOBEES.json"),
             BANKBEES: require("./api/indices/BANKBEES.json"),
             etf_funds_data: require("./api/indices/etf_funds_data.json"),
+            indexFunds: require("./api/indices/indexFunds.json"),
             GOLDBEES: require("./api/indices/GOLDBEES.json"),
             ITBEES: require("./api/indices/ITBEES.json"),
             MAKEINDIA: require("./api/indices/MAKEINDIA.json"),
@@ -86,7 +87,7 @@ const routes = {
             list: require("./api/mutualfunds/list"),
             analyze: require("./api/mutualfunds/analyze"),
             recommend: require("./api/mutualfunds/recommend"),
-            scrape: require("./api/mutualfunds/indexFundScraper"),
+            scrape: require("./api/mutualfunds/scrapeLocalfile"),
             categoryScrape: require("./api/mutualfunds/categoryScrape")
         },
         nse: {
@@ -129,7 +130,7 @@ router.post("/api/mutualfunds/compare", routes.api.mutualfunds.analyze)
 router.post("/api/mutualfunds/recommend", routes.api.mutualfunds.recommend)
 router.get("/api/mutualfunds/list", routes.api.mutualfunds.list)
 router.get("/api/mutualfunds/scrape", routes.api.mutualfunds.scrape)
-router.get("/api/mutualfunds/categoryScrape", routes.api.mutualfunds.categoryScrape)
+router.post("/api/mutualfunds/categoryScrape", routes.api.mutualfunds.categoryScrape)
 router.post("/api/nse/receive", routes.api.nse.receive)
 router.post("/api/nse/announcements", routes.api.nse.announcements)
 router.post("/api/nse/process", routes.api.nse.process)
@@ -142,6 +143,7 @@ router.get("/api/nse/sendSummaries", routes.api.nse.sendSummaries)
 router.get("/api/indices/AUTOBEES", (req, res) => {res.status(200).json(routes.api.indices.AUTOBEES)})
 router.get("/api/indices/BANKBEES", (req, res) => {res.status(200).json(routes.api.indices.BANKBEES)})
 router.get("/api/indices/etf_funds_data", (req, res) => {res.status(200).json(routes.api.indices.etf_funds_data)})
+router.get("/api/indices/indexFunds", (req, res) => {res.status(200).json(routes.api.indices.indexFunds)})
 router.get("/api/indices/GOLDBEES", (req, res) => {res.status(200).json(routes.api.indices.GOLDBEES)})
 router.get("/api/indices/ITBEES", (req, res) => {res.status(200).json(routes.api.indices.ITBEES)})
 router.get("/api/indices/MAKEINDIA", (req, res) => {res.status(200).json(routes.api.indices.MAKEINDIA)})
