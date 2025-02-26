@@ -23,7 +23,7 @@ const getModelToUse = async(email, activity) => {
 const route = async (req, res) => {
   const sessionId = req.sessionId;
   const { email, activity, messages, customData } = req.body;
-  console.log("reasoning_v2", { email, activity, messages, customData })
+  //console.log("reasoning_v2", { email, activity, messages, customData })
   let streaming
   let userLatestMessage = messages[messages.length - 1].content  
   try {  
