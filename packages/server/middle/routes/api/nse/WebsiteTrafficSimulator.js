@@ -76,6 +76,61 @@ class WebsiteTrafficSimulator extends NSEScraper {
     }
 
     async getDownloadedPdfs() {
+        const downloadedPdfs = {
+            equities: [],
+            sme: []
+        };
+        
+        // Get all years
+        const rootDir = this.announcement_dir;
+        if (!fs.existsSync(rootDir)) {
+            console.log("Root directory does not exist:", rootDir);
+            return downloadedPdfs;
+        }
+        
+        const years = fs.readdirSync(rootDir);
+        
+        for (const year of years) {
+            const yearPath = path.join(rootDir, year);
+            if (!fs.statSync(yearPath).isDirectory()) continue;
+            
+            const months = fs.readdirSync(yearPath);
+            for (const month of months) {
+                const monthPath = path.join(yearPath, month);
+                if (!fs.statSync(monthPath).isDirectory()) continue;
+                
+                const days = fs.readdirSync(monthPath);
+                for (const day of days) {
+                    const dayPath = path.join(monthPath, day);
+                    if (!fs.statSync(dayPath).isDirectory()) continue;
+                    
+                    // Check for each index folder
+                    for (const index of ['equities', 'sme']) {
+                        const indexPath = path.join(dayPath, index);
+                        if (!fs.existsSync(indexPath)) continue;
+                        
+                        const logPath = path.join(indexPath, 'activity.log');
+                        if (fs.existsSync(logPath)) {
+                            try {
+                                const content = fs.readFileSync(logPath, 'utf-8');
+                                if (content.trim()) {
+                                    console.log("Processing log:", logPath);
+                                    const jsonContent = '[' + content.replace(/,\s*$/, '') + ']';
+                                    const logs = JSON.parse(jsonContent);
+                                    downloadedPdfs[index].push(...logs.map(log => log.ATTACHMENT));
+                                }
+                            } catch (error) {
+                                console.error(`Error processing ${logPath}:`, error);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        return downloadedPdfs;
+    }
+    /*async getDownloadedPdfs() {
         const now = DateTime.now().setZone('Asia/Kolkata');
         const date = now.toFormat('yyyy-MM-dd');
         const [year, month, day] = date.split('-');
@@ -107,7 +162,7 @@ class WebsiteTrafficSimulator extends NSEScraper {
         }
 
         return downloadedPdfs;
-    }
+    }*/
 
     async createSimulators(count, pdfs, config) {
         const simulators = [];
