@@ -116,7 +116,7 @@ class NSEScraper {
                     pdfLinks[index].push(announcement.ATTACHMENT)
                 }
                 if (announcement.ATTACHMENT && this.pdfsToDownload[index].indexOf(announcement.ATTACHMENT) > -1) {
-                    console.log("fetching pdf", announcement.ATTACHMENT, targetPath)
+                    console.log("checking pdf", announcement.ATTACHMENT, targetPath)
                     const fileToks = announcement.ATTACHMENT.split('/')
                     const fileName = fileToks[fileToks.length - 1]
                     if (fs.existsSync(path.join(targetPath, fileName))) {
