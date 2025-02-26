@@ -12,7 +12,6 @@ const execResultsFileName = "results.json"
 const dataRootFolder = process.env.DATA_ROOT_FOLDER
 const isUnitTest = false
 const getLLMToUse = async (email, activity) => {
-    console.log("getLLMToUse", activity, activity === "stock_market_chat")
     return  isUnitTest === true ? (activity === "stock_market_chat" ? "JavascriptMockLLM" : "SummaryMockLLM") : process.env.LLM_TO_USE
 }
 const getFormattingLLMToUse = async (email, activity) => {
@@ -30,7 +29,6 @@ const route = async (req, res) => {
   try {  
     const PROMPTS_FOLDER = path.join(__dirname, 'prompts');
     const systemPromptPath = path.join(PROMPTS_FOLDER, `${activity}_system_prompt.txt`);
-    console.log("systemPromptPath", systemPromptPath)
     const systemPrompt = await readFile(systemPromptPath, 'utf-8');
     const llmClient = new LLMClient(await getLLMToUse(email, activity), await getModelToUse(email, activity));
     let formattingLLMClient = new LLMClient(await getFormattingLLMToUse(email, activity), await getModelToUse(email, activity))
@@ -55,9 +53,8 @@ const route = async (req, res) => {
     if (true == streaming)
         res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive' });
     
-    console.log("messagesToSend", messagesToSend)
     const llmResponse = await llmClient.sendMessageToLLM(systemPrompt, messagesToSend, customData);
-    await messageManager.saveMessage(sessionId, activity, { "role": 'assistant', "content": [{ "type": 'text', "text": llmResponse }] }, chatMessagesFileName);
+    if (activity === "stock_market_chat") await messageManager.saveMessage(sessionId, activity, { "role": 'assistant', "content": [{ "type": 'text', "text": llmResponse }] }, chatMessagesFileName);
     console.log("llmResponse", llmResponse)
     const formattedResponse = await responseHandler.handleResponse(llmResponse)
     
