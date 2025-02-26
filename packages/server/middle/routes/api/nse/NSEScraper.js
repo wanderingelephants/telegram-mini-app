@@ -98,7 +98,8 @@ class NSEScraper {
             }
             return data;
         });
-        for (const index of ['sme']) {
+        console.log("announcementData", announcementData)
+        for (const index of ['equities', 'sme']) {
             for (const announcement of announcementData[index]) {
                 const [year, month, day] = extractDateComponents(announcement["BROADCAST DATE/TIME"]);
                 const targetPath = path.join(this.announcement_dir, year, month, day, index, "pdf")
