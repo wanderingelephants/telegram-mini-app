@@ -98,7 +98,7 @@ class NSEScraper {
             }
             return data;
         });
-        console.log("announcementData", announcementData)
+        //console.log("announcementData", announcementData)
         for (const index of ['equities', 'sme']) {
             for (const announcement of announcementData[index]) {
                 const [year, month, day] = extractDateComponents(announcement["BROADCAST DATE/TIME"]);
