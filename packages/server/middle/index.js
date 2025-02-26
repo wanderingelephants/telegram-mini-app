@@ -49,6 +49,7 @@ function  startServer(){
     console.log('Starting traffic simulation at:', new Date().toISOString());
     const simulator = new WebsiteTrafficSimulator();
     await simulator.simulateTraffic();
+    console.log('Done traffic simulation at:', new Date().toISOString());
   }, { timezone: "Asia/Kolkata" });
   cron.schedule('*/15 * * * *', async () => {
     console.log("pdf to text")
