@@ -26,6 +26,7 @@ class NSEScraper {
         
         
         this.filesToDownload = filesToDownload
+        console.log("NSEScraper filesToDownload", this.filesToDownload)
         this.tableKeys = Object.keys(disclosureConfig.tabs) //["sme", "equities"] e.g. announcements
         //this.tableKeys.forEach(k => this.filesToDownload[k] = [])
         

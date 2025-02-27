@@ -31,9 +31,9 @@ class WebsiteTrafficSimulator extends NSEScraper {
             console.log("Website Sim start Wake up for ", config.MIN_GAP_TO_START, new Date())
             // Get all available PDFs from website
             const allPdfs = await this.scrapeTables();
-            console.log("Simulator allPdfs", allPdfs)
+            //console.log("Simulator allPdfs", allPdfs)
             const downloadedPdfs = await this.getDownloadedPdfs();
-            console.log("Simulator downloadedPdfs", downloadedPdfs)
+            //console.log("Simulator downloadedPdfs", downloadedPdfs)
             // Get new PDFs to download
             /*const newPdfs = {
                 equities: allPdfs.equities.filter(pdf => !downloadedPdfs.equities.includes(pdf)),
@@ -52,7 +52,7 @@ class WebsiteTrafficSimulator extends NSEScraper {
             const numSimulators = Math.floor(
                 config.MIN_PERSONS_TO_SIMULATE * (1 + Math.random())
             );
-
+            console.log("newPDFs to Download", newPdfs)
             // Distribute PDFs among simulators
             const simulators = await this.createSimulators(numSimulators, newPdfs, config);
             
