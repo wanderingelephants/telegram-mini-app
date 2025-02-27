@@ -19,7 +19,6 @@ const WebsiteTrafficSimulator = require("./routes/api/nse/WebsiteTrafficSimulato
 const dbManager = require('./routes/api/chat/DatabaseManager');
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-console.log('Waiting for GraphQL and other services to initialize...');
 
 /*sleep(20000) // 20 seconds delay
   .then(() => {
@@ -41,7 +40,7 @@ console.log('Waiting for GraphQL and other services to initialize...');
 */
 
 function  startServer(){
-  cron.schedule('55 * * * *', async () => {
+  /*cron.schedule('55 * * * *', async () => {
     if (!process.env.PDF_PROCESS_URL) {
       console.log("PDF_PROCESS_URL not  defined")
       return
@@ -50,9 +49,9 @@ function  startServer(){
     const simulator = new WebsiteTrafficSimulator();
     await simulator.simulateTraffic();
     console.log('Done traffic simulation at:', new Date().toISOString());
-  }, { timezone: "Asia/Kolkata" });
-  cron.schedule('*/15 * * * *', async () => {
-    console.log("pdf to text")
+  }, { timezone: "Asia/Kolkata" });*/
+  //cron.schedule('*/15 * * * *', async () => {
+    /*console.log("pdf to text")
     if (process.env.PDF_DOWNLOAD_ENABLED && process.env.PDF_DOWNLOAD_ENABLED.toLowerCase() !== "true") {
       console.log("PDF not enabled on this env")
       return;
@@ -92,7 +91,7 @@ function  startServer(){
     catch (e) {
       console.error(e)
     }
-  })
+  })*/
   /*cron.schedule('33 15 * * 1-5', async () => {
     console.log('end of market', new Date());
     const todayStr = (new Date()).toISOString().split("T")[0]

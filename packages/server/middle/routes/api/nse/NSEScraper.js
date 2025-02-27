@@ -14,39 +14,77 @@ const extractDateComponents = function (dateStr) {
     return [date.format("YYYY"), date.format("MM"), date.format("DD")];
 }
 class NSEScraper {
-    constructor(pdfsToDownload, isMaster) {
+    constructor(disclosureConfig, isMaster, filesToDownload) {
         this.browser = null;
         this.page = null;
-        this.announcement_url = process.env.ANNOUNCEMENT_URL;
-        this.announcement_dir = process.env.NSE_ANNOUNCEMENTS_DOWNLOAD;
-
+        this.disclosureConfig = disclosureConfig
         this.isMaster = isMaster
-        this.pdfsToDownload = pdfsToDownload//["https://nsearchives.nseindia.com/corporate/RPOWER_22022025220130_Reliance_Power_Limited_Newspaper_Publication.pdf", "https://nsearchives.nseindia.com/corporate/AKZOINDIA_22022025204853_AkzoIndia_Reg30_Intimation_UPGST_SCNFY20_21_26Nov2024_Update22Feb25.pdf"]
+        console.log(disclosureConfig)
+        console.log("NSEScraper constructor", process.env.DATA_ROOT_FOLDER, disclosureConfig["storage_dir_suffix"])
+        this.storage_dir = path.join(process.env.DATA_ROOT_FOLDER, disclosureConfig["storage_dir_suffix"]);
+        //this.announcement_url = announcement_url;
+        
+        
+        this.filesToDownload = filesToDownload
+        this.tableKeys = Object.keys(disclosureConfig.tabs) //["sme", "equities"] e.g. announcements
+        //this.tableKeys.forEach(k => this.filesToDownload[k] = [])
+        
+        //["https://nsearchives.nseindia.com/corporate/RPOWER_22022025220130_Reliance_Power_Limited_Newspaper_Publication.pdf", "https://nsearchives.nseindia.com/corporate/AKZOINDIA_22022025204853_AkzoIndia_Reg30_Intimation_UPGST_SCNFY20_21_26Nov2024_Update22Feb25.pdf"]
 
     }
-    async scrapeAnnouncements() {
+    //tableQuerySelectors - {"sme": "#CFanncsmeTable", "equities": "#CFanncEquityTable"}
+    //headersForSegment = {"sme": ["SYMBOL", "COMPANY NAME", "SUBJECT", "DETAILS", "ATTACHMENT", "BROADCAST DATE/TIME"],
+    //"equities": ["SYMBOL", "COMPANY NAME", "SUBJECT", "DETAILS", "ATTACHMENT", "BROADCAST DATE/TIME"]}
+    async scrapeTables() {
+        console.log("ScrapeTables", this.isMaster)
+        //tableQuerySelectors, headersForSegment
         this.browser = await puppeteer.launch(launchOptions);
         this.page = await this.browser.newPage();
         await this.page.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36");
-
-        await this.page.goto(this.announcement_url, { waitUntil: 'networkidle2' });
-        await delay(5000);
-        const pdfLinks = { "sme": [], "equities": [] }
-        let announcementData = []
-        announcementData = await this.page.evaluate(() => {
-            const tables = {
+/*"announcements": {
+      "storage_dir_suffix": "nse_announcements",
+      "disclosure_url": process.env.ANNOUNCEMENT_URL,
+      "tabs": {
+        "sme": {
+          "tableQuerySelector": "#CFanncsmeTable",
+          "column_headers": ["SYMBOL", "COMPANY NAME", "SUBJECT", "DETAILS", "ATTACHMENT", "BROADCAST DATE/TIME"]
+        },
+        "equities":{
+          "tableQuerySelector": "#CFanncEquityTable",
+          "column_headers": ["SYMBOL", "COMPANY NAME", "SUBJECT", "DETAILS", "ATTACHMENT", "BROADCAST DATE/TIME"]
+        }
+      }
+    }*/
+        await this.page.goto(this.disclosureConfig.disclosure_url, { waitUntil: 'networkidle2' });
+        await delay(10000);
+        let documentLinks = {}; //{ "sme": [], "equities": [] }
+        this.tableKeys.forEach(k => documentLinks[k] = [])
+        let tableData = []
+        tableData = await this.page.evaluate((disclosureConfig) => {
+            console.log(disclosureConfig)
+            const columnHeaders = {}
+            const tables = {}
+            const tableKeys = Object.keys(disclosureConfig.tabs)
+            tableKeys.forEach(k => tables[k] = document.querySelector(disclosureConfig.tabs[k].tableQuerySelector))
+            tableKeys.forEach(k => columnHeaders[k] = disclosureConfig.tabs[k].column_headers)
+            console.log("Tables to parse", tables)
+            console.log("Column Headers", columnHeaders)
+            
+            /*const tables = {
                 equities: document.querySelector('#CFanncEquityTable'),
                 sme: document.querySelector('#CFanncsmeTable')
-            };
-            let data = { sme: [], equities: [] }
-            for (const [idx, table] of Object.entries(tables)) {
+            };*/
+            let data = {}; //{ sme: [], equities: [] }
+            tableKeys.forEach(k => data[k] = [])
+            for (const key of tableKeys) {
                 try {
+                    const table = tables[key]
                     //const table = document.querySelector(`#${tableId}`);
                     console.log("Table found:", !!table);
 
                     if (!table) return null;
 
-                    const headers = ["SYMBOL", "COMPANY NAME", "SUBJECT", "DETAILS", "ATTACHMENT", "BROADCAST DATE/TIME"];
+                    const headers = columnHeaders[key]//["SYMBOL", "COMPANY NAME", "SUBJECT", "DETAILS", "ATTACHMENT", "BROADCAST DATE/TIME"];
                     console.log("Headers:", headers);
 
                     // Get all rows with class=" " and log the count
@@ -89,7 +127,7 @@ class NSEScraper {
                         return record; // Make sure to return the record object
                     });
 
-                    data[idx] = records;
+                    data[key] = records;
 
                 } catch (error) {
                     console.error("Error in data extraction:", error);
@@ -97,12 +135,31 @@ class NSEScraper {
                 }
             }
             return data;
-        });
+        }, this.disclosureConfig);
         this.browser.close()
-        for (const index of ['equities', 'sme']) {
-            for (const announcement of announcementData[index]) {
+        //console.log("tableData", tableData)
+        if (this.isMaster) return tableData
+        console.log("Child Simulator processTableData", this.disclosureConfig)
+        documentLinks = await this.processTableData(tableData, this.tableKeys)
+       
+        console.log("Scraping done")
+        return documentLinks;
+    }
+    //keys ['equities', 'sme']
+    //dateTimeColumnKey - "BROADCAST DATE/TIME"
+    //documentType = pdf
+    //skipExtension=".xml"
+    async processTableData(tableData, keys){
+        let documentLinks = {}
+        if (!tableData) {
+            console.log("processTableData Undefined tableData", this.filesToDownload)
+            return documentLinks
+        }
+        keys.forEach(k => documentLinks[k] = [])
+        for (const index of keys) {
+            for (const announcement of tableData[index]) {
                 const [year, month, day] = extractDateComponents(announcement["BROADCAST DATE/TIME"]);
-                const targetPath = path.join(this.announcement_dir, year, month, day, index, "pdf")
+                const targetPath = path.join(this.storage_dir, year, month, day, index, "pdf")
                 fs.mkdirSync(targetPath, { recursive: true })
                 if (announcement.SUBJECT.toLowerCase().indexOf("newspaper") > -1) {
                     console.log("Skipping newspaper record", announcement.ATTACHMENT)
@@ -113,9 +170,9 @@ class NSEScraper {
                     continue;
                 }
                 if (announcement.ATTACHMENT) {
-                    pdfLinks[index].push(announcement.ATTACHMENT)
+                    documentLinks[index].push(announcement.ATTACHMENT)
                 }
-                if (announcement.ATTACHMENT && this.pdfsToDownload[index].indexOf(announcement.ATTACHMENT) > -1) {
+                if (announcement.ATTACHMENT && this.filesToDownload[index].indexOf(announcement.ATTACHMENT) > -1) {
                     console.log("checking pdf", announcement.ATTACHMENT, targetPath)
                     const fileToks = announcement.ATTACHMENT.split('/')
                     const fileName = fileToks[fileToks.length - 1]
@@ -125,7 +182,7 @@ class NSEScraper {
                     else {
                         await fetchPDF(announcement.ATTACHMENT, path.join(targetPath, fileName), SMART_PROXY_URL)
                         try {
-                            await uploadFileToS3(this.announcement_dir, path.join(year, month, day, index, "pdf", fileName))
+                            await uploadFileToS3(this.storage_dir, path.join(year, month, day, index, "pdf", fileName))
                         }
                         catch (e) {
                             console.log("Upload to S3 failed")
@@ -165,7 +222,7 @@ class NSEScraper {
                             console.error(e)
                         }
                         try {
-                            fs.appendFileSync(path.join(this.announcement_dir, year, month, day, index, "activity.log"), JSON.stringify(announcement) + ",\n")
+                            fs.appendFileSync(path.join(this.storage_dir, year, month, day, index, "activity.log"), JSON.stringify(announcement) + ",\n")
                         }
                         catch (e) {
                             console.error(e)
@@ -175,11 +232,7 @@ class NSEScraper {
                 }
             }
         }
-       
-        console.log("Scraping done")
-        return pdfLinks;
     }
-
     //}
 
 }

@@ -5,8 +5,8 @@ const path = require('path');
 const fs = require('fs');
 
 class WebsiteTrafficSimulator extends NSEScraper {
-    constructor() {
-        super({ equities: [], sme: [] }, true); // Initialize as master scraper
+    constructor(disclosureConfig, isMaster, filesToDownload) {
+        super(disclosureConfig, isMaster, filesToDownload); // Initialize as master scraper
         this.currentActivityBand = null;
     }
 
@@ -30,15 +30,18 @@ class WebsiteTrafficSimulator extends NSEScraper {
             await this.sleep(sleepInterval);
             console.log("Website Sim start Wake up for ", config.MIN_GAP_TO_START, new Date())
             // Get all available PDFs from website
-            const allPdfs = await this.scrapeAnnouncements();
-            console.log("Simulator allPdfs", allPdfs.length)
+            const allPdfs = await this.scrapeTables();
+            console.log("Simulator allPdfs", allPdfs)
             const downloadedPdfs = await this.getDownloadedPdfs();
-            console.log("Simulator downloadedPdfs", downloadedPdfs.length)
+            console.log("Simulator downloadedPdfs", downloadedPdfs)
             // Get new PDFs to download
-            const newPdfs = {
+            /*const newPdfs = {
                 equities: allPdfs.equities.filter(pdf => !downloadedPdfs.equities.includes(pdf)),
                 sme: allPdfs.sme.filter(pdf => !downloadedPdfs.sme.includes(pdf))
-            };
+            };*/
+            const newPdfs = {}
+        
+            Object.keys(this.disclosureConfig.tabs).forEach(k => newPdfs[k] = allPdfs[k].filter(pdf => !downloadedPdfs[k].includes(pdf)))
 
             if (!this.hasNewPdfs(newPdfs)) {
                 console.log('No new PDFs to download');
@@ -55,7 +58,7 @@ class WebsiteTrafficSimulator extends NSEScraper {
             
             // Execute simulators with random delays
             for (const simulator of simulators) {
-                await simulator.scrapeAnnouncements();
+                await simulator.scrapeTables();
                 await this.sleep(
                     config.MIN_GAP_BETWEEN_PERSONS * (1 + Math.random())
                 );
@@ -67,22 +70,28 @@ class WebsiteTrafficSimulator extends NSEScraper {
     }
 
     async getAllPdfLinks() {
-        // Implementation to get all PDF links from website
+        const allPdfLinks = {}
+
+        Object.keys(this.disclosureConfig.tabs).forEach(k => allPdfLinks[k] = []) 
+        return allPdfLinks
+               // Implementation to get all PDF links from website
         // This should use the existing table parsing logic
-        return {
+        /*return {
             equities: [],  // Fill with actual PDF links
             sme: []       // Fill with actual PDF links
-        };
+        };*/
     }
 
     async getDownloadedPdfs() {
-        const downloadedPdfs = {
+        const downloadedPdfs = {}
+        /*const downloadedPdfs = {
             equities: [],
             sme: []
-        };
+        };*/
+        Object.keys(this.disclosureConfig.tabs).forEach(k => downloadedPdfs[k] = [])
         
         // Get all years
-        const rootDir = this.announcement_dir;
+        const rootDir = this.storage_dir;
         if (!fs.existsSync(rootDir)) {
             console.log("Root directory does not exist:", rootDir);
             return downloadedPdfs;
@@ -105,7 +114,7 @@ class WebsiteTrafficSimulator extends NSEScraper {
                     if (!fs.statSync(dayPath).isDirectory()) continue;
                     
                     // Check for each index folder
-                    for (const index of ['equities', 'sme']) {
+                    for (const index of Object.keys(this.disclosureConfig.tabs)) {
                         const indexPath = path.join(dayPath, index);
                         if (!fs.existsSync(indexPath)) continue;
                         
@@ -130,40 +139,7 @@ class WebsiteTrafficSimulator extends NSEScraper {
         
         return downloadedPdfs;
     }
-    /*async getDownloadedPdfs() {
-        const now = DateTime.now().setZone('Asia/Kolkata');
-        const date = now.toFormat('yyyy-MM-dd');
-        const [year, month, day] = date.split('-');
-        
-        const downloadedPdfs = {
-            equities: [],
-            sme: []
-        };
-
-        for (const index of ['equities', 'sme']) {
-            fs.mkdirSync(path.join(this.announcement_dir, year, month, day, index), {recursive: true})
-            const logPath = path.join(
-                this.announcement_dir,
-                year,
-                month,
-                day,
-                index,
-                'activity.log'
-            );
-
-            if (fs.existsSync(logPath)) {
-                const content = fs.readFileSync(logPath, 'utf-8');
-                console.log("getDownloadedPdfs", logPath)
-                console.log(content)
-                const jsonContent = '[' + content.replace(/,\s*$/, '') + ']';
-                const logs = JSON.parse(jsonContent);
-                downloadedPdfs[index] = logs.map(log => log.ATTACHMENT);
-            }
-        }
-
-        return downloadedPdfs;
-    }*/
-
+   
     async createSimulators(count, pdfs, config) {
         const simulators = [];
         
@@ -172,12 +148,14 @@ class WebsiteTrafficSimulator extends NSEScraper {
                 config.MIN_LINKS_TO_DOWNLOAD * (1 + Math.random())
             );
 
-            const simulatorPdfs = {
+            /*const simulatorPdfs = {
                 equities: this.getRandomPdfs(pdfs.equities, linksPerSimulator),
                 sme: this.getRandomPdfs(pdfs.sme, linksPerSimulator)
-            };
+            };*/
+            const simulatorPdfs = {}
+            Object.keys(this.disclosureConfig.tabs).forEach(k => simulatorPdfs[k] = this.getRandomPdfs(pdfs[k], linksPerSimulator))
 
-            simulators.push(new NSEScraper(simulatorPdfs, false));
+            simulators.push(new NSEScraper(this.disclosureConfig, false, simulatorPdfs));
         }
 
         return simulators;
@@ -189,7 +167,12 @@ class WebsiteTrafficSimulator extends NSEScraper {
     }
 
     hasNewPdfs(pdfs) {
-        return pdfs.equities.length > 0 || pdfs.sme.length > 0;
+        let newPdfs = false;
+        for (const key of Object.keys(this.disclosureConfig.tabs)){
+            if (pdfs[key].length > 0) newPdfs = true; break;
+        }
+        return newPdfs
+        //return pdfs.equities.length > 0 || pdfs.sme.length > 0;
     }
 
     sleep(ms) {
