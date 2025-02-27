@@ -100,46 +100,35 @@ const currentSlide = ref(0)
 const cards = ref([
   {
     title: "",
-    subtitle: "Mutual Fund Sahi Hai ??",
-    description: "MFs vastly underperform the market, and charge hefty fees. You can do much better, yourself. See <a href='/etfList'>ETFs</a>.",
+    subtitle: "Index Funds, REITs, Gold/Silver, InvITs",
+    description: "Build long term Solid Core of your portfolio around low fee Passive investing. Especially, for new investors coming to the markets. See <a href='/etfList'>ETFs</a>",
     hasHtml: true
   },
   {
     title: "",
-    subtitle: "ETF >> MF",
-    description: "ETFs are ~10 times lower cost, and majority MFs do not even beat the indexes.",
-    hasHtml: false
+    subtitle: "Mutual Funds",
+    description: "Check if your existing MF portfolio is cluttered. One does not need more than 3-4 <b>non-overlapping</b> high quality Mutual Funds to add extra returns, with moderate risk. Use <a href='/assistant'>Assistant</a> to dig. See <a href='/mutualfunds'>Mutual Funds</a>",
+    hasHtml: true
   },
   {
     title: "",
-    subtitle: "ETF >> MF",
-    description: "ETFs can be traded. MFs cannot be traded. Buy Aggressively, on Index Dips <a href='/dipsip'>DipSIP</a>",
+    subtitle: "Stocks",
+    description: "For Stock Pickers. You need just a couple of big multibaggers to uplife the entire portfolio. For Long term patient investors, with Risk/Volatility Appetite. Use <a href='/assistant'>Assistant</a> to uncover hidden gems in the Indian Markets. See <a href='/stocks'>Stocks</a>",
+    hasHtml: true
+  },
+  {
+    title: "",
+    subtitle: "Assistant",
+    description: "Your Personal Assistant available 24 X 7, to answer general queries, and find hidden gems in the Indian Markets. Try <a href='/assistant'>Assistant</a>",
     hasHtml: true
   },
   {
     title: "",
     subtitle: "DipSIP ETF >>>> MF SIP",
-    description: "Do you regret Buying at highs ? Try DipSip, the proven Contra strategy.<a href='/etfList'>DipSIP ETFs</a>",
-    hasHtml: true
-  },
-  {
-    title: "Risk Profile",
-    subtitle: "Risk Profile",
-    description: "Accurately assess your risk profile and allocate judiciously. Then let compounding do its magic. See  <a href='/riskProfile'>Risk Profile</a>",
-    hasHtml: true
-  },
-  {
-    title: "Ready",
-    subtitle: "Volatility is a Feature, Not a Bug",
-    description: "Not many may remember 2024 Election Day counting day dip. DipSip makes sense.<a href='/dipsip'>DipSip</a>.",
-    hasHtml: true
-  },
-  {
-    title: "Mutual Funds",
-    subtitle: "Portfolio Cleanup",
-    description: "Do you have more than 3-4 Mutual Funds ? Chances are there is massive overlap. MF Portfolios need regular checkups <a href='/mutualfunds'>Mutual Fund Overlaps</a>.",
+    description: "What is DipSIP ? Do you regret Buying at highs ? Try DipSip, the proven Contra strategy.<a href='/etfList'>DipSIP ETFs</a>",
     hasHtml: true
   }
+  
 ])
 </script>
 

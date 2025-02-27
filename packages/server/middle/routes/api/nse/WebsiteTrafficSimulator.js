@@ -1,12 +1,13 @@
 const { DateTime } = require('luxon');
 const NSEScraper = require('./NSEScraper');
+const InsiderScraper = require('./InsiderScraper');
 const { getCurrentActivityBand } = require('../../../config/marketActivity');
 const path = require('path');
 const fs = require('fs');
 
 class WebsiteTrafficSimulator extends NSEScraper {
-    constructor(disclosureConfig, isMaster, filesToDownload) {
-        super(disclosureConfig, isMaster, filesToDownload); // Initialize as master scraper
+    constructor(typeOfDisclosure, isMaster, filesToDownload) {
+        super(typeOfDisclosure, isMaster, filesToDownload); // Initialize as master scraper
         this.currentActivityBand = null;
     }
 
@@ -155,7 +156,15 @@ class WebsiteTrafficSimulator extends NSEScraper {
             const simulatorPdfs = {}
             Object.keys(this.disclosureConfig.tabs).forEach(k => simulatorPdfs[k] = this.getRandomPdfs(pdfs[k], linksPerSimulator))
 
-            simulators.push(new NSEScraper(this.disclosureConfig, false, simulatorPdfs));
+            switch(this.typeOfDisclosure){
+                case "announcements" :
+                    simulators.push(new NSEScraper(this.typeOfDisclosure, false, simulatorPdfs))
+                    break;
+                case "insider_trades" : 
+                    simulators.push(new InsiderScraper(this.typeOfDisclosure, false, simulatorPdfs))
+                    break;
+            }
+            
         }
 
         return simulators;

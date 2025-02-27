@@ -19,7 +19,7 @@ const getPuppeteerConfig = () => {
         
       launchOptions: {
         // Base options for all environments
-        headless: !isDevelopment,
+        headless: true, //!isDevelopment,
         args: puppetArgs,
         
         // Development-specific options for Mac

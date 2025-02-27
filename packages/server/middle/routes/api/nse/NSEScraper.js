@@ -9,27 +9,55 @@ const { uploadFileToS3 } = require('../../../utils/s3Upload');
 const SMART_PROXY_URL = process.env.SMART_PROXY_URL
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-const extractDateComponents = function (dateStr) {
-    const date = moment(dateStr, "DD-MMM-YYYY HH:mm:ss");
-    return [date.format("YYYY"), date.format("MM"), date.format("DD")];
-}
+const disclosures = {
+    "announcements": {
+      "storage_dir_suffix": "nse_announcements",
+      "disclosure_url": process.env.NSE_ANNOUNCEMENT_URL,
+      "tabs": {
+        "sme": {
+          "tableQuerySelector": "#CFanncsmeTable",
+          "column_headers": ["SYMBOL", "COMPANY NAME", "SUBJECT", "DETAILS", "ATTACHMENT", "BROADCAST DATE/TIME"]
+        },
+        "equities":{
+          "tableQuerySelector": "#CFanncEquityTable",
+          "column_headers": ["SYMBOL", "COMPANY NAME", "SUBJECT", "DETAILS", "ATTACHMENT", "BROADCAST DATE/TIME"]
+        }
+      }
+    },
+    "insider_trades": {
+      "storage_dir_suffix": "nse_insider_trades",
+      "disclosure_url": process.env.NSE_INSIDER_TRADES_URL,
+      "tabs":{
+        "insider_trades": {
+          "tableQuerySelector": "#table-CFinsidertrading",
+          "column_headers": ["SYMBOL", "COMPANY NAME", "REGULATION","Name of the Acquirer/ Disposer","TYPE OF SECURITY", "NO. OF SECURITIES", "ACQUISTION/DISPOSAL", "PUBLISH DATE/TIME", "ATTACHMENT"]
+        }
+      }
+    }
+  }
 class NSEScraper {
-    constructor(disclosureConfig, isMaster, filesToDownload) {
+    constructor(typeOfDisclosure, isMaster, filesToDownload) {
         this.browser = null;
         this.page = null;
-        this.disclosureConfig = disclosureConfig
+        this.typeOfDisclosure = typeOfDisclosure;
+        this.disclosureConfig = disclosures[typeOfDisclosure]
         this.isMaster = isMaster
-        this.storage_dir = path.join(process.env.DATA_ROOT_FOLDER, disclosureConfig["storage_dir_suffix"]);
+        this.storage_dir = path.join(process.env.DATA_ROOT_FOLDER, this.disclosureConfig["storage_dir_suffix"]);
         //this.announcement_url = announcement_url;
         
         
         this.filesToDownload = filesToDownload
-        this.tableKeys = Object.keys(disclosureConfig.tabs) //["sme", "equities"] e.g. announcements
+        this.tableKeys = Object.keys(this.disclosureConfig.tabs) //["sme", "equities"] e.g. announcements
         //this.tableKeys.forEach(k => this.filesToDownload[k] = [])
         
         //["https://nsearchives.nseindia.com/corporate/RPOWER_22022025220130_Reliance_Power_Limited_Newspaper_Publication.pdf", "https://nsearchives.nseindia.com/corporate/AKZOINDIA_22022025204853_AkzoIndia_Reg30_Intimation_UPGST_SCNFY20_21_26Nov2024_Update22Feb25.pdf"]
 
     }
+    extractDateComponents(dateStr) {
+        const date = moment(dateStr, "DD-MMM-YYYY HH:mm:ss");
+        return [date.format("YYYY"), date.format("MM"), date.format("DD")];
+    }
+    
     //tableQuerySelectors - {"sme": "#CFanncsmeTable", "equities": "#CFanncEquityTable"}
     //headersForSegment = {"sme": ["SYMBOL", "COMPANY NAME", "SUBJECT", "DETAILS", "ATTACHMENT", "BROADCAST DATE/TIME"],
     //"equities": ["SYMBOL", "COMPANY NAME", "SUBJECT", "DETAILS", "ATTACHMENT", "BROADCAST DATE/TIME"]}
@@ -54,8 +82,8 @@ class NSEScraper {
     }*/
         await this.page.goto(this.disclosureConfig.disclosure_url, { waitUntil: 'networkidle2' });
         await delay(10000);
-        let documentLinks = {}; //{ "sme": [], "equities": [] }
-        this.tableKeys.forEach(k => documentLinks[k] = [])
+        let documentLinksDownloaded = {}; //{ "sme": [], "equities": [] }
+        this.tableKeys.forEach(k => documentLinksDownloaded[k] = [])
         let tableData = []
         tableData = await this.page.evaluate((disclosureConfig) => {
             const columnHeaders = {}
@@ -134,24 +162,67 @@ class NSEScraper {
         //console.log("tableData", tableData)
         if (this.isMaster) return tableData
         console.log("Child Simulator processTableData", this.disclosureConfig)
-        documentLinks = await this.processTableData(tableData, this.tableKeys)
+        documentLinksDownloaded = await this.processTableData(tableData, this.tableKeys)
        
         console.log("Scraping done")
-        return documentLinks;
+        return documentLinksDownloaded;
+    }
+    async updateGQL(announcement, index, year, month, day){
+        try {
+            await postToGraphQL({
+                query: `mutation StockAnnouncementInsertOne($object: stock_announcements_insert_input!) {
+insert_stock_announcements_one(object: $object) {
+id
+}
+}`,
+                variables: {
+                    "object": {
+                        "announcement_document_link": announcement.ATTACHMENT.trim(),
+                        "announcement_date": `${year}-${month}-${day}`,
+                        "announcement_text_summary": "",
+                        "announcement_sentiment": -1,
+                        "announcement_impact": "",
+                        "stock": {
+                            "data": {
+                                "symbol": announcement.SYMBOL,
+                                "company_name": announcement["COMPANY NAME"],
+                                "segment": index.toLowerCase() === "sme" ? 1 : 0
+                            },
+                            "on_conflict": {
+                                "constraint": "stock_symbol_key",
+                                "update_columns": ["symbol", "company_name"]
+                            }
+                        }
+                    }
+                }
+            })
+        }
+        catch (e) {
+            console.log("Error Posting GQL", announcement)
+            console.error(e)
+        }
+    }
+    async updateActivityLog(announcement, index, year, month, day){
+        try {
+            fs.appendFileSync(path.join(this.storage_dir, year, month, day, index, "activity.log"), JSON.stringify(announcement) + ",\n")
+        }
+        catch (e) {
+            console.error(e)
+        }
     }
     //keys ['equities', 'sme']
     //dateTimeColumnKey - "BROADCAST DATE/TIME"
     //documentType = pdf
     //skipExtension=".xml"
     async processTableData(tableData, keys){
-        let documentLinks = {}
+        let documentLinksDownloaded = {}
         if (!tableData) {
-            return documentLinks
+            return documentLinksDownloaded
         }
-        keys.forEach(k => documentLinks[k] = [])
+        keys.forEach(k => documentLinksDownloaded[k] = [])
         for (const index of keys) {
             for (const announcement of tableData[index]) {
-                const [year, month, day] = extractDateComponents(announcement["BROADCAST DATE/TIME"]);
+                const [year, month, day] = this.extractDateComponents(announcement["BROADCAST DATE/TIME"]);
                 const targetPath = path.join(this.storage_dir, year, month, day, index, "pdf")
                 fs.mkdirSync(targetPath, { recursive: true })
                 if (announcement.SUBJECT.toLowerCase().indexOf("newspaper") > -1) {
@@ -163,7 +234,7 @@ class NSEScraper {
                     continue;
                 }
                 if (announcement.ATTACHMENT) {
-                    documentLinks[index].push(announcement.ATTACHMENT)
+                    
                 }
                 if (announcement.ATTACHMENT && this.filesToDownload[index].findIndex(item => item.ATTACHMENT === announcement.ATTACHMENT) > -1) {
                     console.log("checking pdf", announcement.ATTACHMENT, targetPath)
@@ -181,50 +252,15 @@ class NSEScraper {
                             console.log("Upload to S3 failed")
                             console.error(e)
                         }
-                        try {
-                            await postToGraphQL({
-                                query: `mutation StockAnnouncementInsertOne($object: stock_announcements_insert_input!) {
-          insert_stock_announcements_one(object: $object) {
-            id
-          }
-        }`,
-                                variables: {
-                                    "object": {
-                                        "announcement_document_link": announcement.ATTACHMENT.trim(),
-                                        "announcement_date": `${year}-${month}-${day}`,
-                                        "announcement_text_summary": "",
-                                        "announcement_sentiment": -1,
-                                        "announcement_impact": "",
-                                        "stock": {
-                                            "data": {
-                                                "symbol": announcement.SYMBOL,
-                                                "company_name": announcement["COMPANY NAME"],
-                                                "segment": index.toLowerCase() === "sme" ? 1 : 0
-                                            },
-                                            "on_conflict": {
-                                                "constraint": "stock_symbol_key",
-                                                "update_columns": ["symbol", "company_name"]
-                                            }
-                                        }
-                                    }
-                                }
-                            })
-                        }
-                        catch (e) {
-                            console.log("Error Posting GQL", announcement)
-                            console.error(e)
-                        }
-                        try {
-                            fs.appendFileSync(path.join(this.storage_dir, year, month, day, index, "activity.log"), JSON.stringify(announcement) + ",\n")
-                        }
-                        catch (e) {
-                            console.error(e)
-                        }
+                        await this.updateGQL(announcement, index, year, month, day)
+                        await this.updateActivityLog(announcement, index, year, month, day)
+                        documentLinksDownloaded[index].push(announcement.ATTACHMENT)
                     }
 
                 }
             }
         }
+        return documentLinksDownloaded
     }
     //}
 

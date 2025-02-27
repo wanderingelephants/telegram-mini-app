@@ -2,34 +2,12 @@ const WebsiteTrafficSimulator = require("./WebsiteTrafficSimulator")
 const NSEScraper = require("./NSEScraper")
 const InsiderScraper = require("./InsiderScraper")
 const route = async(req, res) => {
-  const disclosures = {
-    "announcements": {
-      "storage_dir_suffix": "nse_announcements",
-      "disclosure_url": process.env.NSE_ANNOUNCEMENT_URL,
-      "tabs": {
-        "sme": {
-          "tableQuerySelector": "#CFanncsmeTable",
-          "column_headers": ["SYMBOL", "COMPANY NAME", "SUBJECT", "DETAILS", "ATTACHMENT", "BROADCAST DATE/TIME"]
-        },
-        "equities":{
-          "tableQuerySelector": "#CFanncEquityTable",
-          "column_headers": ["SYMBOL", "COMPANY NAME", "SUBJECT", "DETAILS", "ATTACHMENT", "BROADCAST DATE/TIME"]
-        }
-      }
-    },
-    "insider_trades": {
-      "storage_dir_suffix": "nse_insider_trades",
-      "disclosure_url": process.env.NSE_INSIDER_TRADES_URL,
-      "tabs":{
-        "insider_trades": {
-          "tableQuerySelector": "#table-CFinsidertrading",
-          "column_headers": ["SYMBOL", "COMPANY NAME", "REGULATION","Name of the Acquirer/ Disposer","TYPE OF SECURITY", "NO. OF SECURITIES", "ACQUISTION/DISPOSAL", "PUBLISH DATE/TIME", "ATTACHMENT"]
-        }
-      }
-    }
-  }
-    const simulator = new WebsiteTrafficSimulator(disclosures["announcements"], true, {"sme": [], "equities": []});
-    await simulator.simulateTraffic();
+  
+    const announcementSimulator = new WebsiteTrafficSimulator("announcements", true, {"sme": [], "equities": []});
+    await announcementSimulator.simulateTraffic();
+
+    const insiderTradesSimulator = new WebsiteTrafficSimulator("insider_trades", true, {"insider_trades": []});
+    await insiderTradesSimulator.simulateTraffic();
 
     /*const tableQuerySelectors = {"sme": "#CFanncsmeTable", "equities": "#CFanncEquityTable"}
     const headersForSegment = {"sme": ["SYMBOL", "COMPANY NAME", "SUBJECT", "DETAILS", "ATTACHMENT", "BROADCAST DATE/TIME"],
