@@ -161,7 +161,7 @@ class NSEScraper {
             for (const announcement of tableData[index]) {
                 const [year, month, day] = extractDateComponents(announcement["BROADCAST DATE/TIME"]);
                 const targetPath = path.join(this.storage_dir, year, month, day, index, "pdf")
-                console.log("process announcement", index, targetPath, announcement, this.filesToDownload[index].findIndex(announcement.ATTACHMENT))
+                console.log("process announcement", index, targetPath, announcement, this.filesToDownload[index].findIndex(item => item.ATTACHMENT === announcement.ATTACHMENT))
                 fs.mkdirSync(targetPath, { recursive: true })
                 if (announcement.SUBJECT.toLowerCase().indexOf("newspaper") > -1) {
                     console.log("Skipping newspaper record", announcement.ATTACHMENT)
@@ -174,7 +174,7 @@ class NSEScraper {
                 if (announcement.ATTACHMENT) {
                     documentLinks[index].push(announcement.ATTACHMENT)
                 }
-                if (announcement.ATTACHMENT && this.filesToDownload[index].findIndex(announcement.ATTACHMENT) > -1) {
+                if (announcement.ATTACHMENT && this.filesToDownload[index].findIndex(item => item.ATTACHMENT === announcement.ATTACHMENT) > -1) {
                     console.log("checking pdf", announcement.ATTACHMENT, targetPath)
                     const fileToks = announcement.ATTACHMENT.split('/')
                     const fileName = fileToks[fileToks.length - 1]
