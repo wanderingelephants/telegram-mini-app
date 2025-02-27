@@ -19,14 +19,11 @@ class NSEScraper {
         this.page = null;
         this.disclosureConfig = disclosureConfig
         this.isMaster = isMaster
-        console.log(disclosureConfig)
-        console.log("NSEScraper constructor", process.env.DATA_ROOT_FOLDER, disclosureConfig["storage_dir_suffix"])
         this.storage_dir = path.join(process.env.DATA_ROOT_FOLDER, disclosureConfig["storage_dir_suffix"]);
         //this.announcement_url = announcement_url;
         
         
         this.filesToDownload = filesToDownload
-        console.log("NSEScraper filesToDownload", this.filesToDownload)
         this.tableKeys = Object.keys(disclosureConfig.tabs) //["sme", "equities"] e.g. announcements
         //this.tableKeys.forEach(k => this.filesToDownload[k] = [])
         
@@ -37,7 +34,6 @@ class NSEScraper {
     //headersForSegment = {"sme": ["SYMBOL", "COMPANY NAME", "SUBJECT", "DETAILS", "ATTACHMENT", "BROADCAST DATE/TIME"],
     //"equities": ["SYMBOL", "COMPANY NAME", "SUBJECT", "DETAILS", "ATTACHMENT", "BROADCAST DATE/TIME"]}
     async scrapeTables() {
-        console.log("ScrapeTables", this.isMaster)
         //tableQuerySelectors, headersForSegment
         this.browser = await puppeteer.launch(launchOptions);
         this.page = await this.browser.newPage();
@@ -62,14 +58,11 @@ class NSEScraper {
         this.tableKeys.forEach(k => documentLinks[k] = [])
         let tableData = []
         tableData = await this.page.evaluate((disclosureConfig) => {
-            console.log(disclosureConfig)
             const columnHeaders = {}
             const tables = {}
             const tableKeys = Object.keys(disclosureConfig.tabs)
             tableKeys.forEach(k => tables[k] = document.querySelector(disclosureConfig.tabs[k].tableQuerySelector))
             tableKeys.forEach(k => columnHeaders[k] = disclosureConfig.tabs[k].column_headers)
-            console.log("Tables to parse", tables)
-            console.log("Column Headers", columnHeaders)
             
             /*const tables = {
                 equities: document.querySelector('#CFanncEquityTable'),
@@ -153,7 +146,6 @@ class NSEScraper {
     async processTableData(tableData, keys){
         let documentLinks = {}
         if (!tableData) {
-            console.log("processTableData Undefined tableData", this.filesToDownload)
             return documentLinks
         }
         keys.forEach(k => documentLinks[k] = [])
@@ -161,7 +153,6 @@ class NSEScraper {
             for (const announcement of tableData[index]) {
                 const [year, month, day] = extractDateComponents(announcement["BROADCAST DATE/TIME"]);
                 const targetPath = path.join(this.storage_dir, year, month, day, index, "pdf")
-                console.log("process announcement", index, targetPath, announcement, this.filesToDownload[index].findIndex(item => item.ATTACHMENT === announcement.ATTACHMENT))
                 fs.mkdirSync(targetPath, { recursive: true })
                 if (announcement.SUBJECT.toLowerCase().indexOf("newspaper") > -1) {
                     console.log("Skipping newspaper record", announcement.ATTACHMENT)
