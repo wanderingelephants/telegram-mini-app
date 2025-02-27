@@ -115,7 +115,7 @@ const routes = {
 router.post("/api/auth/google", routes.api.auth.google)
 router.get("/api/auth/callback", routes.api.auth.callback)
 router.get("/api/mutualfunds/migrate", routes.api.mutualfunds.migrate)
-router.post("/api/chat/reasoning", routes.api.chat.reasoning)
+router.post("/api/chat/reasoning", verifyToken,routes.api.chat.reasoning)
 router.post("/api/telegram/auth", routes.api.telegram.auth)
 router.post("/api/db/create", verifyAdminToken, routes.api.db.create)
 router.post("/api/db/import", routes.api.db.import)

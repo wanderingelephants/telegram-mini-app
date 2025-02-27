@@ -147,6 +147,7 @@ export default{
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'text/event-stream',
+        'Authorization' : `Bearer ${localStorage.getItem("jwtGoogle")}`
       },
       body: JSON.stringify({
         activity: "stock_market_chat",
@@ -154,7 +155,12 @@ export default{
         email: this.userGoogle.email
       })
     });
-
+    if (response.status !== 200){
+      this.snackbar.color = "error"
+        this.snackbar.message = "Not authorized"
+        this.snackbar.show = true
+        return
+    }
     // Create reader from response body
     const reader = response.body.getReader();
     const decoder = new TextDecoder();

@@ -5,7 +5,7 @@ const api = axios.create({
 })
 
 api.interceptors.request.use(config => {
-  const token = localStorage.getItem('AUTH_TOKEN')
+  const token = localStorage.getItem('jwtGoogle')
   if (token) {
     config.headers['Authorization'] = `Bearer ${token}`
   }
@@ -30,13 +30,13 @@ api.interceptors.response.use(
         if (user) {
           // Force refresh token
           const newToken = await user.getIdToken(true);
-          localStorage.setItem('AUTH_TOKEN', newToken);
+          localStorage.setItem('jwtGoogle', newToken);
           originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
           return api(originalRequest);
         }
       } catch (err) {
         // Handle refresh failure
-        localStorage.removeItem('AUTH_TOKEN');
+        localStorage.removeItem('jwtGoogle');
         window.location.reload();
       }
     }

@@ -65,10 +65,12 @@ export default {
             // Token invalid - clear storage
             localStorage.removeItem("AUTH_TOKEN");
             this.$store.commit("setloggedInGoogle", false);
+            localStorage.removeItem("jwtGoogle");
           } else {
             this.$store.commit("setloggedInGoogle", true);
             this.$store.commit("setUserGoogle", json.userGoogle);
             localStorage.setItem("AUTH_TOKEN", json.token)
+            localStorage.setItem("jwtGoogle", idToken);
           }
         } catch (error) {
           console.error("Token verification error:", error);
@@ -82,12 +84,12 @@ export default {
         if (user) {
           // User is signed in
           const idToken = await user.getIdToken(true);
-          //localStorage.setItem("jwtGoogle", idToken);
+          localStorage.setItem("jwtGoogle", idToken);
           this.$store.commit("setloggedInGoogle", true);
           this.$store.commit("setUserGoogle", user);
         } else {
           // User is signed out
-          //localStorage.removeItem("jwtGoogle");
+          localStorage.removeItem("jwtGoogle");
           this.$store.commit("setloggedInGoogle", false);
           this.$store.commit("setUserGoogle", null);
         }
