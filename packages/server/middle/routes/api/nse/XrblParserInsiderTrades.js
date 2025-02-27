@@ -204,5 +204,4 @@ class InsiderTradesXrblParser {
     }
   }
 }
-new InsiderTradesXrblParser().parse(path.join(process.env.DATA_ROOT_FOLDER, "nse_insider_trades", "2025", "02", "25", "insider_trades", "xml", "IT_1178588_1389540_25022025113540_WEB.xml")).then(console.log("Parsing done"))
 module.exports = InsiderTradesXrblParser
