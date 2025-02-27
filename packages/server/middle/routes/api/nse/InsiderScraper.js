@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const NSEScraper = require("./NSEScraper");
+const InsiderTradesXrblParser = require("./XrblParserInsiderTrades")
 const fetchPDF = require("./pdfFetcher");
 const { uploadFileToS3 } = require('../../../utils/s3Upload');
 const SMART_PROXY_URL = process.env.SMART_PROXY_URL
@@ -8,6 +9,7 @@ const SMART_PROXY_URL = process.env.SMART_PROXY_URL
 class InsiderScraper extends NSEScraper{
     constructor(typeOfDisclosure, isMaster, filesToDownload){
         super(typeOfDisclosure, isMaster, filesToDownload)
+        this.xrblParser = new InsiderTradesXrblParser()
     }
     async processTableData(tableData, keys){
         let documentLinksDownloaded = {}
@@ -41,7 +43,7 @@ class InsiderScraper extends NSEScraper{
                             console.log("Upload to S3 failed")
                             console.error(e)
                         }
-                        await this.updateGQL(announcement, index, year, month, day)
+                        await this.xrblParser.parse(path.join(targetPath, fileName))
                         await this.updateActivityLog(announcement, index, year, month, day)
                         documentLinksDownloaded[index].push(announcement.ATTACHMENT)
                     }

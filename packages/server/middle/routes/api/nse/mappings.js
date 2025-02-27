@@ -1,21 +1,3 @@
-const mapping_category_of_insider = {
-  "Promoters": 1,
-  "Key Management Personnel": 2,
-  "Relative": 3,
-  "-": 4,
-  "Promoter Group": 5,
-  "Employees/Designated Employees": 6,
-  "Director": 7,
-  "Other": 8,
-  "Immediate relative": 9,
-  "Key Managerial Personnel": 10
-};
-const reverse_mapping_category_of_insider = Object.entries(mapping_category_of_insider)
-  .reduce((acc, [key, value]) => {
-    acc[value] = key;
-    return acc;
-  }, {});
-
 const mapping_regulation = {
   "7(2)": 1,
   "7(3)": 2,
@@ -25,7 +7,24 @@ const reverse_mapping_regulation = Object.entries(mapping_regulation)
     acc[value] = key;
     return acc;
   }, {});
-
+  const mapping_category_of_insider = {
+    "Promoters": 1,
+    "Key Management Personnel": 2,
+    "Relative": 3,
+    "-": 4,
+    "Promoter Group": 5,
+    "Employees/Designated Employees": 6,
+    "Director": 7,
+    "Other": 8,
+    "Immediate relative": 9,
+    "Key Managerial Personnel": 10
+  };
+  const reverse_mapping_category_of_insider = Object.entries(mapping_category_of_insider)
+    .reduce((acc, [key, value]) => {
+      acc[value] = key;
+      return acc;
+    }, {});
+  
 const mapping_type_of_security = {
   "Equity Shares": 1,
   "Convertible Debentures": 2,

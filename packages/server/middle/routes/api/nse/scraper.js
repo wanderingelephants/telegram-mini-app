@@ -1,6 +1,4 @@
 const WebsiteTrafficSimulator = require("./WebsiteTrafficSimulator")
-const NSEScraper = require("./NSEScraper")
-const InsiderScraper = require("./InsiderScraper")
 const route = async(req, res) => {
   
     const announcementSimulator = new WebsiteTrafficSimulator("announcements", true, {"sme": [], "equities": []});

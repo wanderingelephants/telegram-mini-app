@@ -6,7 +6,7 @@ const Puppet = require('./puppet.js')
 const downloadFolder = process.env.NSE_ANNOUNCEMENTS_DOWNLOAD
 const path = require("path")
 
-let failedLogFile;
+let failedLogFile = "failed_records-" + (new Date()).toISOString();
 // Lookup mappings for various columns
 const {mapping_category_of_insider, mapping_regulation, mapping_type_of_security, mapping_mode_of_transaction, mapping_transaction_type, mapping_exchange} = require("./mappings")
 

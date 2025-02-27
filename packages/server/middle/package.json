@@ -34,7 +34,8 @@
         "openai": "^4.80.1",
         "puppeteer": "^23.11.1",
         "puppeteer-extra": "^3.3.6",
-        "puppeteer-extra-plugin-stealth": "^2.11.2"
+        "puppeteer-extra-plugin-stealth": "^2.11.2",
+        "xbrl-parser": "^1.2.4"
     },
     "devDependencies": {
         "nodemon": "^3.1.7"
