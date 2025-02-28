@@ -19,26 +19,6 @@ const WebsiteTrafficSimulator = require("./routes/api/nse/WebsiteTrafficSimulato
 const dbManager = require('./routes/api/chat/DatabaseManager');
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-
-/*sleep(20000) // 20 seconds delay
-  .then(() => {
-    console.log('Starting database initialization...');
-    return dbManager.getData();
-  })
-  .then(data => {
-    console.log('Database initialized successfully');
-    // Store reference if needed
-    const appData = data;
-    
-    // Start your server here
-    startServer();
-  })
-  .catch(error => {
-    console.error('Failed to initialize database:', error);
-    process.exit(1); // Exit if database initialization fails
-  });
-*/
-
 function  startServer(){
   cron.schedule('55 * * * *', async () => {
     if (!process.env.PDF_PROCESS_URL) {
@@ -64,7 +44,7 @@ function  startServer(){
       const now = DateTime.now().setZone('Asia/Kolkata');
       const date = now.toFormat('yyyy-MM-dd');
       const [year, month, day] = date.split('-');
-      const announcement_dir = process.env.NSE_ANNOUNCEMENTS_DOWNLOAD;
+      const announcement_dir = path.join(process.env.DATA_ROOT_FOLDER, process.env.NSE_ANNOUNCEMENTS);
        
       for (const index of ['equities', 'sme']) {
         const txtPath = path.join(year, month, day, index, "txt")
