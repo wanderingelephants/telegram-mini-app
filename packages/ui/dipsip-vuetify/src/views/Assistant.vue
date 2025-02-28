@@ -79,9 +79,12 @@
 <script>
 import { mapState } from "vuex";
 import GoogleSignIn from "../components/GoogleSignIn";
-
+import api from "./api"
 export default{
   name: 'PromptChat',
+  components:{
+    GoogleSignIn
+  },
     data(){
         return {
             model: 'llama3.2:latest',
@@ -127,7 +130,6 @@ export default{
         this.snackbar.show = true
         return
       }
-      console.log("send message for user", this.userGoogle.email)    
       if (!this.userInput.trim()) return;
       if  (this.userInput.length > 1000) this.userInput = this.userInput.substring(0, 1000)
       this.suggestions = [];
@@ -142,18 +144,18 @@ export default{
       this.isLoading = true;
 
       try {
-	      const response = await fetch('/api/chat/reasoning', {
-      method: 'POST',
+	      const response = await api.post('/api/chat/reasoning', {
+      activity: "stock_market_chat",
+        messages: [...this.messages],
+        email: this.userGoogle.email,
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'text/event-stream',
-        'Authorization' : `Bearer ${localStorage.getItem("jwtGoogle")}`
+        //'Authorization' : `Bearer ${localStorage.getItem("jwtGoogle")}`
       },
-      body: JSON.stringify({
-        activity: "stock_market_chat",
-        messages: [...this.messages],
-        email: this.userGoogle.email
-      })
+      //body: JSON.stringify({
+        
+      //})
     });
     if (response.status !== 200){
       this.snackbar.color = "error"

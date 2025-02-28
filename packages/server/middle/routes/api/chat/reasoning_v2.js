@@ -20,12 +20,16 @@ const getFormattingLLMToUse = async (email, activity) => {
 const getModelToUse = async(email, activity) => {
     return  process.env.LLM_MODEL
 }
+const getMaxMessageLength = async(email, activity) => {
+  return  1000
+}
 const route = async (req, res) => {
   const sessionId = req.sessionId;
   const { email, activity, messages, customData } = req.body;
-  //console.log("reasoning_v2", { email, activity, messages, customData })
+  console.log("reasoning_v2", { email, activity, messages, customData })
   let streaming
-  let userLatestMessage = messages[messages.length - 1].content  
+  let userLatestMessage = messages[messages.length - 1].content
+  if (userLatestMessage.length > await getMaxMessageLength(email, activity)) res.status(401).json("msg size")  
   try {  
     const PROMPTS_FOLDER = path.join(__dirname, 'prompts');
     const systemPromptPath = path.join(PROMPTS_FOLDER, `${activity}_system_prompt.txt`);

@@ -181,7 +181,7 @@ export default {
     
     async sendCompare(){
       try {
-        const response = await api.post('/api/mutualfunds/compare', {
+        const response = await api.post('/api/mutualfunds/analyze', {
          "fundList": this.selectedFunds
         })
         this.compareData = response.data

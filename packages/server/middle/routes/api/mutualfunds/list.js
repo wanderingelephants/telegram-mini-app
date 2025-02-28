@@ -9,7 +9,8 @@ const route = async (req, res) => {
         //const dbResp = db.prepare('SELECT * FROM mutual_fund order by return_3Y desc').all();
         const gqlResp = await postToGraphQL({
             query: `query mutual_funds{
-  mutual_fund(order_by: {return_3Y: desc_nulls_last}){
+  mutual_fund(where: 
+            {mf_direct_variant_id:{_is_null:true}, aum: {_gt: 10}},order_by: {return_3Y: desc_nulls_last}){
     name
     plan
     star_rating

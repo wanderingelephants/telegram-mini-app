@@ -47,13 +47,6 @@ const routes = {
         chat: {
             reasoning: require("./api/chat/reasoning_v2")
         },
-        db: {
-            create: require("./api/db/create"),
-            import: require("./api/db/import"),
-            getuser: require("./api/db/getuser"),
-            updateuser: require("./api/db/updateuser"),
-            saveconfig: require("./api/db/saveconfig")
-        },
         indices: {
             AUTOBEES: require("./api/indices/AUTOBEES.json"),
             BANKBEES: require("./api/indices/BANKBEES.json"),
@@ -83,11 +76,11 @@ const routes = {
             }
         },
         mutualfunds: {
-            migrate: require("./api/mutualfunds/migrate_to_pg"),
+            //migrate: require("./api/mutualfunds/migrate_to_pg"),
             list: require("./api/mutualfunds/list"),
             analyze: require("./api/mutualfunds/analyze"),
             recommend: require("./api/mutualfunds/recommend"),
-            scrape: require("./api/mutualfunds/scrapeLocalfile"),
+            //scrape: require("./api/mutualfunds/scrapeLocalfile"),
             categoryScrape: require("./api/mutualfunds/categoryScrape")
         },
         nse: {
@@ -114,27 +107,22 @@ const routes = {
 };
 router.post("/api/auth/google", routes.api.auth.google)
 router.get("/api/auth/callback", routes.api.auth.callback)
-router.get("/api/mutualfunds/migrate", routes.api.mutualfunds.migrate)
+//router.get("/api/mutualfunds/migrate", routes.api.mutualfunds.migrate)
 router.post("/api/chat/reasoning", verifyToken,routes.api.chat.reasoning)
 router.post("/api/telegram/auth", routes.api.telegram.auth)
-router.post("/api/db/create", verifyAdminToken, routes.api.db.create)
-router.post("/api/db/import", routes.api.db.import)
-router.get("/api/db/getuser", routes.api.db.getuser)
-router.post("/api/db/updateuser", routes.api.db.updateuser)
-router.post("/api/db/saveconfig", routes.api.db.saveconfig)
 router.get("/api/kite/order/create", routes.api.kite.order.create)
 router.get("/api/kite/login/success", routes.api.kite.login.success)
 router.get("/api/kite/instrument/quote", routes.api.kite.instrument.eod)
 router.get("/api/kite/instrument/eod", routes.api.kite.instrument.eod)
-router.post("/api/mutualfunds/compare", routes.api.mutualfunds.analyze)
+router.post("/api/mutualfunds/analyze", routes.api.mutualfunds.analyze)
 router.post("/api/mutualfunds/recommend", routes.api.mutualfunds.recommend)
 router.get("/api/mutualfunds/list", routes.api.mutualfunds.list)
-router.get("/api/mutualfunds/scrape", routes.api.mutualfunds.scrape)
+//router.get("/api/mutualfunds/scrape", routes.api.mutualfunds.scrape)
 router.post("/api/mutualfunds/categoryScrape", routes.api.mutualfunds.categoryScrape)
-router.post("/api/nse/receive", routes.api.nse.receive)
-router.post("/api/nse/announcements", routes.api.nse.announcements)
-router.post("/api/nse/process", routes.api.nse.process)
-router.get("/api/nse/insider", routes.api.nse.insider)
+//router.post("/api/nse/receive", routes.api.nse.receive)
+//router.post("/api/nse/announcements", routes.api.nse.announcements)
+//router.post("/api/nse/process", routes.api.nse.process)
+//router.get("/api/nse/insider", routes.api.nse.insider)
 router.get("/api/nse/scraper", routes.api.nse.scraper)
 router.get("/api/nse/instruments", routes.api.nse.instruments)
 router.get("/api/nse/summaries", routes.api.nse.summaries)
@@ -154,10 +142,6 @@ router.get("/api/indices/SHARIABEES", (req, res) => {res.status(200).json(routes
 router.get("/api/indices/SILVERBEES", (req, res) => {res.status(200).json(routes.api.indices.SILVERBEES)})
 router.get("/api/indices/SMALLCAP", (req, res) => {res.status(200).json(routes.api.indices.SMALLCAP)})
 router.get("/api/indices/TNIDETF", (req, res) => {res.status(200).json(routes.api.indices.TNIDETF)})
-
-//router.post("/api/mutualfunds/chatStream", routes.api.ollama.singleShotStream)
-//router.post("/api/ollama/promptInstruct", routes.api.ollama.promptInstruct)
-//router.post("/api/reasoning/promptChat", routes.api.ollama.promptInstruct)
 
 
 module.exports = router

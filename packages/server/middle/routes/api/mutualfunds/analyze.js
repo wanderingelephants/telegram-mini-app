@@ -10,12 +10,15 @@ const getLatestHoldings = (holdings, latestDate) => {
 };
 
 const calculateStockOverlap = (fund1, fund2) => {
+    console.log("calculateOverlap", fund1.mutual_fund_name, fund2.mutual_fund_name)
     const holdings1 = getLatestHoldings(fund1.mutual_fund_stock_holdings, getLatestHoldingsDate(fund1.mutual_fund_stock_holdings));
     const holdings2 = getLatestHoldings(fund2.mutual_fund_stock_holdings, getLatestHoldingsDate(fund2.mutual_fund_stock_holdings));
-    
-    const stocks1 = new Set(holdings1.map(h => h.stock_name));
-    const stocks2 = new Set(holdings2.map(h => h.stock_name));
-    
+    //console.log("holdings1", holdings1)
+    //console.log("holdings2", holdings2)
+    const stocks1 = new Set(holdings1.map(h => h.stock_mf.company_name));
+    const stocks2 = new Set(holdings2.map(h => h.stock_mf.company_name));
+    console.log("stocks1", stocks1)
+    console.log("stocks2", stocks2)
     const overlappingStocks = new Set([...stocks1].filter(x => stocks2.has(x)));
     
     // Calculate total percentage overlap
@@ -24,8 +27,8 @@ const calculateStockOverlap = (fund1, fund2) => {
     // Get detailed holdings for overlapping stocks
     const overlappingHoldings = Array.from(overlappingStocks).map(stock => ({
         stock_name: stock,
-        fund1_holding: holdings1.find(h => h.stock_name === stock)?.stock_holding_percentage_in_fund || 0,
-        fund2_holding: holdings2.find(h => h.stock_name === stock)?.stock_holding_percentage_in_fund || 0
+        fund1_holding: holdings1.find(h => h.stock_mf.company_name === stock)?.stock_holding_percentage_in_fund || 0,
+        fund2_holding: holdings2.find(h => h.stock_mf.company_name === stock)?.stock_holding_percentage_in_fund || 0
     }));
 
     return {
@@ -66,8 +69,8 @@ const calculateETFOverlap = (fund, compareFund) => {
         };
     }
     
-    const fundStocks = new Map(fundHoldings.map(h => [h.stock_name, h.stock_holding_percentage_in_fund]));
-    const compareStocks = new Map(compareHoldings.map(h => [h.stock_name, h.stock_holding_percentage_in_fund]));
+    const fundStocks = new Map(fundHoldings.map(h => [h.stock_mf.company_name, h.stock_holding_percentage_in_fund]));
+    const compareStocks = new Map(compareHoldings.map(h => [h.stock_mf.company_name, h.stock_holding_percentage_in_fund]));
     
     let overlapSum = 0;
     let fundSum = 0;
@@ -160,7 +163,7 @@ const calculatePortfolioDiversification = (fundList) => {
     });
 
     // Unique stocks analysis
-    const uniqueStocks = new Set(allHoldings.map(h => h.stock_name));
+    const uniqueStocks = new Set(allHoldings.map(h => h.stock_mf.company_name));
     
     // Sector breakdown
     const sectorBreakdown = _.chain(allHoldings)
