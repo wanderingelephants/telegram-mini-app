@@ -296,10 +296,12 @@ export default {
 
     async sendCompare() {
       console.log("this.selectedFunds", this.selectedFunds)
-      //const fundsToCompare = this.fundList.filter(f => this.selectedFunds.findIndex(s => s.id === f.id)>-1).map(f => f.name)
+      const fundsToCompare = this.fundList.filter(f => this.selectedFunds.indexOf(f.id)>-1).map(f => f.name)
+      console.log(fundsToCompare)
+      
       try {
         const response = await api.post("/api/mutualfunds/analyze", {
-          fundList: this.selectedFunds.map(f => f.name),
+          fundList: fundsToCompare,
         });
         this.compareData = response.data;
       } catch (error) {
