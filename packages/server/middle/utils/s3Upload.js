@@ -5,9 +5,6 @@ const dotenv = require ("dotenv");
 
 dotenv.config(); // Load AWS credentials from .env file
 
-const bucketName = process.env.AWS_S3_BUCKET_NAME; // Define in .env
-
-
 const s3 = new S3Client({ region: process.env.AWS_REGION });
 
 function determineContentType(filePath) {
@@ -31,7 +28,7 @@ function determineContentType(filePath) {
 
   return contentTypes[extension] || 'application/octet-stream';
 }
-async function uploadFileToS3(localBaseFolder, localRelativePath) {
+async function uploadFileToS3(bucketName, localBaseFolder, localRelativePath) {
   try {
       // Construct the full local file path
       const fullLocalPath = path.join(localBaseFolder, localRelativePath);

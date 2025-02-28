@@ -37,7 +37,7 @@ class InsiderScraper extends NSEScraper{
                     else {
                         await fetchPDF(announcement.ATTACHMENT, path.join(targetPath, fileName), SMART_PROXY_URL)
                         try {
-                            await uploadFileToS3(this.storage_dir, path.join(year, month, day, index, "xml", fileName))
+                            await uploadFileToS3("insidertradesnse", this.storage_dir, path.join(year, month, day, index, "xml", fileName))
                         }
                         catch (e) {
                             console.log("Upload to S3 failed")
