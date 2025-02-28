@@ -246,7 +246,7 @@ id
                     else {
                         await fetchPDF(announcement.ATTACHMENT, path.join(targetPath, fileName), SMART_PROXY_URL)
                         try {
-                            await uploadFileToS3("nseannouncements", this.storage_dir, path.join(year, month, day, index, "pdf", fileName))
+                            await uploadFileToS3("announcementsnse", this.storage_dir, path.join(year, month, day, index, "pdf", fileName))
                         }
                         catch (e) {
                             console.log("Upload to S3 failed")
