@@ -1,0 +1,8 @@
+CREATE VIEW latest_mutual_fund_holdings AS
+SELECT 
+    mutual_fund_id,
+    MAX(reporting_date) AS latest_reporting_date
+FROM 
+    mutual_fund_holdings
+GROUP BY 
+    mutual_fund_id;

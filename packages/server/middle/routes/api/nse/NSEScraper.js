@@ -33,6 +33,26 @@ const disclosures = {
           "column_headers": ["SYMBOL", "COMPANY NAME", "REGULATION","Name of the Acquirer/ Disposer","TYPE OF SECURITY", "NO. OF SECURITIES", "ACQUISTION/DISPOSAL", "PUBLISH DATE/TIME", "ATTACHMENT"]
         }
       }
+    },
+    "fifty_two_weeks_high": {
+        "storage_dir_suffix": process.env.NSE_52W_HIGH_LOW ? process.env.NSE_52W_HIGH_LOW : "nse_52w_high_low",
+        "disclosure_url": process.env.NSE_52W_HIGH_URL ? process.env.NSE_52W_HIGH_URL  : "https://www.nseindia.com/market-data/52-week-high-equity-market",
+        "tabs":{
+            "52week_high":{
+                "tableQuerySelector": "#cm_52week_high_table",
+                "column_headers": ["SYMBOL", "SERIES", "LTP", "CHANGE_PERCENT", "NEW_52W_HIGH", "PREV_HIGH", "PREV_HIGH_DATE"]
+            }
+        }
+    },
+    "fifty_two_weeks_low": {
+        "storage_dir_suffix": process.env.NSE_52W_HIGH_LOW ? process.env.NSE_52W_HIGH_LOW : "nse_52w_high_low",
+        "disclosure_url": process.env.NSE_52W_LOW_URL ? process.env.NSE_52W_LOW_URL  : "https://www.nseindia.com/market-data/52-week-low-equity-market",
+        "tabs":{
+            "52week_low":{
+                "tableQuerySelector": "#cm_52week_low_table",
+                "column_headers": ["SYMBOL", "SERIES", "LTP", "CHANGE_PERCENT", "NEW_52W_LOW", "PREV_LOW", "PREV_LOW_DATE"]
+            }
+        }
     }
   }
 class NSEScraper {
@@ -58,28 +78,12 @@ class NSEScraper {
         return [date.format("YYYY"), date.format("MM"), date.format("DD")];
     }
     
-    //tableQuerySelectors - {"sme": "#CFanncsmeTable", "equities": "#CFanncEquityTable"}
-    //headersForSegment = {"sme": ["SYMBOL", "COMPANY NAME", "SUBJECT", "DETAILS", "ATTACHMENT", "BROADCAST DATE/TIME"],
-    //"equities": ["SYMBOL", "COMPANY NAME", "SUBJECT", "DETAILS", "ATTACHMENT", "BROADCAST DATE/TIME"]}
     async scrapeTables() {
         //tableQuerySelectors, headersForSegment
         this.browser = await puppeteer.launch(launchOptions);
         this.page = await this.browser.newPage();
         await this.page.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36");
-/*"announcements": {
-      "storage_dir_suffix": "nse_announcements",
-      "disclosure_url": process.env.ANNOUNCEMENT_URL,
-      "tabs": {
-        "sme": {
-          "tableQuerySelector": "#CFanncsmeTable",
-          "column_headers": ["SYMBOL", "COMPANY NAME", "SUBJECT", "DETAILS", "ATTACHMENT", "BROADCAST DATE/TIME"]
-        },
-        "equities":{
-          "tableQuerySelector": "#CFanncEquityTable",
-          "column_headers": ["SYMBOL", "COMPANY NAME", "SUBJECT", "DETAILS", "ATTACHMENT", "BROADCAST DATE/TIME"]
-        }
-      }
-    }*/
+
         await this.page.goto(this.disclosureConfig.disclosure_url, { waitUntil: 'networkidle2' });
         await delay(10000);
         let documentLinksDownloaded = {}; //{ "sme": [], "equities": [] }

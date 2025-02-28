@@ -1,4 +1,7 @@
 - table:
+    name: config
+    schema: public
+- table:
     name: insider_trades
     schema: public
   object_relationships:

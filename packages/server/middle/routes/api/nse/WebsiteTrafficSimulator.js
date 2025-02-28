@@ -1,6 +1,6 @@
-const { DateTime } = require('luxon');
 const NSEScraper = require('./NSEScraper');
 const InsiderScraper = require('./InsiderScraper');
+const FiftyTwoWeekHighLowScraper = require("./FiftyTwoWeekHighLowScraper");
 const { getCurrentActivityBand } = require('../../../config/marketActivity');
 const path = require('path');
 const fs = require('fs');
@@ -162,6 +162,12 @@ class WebsiteTrafficSimulator extends NSEScraper {
                     break;
                 case "insider_trades" : 
                     simulators.push(new InsiderScraper(this.typeOfDisclosure, false, simulatorPdfs))
+                    break;
+                case "fifty_two_weeks_high" : 
+                    simulators.push(new FiftyTwoWeekHighLowScraper(this.typeOfDisclosure, false, simulatorPdfs))
+                    break;
+                case "fifty_two_weeks_low" : 
+                    simulators.push(new FiftyTwoWeekHighLowScraper(this.typeOfDisclosure, false, simulatorPdfs))
                     break;
             }
             
