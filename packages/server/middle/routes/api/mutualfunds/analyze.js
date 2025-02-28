@@ -200,6 +200,7 @@ const calculatePortfolioDiversification = (fundList) => {
 
 const route = async (req, res) => {
     const { fundList } = req.body;
+    console.log("analyze", fundList)
     const reportData = {};
     const compareResults = {
         overlaps: [],
@@ -211,7 +212,8 @@ const route = async (req, res) => {
 
     try {
         const mutual_fund_data = await getData(fundList, []);
-        const etf_data = await getData([], ["ETF"]);
+        console.log("mutual_fund_data", mutual_fund_data.length)
+        //const etf_data = await getData([], ["ETF"]);
         // Calculate pairwise overlaps
         for (let i = 0; i < mutual_fund_data.length; i++) {
             for (let j = i + 1; j < mutual_fund_data.length; j++) {
