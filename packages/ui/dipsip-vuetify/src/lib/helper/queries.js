@@ -8,11 +8,33 @@ const GET_STOCK_LIST = gql`
         }
     }
 `
-const INSERT_PORTLFOLIO_STOCK = gql`
-mutation InsertStockPortfolio($object: portfolio_stocks_insert_input!) {
-  insert_portfolio_stocks_one(object: $object) {
-    stock_id
+const GET_USER_MF_PORTFOLIO = gql `
+query  GetUserMFPortfolio($email: String!){
+        portfolio_mutual_funds(where: {user: {email : {_eq: $email}}}){
+						mutual_fund{
+              id
+              name
+              return_3Y
+              star_rating
+            }   
+  			}
+}
+`
+const INSERT_USER_MF_PORTFOLIO = gql`
+mutation InsertMFPortfolio($object: portfolio_mutual_funds_insert_input!) {
+  insert_portfolio_mutual_funds_one(object: $object) {
+    mutual_fund_id
     user_id
+  }
+}
+`
+const DELETE_USER_MF_PORTFOLIO = gql`
+mutation deleteUserMutualFundPortfolio($mutual_fund_id: Int!, $email: String!){
+  delete_portfolio_mutual_funds(where: {
+    mutual_fund_id: {_eq: $mutual_fund_id},
+    user: {email: {_eq: $email}}
+  }){
+    affected_rows
   }
 }
 `
@@ -24,6 +46,14 @@ query  GetUserStockPortfolio($email: String!){
               company_name
             }   
   			}
+}
+`
+const INSERT_PORTLFOLIO_STOCK = gql`
+mutation InsertStockPortfolio($object: portfolio_stocks_insert_input!) {
+  insert_portfolio_stocks_one(object: $object) {
+    stock_id
+    user_id
+  }
 }
 `
 const DELETE_USER_STOCK_PORTFOLIO = gql`
@@ -76,5 +106,5 @@ query UserStockPortfolio($email: String!, $fromDate: date!, $toDate: date!, $fro
 `
 export {
     GET_STOCK_LIST, INSERT_PORTLFOLIO_STOCK, GET_USER_STOCK_PORTFOLIO, DELETE_USER_STOCK_PORTFOLIO,
-    GET_PORTFOLIO_ANNOUNCEMENTS
+    GET_PORTFOLIO_ANNOUNCEMENTS, GET_USER_MF_PORTFOLIO, INSERT_USER_MF_PORTFOLIO, DELETE_USER_MF_PORTFOLIO
 }

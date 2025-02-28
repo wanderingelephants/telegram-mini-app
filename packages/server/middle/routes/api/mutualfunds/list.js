@@ -11,6 +11,7 @@ const route = async (req, res) => {
             query: `query mutual_funds{
   mutual_fund(where: 
             {mf_direct_variant_id:{_is_null:true}, aum: {_gt: 10}},order_by: {return_3Y: desc_nulls_last}){
+    id        
     name
     plan
     star_rating
@@ -22,7 +23,7 @@ const route = async (req, res) => {
   }
 }`, variables: {}
         })
-        const mutualFundList = gqlResp.data.mutual_fund.map(m => ({"name": m.name, "star_rating": m.star_rating ,"category": m.category, "aum": m.aum, "return_3Y": m.return_3Y}))
+        const mutualFundList = gqlResp.data.mutual_fund.map(m => ({"id": m.id, "name": m.name, "star_rating": m.star_rating ,"category": m.category, "aum": m.aum, "return_3Y": m.return_3Y}))
         
         res.status(200).json(mutualFundList);
     } catch (e) {

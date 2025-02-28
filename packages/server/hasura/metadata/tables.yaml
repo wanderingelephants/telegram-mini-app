@@ -47,6 +47,31 @@
           table:
             name: portfolio_mutual_funds
             schema: public
+  select_permissions:
+    - role: user
+      permission:
+        columns:
+          - aum
+          - category
+          - category_key
+          - expenses_ratio
+          - expenses_ratio_cat_avg
+          - id
+          - mf_direct_variant_id
+          - name
+          - plan
+          - return_10Y
+          - return_1Y
+          - return_1m
+          - return_1w
+          - return_2Y
+          - return_3Y
+          - return_3m
+          - return_5Y
+          - return_6m
+          - return_ytd
+          - star_rating
+        filter: {}
 - table:
     name: mutual_fund_holdings
     schema: public
@@ -70,6 +95,43 @@
     - name: user
       using:
         foreign_key_constraint_on: user_id
+  insert_permissions:
+    - role: user
+      permission:
+        check:
+          user:
+            email:
+              _eq: X-Hasura-User-Id
+        columns:
+          - purchase_date
+          - id
+          - mutual_fund_id
+          - units
+          - user_id
+          - created_at
+          - updated_at
+  select_permissions:
+    - role: user
+      permission:
+        columns:
+          - purchase_date
+          - id
+          - mutual_fund_id
+          - units
+          - user_id
+          - created_at
+          - updated_at
+        filter:
+          user:
+            email:
+              _eq: X-Hasura-User-Id
+  delete_permissions:
+    - role: user
+      permission:
+        filter:
+          user:
+            email:
+              _eq: X-Hasura-User-Id
 - table:
     name: portfolio_stocks
     schema: public
