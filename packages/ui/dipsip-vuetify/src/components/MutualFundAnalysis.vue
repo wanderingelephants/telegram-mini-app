@@ -176,9 +176,9 @@
         </v-data-table>
       </v-card-text>
     </v-card>
-    <v-card class="mt-4">
+   <!-- <v-card class="mt-4">
   <v-card-title class="text-h6">Similar ETFs</v-card-title>
-  <v-card-text>
+  v-card-text>
     <v-data-table
       :headers="etfRecommendationHeaders"
       :items="formattedEtfRecommendations"
@@ -203,8 +203,8 @@
         </v-chip>
       </template>
     </v-data-table>
-  </v-card-text>
-</v-card>
+  </v-card-text> 
+</v-card> -->
     <!-- Overlap Details Dialog -->
     <v-dialog v-model="showDialog" max-width="800px">
       <v-card>
@@ -409,7 +409,7 @@ export default {
         this.analysisReport.diversification.sector_breakdown
       ).map((sector) => sector.percentage);
     },
-    formattedEtfRecommendations() {
+    /*formattedEtfRecommendations() {
       const recommendations = [];
       console.log(this.analysisReport.recommendedETFs)
       Object.entries(this.analysisReport.recommendedETFs).forEach(
@@ -431,7 +431,7 @@ export default {
       );
       console.log("computed formattedEtfRecom", recommendations)
       return recommendations;
-    },
+    },*/
     sectorChartOptions() {
       return {
         chart: {

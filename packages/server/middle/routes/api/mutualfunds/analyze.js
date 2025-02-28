@@ -234,10 +234,10 @@ const route = async (req, res) => {
             }
         }
 
-        const recommendedETFs = {};
+        /*const recommendedETFs = {};
         for (const fund of mutual_fund_data) {
             recommendedETFs[fund.mutual_fund_name] = findRecommendedETFs(fund, etf_data);
-        }
+        }*/
         // Calculate diversification metrics
         const diversificationAnalysis = calculatePortfolioDiversification(mutual_fund_data);
         const performanceAnalysis = calculatePerformanceAnalysis(mutual_fund_data);
@@ -253,8 +253,8 @@ const route = async (req, res) => {
         reportData.diversification = diversificationAnalysis;
         reportData.expenses = expenseAnalysis;
         reportData.performanceAnalysis = performanceAnalysis;
-        reportData.recommendedETFs = recommendedETFs;
-        console.log(reportData.recommendedETFs)
+        //reportData.recommendedETFs = recommendedETFs;
+        //console.log(reportData.recommendedETFs)
 
         res.status(200).json(reportData);
     } catch (error) {
