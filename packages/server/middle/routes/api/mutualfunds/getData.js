@@ -1,7 +1,7 @@
 const Database = require('better-sqlite3');
 const db = new Database(process.env.SQLITE_DB + '/dipsip.db', {  });
 const {postToGraphQL} = require("../../../lib/helper")
-const getMutualFundsFiltered = `query getMutualFundsFiltered($fundList: [String!], $categoryList: [String!]) {
+const getMutualFundsFiltered = `query getMutualFundsFiltered($fundList: [String!], $categoryList: [String!], $reporting_date: date!) {
     mutual_fund(where: {
       _or: [
         {
@@ -30,7 +30,7 @@ const getMutualFundsFiltered = `query getMutualFundsFiltered($fundList: [String!
       mutual_fund_fee_percentage: expenses_ratio
       mutual_fund_category_fee_percentage: expenses_ratio_cat_avg
       mutual_fund_stock_holdings: mutual_fund_holdings(
-        order_by: { reporting_date: desc }
+        where:{reporting_date: {_gte: $reporting_date}}
       ) {
         stock_mf{
         company_name
@@ -43,7 +43,7 @@ const getMutualFundsFiltered = `query getMutualFundsFiltered($fundList: [String!
   }`
   
  
-  const getMutualFundsAll =`query getMutualFundsAll {
+  const getMutualFundsAll =`query getMutualFundsAll($reporting_date: date!) {
     mutual_fund (where: {mf_direct_variant_id:{_is_null:true}, aum: {_gt: 2000}}) {
       mutual_fund_name: name
       mutual_fund_category: category
@@ -57,7 +57,7 @@ const getMutualFundsFiltered = `query getMutualFundsFiltered($fundList: [String!
       mutual_fund_fee_percentage: expenses_ratio
       mutual_fund_category_fee_percentage: expenses_ratio_cat_avg
       mutual_fund_stock_holdings: mutual_fund_holdings(
-        order_by: { reporting_date: desc }
+        where:{reporting_date: {_gte: $reporting_date}}
       ) {
         stock_mf{
         company_name
@@ -97,7 +97,7 @@ const filtered_holdings = holding_data.filter(holding => {
 
 return filtered_holdings    
 }
-const getData = async (fundList = [], categoryList = []) => {
+const getData = async (fundList = [], categoryList = [], reporting_date="2025-01-31") => {
     try {
       // Choose which query to use based on filter lists
       const queryToUse = (fundList.length > 0 || categoryList.length > 0) 
@@ -108,7 +108,7 @@ const getData = async (fundList = [], categoryList = []) => {
       const variables = (fundList.length > 0 || categoryList.length > 0) 
         ? { fundList, categoryList }
         : {};
-      
+      variables["reporting_date"] = reporting_date
       const response = await postToGraphQL({
         query: queryToUse,
         variables
