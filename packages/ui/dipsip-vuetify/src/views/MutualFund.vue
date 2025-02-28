@@ -70,6 +70,7 @@
                 "
                 multiple
                 chips
+                return-object
                 closable-chips
                 persistent-hint
                 hint="Partial match works while typing e.g. 'Motilal Small'"
@@ -196,24 +197,26 @@ export default {
     },
     async updatePortfolio() {
       const previousStocks = new Set(this.portfolio.map((stock) => stock.id)); // Old selection
-      const currentStocks = this.selectedFunds;
-
+      const currentStocks = new Set(
+        this.selectedFunds.map((stock) => stock.id)
+      ); // New selection
       const inserts = this.selectedFunds.filter(
-        (stock) => !previousStocks.has(stock)
+        (stock) => !previousStocks.has(stock.id)
       );
-
       // Deletes: Stocks that are in `portfolio` but NOT in `selectedStocks`
-      const deletes = this.portfolio
-        .filter((stock) => currentStocks.indexOf(stock.id) == -1)
-        .map((o) => o.id);
-
+      const deletes = this.portfolio.filter(
+        (stock) => !currentStocks.has(stock.id)
+      );
+      console.log("inserts", inserts)
+      console.log("deletes", deletes)
+      
       for (const [index, item] of inserts.entries()) {
         try {
           const resp = await this.$apollo.query({
             query: INSERT_USER_MF_PORTFOLIO,
             variables: {
               object: {
-                mutual_fund_id: item,
+                mutual_fund_id: item.id,
                 user: {
                   data: {
                     email: this.userGoogle.email,
@@ -237,7 +240,7 @@ export default {
           const resp = await this.$apollo.query({
             query: DELETE_USER_MF_PORTFOLIO,
             variables: {
-              mutual_fund_id: item,
+              mutual_fund_id: item.id,
               email: this.userGoogle.email,
             },
             fetchPolicy: "no-cache",
@@ -295,13 +298,9 @@ export default {
     },
 
     async sendCompare() {
-      console.log("this.selectedFunds", this.selectedFunds)
-      const fundsToCompare = this.fundList.filter(f => this.selectedFunds.indexOf(f.id)>-1).map(f => f.name)
-      console.log(fundsToCompare)
-      
       try {
         const response = await api.post("/api/mutualfunds/analyze", {
-          fundList: fundsToCompare,
+          fundList: this.selectedFunds.map(f => f.name),
         });
         this.compareData = response.data;
       } catch (error) {
