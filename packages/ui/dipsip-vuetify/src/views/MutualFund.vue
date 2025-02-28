@@ -53,8 +53,8 @@
                 color="amber"
                 >Compare</v-btn
               >
-              <v-btn @click="updateWatchList" color="primary"
-                >Update Watch List</v-btn
+              <v-btn @click="updatePortfolio" class="ml-2" color="primary"
+                >Update Portfolio</v-btn
               >
               <v-autocomplete
                 v-model="selectedFunds"
@@ -194,7 +194,7 @@ export default {
       const searchWords = searchText.split(/\s+/);
       return searchWords.every((word) => itemText.includes(word));
     },
-    async updateWatchList() {
+    async updatePortfolio() {
       const previousStocks = new Set(this.portfolio.map((stock) => stock.id)); // Old selection
       const currentStocks = this.selectedFunds;
 
@@ -295,9 +295,10 @@ export default {
     },
 
     async sendCompare() {
+      const fundsToCompare = this.fundList.filter(f => this.selectedFunds.findIndex(s => s.id === f.id)>-1).map(f => f.name)
       try {
         const response = await api.post("/api/mutualfunds/analyze", {
-          fundList: this.selectedFunds,
+          fundList: fundsToCompare,
         });
         this.compareData = response.data;
       } catch (error) {
