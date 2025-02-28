@@ -11,7 +11,7 @@ const SMART_PROXY_URL = process.env.SMART_PROXY_URL
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 const disclosures = {
     "announcements": {
-      "storage_dir_suffix": "nse_announcements",
+      "storage_dir_suffix": process.env.NSE_ANNOUNCEMENTS ? process.env.NSE_ANNOUNCEMENTS : "nse_announcements",
       "disclosure_url": process.env.NSE_ANNOUNCEMENT_URL,
       "tabs": {
         "sme": {
@@ -25,7 +25,7 @@ const disclosures = {
       }
     },
     "insider_trades": {
-      "storage_dir_suffix": "nse_insider_trades",
+      "storage_dir_suffix": process.env.NSE_INSIDER_TRADES ? process.env.NSE_INSIDER_TRADES : "nse_insider_trades",
       "disclosure_url": process.env.NSE_INSIDER_TRADES_URL,
       "tabs":{
         "insider_trades": {
