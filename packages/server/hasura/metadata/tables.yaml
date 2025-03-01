@@ -2,6 +2,13 @@
     name: config
     schema: public
 - table:
+    name: fifty_two_week_high_low
+    schema: public
+  object_relationships:
+    - name: stock
+      using:
+        foreign_key_constraint_on: stock_id
+- table:
     name: insider_trades
     schema: public
   object_relationships:
@@ -191,6 +198,13 @@
     name: stock
     schema: public
   array_relationships:
+    - name: fifty_two_week_high_lows
+      using:
+        foreign_key_constraint_on:
+          column: stock_id
+          table:
+            name: fifty_two_week_high_low
+            schema: public
     - name: insider_trades
       using:
         foreign_key_constraint_on:

@@ -35,6 +35,7 @@ const disclosures = {
       }
     },
     "fifty_two_weeks_high": {
+        "as_on_date_time_selector": ".asondatetime",
         "storage_dir_suffix": process.env.NSE_52W_HIGH_LOW ? process.env.NSE_52W_HIGH_LOW : "nse_52w_high_low",
         "disclosure_url": process.env.NSE_52W_HIGH_URL ? process.env.NSE_52W_HIGH_URL  : "https://www.nseindia.com/market-data/52-week-high-equity-market",
         "tabs":{
@@ -45,6 +46,7 @@ const disclosures = {
         }
     },
     "fifty_two_weeks_low": {
+        "as_on_date_time_selector": ".asondatetime",
         "storage_dir_suffix": process.env.NSE_52W_HIGH_LOW ? process.env.NSE_52W_HIGH_LOW : "nse_52w_high_low",
         "disclosure_url": process.env.NSE_52W_LOW_URL ? process.env.NSE_52W_LOW_URL  : "https://www.nseindia.com/market-data/52-week-low-equity-market",
         "tabs":{
@@ -89,6 +91,7 @@ class NSEScraper {
         let documentLinksDownloaded = {}; //{ "sme": [], "equities": [] }
         this.tableKeys.forEach(k => documentLinksDownloaded[k] = [])
         let tableData = []
+        
         tableData = await this.page.evaluate((disclosureConfig) => {
             const columnHeaders = {}
             const tables = {}
@@ -96,10 +99,12 @@ class NSEScraper {
             tableKeys.forEach(k => tables[k] = document.querySelector(disclosureConfig.tabs[k].tableQuerySelector))
             tableKeys.forEach(k => columnHeaders[k] = disclosureConfig.tabs[k].column_headers)
             
-            /*const tables = {
-                equities: document.querySelector('#CFanncEquityTable'),
-                sme: document.querySelector('#CFanncsmeTable')
-            };*/
+            let asondatetime;
+            if (disclosureConfig.as_on_date_time_selector){
+                    const element = document.querySelector('.asondatetime');
+                    asondatetime = element ? element.textContent.trim() : null;
+            }
+            console.log("asondatetime", asondatetime)
             let data = {}; //{ sme: [], equities: [] }
             tableKeys.forEach(k => data[k] = [])
             for (const key of tableKeys) {
@@ -149,7 +154,10 @@ class NSEScraper {
                                 record[header] = '';
                             }
                         });
-
+                        if (disclosureConfig.as_on_date_time_selector){
+                            record["AS_ON_DATE_TIME"] = asondatetime
+                        }
+                        console.log("parsed record", record)
                         return record; // Make sure to return the record object
                     });
 
@@ -162,8 +170,8 @@ class NSEScraper {
             }
             return data;
         }, this.disclosureConfig);
-        this.browser.close()
-        //console.log("tableData", tableData)
+        //this.browser.close()
+        console.log("tableData", tableData)
         if (this.isMaster) return tableData
         console.log("Child Simulator processTableData", this.disclosureConfig)
         documentLinksDownloaded = await this.processTableData(tableData, this.tableKeys)
