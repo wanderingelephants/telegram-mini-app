@@ -79,7 +79,11 @@ class NSEScraper {
         const date = moment(dateStr, "DD-MMM-YYYY HH:mm:ss");
         return [date.format("YYYY"), date.format("MM"), date.format("DD")];
     }
-    
+    parseNumber(value){
+        if (typeof value !== 'string') return isNaN(value) ? 0 : value;
+        const num = parseFloat(value.replace(/,/g, ''));
+        return isNaN(num) ? 0 : num;
+    };
     async scrapeTables() {
         //tableQuerySelectors, headersForSegment
         this.browser = await puppeteer.launch(launchOptions);
