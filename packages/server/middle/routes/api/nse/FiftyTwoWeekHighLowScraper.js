@@ -1,4 +1,4 @@
-const { DateTime } = require('luxon');
+const moment = require('moment');
 const path = require('path');
 const fs = require('fs');
 const { postToGraphQL } = require("../../../lib/helper")
