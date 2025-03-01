@@ -39,7 +39,7 @@ const disclosures = {
         "storage_dir_suffix": process.env.NSE_52W_HIGH_LOW ? process.env.NSE_52W_HIGH_LOW : "nse_52w_high_low",
         "disclosure_url": process.env.NSE_52W_HIGH_URL ? process.env.NSE_52W_HIGH_URL  : "https://www.nseindia.com/market-data/52-week-high-equity-market",
         "tabs":{
-            "52week_high":{
+            "fifty_two_weeks_high":{
                 "tableQuerySelector": "#cm_52week_high_table",
                 "column_headers": ["SYMBOL", "SERIES", "LTP", "CHANGE_PERCENT", "NEW_52W_HIGH", "PREV_HIGH", "PREV_HIGH_DATE"]
             }
@@ -50,7 +50,7 @@ const disclosures = {
         "storage_dir_suffix": process.env.NSE_52W_HIGH_LOW ? process.env.NSE_52W_HIGH_LOW : "nse_52w_high_low",
         "disclosure_url": process.env.NSE_52W_LOW_URL ? process.env.NSE_52W_LOW_URL  : "https://www.nseindia.com/market-data/52-week-low-equity-market",
         "tabs":{
-            "52week_low":{
+            "fifty_two_weeks_low":{
                 "tableQuerySelector": "#cm_52week_low_table",
                 "column_headers": ["SYMBOL", "SERIES", "LTP", "CHANGE_PERCENT", "NEW_52W_LOW", "PREV_LOW", "PREV_LOW_DATE"]
             }
