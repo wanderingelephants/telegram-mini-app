@@ -21,7 +21,8 @@ class FiftyTwoWeekHighLowScraper extends NSEScraper {
             "object": {
               "stock": {
                 "data": {
-                  "symbol": announcement.SYMBOL
+                  "symbol": announcement.SYMBOL,
+                  "company_name": announcement.SYMBOL
                 },
                 "on_conflict": {
                   "constraint": "stock_symbol_key",
