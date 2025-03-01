@@ -35,7 +35,7 @@ class FiftyTwoWeekHighLowScraper extends NSEScraper {
               "prev_high_low": "fifty_two_weeks_high" ? this.parseNumber(announcement.PREV_HIGH.replace(/,/g, '')) : this.parseNumber(announcement.PREV_LOW.replace(/,/g, '')),
               "prev_high_low_date": index === "fifty_two_weeks_high" ? announcement.PREV_HIGH_DATE : announcement.PREV_LOW_DATE,
               "is_high": index === "fifty_two_weeks_high" ? true:false,
-              "reporting_date": `${year}-${month}-${day}`
+              "reporting_date": moment(`${year}-${month}-${day}`, "yyyy-mm-dd")
             }
           }
         await postToGraphQL({
@@ -49,7 +49,6 @@ class FiftyTwoWeekHighLowScraper extends NSEScraper {
         if (!tableData) {
             return ""
         }
-        console.log("tableData", tableData)
         for (const index of keys) {
             if (tableData[index].length == 0) continue;
             const [year, month, day] =  this.extractDateComponents(tableData[index][0]["AS_ON_DATE_TIME"])
@@ -62,7 +61,6 @@ class FiftyTwoWeekHighLowScraper extends NSEScraper {
                 continue
             }
             for (const announcement of tableData[index]) {
-                console.log(announcement)
                 fs.appendFileSync(dataFilePath, JSON.stringify(announcement))
                 /*try {
                     await uploadFileToS3("fifty_two_week_high_low", this.storage_dir, path.join(year, month, day, index, fileName))
