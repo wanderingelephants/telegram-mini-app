@@ -32,7 +32,7 @@ class FiftyTwoWeekHighLowScraper extends NSEScraper {
               "ltp": this.parseNumber(announcement.LTP.replace(/,/g, '')),
               "change_percent": announcement.CHANGE_PERCENT,
               "new_high_low": index === "fifty_two_weeks_high" ? this.parseNumber(announcement.NEW_52W_HIGH.replace(/,/g, '')) : this.parseNumber(announcement.NEW_52W_LOW.replace(/,/g, '')),
-              "prev_high_low": "fifty_two_weeks_high" ? this.parseNumber(announcement.PREV_HIGH.replace(/,/g, '')) : this.parseNumber(announcement.PREV_LOW.replace(/,/g, '')),
+              "prev_high_low": index === "fifty_two_weeks_high" ? this.parseNumber(announcement.PREV_HIGH.replace(/,/g, '')) : this.parseNumber(announcement.PREV_LOW.replace(/,/g, '')),
               "prev_high_low_date": index === "fifty_two_weeks_high" ? announcement.PREV_HIGH_DATE : announcement.PREV_LOW_DATE,
               "is_high": index === "fifty_two_weeks_high" ? true:false,
               "reporting_date": moment(`${year}-${month}-${day}`, "yyyy-mm-dd")

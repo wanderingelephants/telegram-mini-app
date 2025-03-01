@@ -108,7 +108,6 @@ class NSEScraper {
                     const element = document.querySelector('.asondatetime');
                     asondatetime = element ? element.textContent.trim() : null;
             }
-            console.log("asondatetime", asondatetime)
             let data = {}; //{ sme: [], equities: [] }
             tableKeys.forEach(k => data[k] = [])
             for (const key of tableKeys) {
@@ -175,7 +174,6 @@ class NSEScraper {
             return data;
         }, this.disclosureConfig);
         //this.browser.close()
-        console.log("tableData", tableData)
         if (this.isMaster) return tableData
         console.log("Child Simulator processTableData", this.disclosureConfig)
         documentLinksDownloaded = await this.processTableData(tableData, this.tableKeys)
