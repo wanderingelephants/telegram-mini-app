@@ -33,8 +33,21 @@
           - value_of_securities_transacted
         filter: {}
 - table:
+    name: latest_and_previous_mutual_fund_holding_dates
+    schema: public
+- table:
     name: mutual_fund
     schema: public
+  object_relationships:
+    - name: mutual_fund_reporting_dates
+      using:
+        manual_configuration:
+          column_mapping:
+            id: mutual_fund_id
+          insertion_order: null
+          remote_table:
+            name: latest_and_previous_mutual_fund_holding_dates
+            schema: public
   array_relationships:
     - name: mutual_fund_holdings
       using:
