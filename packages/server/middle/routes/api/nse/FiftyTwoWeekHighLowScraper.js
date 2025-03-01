@@ -29,10 +29,10 @@ class FiftyTwoWeekHighLowScraper extends NSEScraper {
                   "update_columns": ["symbol"]
                 }
               },
-              "ltp": announcement.LTP,
+              "ltp": parseNumber(announcement.LTP.replace(/,/g, '')),
               "change_percent": announcement.CHANGE_PERCENT,
-              "new_high_low": index === "fifty_two_weeks_high" ? announcement.NEW_52W_HIGH : announcement.NEW_52W_LOW,
-              "prev_high_low": "fifty_two_weeks_high" ? announcement.PREV_HIGH : announcement.PREV_LOW,
+              "new_high_low": index === "fifty_two_weeks_high" ? parseNumber(announcement.NEW_52W_HIGH.replace(/,/g, '')) : parseNumber(announcement.NEW_52W_LOW.replace(/,/g, '')),
+              "prev_high_low": "fifty_two_weeks_high" ? parseNumber(announcement.PREV_HIGH.replace(/,/g, '')) : parseNumber(announcement.PREV_LOW.replace(/,/g, '')),
               "prev_high_low_date": index === "fifty_two_weeks_high" ? announcement.PREV_HIGH_DATE : announcement.PREV_LOW_DATE,
               "is_high": index === "fifty_two_weeks_high" ? true:false,
               "reporting_date": `${year}-${month}-${day}`
