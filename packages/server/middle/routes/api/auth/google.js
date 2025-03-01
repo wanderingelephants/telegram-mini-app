@@ -1,5 +1,3 @@
-const Database = require('better-sqlite3');
-const db = new Database(process.env.SQLITE_DB + '/dipsip.db', { verbose: console.log });
 const admin = require('firebase-admin');
 const config = process.env.CONFIG
 const serviceAccount = require(`${config}/firebase-admin.json`)

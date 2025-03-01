@@ -1,7 +1,0 @@
-While SIP (System Investment Plan) have long been touted as disciplined way to invest, because they do Rupee Cost Averaging, there 
-are more efficient ways of investing in a disciplined way.
-A powerful variant of SIP is DipSIP, basically Systematic Investment Plans around DIPs in the market. 
-i.e. you invest when market corrects. And if market correction is bigger, you increase the allocation further.
-This works really well for Index strategies and ETFs that are traded on the exchanges, offering investors volatile periods where dips can be purchased.
-In the long run for a growing economy like India, Indexes like NIFTY, Bank Nifty or Nifty Small Cap, will continue to grow over 3-5 years period.
-So, whenever there is a dip, go ahead and buy.

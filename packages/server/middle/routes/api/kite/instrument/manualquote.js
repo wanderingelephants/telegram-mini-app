@@ -50,35 +50,7 @@ const manualquote = async (instrumentList, sendNotification) => {
     let jsonResp = []
     const tod = new Date(); tod.setHours(0, 0, 0, 0);
     console.log("fetch users and notify them on TG")
-    const db_path = process.env.SQLITE_DB + '/dipsip.db'
-    const options = { fileMustExist: true }
-    const db = require('better-sqlite3')(db_path, options)
     
-    
-    const users = db.prepare('select profile.tg_id, cfg.trigger, cfg.base_amt, cfg.buy_factor, cfg.instrument from user_config cfg, user_profile profile where cfg.user_id=profile.id').all()
-    for (const user of users) {
-        let querystring = ''
-        let count = 0
-        for (const instr of instrumentList) {
-            const { last_price, close_price } = instrData.filter(i => i.instr == instr)[0]
-            const percentageOverClose = (last_price - close_price) * 100 / close_price
-            console.log({ instr, last_price, close_price, percentageOverClose, sendNotification })
-            jsonResp.push({
-                instr, last_price, close_price
-            })
-            if (percentageOverClose < -1 * user.trigger &&  user.instrument && user.instrument.indexOf(instr) > -1) {
-                const limit_price = (close_price * (100 - user.trigger * 1) / 100)
-                const amt = user.base_amt * Math.pow(user.buy_factor * 1, (user.trigger * -1) - percentageOverClose)
-                const quantity = (amt / limit_price)
-                
-                querystring += count === 0 ? '?' : '&'
-                querystring += 'i=' + instr + '&quantity=' + quantity.toFixed(0) + '&price=' + limit_price.toFixed(2)
-                count++
-            }
-        }
-        console.log(user.tg_id,"querystring", querystring)
-        await sendTelegramMessage(user.tg_id, 'Alert : ' + process.env.WEB_APP_HOST + 'trade' + querystring, sendNotification)
-    }
     return jsonResp
 }
 module.exports = manualquote

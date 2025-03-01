@@ -52,44 +52,7 @@ class ProcessETFQuotes {
                 etfList.map((_) => _.symbol).indexOf(record.symbol) > -1
         );
         console.log("Filtered Data", data.map(_ => _.symbol))
-
-        const db_path = process.env.SQLITE_DB + '/dipsip.db'
-        const options = { fileMustExist: true }
-        const db = require('better-sqlite3')(db_path, options)
         
-        const users = db.prepare('select profile.tg_id, cfg.trigger, cfg.base_amt, cfg.buy_factor, cfg.instrument from user_config cfg, user_profile profile where cfg.user_id=profile.id').all()
-        const tgNotify = new TelegramNotify()
-
-        for (const user of users) {
-            console.log('user', user)
-            const instrumentsToAlertForUser = []
-            for (const instrument of data) {
-                console.log('checking', instrument.symbol, user.instrument, user.instrument.indexOf(instrument.symbol))
-                if (user.instrument && (user.instrument.indexOf(instrument.symbol) > -1)) {
-                    console.log("Instrument MATCH", instrument.symbol)
-                    const userTrigger = parseFloat(user.trigger)
-                    const instrumentChangePercent = parseFloat(instrument.per)
-                    console.log('user subscribed to ', instrument.symbol, user.trigger, instrumentChangePercent)
-                    if (instrumentChangePercent < userTrigger * -1) {
-                        instrumentsToAlertForUser.push({
-                            symbol: instrument.symbol,
-                            base_amt: user.base_amt,
-                            buy_factor: user.buy_factor,
-                            trigger: user.trigger,
-                            price: instrument.ltP,
-                            change: instrumentChangePercent,
-                            prevClose: instrument.prevClose
-                        })
-                    }
-                }
-            }
-            console.log("instrumentsToAlertForUser", instrumentsToAlertForUser)
-            const querystring = this.getQueryString(instrumentsToAlertForUser)
-            if (instrumentsToAlertForUser.length > 0)
-                await tgNotify.sendTelegramMessage(user.tg_id, 'DipSip Opporunities : ' + process.env.WEB_APP_HOST + 'trade' + querystring)
-            console.log("done loop")
-        }
-        console.log("processing done")
     }
 }
 module.exports = ProcessETFQuotes

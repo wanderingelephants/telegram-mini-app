@@ -94,10 +94,6 @@ const routes = {
             insider: require("./api/nse/process_insider_csv"),
             scraper: require("./api/nse/scraper")
         },
-        /*ollama:{
-            singleShotStream: require("./api/ollama/singleShotStream"),
-            promptInstruct: require("./api/ollama/question"),
-        },*/
         telegram:{
             auth: require("./api/telegram/auth")
         },

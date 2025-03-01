@@ -1,5 +1,3 @@
-const Database = require('better-sqlite3');
-const db = new Database(process.env.SQLITE_DB + '/dipsip.db', {  });
 const {postToGraphQL} = require("../../../lib/helper")
 const getMutualFundsFiltered = `query getMutualFundsFiltered($fundList: [String!], $categoryList: [String!], $reporting_date: date!) {
     mutual_fund(where: {

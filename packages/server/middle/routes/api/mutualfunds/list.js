@@ -1,7 +1,5 @@
 const fs = require('fs').promises;
 const path = require('path');
-const Database = require('better-sqlite3');
-const db = new Database(process.env.SQLITE_DB + '/dipsip.db', { verbose: console.log });
 const {postToGraphQL} = require("../../../lib/helper")
 
 const route = async (req, res) => {
