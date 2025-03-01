@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
-const baseFolder = process.env.DOWNLOADS + '/moneycontrol'
+const baseFolder = process.env.DATA_ROOT_FOLDER + '/moneycontrol'
 const Database = require('better-sqlite3');
 const db = new Database(process.env.SQLITE_DB + '/dipsip.db', { verbose: console.log });
 const {upsertHoldings, isValidHolding} = require('./data-loader')

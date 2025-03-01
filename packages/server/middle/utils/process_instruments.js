@@ -5,17 +5,8 @@ const CSVProcessor = require('./CSVProcessor');
 async function processInstruments(){
     const processor = new CSVProcessor();
     
-    // Process from file
-    //await processor.processFile(process.env.DOWNLOADS + '/instruments.csv');
-    
-    // Or process from string
-    
-    // Get all records
-    //const records = processor.getRecords();
-    //console.log(records.length);
-    const records = require(process.env.DOWNLOADS + "/equities.json")
+    const records = require(process.env.DATA_ROOT_FOLDER + "/equities.json")
     const equities = records.filter(r => r.instrument_type === "EQ" &&  r.segment === "NSE")
-    //const equities = require(process.env.DOWNLOADS + "/equities.json")
     console.log(equities.length)
     function groupStockCategories(stockData) {
       return Object.entries(stockData.map(stock => {
@@ -40,9 +31,6 @@ async function processInstruments(){
 
 let filtered = filterStockCategories(equities)
   console.log(filtered.length)
-  //console.log(groupStockCategories(equities));
-    //console.log(JSON.stringify(filtered))
-    //if  (true) return
     const stockResp = await postToGraphQL({
         query: `query GetEquitySymbols{
   stock{

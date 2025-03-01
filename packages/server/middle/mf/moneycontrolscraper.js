@@ -3,7 +3,7 @@ const fs = require('fs');
 // Utility function for delays
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-const outputFolder =  process.env.DOWNLOADS + '/moneycontrol'
+const outputFolder =  process.env.DATA_ROOT_FOLDER + '/moneycontrol'
 if (!fs.existsSync(outputFolder)) fs.mkdirSync(outputFolder)
 // List of mutual fund categories to scrape
 const FUND_CATEGORIES = [

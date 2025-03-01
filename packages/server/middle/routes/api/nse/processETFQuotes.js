@@ -4,7 +4,7 @@ const TG_ADMIN_ID = process.env.TG_ADMIN_ID
 const etfList = require('./etfList.json')
 const Puppet = require('./puppet.js')
 
-const downloadPath = process.env.DOWNLOADS + '/etf_quotes'
+const downloadPath = process.env.DATA_ROOT_FOLDER + '/etf_quotes'
 
 class ProcessETFQuotes {
     constructor(baseUrl, urlSuffix, etfQuoteFileName) {
