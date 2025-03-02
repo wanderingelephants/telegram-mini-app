@@ -12,13 +12,13 @@ const cookieParser = require('cookie-parser');
 const WebsiteTrafficSimulator = require("./routes/api/nse/WebsiteTrafficSimulator")
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-cron.schedule('15 * * * *', async () => {
+cron.schedule('55 * * * *', async () => {
   if (!process.env.PDF_PROCESS_URL) {
     console.log("PDF_PROCESS_URL not  defined")
     return
   }
   console.log('Starting traffic simulation at:', new Date().toISOString());
-  const simulator = new WebsiteTrafficSimulator();
+  const simulator = new WebsiteTrafficSimulator("insider_trades", true, []);
   await simulator.simulateTraffic();
   console.log('Done traffic simulation at:', new Date().toISOString());
 }, { timezone: "Asia/Kolkata" });
@@ -36,7 +36,7 @@ cron.schedule('*/15 * * * *', async () => {
     const now = DateTime.now().setZone('Asia/Kolkata');
     const date = now.toFormat('yyyy-MM-dd');
     const [year, month, day] = date.split('-');
-    const announcement_dir = path.join(process.env.DATA_ROOT_FOLDER, process.env.NSE_ANNOUNCEMENTS);
+    const announcement_dir = path.join(process.env.DATA_ROOT_FOLDER, process.env.NSE_ANNOUNCEMENTS ? process.env.NSE_ANNOUNCEMENTS : "nse_announcements");
 
     for (const index of ['equities', 'sme']) {
       const txtPath = path.join(year, month, day, index, "txt")
