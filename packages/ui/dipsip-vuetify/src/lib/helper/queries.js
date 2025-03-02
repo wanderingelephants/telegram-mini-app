@@ -16,8 +16,16 @@ query  GetUserMFPortfolio($email: String!){
               name
               return_3Y
               star_rating
+              isDipSipETF
             }   
   			}
+            users(where: {email: {_eq: $email}}){
+    user_configs{
+      key
+      value
+    }
+    }
+  
 }
 `
 const INSERT_USER_MF_PORTFOLIO = gql`
@@ -44,7 +52,7 @@ query  GetUserStockPortfolio($email: String!){
 						stock{
               id
               company_name
-            }   
+            }
   			}
 }
 `
@@ -62,6 +70,23 @@ mutation deleteUserStockPortfolio($stock_id: Int!, $email: String!){
     stock_id: {_eq: $stock_id},
     user: {email: {_eq: $email}}
   }){
+    affected_rows
+  }
+}
+`
+const INSERT_USER_CONFIG = gql`
+mutation  insertUserConfig($object: user_config_insert_input!){
+  insert_user_config_one(object: $object, on_conflict:{
+    constraint: user_config_key_user_id_key,
+    update_columns: [value]
+  }){
+    id
+  }
+}
+`
+const DELETE_USER_CONFIG = gql `
+mutation deleteUserConfig($email: String!, $key: String!){
+  delete_user_config(where: {key: {_eq: $key},user:  {email: {_eq: $email}}}){
     affected_rows
   }
 }
@@ -106,5 +131,6 @@ query UserStockPortfolio($email: String!, $fromDate: date!, $toDate: date!, $fro
 `
 export {
     GET_STOCK_LIST, INSERT_PORTLFOLIO_STOCK, GET_USER_STOCK_PORTFOLIO, DELETE_USER_STOCK_PORTFOLIO,
-    GET_PORTFOLIO_ANNOUNCEMENTS, GET_USER_MF_PORTFOLIO, INSERT_USER_MF_PORTFOLIO, DELETE_USER_MF_PORTFOLIO
+    GET_PORTFOLIO_ANNOUNCEMENTS, GET_USER_MF_PORTFOLIO, INSERT_USER_MF_PORTFOLIO, DELETE_USER_MF_PORTFOLIO,
+    INSERT_USER_CONFIG, DELETE_USER_CONFIG
 }

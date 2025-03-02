@@ -4,11 +4,11 @@ const {postToGraphQL} = require("../../../lib/helper")
 
 const route = async (req, res) => {
     try {
-        //const dbResp = db.prepare('SELECT * FROM mutual_fund order by return_3Y desc').all();
+        const isDipSipETF = "true" === req.query.isDipSipETF ? true : false 
         const gqlResp = await postToGraphQL({
             query: `query mutual_funds{
   mutual_fund(where: 
-            {mf_direct_variant_id:{_is_null:true}, aum: {_gt: 10}},order_by: {return_3Y: desc_nulls_last}){
+            {isDipSipETF: {_eq: ${isDipSipETF}}, mf_direct_variant_id:{_is_null:true}},order_by: {return_3Y: desc_nulls_last}){
     id        
     name
     plan

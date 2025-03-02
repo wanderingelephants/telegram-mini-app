@@ -1,0 +1,1 @@
+CREATE TABLE "public"."user_config" ("id" serial NOT NULL, "key" text NOT NULL, "value" text NOT NULL, "user_id" integer NOT NULL, PRIMARY KEY ("id") , FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON UPDATE restrict ON DELETE restrict, UNIQUE ("key", "user_id"));

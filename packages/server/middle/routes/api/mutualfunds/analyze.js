@@ -10,15 +10,10 @@ const getLatestHoldings = (holdings, latestDate) => {
 };
 
 const calculateStockOverlap = (fund1, fund2) => {
-    console.log("calculateOverlap", fund1.mutual_fund_name, fund2.mutual_fund_name)
     const holdings1 = getLatestHoldings(fund1.mutual_fund_stock_holdings, getLatestHoldingsDate(fund1.mutual_fund_stock_holdings));
     const holdings2 = getLatestHoldings(fund2.mutual_fund_stock_holdings, getLatestHoldingsDate(fund2.mutual_fund_stock_holdings));
-    //console.log("holdings1", holdings1)
-    //console.log("holdings2", holdings2)
     const stocks1 = new Set(holdings1.map(h => h.stock_mf.company_name));
     const stocks2 = new Set(holdings2.map(h => h.stock_mf.company_name));
-    console.log("stocks1", stocks1)
-    console.log("stocks2", stocks2)
     const overlappingStocks = new Set([...stocks1].filter(x => stocks2.has(x)));
     
     // Calculate total percentage overlap

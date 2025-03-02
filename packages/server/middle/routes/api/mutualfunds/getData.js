@@ -1,6 +1,6 @@
 const {postToGraphQL} = require("../../../lib/helper")
 const getMutualFundsFiltered = `query getMutualFundsFiltered($fundList: [String!], $categoryList: [String!], $reporting_date: date!) {
-    mutual_fund(where: {
+    mutual_fund(where: {isDipSipETF: {_eq: false},
       _or: [
         {
           _and: [
@@ -42,7 +42,7 @@ const getMutualFundsFiltered = `query getMutualFundsFiltered($fundList: [String!
   
  
   const getMutualFundsAll =`query getMutualFundsAll($reporting_date: date!) {
-    mutual_fund (where: {mf_direct_variant_id:{_is_null:true}, aum: {_gt: 2000}}) {
+    mutual_fund (where: {isDipSipETF: {_eq: false}, mf_direct_variant_id:{_is_null:true}, aum: {_gt: 2000}}) {
       mutual_fund_name: name
       mutual_fund_category: category
       mutual_fund_star_rating: star_rating

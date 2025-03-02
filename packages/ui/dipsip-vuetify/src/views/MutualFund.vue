@@ -2,17 +2,6 @@
   <v-responsive>
     <v-container fluid class="fill-height pa-0">
       <v-row no-gutters class="fill-height">
-        <!--<v-col
-            cols="12"
-            md="6"
-            order="first"
-            order-md="first"
-            class="left-panel"
-          >
-          
-       <prompt-chat :distilledModel="distilledModel" :title="title" :subTitles="subTitles" :userInputLabel="userInputLabel" :debug="debug"></prompt-chat>
-          
-      </v-col> -->
         <v-col cols="12">
           <google-sign-in />
           <v-card-text v-if="loggedInGoogle === true"
@@ -74,7 +63,7 @@
                 closable-chips
                 persistent-hint
                 hint="Partial match works while typing e.g. 'Motilal Small'"
-                @update:model-value="handleFundSelection"
+                
                 :search="searchText"
                 @update:search="handleSearch"
               >
@@ -119,7 +108,6 @@ import {
 import GoogleSignIn from "../components/GoogleSignIn";
 import api from "./api";
 import MutualFundAnalysis from "../components/MutualFundAnalysis.vue";
-//import PromptChat from "./Assistant.vue"
 
 export default {
   name: "ChatApp",
@@ -260,7 +248,7 @@ export default {
           },
         });
         //console.log("resp", resp.data.portfolio_mutual_funds)
-        this.selectedMFs = resp.data.portfolio_mutual_funds.map((m) => {
+        this.selectedMFs = resp.data.portfolio_mutual_funds.filter(m => m.mutual_fund.isDipSipETF === false).map((m) => {
           let returnsLabel = m.mutual_fund.return_3Y
             ? " (3 Y Returns " + m.mutual_fund.return_3Y + " %)"
             : "";
@@ -280,7 +268,7 @@ export default {
     },
     async fetchFundList() {
       try {
-        const response = await api.get("/api/mutualfunds/list");
+        const response = await api.get("/api/mutualfunds/list?isDipSipETF=false");
         this.fundList = response.data.map((m) => {
           let returnsLabel = m.return_3Y
             ? " (3 Y Returns " + m.return_3Y + " %)"
