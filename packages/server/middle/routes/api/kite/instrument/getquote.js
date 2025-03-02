@@ -15,7 +15,7 @@ async function sendTelegramMessage(userId, message, sendNotification) {
         console.error('Error sending message:', error)
     }
 }
-let getquote = async (instrumentList, sendNotification) => {
+let getquote = async (instrumentList) => {
     if (Array.isArray(instrumentList) == false) instrumentList = [instrumentList]
     let kiteQuoteUrl = 'https://api.kite.trade/quote?'
     for (let i = 0; i < instrumentList.length; i++) {
@@ -33,8 +33,7 @@ let getquote = async (instrumentList, sendNotification) => {
             'Authorization': `token ${access_token_data.data.api_key}:${access_token_data.data.access_token}` // Overrides any defaults that are set
         }
     })
-    console.log(resp.data)
-
+    
     return resp.data
 }
 module.exports = getquote

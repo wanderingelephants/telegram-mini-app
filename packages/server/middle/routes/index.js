@@ -72,7 +72,8 @@ const routes = {
             },
             instrument: {
                 quote: require("./api/kite/instrument/quote"),
-                eod: require("./api/kite/instrument/eod")
+                eod: require("./api/kite/instrument/eod"),
+                dipsipalert: require("./api/kite/instrument/dipsip_alert")
             }
         },
         mutualfunds: {
@@ -111,6 +112,7 @@ router.get("/api/kite/order/create", routes.api.kite.order.create)
 router.get("/api/kite/login/success", routes.api.kite.login.success)
 router.get("/api/kite/instrument/quote", routes.api.kite.instrument.eod)
 router.get("/api/kite/instrument/eod", routes.api.kite.instrument.eod)
+router.get("/api/kite/instrument/dipsipalert", routes.api.kite.instrument.dipsipalert)
 router.post("/api/mutualfunds/analyze", routes.api.mutualfunds.analyze)
 router.post("/api/mutualfunds/recommend", routes.api.mutualfunds.recommend)
 router.get("/api/mutualfunds/list", routes.api.mutualfunds.list)
