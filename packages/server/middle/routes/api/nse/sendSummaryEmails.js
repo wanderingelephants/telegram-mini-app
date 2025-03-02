@@ -182,7 +182,7 @@ const subscribers = resp.data.users
 for (const subscriber of subscribers){
     const BodyText  = draftEmail(subscriber.portfolio_stocks)
     console.log("Sending Mail", new Date(), subscriber.email, BodyText)
-    await sendEmail([subscriber.email], "Watch List Updates", BodyText)
+    await sendEmail([subscriber.email], "DipSIP Watch List Updates", BodyText)
     await delay(2000)
 }   
 res.status(200).json("OK")

@@ -12,7 +12,6 @@ class WebsiteTrafficSimulator extends NSEScraper {
     }
 
     async simulateTraffic() {
-        console.log(process.env.PDF_DOWNLOAD_ENABLED)
         if (process.env.PDF_DOWNLOAD_ENABLED && process.env.PDF_DOWNLOAD_ENABLED.toLowerCase() !== "true"){
             console.log("PDF not enabled on this env")
             return;

@@ -3,6 +3,32 @@ const getquote = require("./getquote")
 const sendMail = require("../../../../utils/sendMail");
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
+
+const formatEmail = (fullUrl) => {
+    emailBody = `
+            <h1 style="font-weight: bold; font-size: 24px;">Index Fund Price Alert</h1>
+        `;
+    emailBody += `<div style="margin: 10px 0;">
+    <strong>Index Funds Correction</strong><br/>
+    <a href="${fullUrl}" style="color: #0066cc;">Place Order</a>
+</div>`   
+emailBody += 
+`
+        <div style="background-color: #fff3e6; padding: 15px; margin: 20px 0; border-radius: 5px;">
+            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                <span style="font-size: 24px; margin-right: 10px;">💡</span>
+                <h2 style="font-weight: bold; font-size: 20px; margin: 0;">Did You Know ?</h2>
+            </div>
+            <p style="margin: 10px 0;">
+                On <a href="https://dipsip.co.in/stocks" style="color: #0066cc; text-decoration: underline;">DipSip.co.in</a>, 
+                you can search for hidden gems by making nested and complex queries.<br/><br/>
+                <em>For example:</em> "Which companies made positive announcements last week, and whose stock price went up next day, 
+                and is now below the announcement day price"
+            </p>
+        </div>
+    `;
+return emailBody
+}
 const getQueryString = (instruments) => {
     console.log("getQueryString")
     console.log(instruments)
@@ -58,10 +84,15 @@ const route = async(req, res) => {
     }
     const quotes = await getquote([...instrList])
     console.log("quotes", JSON.stringify(quotes))
+    console.log(userETFPortfolios)
     const symbolsToSend = {}
     for (userETFPortfolio of userETFPortfolios){
         try{
             const email = userETFPortfolio.user.email
+            if (userETFPortfolio.user.user_configs.length === 0){
+                console.log("User not subscribed", email)
+                continue
+            }
             if (!symbolsToSend[email]) symbolsToSend[email] = []
             const userMF = userETFPortfolio.mutual_fund.name
             const priceChange = quotes.data[`NSE:${userMF}`].net_change
@@ -84,7 +115,10 @@ const route = async(req, res) => {
             const fullUrl = process.env.WEB_APP_HOST + "/trade" + trade_url_query
             console.log(email, fullUrl)
             await delay(5000)
-            await sendMail([email], "Index Fund Price Alert", fullUrl)
+            console.log("sendMail", email, fullUrl)
+            const emailBody = formatEmail(fullUrl)
+            console.log(emailBody)
+            await sendMail([email], "DipSIP Index Fund Price Alert", emailBody)
         }
         else {
             console.log("process.env.WEB_APP_HOST not defined")
