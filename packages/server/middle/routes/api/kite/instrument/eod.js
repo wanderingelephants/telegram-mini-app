@@ -4,6 +4,10 @@ const { postToGraphQL } = require("../../../../lib/helper");
 
 //https://api.kite.trade/instruments/historical/136413956/day?from=2025-02-01+09:15:00&to=2025-02-12+15:30:00
 const route = async (req, res) => {
+    if (!req.query.dateStr) {
+        res.status(400).json("dateStr missing")
+        return
+    }
     const dateStr = req.query.dateStr
     let symbol = req.query.symbol ? req.query.symbol.toUpperCase() : "%%"
     const fromTime = `${dateStr} 09:15:00`
@@ -26,7 +30,7 @@ const route = async (req, res) => {
 }`,
         variables: {symbol}
     })
-
+    let failedCount = 0;
     const stocks = queryResp.data.stock
     for (const [index, record] of stocks.entries()) {
         try{
@@ -34,8 +38,13 @@ const route = async (req, res) => {
                 console.log("instrument_token not found for ", record)
                 continue;
             }
+            if (failedCount > 10){
+                console.log("Failed Count breached")
+                return;
+            }
             //console.log("fetching", `https://api.kite.trade/instruments/historical/${record.instrument_token}/day?from=${fromTime}&to=${toTime}`)
             const kiteQuoteUrl = `https://api.kite.trade/instruments/historical/${record.instrument_token}/day?from=${fromTime}&to=${toTime}`
+            console.log("Fetching", kiteQuoteUrl)
             const resp = await axios.get(kiteQuoteUrl, {
                 headers: {
                     'X-Kite-Version': 3,
@@ -79,6 +88,7 @@ const route = async (req, res) => {
         }
         catch(e){
             console.log(e.message, record)
+            failedCount ++
         }
         
     }

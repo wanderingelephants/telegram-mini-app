@@ -11,11 +11,13 @@ const crypto = require('crypto')
 const cookieParser = require('cookie-parser');
 const WebsiteTrafficSimulator = require("./routes/api/nse/WebsiteTrafficSimulator")
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-
-cron.schedule('05 16 * * 1-5', async () => {
+const now = DateTime.now().setZone('Asia/Kolkata');
+const date = now.toFormat('yyyy-MM-dd');
+const [year, month, day] = date.split('-');
+cron.schedule('17 16 * * 1-5', async () => {
   console.log("Triggered EoD job", process.env.EOD_JOBS_ENABLED)
   if ("true" === process.env.EOD_JOBS_ENABLED){
-    await axios.get(process.env.API_SERVER + "/api/kite/instrument/eod")
+    await axios.get(process.env.API_SERVER + `/api/kite/instrument/eod?dateStr=${yyyy}-${mm}-${dd}`)
     await axios.get(process.env.API_SERVER + "/api/nse/marketclose")
   }
   else console.log("EOD Jobs not enabled on this env")
@@ -49,9 +51,7 @@ cron.schedule('*/15 * * * *', async () => {
       console.log("PDF_PROCESS_URL not  defined")
       return
     }
-    const now = DateTime.now().setZone('Asia/Kolkata');
-    const date = now.toFormat('yyyy-MM-dd');
-    const [year, month, day] = date.split('-');
+    
     const announcement_dir = path.join(process.env.DATA_ROOT_FOLDER, process.env.NSE_ANNOUNCEMENTS ? process.env.NSE_ANNOUNCEMENTS : "nse_announcements");
 
     for (const index of ['equities', 'sme']) {
