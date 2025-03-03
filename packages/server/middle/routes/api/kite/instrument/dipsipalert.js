@@ -35,9 +35,9 @@ const getQueryString = (instruments) => {
     let querystring = ''
     let count = 0
     for (const instr of instruments) {
-        console.log('delta', (instr.trigger * -1) - instr.change)
+        console.log('delta', (instr.trigger * -1) - instr.change_percent)
         const limit_price = (instr.prevClose * (100 - instr.trigger * 1) / 100)
-        const amt = instr.base_amt * Math.pow(instr.buy_factor * 1, (instr.trigger * -1) - instr.change)
+        const amt = instr.base_amt * Math.pow(instr.buy_factor * 1, (instr.trigger * -1) - instr.change_percent)
         console.log("amt", amt)
         const quantity = (amt / limit_price)
         console.log("quantity", quantity)
@@ -95,12 +95,13 @@ const route = async(req, res) => {
             }
             if (!symbolsToSend[email]) symbolsToSend[email] = []
             const userMF = userETFPortfolio.mutual_fund.name
-            const priceChange = quotes.data[`NSE:${userMF}`].net_change
+            const closePrice = quotes.data[`NSE:${userMF}`].ohlc.close
             const lastPrice = quotes.data[`NSE:${userMF}`].last_price
+            const change_percent = ((lastPrice - closePrice) * 100 / closePrice)
             const configValue = JSON.parse(userETFPortfolio.user.user_configs[0].value) 
-            console.log(userMF, priceChange, email, configValue)
-            if (priceChange <= configValue.trigger*-1){
-                symbolsToSend[email].push({symbol: userMF, change: priceChange, price: lastPrice, trigger: configValue.trigger, base_amt: configValue.base_amt, buy_factor: configValue.buy_factor, prevClose: quotes.data[`NSE:${userMF}`].ohlc.close})
+            console.log(userMF, change_percent, email, configValue)
+            if (change_percent <= configValue.trigger*-1){
+                symbolsToSend[email].push({symbol: userMF, change: change_percent, price: lastPrice, trigger: configValue.trigger, base_amt: configValue.base_amt, buy_factor: configValue.buy_factor, prevClose: quotes.data[`NSE:${userMF}`].ohlc.close})
             }
         }
         catch (e){

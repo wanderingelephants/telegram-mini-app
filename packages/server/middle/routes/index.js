@@ -86,7 +86,7 @@ const routes = {
         },
         nse: {
             announcements: require("./api/nse/announcements"),
-            summaries: require("./api/nse/processSummaries"),
+            summaries: require("./api/nse/summaries"),
             sendSummaries: require("./api/nse/sendSummaryEmails"),
             insider: require("./api/nse/process_insider_csv"),
             scraper: require("./api/nse/scraper"),
@@ -102,7 +102,7 @@ const routes = {
 router.post("/api/auth/google", routes.api.auth.google)
 router.get("/api/auth/callback", routes.api.auth.callback)
 router.post("/api/chat/reasoning",routes.api.chat.reasoning)
-router.post("/api/summary/processSummary", routes.api.chat.reasoning)
+router.post("/api/chat/summary", routes.api.chat.reasoning)
 router.post("/api/telegram/auth", routes.api.telegram.auth)
 router.get("/api/kite/order/create", routes.api.kite.order.create)
 router.get("/api/kite/login/success", routes.api.kite.login.success)
