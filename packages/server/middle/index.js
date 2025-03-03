@@ -14,9 +14,9 @@ const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 const now = DateTime.now().setZone('Asia/Kolkata');
 const date = now.toFormat('yyyy-MM-dd');
 const [year, month, day] = date.split('-');
-cron.schedule('25 16 * * 1-5', async () => {
-  console.log("Triggered EoD job", process.env.EOD_JOBS_ENABLED)
-  if ("true" === process.env.EOD_JOBS_ENABLED){
+cron.schedule('30 16 * * 1-5', async () => {
+  console.log("Triggered EoD", process.env.EOD_JOBS_ENABLED, process.env.API_SERVER)
+  if (process.env.EOD_JOBS_ENABLED){
     console.log("eod job", process.env.API_SERVER + `/api/kite/instrument/eod?dateStr=${yyyy}-${mm}-${dd}`)
     let resp = await axios.get(process.env.API_SERVER + `/api/kite/instrument/eod?dateStr=${yyyy}-${mm}-${dd}`)
     console.log("eod resp", resp)
