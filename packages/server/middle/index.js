@@ -12,7 +12,7 @@ const cookieParser = require('cookie-parser');
 const WebsiteTrafficSimulator = require("./routes/api/nse/WebsiteTrafficSimulator")
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-cron.schedule('00 16 * * 1-5', async () => {
+cron.schedule('05 16 * * 1-5', async () => {
   console.log("Triggered EoD job", process.env.EOD_JOBS_ENABLED)
   if ("true" === process.env.EOD_JOBS_ENABLED){
     await axios.get(process.env.API_SERVER + "/api/kite/instrument/eod")
