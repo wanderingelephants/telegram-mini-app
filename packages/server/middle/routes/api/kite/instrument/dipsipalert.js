@@ -101,7 +101,7 @@ const route = async(req, res) => {
             const configValue = JSON.parse(userETFPortfolio.user.user_configs[0].value) 
             console.log(userMF, change_percent, email, configValue)
             if (change_percent <= configValue.trigger*-1){
-                symbolsToSend[email].push({symbol: userMF, change: change_percent, price: lastPrice, trigger: configValue.trigger, base_amt: configValue.base_amt, buy_factor: configValue.buy_factor, prevClose: quotes.data[`NSE:${userMF}`].ohlc.close})
+                symbolsToSend[email].push({symbol: userMF, change_percent, price: lastPrice, trigger: configValue.trigger, base_amt: configValue.base_amt, buy_factor: configValue.buy_factor, prevClose: quotes.data[`NSE:${userMF}`].ohlc.close})
             }
         }
         catch (e){
