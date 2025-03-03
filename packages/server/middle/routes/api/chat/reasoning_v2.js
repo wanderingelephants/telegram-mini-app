@@ -29,7 +29,7 @@ const route = async (req, res) => {
   console.log("reasoning_v2", { email, activity, messages, customData })
   let streaming
   let userLatestMessage = messages[messages.length - 1].content
-  if (userLatestMessage.length > await getMaxMessageLength(email, activity)) res.status(401).json("msg size")  
+  if (activity === "stock_market_chat" && userLatestMessage.length > await getMaxMessageLength(email, activity)) res.status(401).json("msg size")  
   try {  
     const PROMPTS_FOLDER = path.join(__dirname, 'prompts');
     const systemPromptPath = path.join(PROMPTS_FOLDER, `${activity}_system_prompt.txt`);

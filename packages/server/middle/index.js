@@ -37,7 +37,7 @@ cron.schedule('*/15 * * * *', async () => {
     return;
   }
   try {
-  /*  if (!process.env.PDF_PROCESS_URL) {
+  if (!process.env.PDF_PROCESS_URL) {
       console.log("PDF_PROCESS_URL not  defined")
       return
     }
@@ -65,7 +65,7 @@ cron.schedule('*/15 * * * *', async () => {
       await axios.get(process.env.API_SERVER_URL + `/api/nse/summaries?inputFolder=${txtPath}&outputFolder=${summaryPath}`)
       const t2 = Date.now();
       console.log(`Summary Task ${index} time taken: ${(t2 - t1)} ms`);
-    }*/
+    }
 
   }
   catch (e) {
