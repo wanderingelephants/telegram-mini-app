@@ -106,6 +106,7 @@ async function processSummaries(inputFolder, outputFolder, fileToSummarize) {
                 // Wait for 3 seconds before next request
                 await new Promise(resolve => setTimeout(resolve, 3000));
             } catch (error) {
+                console.error(error)
                 console.error(`Error occurred while processing ${file}:`, error.message);
             }
         }

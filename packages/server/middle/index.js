@@ -12,6 +12,7 @@ const cookieParser = require('cookie-parser');
 const WebsiteTrafficSimulator = require("./routes/api/nse/WebsiteTrafficSimulator")
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
+
 cron.schedule('45 12 * * 1-5', async () => {
   console.log("Triggered DipSip Alert job", process.env.DIPSIP_ALERT_JOBS_ENABLED)
   if ("true" === process.env.DIPSIP_ALERT_JOBS_ENABLED){
@@ -36,7 +37,7 @@ cron.schedule('*/15 * * * *', async () => {
     return;
   }
   try {
-    if (!process.env.PDF_PROCESS_URL) {
+  /*  if (!process.env.PDF_PROCESS_URL) {
       console.log("PDF_PROCESS_URL not  defined")
       return
     }
@@ -64,20 +65,14 @@ cron.schedule('*/15 * * * *', async () => {
       await axios.get(process.env.API_SERVER_URL + `/api/nse/summaries?inputFolder=${txtPath}&outputFolder=${summaryPath}`)
       const t2 = Date.now();
       console.log(`Summary Task ${index} time taken: ${(t2 - t1)} ms`);
-    }
+    }*/
 
   }
   catch (e) {
     console.error(e)
   }
 })
-/*cron.schedule('33 15 * * 1-5', async () => {
-  console.log('end of market', new Date());
-  const todayStr = (new Date()).toISOString().split("T")[0]
-  let req = { "query": { "dateStr": todayStr } }
-  let res = { status: (code) => { console.log(code) }, json: (msg) => { console.log(msg) } }
-  await route(req, res)
-}, { timezone: "Asia/Kolkata" });*/
+
 app.use([
   bodyParser.urlencoded({ limit: '5mb', extended: true }),
   express.json({ limit: '5mb' })
