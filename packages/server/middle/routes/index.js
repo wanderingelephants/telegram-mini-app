@@ -73,7 +73,7 @@ const routes = {
             instrument: {
                 quote: require("./api/kite/instrument/quote"),
                 eod: require("./api/kite/instrument/eod"),
-                dipsipalert: require("./api/kite/instrument/dipsip_alert")
+                dipsipalert: require("./api/kite/instrument/dipsipalert")
             }
         },
         mutualfunds: {

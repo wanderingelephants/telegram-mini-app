@@ -12,6 +12,12 @@ const cookieParser = require('cookie-parser');
 const WebsiteTrafficSimulator = require("./routes/api/nse/WebsiteTrafficSimulator")
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
+cron.schedule('1 12 * * 1-5', async () => {
+  if (true === process.env.EOD_JOBS_ENABLED){
+    await axios.post(process.env.API_SERVER_URL + "/api/kite/instrument/dipsipalert")
+  }
+  else console.log("EOD Jobs not enabled on this env")
+})
 cron.schedule('55 * * * *', async () => {
   if (!process.env.PDF_PROCESS_URL) {
     console.log("PDF_PROCESS_URL not  defined")
