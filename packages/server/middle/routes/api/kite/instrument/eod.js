@@ -39,8 +39,9 @@ const route = async (req, res) => {
                 console.log("instrument_token not found for ", record)
                 continue;
             }
-            if (failedCount > 10){
+            if (failedCount > 50){
                 console.log("Failed Count breached")
+                res.status(200).json("ok")
                 return;
             }
             //console.log("fetching", `https://api.kite.trade/instruments/historical/${record.instrument_token}/day?from=${fromTime}&to=${toTime}`)
