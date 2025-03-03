@@ -59,9 +59,9 @@ const route = async (req, res) => {
                 "object": {
                     "stock_id": record.id,
                     "price_date": yyyyymmdd,
-                    "open": candle[1],
-                    "high": candle[2],
-                    "low": candle[3],
+                    //"open": candle[1],
+                    //"high": candle[2],
+                    //"low": candle[3],
                     "close": candle[4],
                     "volume": candle[5]
                 }

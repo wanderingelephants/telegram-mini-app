@@ -12,13 +12,21 @@ const cookieParser = require('cookie-parser');
 const WebsiteTrafficSimulator = require("./routes/api/nse/WebsiteTrafficSimulator")
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-
-cron.schedule('45 12 * * 1-5', async () => {
-  console.log("Triggered DipSip Alert job", process.env.DIPSIP_ALERT_JOBS_ENABLED)
-  if ("true" === process.env.DIPSIP_ALERT_JOBS_ENABLED){
-    await axios.get(process.env.DIPSIP_API_SERVER + "/api/kite/instrument/dipsipalert")
+cron.schedule('00 16 * * 1-5', async () => {
+  console.log("Triggered EoD job", process.env.EOD_JOBS_ENABLED)
+  if ("true" === process.env.EOD_JOBS_ENABLED){
+    await axios.get(process.env.API_SERVER + "/api/kite/instrument/eod")
+    await axios.get(process.env.API_SERVER + "/api/kite/instrument/eod")
   }
   else console.log("EOD Jobs not enabled on this env")
+}, { timezone: "Asia/Kolkata" })
+
+cron.schedule('15 12 * * 1-5', async () => {
+  console.log("Triggered DipSip Alert job", process.env.DIPSIP_ALERT_JOBS_ENABLED)
+  if ("true" === process.env.DIPSIP_ALERT_JOBS_ENABLED){
+    await axios.get(process.env.API_SERVER + "/api/kite/instrument/dipsipalert")
+  }
+  else console.log("DipSip Alert Jobs not enabled on this env")
 }, { timezone: "Asia/Kolkata" })
 cron.schedule('55 * * * *', async () => {
   if (!process.env.PDF_PROCESS_URL) {
