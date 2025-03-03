@@ -85,11 +85,7 @@ const routes = {
             categoryScrape: require("./api/mutualfunds/categoryScrape")
         },
         nse: {
-            receive: require("./api/nse/receive"),
-            publish: require("./api/nse/publish"),
-            process: require("./api/nse/process"),
             announcements: require("./api/nse/announcements"),
-            instruments: require("./api/nse/instruments"),
             summaries: require("./api/nse/processSummaries"),
             sendSummaries: require("./api/nse/sendSummaryEmails"),
             insider: require("./api/nse/process_insider_csv"),
@@ -105,7 +101,6 @@ const routes = {
 };
 router.post("/api/auth/google", routes.api.auth.google)
 router.get("/api/auth/callback", routes.api.auth.callback)
-//router.get("/api/mutualfunds/migrate", routes.api.mutualfunds.migrate)
 router.post("/api/chat/reasoning", verifyToken,routes.api.chat.reasoning)
 router.post("/api/telegram/auth", routes.api.telegram.auth)
 router.get("/api/kite/order/create", routes.api.kite.order.create)
@@ -118,12 +113,8 @@ router.post("/api/mutualfunds/recommend", routes.api.mutualfunds.recommend)
 router.get("/api/mutualfunds/list", routes.api.mutualfunds.list)
 //router.get("/api/mutualfunds/scrape", routes.api.mutualfunds.scrape)
 router.post("/api/mutualfunds/categoryScrape", routes.api.mutualfunds.categoryScrape)
-//router.post("/api/nse/receive", routes.api.nse.receive)
-//router.post("/api/nse/announcements", routes.api.nse.announcements)
-//router.post("/api/nse/process", routes.api.nse.process)
 router.get("/api/nse/marketclose", routes.api.nse.marketclose)
 router.get("/api/nse/scraper", routes.api.nse.scraper)
-router.get("/api/nse/instruments", routes.api.nse.instruments)
 router.get("/api/nse/summaries", routes.api.nse.summaries)
 router.get("/api/nse/sendSummaries", routes.api.nse.sendSummaries)
 
