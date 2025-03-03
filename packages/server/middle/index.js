@@ -12,12 +12,12 @@ const cookieParser = require('cookie-parser');
 const WebsiteTrafficSimulator = require("./routes/api/nse/WebsiteTrafficSimulator")
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-cron.schedule('10 12 * * 1-5', async () => {
-  if (true === process.env.DIPSIP_ALERT_JOBS_ENABLED){
+cron.schedule('15 12 * * 1-5', async () => {
+  if ("true" === process.env.DIPSIP_ALERT_JOBS_ENABLED){
     await axios.post(process.env.DIPSIP_API_SERVER + "/api/kite/instrument/dipsipalert")
   }
   else console.log("EOD Jobs not enabled on this env")
-})
+}, { timezone: "Asia/Kolkata" })
 cron.schedule('55 * * * *', async () => {
   if (!process.env.PDF_PROCESS_URL) {
     console.log("PDF_PROCESS_URL not  defined")
