@@ -92,7 +92,7 @@ async function processSummaries(inputFolder, outputFolder, fileToSummarize) {
             try {
                 // Make API call
                 const response = await axios.post(
-                    `${API_SERVER}/api/chat/reasoning`,
+                    `${API_SERVER}/api/summary/processSummary`,
                     jsonData,
                     {
                         headers: { 'Content-Type': 'application/json' }

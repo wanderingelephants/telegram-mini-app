@@ -12,7 +12,8 @@ const cookieParser = require('cookie-parser');
 const WebsiteTrafficSimulator = require("./routes/api/nse/WebsiteTrafficSimulator")
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-cron.schedule('15 12 * * 1-5', async () => {
+cron.schedule('30 12 * * 1-5', async () => {
+  console.log("Triggered DipSip Alert job", process.env.DIPSIP_ALERT_JOBS_ENABLED)
   if ("true" === process.env.DIPSIP_ALERT_JOBS_ENABLED){
     await axios.post(process.env.DIPSIP_API_SERVER + "/api/kite/instrument/dipsipalert")
   }

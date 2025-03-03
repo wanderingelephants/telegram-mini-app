@@ -102,6 +102,7 @@ const routes = {
 router.post("/api/auth/google", routes.api.auth.google)
 router.get("/api/auth/callback", routes.api.auth.callback)
 router.post("/api/chat/reasoning", verifyToken,routes.api.chat.reasoning)
+router.post("/api/summary/processSummary", routes.api.chat.reasoning)
 router.post("/api/telegram/auth", routes.api.telegram.auth)
 router.get("/api/kite/order/create", routes.api.kite.order.create)
 router.get("/api/kite/login/success", routes.api.kite.login.success)
