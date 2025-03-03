@@ -8,7 +8,7 @@ const serviceAccount = require(`${config}/firebase-admin.json`)
 admin.initializeApp({
 credential: admin.credential.cert(serviceAccount)
 });
-const verifyAdminToken = async (req, res, next) => {
+/*const verifyAdminToken = async (req, res, next) => {
     try {
       const idToken = req.headers.authorization?.split("Bearer ")[1];
       if (!idToken) {
@@ -36,7 +36,7 @@ try {
 } catch (error) {
   res.status(401).json({ error: "Invalid token" });
 }
-};
+};*/
 
 const routes = {
     api: {
