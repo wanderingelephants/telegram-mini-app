@@ -4,6 +4,7 @@ const { postToGraphQL } = require("../../../../lib/helper");
 
 //https://api.kite.trade/instruments/historical/136413956/day?from=2025-02-01+09:15:00&to=2025-02-12+15:30:00
 const route = async (req, res) => {
+    console.log("eod.js req res")
     if (!req.query.dateStr) {
         res.status(400).json("dateStr missing")
         return
