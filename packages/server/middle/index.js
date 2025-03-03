@@ -14,7 +14,7 @@ const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 const now = DateTime.now().setZone('Asia/Kolkata');
 const date = now.toFormat('yyyy-MM-dd');
 const [year, month, day] = date.split('-');
-cron.schedule('42 16 * * 1-5', async () => {
+cron.schedule('02 16 * * 1-5', async () => {
   console.log("Triggered EoD job", process.env.EOD_JOBS_ENABLED)
   if ("true" === process.env.EOD_JOBS_ENABLED){
     console.log("eod job", process.env.API_SERVER + `/api/kite/instrument/eod?dateStr=${year}-${month}-${day}`)
@@ -26,7 +26,7 @@ cron.schedule('42 16 * * 1-5', async () => {
   else console.log("EOD Jobs not enabled on this env")
 }, { timezone: "Asia/Kolkata" })
 
-cron.schedule('15 12 * * 1-5', async () => {
+cron.schedule('30 12 * * 1-5', async () => {
   console.log("Triggered DipSip Alert job", process.env.DIPSIP_ALERT_JOBS_ENABLED)
   if ("true" === process.env.DIPSIP_ALERT_JOBS_ENABLED){
     await axios.get(process.env.API_SERVER + "/api/kite/instrument/dipsipalert")
