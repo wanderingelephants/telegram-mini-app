@@ -79,7 +79,6 @@
 <script>
 import { mapState } from "vuex";
 import GoogleSignIn from "../components/GoogleSignIn";
-import api from "./api"
 export default{
   name: 'PromptChat',
   components:{
@@ -144,18 +143,19 @@ export default{
       this.isLoading = true;
 
       try {
-	      const response = await api.post('/api/chat/reasoning', {
-      activity: "stock_market_chat",
-        messages: [...this.messages],
-        email: this.userGoogle.email,
+	      const response = await fetch('/api/chat/reasoning', {
+          method: "POST",
+      
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'text/event-stream',
-        //'Authorization' : `Bearer ${localStorage.getItem("jwtGoogle")}`
+        'Authorization' : `Bearer ${localStorage.getItem("jwtGoogle")}`
       },
-      //body: JSON.stringify({
-        
-      //})
+      body: JSON.stringify({
+        activity: "stock_market_chat",
+        messages: [...this.messages],
+        email: this.userGoogle.email,  
+      })
     });
     if (response.status !== 200){
       this.snackbar.color = "error"
@@ -164,6 +164,7 @@ export default{
         return
     }
     // Create reader from response body
+    console.log("response", response)
     const reader = response.body.getReader();
     const decoder = new TextDecoder();
     let currentResponse = '';

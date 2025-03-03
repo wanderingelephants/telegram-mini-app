@@ -8,7 +8,7 @@ const serviceAccount = require(`${config}/firebase-admin.json`)
 admin.initializeApp({
 credential: admin.credential.cert(serviceAccount)
 });
-/*const verifyAdminToken = async (req, res, next) => {
+const verifyAdminToken = async (req, res, next) => {
     try {
       const idToken = req.headers.authorization?.split("Bearer ")[1];
       if (!idToken) {
@@ -36,7 +36,7 @@ try {
 } catch (error) {
   res.status(401).json({ error: "Invalid token" });
 }
-};*/
+};
 
 const routes = {
     api: {
@@ -101,7 +101,7 @@ const routes = {
 };
 router.post("/api/auth/google", routes.api.auth.google)
 router.get("/api/auth/callback", routes.api.auth.callback)
-router.post("/api/chat/reasoning",routes.api.chat.reasoning)
+router.post("/api/chat/reasoning", verifyToken, routes.api.chat.reasoning)
 router.post("/api/chat/summary", routes.api.chat.reasoning)
 router.post("/api/telegram/auth", routes.api.telegram.auth)
 router.get("/api/kite/order/create", routes.api.kite.order.create)
