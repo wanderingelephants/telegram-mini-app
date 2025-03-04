@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
-
+const { postToGraphQL } = require("../../../lib/helper")
 
 async function processSummaries(inputFolder, outputFolder, fileToSummarize) {
     console.log("Recevied text to summary", inputFolder, outputFolder, fileToSummarize)
@@ -50,7 +50,6 @@ async function processSummaries(inputFolder, outputFolder, fileToSummarize) {
             else {
                 console.log("Will process summary for file", filePath)
             }
-            const content = await fs.readFileSync(filePath, 'utf-8');
 
             const filenameNoExt = path.parse(file).name;
             // Generate output filename
@@ -59,20 +58,39 @@ async function processSummaries(inputFolder, outputFolder, fileToSummarize) {
                 console.log("Output file exists", outputFile)
                 continue
             }
-            /*try {
-                // Check if the output file already exists
-                await fs.access(outputFile);
-                console.log(`Output file already exists: ${outputFile}, skipping processing.`);
-                return;
-            } catch (err) {
-                // If error is because file does not exist, proceed with processing
-                if (err.code !== 'ENOENT') {
-                    console.error(`Error checking file existence: ${err.message}`);
-                    return;
-                }
-            }*/
+            const content = await fs.readFileSync(filePath, 'utf-8');
+
             const fullAttachment = `${NSE_PREFIX}${filenameNoExt}`;
 
+            try {
+
+                const summaryMutation = `mutation StockAnnouncementUpdate(
+      $attachment: String!, 
+      $text: String!
+    ) {
+      update_stock_announcements(
+        where: {announcement_document_link: {_like: $attachment}}, 
+        _set: {
+          announcement_text: $text
+        }
+      ) {
+        returning {
+          id
+        }
+      }
+    }
+    `
+                const summaryObj = {
+                    "attachment": fullAttachment.trim() + "%",
+                    "text": content,
+                }
+                const resp = await postToGraphQL({ "query": summaryMutation, "variables": summaryObj })
+                console.log("Updated Announcement Text", resp)
+            }
+            catch (e) {
+                console.error(e)
+            }
+            
             // Prepare JSON payload
             const jsonData = {
                 activity: "announcements_summary",
