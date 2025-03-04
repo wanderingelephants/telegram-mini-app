@@ -23,7 +23,7 @@ class InsiderScraper extends NSEScraper{
                 const targetPath = path.join(this.storage_dir, year, month, day, index, "xml")
                 fs.mkdirSync(targetPath, { recursive: true })
                 
-                if (announcement.ATTACHMENT && announcement.ATTACHMENT.endsWith(".pdf")) {
+                if (announcement.ATTACHMENT && !announcement.ATTACHMENT.endsWith(".xml")) {
                     console.log("Skipping PDF announcement", announcement.ATTACHMENT)
                     continue;
                 }

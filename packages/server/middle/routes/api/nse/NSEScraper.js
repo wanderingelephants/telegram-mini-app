@@ -243,12 +243,9 @@ id
                     console.log("Skipping newspaper record", announcement.ATTACHMENT)
                     continue;
                 }
-                if (announcement.ATTACHMENT && announcement.ATTACHMENT.endsWith(".xml")) {
-                    console.log("Skipping XML announcement", announcement.ATTACHMENT)
+                if (announcement.ATTACHMENT && !announcement.ATTACHMENT.endsWith(".pdf")) {
+                    console.log("Skipping non-pdf announcement", announcement.ATTACHMENT)
                     continue;
-                }
-                if (announcement.ATTACHMENT) {
-                    
                 }
                 if (announcement.ATTACHMENT && this.filesToDownload[index].findIndex(item => item.ATTACHMENT === announcement.ATTACHMENT) > -1) {
                     console.log("checking pdf", announcement.ATTACHMENT, targetPath)

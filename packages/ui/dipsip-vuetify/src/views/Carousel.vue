@@ -107,13 +107,13 @@ const cards = ref([
   {
     title: "",
     subtitle: "Mutual Funds",
-    description: "Check if your existing MF portfolio is cluttered. One does not need more than 3-4 <b>non-overlapping</b> high quality Mutual Funds to add extra returns, with moderate risk. Use <a href='/assistant'>Assistant</a> to dig. See <a href='/mutualfunds'>Mutual Funds</a>",
+    description: "Check if your existing MF portfolio is cluttered. Bulk of MFs underperform the market. Research, one does not need more than 3-4 <b>non-overlapping</b> high quality Mutual Funds to add extra returns, with moderate risk. Use <a href='/assistant'>Assistant</a> to dig. See <a href='/mutualfunds'>Mutual Funds</a>",
     hasHtml: true
   },
   {
     title: "",
     subtitle: "Stocks",
-    description: "For Stock Pickers. You need just a couple of big multibaggers to uplife the entire portfolio. For Long term patient investors, with Risk/Volatility Appetite. Use <a href='/assistant'>Assistant</a> to uncover hidden gems in the Indian Markets. See <a href='/stocks'>Stocks</a>",
+    description: "For Stock Pickers. You need just a couple of big multibaggers to uplift the entire portfolio. For Long term patient investors, with Risk/Volatility Appetite. Use <a href='/assistant'>Assistant</a> to uncover hidden gems in the Indian Markets. See <a href='/stocks'>Stocks</a>",
     hasHtml: true
   },
   {
