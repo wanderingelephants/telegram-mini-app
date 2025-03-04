@@ -47,10 +47,13 @@ cron.schedule('55 * * * *', async () => {
     console.log("PDF_PROCESS_URL not  defined")
     return
   }
-  console.log('Starting traffic simulation at:', new Date().toISOString());
-  const simulator = new WebsiteTrafficSimulator("insider_trades", true, []);
+  console.log('Starting traffic simulation insider_trades at:', new Date().toISOString());
+  let simulator = new WebsiteTrafficSimulator("insider_trades", true, []);
   await simulator.simulateTraffic();
-  console.log('Done traffic simulation at:', new Date().toISOString());
+  console.log('Done traffic simulation insider_trades at:', new Date().toISOString());
+  simulator = new WebsiteTrafficSimulator("announcements", true, []);
+  await simulator.simulateTraffic();
+  console.log('Done traffic simulation announcements at:', new Date().toISOString());
 }, { timezone: "Asia/Kolkata" });
 cron.schedule('*/15 * * * *', async () => {
   console.log("pdf to text")

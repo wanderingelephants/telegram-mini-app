@@ -28,7 +28,7 @@ class InsiderScraper extends NSEScraper{
                     continue;
                 }
                 if (announcement.ATTACHMENT && this.filesToDownload[index].findIndex(item => item.ATTACHMENT === announcement.ATTACHMENT) > -1) {
-                    console.log("checking pdf", announcement.ATTACHMENT, targetPath)
+                    console.log("checking xml", announcement.ATTACHMENT, targetPath)
                     const fileToks = announcement.ATTACHMENT.split('/')
                     const fileName = fileToks[fileToks.length - 1]
                     if (fs.existsSync(path.join(targetPath, fileName))) {
