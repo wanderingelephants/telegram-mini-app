@@ -1,6 +1,5 @@
 const axios = require('axios');
 const moment = require('moment');
-const access_token_data = require(process.env.ACCESS_TOKEN_PATH)
 const getCandleData = async (dateStr, instrument_id) => {
   try {
     // 1. Parse the input date string
@@ -12,7 +11,8 @@ const getCandleData = async (dateStr, instrument_id) => {
     // Format dates for API request (using 00:00:00 as requested)
     const fromTime = sevenDaysAgo.format('YYYY-MM-DD') + ' 00:00:00';
     const toTime = inputDate.format('YYYY-MM-DD') + ' 00:00:00';
-    
+    const access_token_data = require(process.env.ACCESS_TOKEN_PATH)
+
     // 3. Create URL for API request
     //const instrument_id = 'your_nifty_instrument_id'; // You'll need to provide this value
     const kiteNiftyQuoteUrl = `https://api.kite.trade/instruments/historical/${instrument_id}/day?from=${fromTime}&to=${toTime}`;
