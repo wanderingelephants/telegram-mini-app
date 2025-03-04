@@ -58,6 +58,7 @@ class AnnouncementSummaryResponseHandler {
         console.log("summary handler", jsonObj)
         if (jsonObj.isMock === true){
           console.log("Mock Unit Test Done", jsonObj)
+          return;
         }
         try {
 
