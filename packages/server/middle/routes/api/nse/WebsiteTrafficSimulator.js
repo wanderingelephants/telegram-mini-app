@@ -52,7 +52,7 @@ class WebsiteTrafficSimulator extends NSEScraper {
             const numSimulators = Math.floor(
                 config.MIN_PERSONS_TO_SIMULATE * (1 + Math.random())
             );
-            console.log("newPDFs to Download", newPdfs)
+            console.log("newPDFs to Download", newPdfs.length)
             // Distribute PDFs among simulators
             const simulators = await this.createSimulators(numSimulators, newPdfs, config);
             

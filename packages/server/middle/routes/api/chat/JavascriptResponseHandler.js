@@ -3,12 +3,12 @@ const fs = require("fs")
 const dataFolder = process.env.DATA_ROOT_FOLDER
 const MAX_RESULTS_TO_FORMAT = 10
 const _getFilePath = function (basePath, sessionId, activity, filename) {
-    console.log("_getFilePath", {basePath, sessionId, activity, filename})
-  const date = new Date();
-  const year = date.getFullYear() + "";
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return path.join(basePath, year, month, day, sessionId, activity, filename);
+    console.log("_getFilePath", { basePath, sessionId, activity, filename })
+    const date = new Date();
+    const year = date.getFullYear() + "";
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return path.join(basePath, year, month, day, sessionId, activity, filename);
 }
 class JavascriptResponseHandler {
     constructor(dbManager, messageManager, formattingLLMClient, activity, userQuery, customData, testAgainstFunction) {
@@ -30,21 +30,29 @@ class JavascriptResponseHandler {
     }
     async convertToConstFormat(functionText) {
         let functionName = "general_query"
-        const startIdx = functionText.indexOf("const analysis") 
-        if (startIdx > -1) functionName = "analysis"
-        const endIndex = functionText.lastIndexOf("}")
-        functionText = functionText.substring(startIdx, endIndex+1)
+        let startIdx = functionText.indexOf("const analysis")
+        let gqlImportPrefix = ""
+        if (startIdx > -1) {
+            functionName = "analysis"
+            const endIndex = functionText.lastIndexOf("}")
+            functionText = functionText.substring(startIdx, endIndex + 1)
+            gqlImportPrefix = "const {postToGraphQL} = require(process.env.GRAPHQL_MODULE_PATH)"
+        }
+        else {
+            startIdx = functionText.indexOf("const general_query")
+            const endIndex = functionText.lastIndexOf("}")
+            functionText = functionText.substring(startIdx, endIndex + 1)
+        }
         functionText += `\nmodule.exports = ${functionName}`
         const generatedFileName = `${functionName}_${(new Date()).getTime()}.js`;
         const generatedFilePath = _getFilePath(path.join(dataFolder, "generated_functions"), this.customData.sessionId, this.activity, generatedFileName);
-        //await _ensureDirectory(generatedFilePath);
-        fs.writeFileSync(generatedFilePath, functionText);
+        fs.writeFileSync(generatedFilePath, `${gqlImportPrefix}\n${functionText}`);
         return { functionName, generatedFilePath }
-      }
+    }
     async executeJavaScript(functionText) {
         let result;
-        functionText = this.stripJSTicks(functionText, '```')
         functionText = this.stripJSTicks(functionText, '```javascript')
+        functionText = this.stripJSTicks(functionText, '```')
         let lastIdx = functionText.lastIndexOf("}")
         functionText = functionText.substring(0, lastIdx + 1)
         functionText = functionText.trim()
@@ -56,9 +64,9 @@ class JavascriptResponseHandler {
             functionName = toks[toks.length - 1].split("_")[0]
         }
         else {*/
-            const functionAndPath = await this.convertToConstFormat(functionText)
-            functionName = functionAndPath.functionName
-            generatedFilePath = functionAndPath.generatedFilePath
+        const functionAndPath = await this.convertToConstFormat(functionText)
+        functionName = functionAndPath.functionName
+        generatedFilePath = functionAndPath.generatedFilePath
         //}
         console.log({
             functionName, generatedFilePath

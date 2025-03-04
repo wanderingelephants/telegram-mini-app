@@ -56,17 +56,17 @@ cron.schedule('55 * * * *', async () => {
   console.log('Done traffic simulation announcements at:', new Date().toISOString());
 }, { timezone: "Asia/Kolkata" });
 cron.schedule('*/15 * * * *', async () => {
-  console.log("pdf to text")
-  if (process.env.PDF_DOWNLOAD_ENABLED && process.env.PDF_DOWNLOAD_ENABLED.toLowerCase() !== "true") {
+  console.log("cron pdf to text")
+  /*if (process.env.PDF_DOWNLOAD_ENABLED && process.env.PDF_DOWNLOAD_ENABLED.toLowerCase() !== "true") {
     console.log("PDF not enabled on this env")
     return;
-  }
+  }*/
   try {
   if (!process.env.PDF_PROCESS_URL) {
-      console.log("PDF_PROCESS_URL not  defined")
+      console.log(new Date(), "cron PDF_PROCESS_URL not  defined")
       return
     }
-    
+    console.log(new Date(), "process website traffic")
     const announcement_dir = path.join(process.env.DATA_ROOT_FOLDER, process.env.NSE_ANNOUNCEMENTS ? process.env.NSE_ANNOUNCEMENTS : "nse_announcements");
 
     for (const index of ['equities', 'sme']) {
