@@ -108,7 +108,7 @@
   ></v-text-field>
 </v-col> -->
               </v-row>
-              <v-btn @click="getAnnouncements" color="primary">Fetch</v-btn>
+              <v-btn @click="getAnnouncements" color="primary">Fetch Announcements</v-btn>
             <stock-watch-list :announcements="announcements" :insiderTrades="insiderTrades" :candles="candles"/>
             </v-card-text>
           </v-card>
@@ -125,6 +125,12 @@
           <v-btn text v-bind="attrs" @click="showError = false"> Close </v-btn>
         </template>
       </v-snackbar>
+      <v-snackbar
+    v-model="snackbar.show"
+    :timeout="snackbar.timeout"
+    :color="snackbar.color">
+    {{ snackbar.message }}
+  </v-snackbar>
     </v-container>
   </v-responsive>
 </template>
@@ -192,6 +198,12 @@ export default {
       announcements: [],
       insiderTrades: [],
       candles: [],
+      snackbar: {
+        show: false,
+        message: "",
+        timeout: 3000,
+        color: "orange",
+      },
     };
   },
   watch: {
@@ -407,6 +419,8 @@ export default {
           console.error(e);
         }
       }
+      this.snackbar.show = true
+      this.snackbar.message = "Watch List updated"
     },
     async getUserStockPortfolio() {
       if (!this.userGoogle.email) return;
