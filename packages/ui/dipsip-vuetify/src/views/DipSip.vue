@@ -60,7 +60,7 @@
             >
               <template v-slot:activator="{ props }">
                 <v-icon v-bind="props" size="small" color="grey" class="ml-1">
-                  $$mdiInformationOutline
+                  $mdiInformationOutline
                 </v-icon>
               </template>
             </v-tooltip>
@@ -86,7 +86,7 @@
             >
               <template v-slot:activator="{ props }">
                 <v-icon v-bind="props" size="small" color="grey" class="ml-1">
-                  $$mdiInformationOutline
+                  $mdiInformationOutline
                 </v-icon>
               </template>
             </v-tooltip>
@@ -136,7 +136,7 @@
             >
               <template v-slot:activator="{ props }">
                 <v-icon v-bind="props" size="small" color="grey" class="ml-1">
-                  $$mdiInformationOutline
+                  $mdiInformationOutline
                 </v-icon>
               </template>
             </v-tooltip>
@@ -315,7 +315,7 @@
                   @telegram-auth="handleTelegramAuth"
                 />
                 <v-icon size="small" color="grey" class="ml-1">
-                  $$mdiInformationOutline
+                  $mdiInformationOutline
                 </v-icon>
               </div>
             </template>

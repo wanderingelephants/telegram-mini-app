@@ -62,7 +62,7 @@ class LLMClient {
                 break;
 
             case 'FormatMockLLM':
-                llmResponse = `The best fund as per database is Motilal Oswal Small Cap`
+                llmResponse = `The best fund as per database is Motilal Oswal Small Cap\nThis has rating above 4\nFee below 0.5%`
                 break;
 
             case 'SummaryMockLLM':

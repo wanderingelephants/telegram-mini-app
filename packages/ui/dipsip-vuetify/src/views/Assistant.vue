@@ -84,6 +84,12 @@ export default{
   components:{
     GoogleSignIn
   },
+  mounted() {
+  document.addEventListener('click', this.handleButtonClick);
+},
+beforeUnmount() {
+  document.removeEventListener('click', this.handleButtonClick);
+},
     data(){
         return {
             model: 'llama3.2:latest',
@@ -122,6 +128,25 @@ export default{
    }
    this.sendMessage();
  },
+ handleButtonClick(event) {
+    const target = event.target.closest('[data-action]');
+    if (!target) return;
+    
+    const action = target.getAttribute('data-action');
+    
+    if (action === 'set-alert') {
+      this.setAlert();
+    } else if (action === 'show-snackbar') {
+      const message = target.getAttribute('data-message') || 'Information';
+      this.snackbar.message = message;
+      this.snackbar.timeout = 6000
+      this.snackbar.show = true
+    }
+  },
+  setAlert() {
+    // Your alert logic
+    console.log('Alert set!');
+  },
         async sendMessage() {
       if (!this.userGoogle){
         this.snackbar.color = "error"
@@ -164,7 +189,6 @@ export default{
         return
     }
     // Create reader from response body
-    console.log("response", response)
     const reader = response.body.getReader();
     const decoder = new TextDecoder();
     let currentResponse = '';
@@ -337,5 +361,25 @@ export default{
 .white-space-pre {
   white-space: pre-wrap;
   word-break: break-word;
+}
+.red-button {
+  background-color: #ff3b30;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  transition: background-color 0.2s;
+}
+
+.red-button:hover {
+  background-color: #ff6651;
+}
+
+.red-button:active {
+  background-color: #e0352b;
+  transform: translateY(1px);
 }
 </style>

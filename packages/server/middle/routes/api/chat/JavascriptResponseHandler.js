@@ -30,7 +30,10 @@ class JavascriptResponseHandler {
     }
     async convertToConstFormat(functionText) {
         let functionName = "general_query"
-        if (functionText.indexOf("const analysis") > -1) functionName = "analysis"
+        const startIdx = functionText.indexOf("const analysis") 
+        if (startIdx > -1) functionName = "analysis"
+        const endIndex = functionText.lastIndexOf("}")
+        functionText = functionText.substring(startIdx, endIndex+1)
         functionText += `\nmodule.exports = ${functionName}`
         const generatedFileName = `${functionName}_${(new Date()).getTime()}.js`;
         const generatedFilePath = _getFilePath(path.join(dataFolder, "generated_functions"), this.customData.sessionId, this.activity, generatedFileName);

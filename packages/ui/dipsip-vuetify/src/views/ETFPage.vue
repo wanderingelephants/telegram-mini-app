@@ -201,32 +201,6 @@
 import InvestmentChart from '../components/InvestmentChart.vue'
 
 import api from "./api";
-/*import AUTOBEES from "./indices/AUTOBEES.json";
-import GOLDBEES from "./indices/GOLDBEES.json";
-import MAKEINDIA from "./indices/MAKEINDIA.json";
-import NIFTYBEES from "./indices/NIFTYBEES.json";
-import SHARIABEES from "./indices/SHARIABEES.json";
-import SMALLCAP from "./indices/SMALLCAP.json";
-import BANKBEES from "./indices/BANKBEES.json";
-import ITBEES from "./indices/ITBEES.json";
-import MID150BEES from "./indices/MID150BEES.json";
-import PHARMABEES from "./indices/PHARMABEES.json";
-import SILVERBEES from "./indices/SILVERBEES.json";
-import TNIDETF from "./indices/TNIDETF.json";
-const etfImports = {
-  AUTOBEES,
-  GOLDBEES,
-  MAKEINDIA,
-  NIFTYBEES,
-  SHARIABEES,
-  SMALLCAP,
-  BANKBEES,
-  ITBEES,
-  MID150BEES,
-  PHARMABEES,
-  SILVERBEES,
-  TNIDETF
-};*/
 const indicesList = ['NIFTYBEES', 'BANKBEES', 'AUTOBEES', 'ITBEES', 'MID150BEES', 'SMALLCAP', 'SHARIABEES','PHARMABEES', 'MAKEINDIA','TNIDETF']
 //const indicesList = ['AUTOBEES', 'BANKBEES']
 
