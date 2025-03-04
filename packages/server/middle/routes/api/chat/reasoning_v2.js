@@ -10,7 +10,7 @@ const readFile = util.promisify(fs.readFile);
 const chatMessagesFileName = "chat_messages.json"
 const execResultsFileName = "results.json"
 const dataRootFolder = process.env.DATA_ROOT_FOLDER
-const isUnitTest = false
+const isUnitTest = true
 const getLLMToUse = async (email, activity) => {
     return  isUnitTest === true ? (activity === "stock_market_chat" ? "JavascriptMockLLM" : "SummaryMockLLM") : process.env.LLM_TO_USE
 }
@@ -89,7 +89,7 @@ const route = async (req, res) => {
   viewBox="0 0 24 24"
   style="margin-left: 8px; fill: #2196F3; cursor: pointer;"
   data-action="show-snackbar"
-  data-message="This is like Google News Alert. When underlying data changes, and your query is met, system will notify you."
+  data-message="This is like Google News Alert. When underlying data changes, and your query conditions are met, system will notify you. This can be used to set up investing or trading strategies, based on multiple signals of your choice."
 >
   <path d="M13,9H11V7H13M13,17H11V11H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
 </svg>

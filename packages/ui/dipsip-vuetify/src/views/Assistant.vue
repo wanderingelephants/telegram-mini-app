@@ -82,10 +82,25 @@
         </v-card-actions>
       </div>
     </v-card>
-    <v-snackbar
-        v-model="snackbar.show"
-        :timeout="snackbar.timeout"
-        :color="snackbar.color">{{ snackbar.message }}</v-snackbar>
+    <template>
+  <v-snackbar
+    v-model="snackbar.show"
+    :timeout="snackbar.timeout"
+    :color="snackbar.color"
+    @update:modelValue="startProgress"
+  >
+    {{ snackbar.message }}
+
+    <!-- Progress bar at the bottom -->
+    <v-progress-linear
+      :model-value="progress"
+      color="black"
+      height="4"
+      class="mt-2"
+    ></v-progress-linear>
+  </v-snackbar>
+</template>
+
   </div>
 </template>
 
@@ -129,6 +144,8 @@ export default {
         timeout: 3000,
         color: "orange",
       },
+       progress: 100,
+      interval: null,
       distilledModel: "reasoning_dseek",
       title: "Stock Market Helper Agent",
       subTitles: [
@@ -140,7 +157,35 @@ export default {
       userInputLabel: "This is an AI tool. Double Check",
     };
   },
+  watch: {
+    "snackbar.show"(newVal) {
+      console.log("Snackbar visibility changed:", newVal);
+      if (newVal) {
+        this.startProgress();
+      } else {
+        clearInterval(this.interval);
+      }
+    },
+  },
   methods: {
+    startProgress() {
+      console.log("Snackbar startProgress triggered!");
+      this.progress = 100;
+      const totalSteps = this.snackbar.timeout / 100;
+      let currentStep = totalSteps;
+
+      if (this.interval) clearInterval(this.interval);
+
+      this.interval = setInterval(() => {
+        currentStep--;
+        console.log("currentStep", currentStep)
+        this.progress = (currentStep / totalSteps) * 100;
+
+        if (currentStep <= 0) {
+          clearInterval(this.interval);
+        }
+      }, 100);
+    },
     handleEnter(e) {
       if (this.suggestions.length && this.$refs.autocomplete.isMenuActive) {
         // Let v-autocomplete handle selection
@@ -159,7 +204,7 @@ export default {
       } else if (action === "show-snackbar") {
         const message = target.getAttribute("data-message") || "Information";
         this.snackbar.message = message;
-        this.snackbar.timeout = 6000;
+        this.snackbar.timeout = 10000;
         this.snackbar.show = true;
       }
     },
