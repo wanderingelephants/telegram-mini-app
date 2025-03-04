@@ -10,7 +10,8 @@ const readFile = util.promisify(fs.readFile);
 const chatMessagesFileName = "chat_messages.json"
 const execResultsFileName = "results.json"
 const dataRootFolder = process.env.DATA_ROOT_FOLDER
-const isUnitTest = false
+const isUnitTest = process.env.IS_MOCK_CHAT === "true" ? true : false
+console.log("isunitest", isUnitTest)
 const getLLMToUse = async (email, activity) => {
     return  isUnitTest === true ? (activity === "stock_market_chat" ? "JavascriptMockLLM" : "SummaryMockLLM") : process.env.LLM_TO_USE
 }
