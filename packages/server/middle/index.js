@@ -1,7 +1,6 @@
 const express = require('express')
 const path = require("path")
 const fs = require("fs")
-const { DateTime } = require('luxon');
 const bodyParser = require('body-parser');
 const axios = require("axios")
 const app = express()
@@ -11,6 +10,7 @@ const crypto = require('crypto')
 const cookieParser = require('cookie-parser');
 const WebsiteTrafficSimulator = require("./routes/api/nse/WebsiteTrafficSimulator")
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+const { DateTime } = require('luxon');
 const now = DateTime.now().setZone('Asia/Kolkata');
 const date = now.toFormat('yyyy-MM-dd');
 const [year, month, day] = date.split('-');
@@ -25,7 +25,16 @@ cron.schedule('02 16 * * 1-5', async () => {
   }
   else console.log("EOD Jobs not enabled on this env")
 }, { timezone: "Asia/Kolkata" })
-
+cron.schedule('15 10 * * *', async () => {
+  if ("true" === process.env.EOD_JOBS_ENABLED){
+    const yesterday = now.minus({ days: 1 });
+    const ydayFormatted = yesterday.toFormat('yyyy-MM-dd');
+    const [year, month, day] = ydayFormatted.split("-")
+    console.log("eod job", process.env.API_SERVER + `/api/nse/sendSummaries?dateStr=${year}-${month}-${day}`)
+    resp = await axios.get(process.env.API_SERVER + `/api/nse/sendSummaries?dateStr=${year}-${month}-${day}`)
+  }
+  else console.log("EOD Jobs not enabled on this env")
+}, { timezone: "Asia/Kolkata" })
 cron.schedule('30 12 * * 1-5', async () => {
   console.log("Triggered DipSip Alert job", process.env.DIPSIP_ALERT_JOBS_ENABLED)
   if ("true" === process.env.DIPSIP_ALERT_JOBS_ENABLED){
@@ -100,7 +109,6 @@ app.use(async (err, req, res, next) => {
 app.use(cookieParser());
 app.use((req, res, next) => {
   let sessionId = req.cookies?.dSessionID;
-  console.log("sesionID recd", sessionId)
   if (!sessionId) {
     sessionId = crypto.randomUUID();
     res.cookie('dSessionID', sessionId, { httpOnly: true });

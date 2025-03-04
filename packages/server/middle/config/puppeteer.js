@@ -10,8 +10,6 @@ const getPuppeteerConfig = () => {
         '--disable-dev-shm-usage', 
         '--disable-gpu', '--disable-setuid-sandbox']
     const puppetArgs = SMART_PROXY_URL ? [`--proxy-server=${SMART_PROXY_URL}`, ...baseArgs] : baseArgs   
-    console.log("puppetArgs", puppetArgs) 
-    // Configuration object
     const config = {
       puppeteer: isDevelopment && !isLinux ? 
         require('puppeteer') : 

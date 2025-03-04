@@ -1,7 +1,6 @@
 const axios = require('axios');
 const moment = require('moment');
 const access_token_data = require(process.env.ACCESS_TOKEN_PATH)
-console.log(access_token_data)
 const getCandleData = async (dateStr, instrument_id) => {
   try {
     // 1. Parse the input date string

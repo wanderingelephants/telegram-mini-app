@@ -60,7 +60,6 @@ export default {
             body: JSON.stringify({ idToken }),
           });
           const json = await response.json();
-          console.log("Mountted", json)
           if (!response.ok) {
             // Token invalid - clear storage
             localStorage.removeItem("AUTH_TOKEN");
