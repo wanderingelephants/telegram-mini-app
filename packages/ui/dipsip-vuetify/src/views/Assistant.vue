@@ -1,61 +1,148 @@
 <template>
-  <div class="chat-wrapper">
-    <google-sign-in />
+  <div class="chat-wrapper d-flex">
+    <!-- Sidebar -->
+    <v-navigation-drawer
+      v-model="sidebarOpen"
+      app
+      class="sidebar"
+      width="250"
+    >
+      <v-list>
+  <!-- Top Row with Icons -->
+  <v-list-item>
+    <v-row align="center" class="px-2 d-flex justify-space-between">
+      <!-- Collapse Button -->
+      
+          <span  @click="toggleSidebar">
+            <v-icon>$mdiChevronDoubleLeft</v-icon>
+          </span>
+        
 
+      <!-- Search Button -->
+      
+          <span icon @click="openSearch">
+            <v-icon>$mdiMagnify</v-icon>
+          </span>
+        
+
+      <!-- New Chat Button -->
+      
+          <v-btn icon @click="startNewChat">
+            <v-icon>$mdiSquareEditOutline</v-icon>
+          </v-btn>
+        
+    </v-row>
+  </v-list-item>
+
+  <v-divider></v-divider>
+
+  <!-- Chat History -->
+  <v-list dense>
+         <v-list-item
+  v-for="chat in chatHistory"
+  :key="chat.id"
+  @click="loadChat(chat.id)"
+  class="chat-list-item"
+  @mouseenter="hoveredChatId = chat.id"
+  @mouseleave="hoveredChatId = null"
+>
+  <v-list-item-content class="d-flex justify-space-between align-center">
+    <v-list-item-title>{{ chat.title }}</v-list-item-title>
+
+    <!-- 3-dot menu (lightweight icon) -->
+    <!--<span v-if="hoveredChatId === chat.id" @click.stop="openMenu($event, chat.id)">
+      <v-icon small class="text-grey-darken-1">$mdiDotsHorizontal</v-icon>
+    </span> -->
+  </v-list-item-content>
+</v-list-item>
+
+
+        </v-list>
+</v-list>
+
+    </v-navigation-drawer>
+    <!-- Chat Options Menu -->
+    <v-menu
+      v-model="menu.show"
+      :position-x="menu.x"
+      :position-y="menu.y"
+      absolute
+    >
+      <v-list dense>
+        <v-list-item @click="shareChat(menu.chatId)">
+          <v-list-item-title>Share</v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="renameChat(menu.chatId)">
+          <v-list-item-title>Rename</v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="archiveChat(menu.chatId)">
+          <v-list-item-title>Archive</v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="deleteChat(menu.chatId)">
+          <v-list-item-title class="text-error">Delete</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
+    <!-- Rename Chat Dialog -->
+    <v-dialog v-model="renameDialog.show" max-width="400px">
+      <v-card>
+        <v-card-title>Rename Chat</v-card-title>
+        <v-card-text>
+          <v-text-field v-model="renameDialog.newTitle" label="New Chat Name" />
+        </v-card-text>
+        <v-card-actions>
+          <v-btn text @click="renameDialog.show = false">Cancel</v-btn>
+          <v-btn color="primary" @click="confirmRename">Save</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <!-- Main Chat Area -->
     <v-card class="chat-container">
-      <!-- Chat Header - Fixed -->
+      <google-sign-in />
+
+      <!-- Sidebar Toggle (When Collapsed) -->
+      <span
+        v-if="!sidebarOpen"
+        class="toggle-sidebar-btn"
+        icon
+        @click="toggleSidebar"
+      >
+        <v-icon>$mdiChevronDoubleRight</v-icon>
+      </span>
+
+      <!-- Chat Header -->
       <div class="chat-header">
-        <v-card-title class="primary white--text">
-          {{ title }}
-        </v-card-title>
+        <v-card-title class="primary white--text">{{ title }}</v-card-title>
         <v-card-subtitle
           class="subtitle-wrap"
           v-for="(subTitle, idx) in subTitles"
           :key="idx"
-          >{{ subTitle }}</v-card-subtitle
         >
+          {{ subTitle }}
+        </v-card-subtitle>
       </div>
 
-      <!-- Messages Area - Scrollable -->
+      <!-- Messages Area -->
       <div class="messages-wrapper" ref="messagesContainer">
         <v-card-text class="chat-messages">
           <v-list two-line>
             <template v-for="(message, index) in messages" :key="index">
-              <v-list-item
-                :class="message.role === 'user' ? 'justify-end' : ''"
-                class="message-item"
-              >
-                <v-card
-                  :class="[
-                    'message-card',
-                    message.role === 'user'
-                      ? 'user-message'
-                      : 'assistant-message',
-                  ]"
-                  elevation="0"
-                >
+              <v-list-item :class="message.role === 'user' ? 'justify-end' : ''" class="message-item">
+                <v-card :class="['message-card', message.role === 'user' ? 'user-message' : 'assistant-message']" elevation="0">
                   <v-card-title class="text-caption pb-1">
                     {{ message.role === "user" ? "You" : "Assistant" }}
                   </v-card-title>
-                  <v-card-text
-                    class="white-space-pre pt-0"
-                    v-html="message.content"
-                  >
-                  </v-card-text>
+                  <v-card-text class="white-space-pre pt-0" v-html="message.content"></v-card-text>
                 </v-card>
               </v-list-item>
             </template>
-            
+
             <!-- Loading indicator -->
             <v-list-item v-if="isLoading">
               <v-list-item-content class="grey lighten-3 rounded-lg pa-3 ma-2">
                 <v-list-item-subtitle>
-                  <v-progress-circular
-                    indeterminate
-                    color="primary"
-                    size="24"
-                    class="mr-2"
-                  />
+                  <v-progress-circular indeterminate color="primary" size="24" class="mr-2" />
                   Fetching Your Response...
                 </v-list-item-subtitle>
               </v-list-item-content>
@@ -64,7 +151,7 @@
         </v-card-text>
       </div>
 
-      <!-- Input Area - Sticky Bottom -->
+      <!-- Input Area -->
       <div class="chat-input">
         <v-card-actions class="pa-4">
           <v-text-field
@@ -82,56 +169,94 @@
         </v-card-actions>
       </div>
     </v-card>
-    <template>
-  <v-snackbar
-    v-model="snackbar.show"
-    :timeout="snackbar.timeout"
-    :color="snackbar.color"
-    @update:modelValue="startProgress"
-  >
-    {{ snackbar.message }}
-
-    <!-- Progress bar at the bottom -->
-    <v-progress-linear
-      :model-value="progress"
-      color="black"
-      height="4"
-      class="mt-2"
-    ></v-progress-linear>
-  </v-snackbar>
-</template>
-
+ <!-- Search Modal -->
+    <v-dialog v-model="searchDialog" max-width="500px">
+      <v-card>
+        <v-card-title>
+          <v-text-field
+            v-model="searchQuery"
+            label="Search Chats"
+            clearable
+            prepend-inner-icon="mdi-magnify"
+          />
+        </v-card-title>
+        <v-divider />
+        <v-card-text>
+          <v-list dense>
+            <v-list-item
+              v-for="chat in filteredChats"
+              :key="chat.id"
+              @click="selectChat(chat.id)"
+            >
+              <v-list-item-content>
+                <v-list-item-title>{{ chat.title }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="primary" text @click="searchDialog = false">Close</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- Snackbar -->
+    <v-snackbar
+      v-model="snackbar.show"
+      :timeout="snackbar.timeout"
+      :color="snackbar.color"
+      @update:modelValue="startProgress"
+    >
+      {{ snackbar.message }}
+      <v-progress-linear :model-value="progress" color="black" height="4" class="mt-2"></v-progress-linear>
+    </v-snackbar>
   </div>
 </template>
 
 <script>
+import {
+  USER_CHAT_HISTORY
+} from "../lib/helper/queries";
+
 import { mapState } from "vuex";
 import GoogleSignIn from "../components/GoogleSignIn";
 export default {
-  name: "PromptChat",
+  name: "Assistant",
   components: {
     GoogleSignIn,
   },
   mounted() {
     document.addEventListener("click", this.handleButtonClick);
+    const chatSessionId = crypto.randomUUID();
+    console.log("Start new chat", chatSessionId)
+    sessionStorage.setItem("chatSessionId", chatSessionId);
+      
   },
   beforeUnmount() {
     document.removeEventListener("click", this.handleButtonClick);
   },
   data() {
     return {
-      model: "llama3.2:latest",
-      models: [
-        "llama3.2:latest",
-        "gemma:7b",
-        "tinyllama:latest",
-        "phi3:mini",
-        "mistral:latest",
-        "phi4:latest",
+      sidebarOpen: true,
+      hoveredChatId: null,
+      menu: {
+        show: false,
+        x: 0,
+        y: 0,
+        chatId: null,
+      },
+      renameDialog: {
+        show: false,
+        chatId: null,
+        newTitle: "",
+      },
+      searchQuery: "",
+      searchDialog: false,
+      chatHistory: [
+       /* { id: "1", title: "Chat about Ethereum" },
+        { id: "2", title: "Blockchain Scaling Solutions" },
+        { id: "3", title: "Vue.js vs React for Frontend" },*/
       ],
       timeTaken: 0,
-      operation: "testPrompt",
-      operations: ["savePrompt", "testPrompt"],
       messages: [],
       isLoading: false,
       userInput: "",
@@ -158,6 +283,11 @@ export default {
     };
   },
   watch: {
+    async userGoogle(newVal) {
+      if (newVal && newVal.email){
+        await this.getUserChatHistory();
+      } 
+    },
     "snackbar.show"(newVal) {
       console.log("Snackbar visibility changed:", newVal);
       if (newVal) {
@@ -168,6 +298,90 @@ export default {
     },
   },
   methods: {
+    toggleSidebar() {
+      this.sidebarOpen = !this.sidebarOpen;
+    },
+    async getUserChatHistory(){
+      const chatQueryResponse = await this.$apollo.query({
+        query: USER_CHAT_HISTORY,
+        variables: {email: this.userGoogle.email},
+        fetchPolicy: "no-cache"
+      })
+      this.chatHistory = []
+      for (const chat of chatQueryResponse.data.user_chat){
+        if ((this.chatHistory.filter(ch => ch.id === chat.chat_uuid)).length === 0){
+          this.chatHistory.push({
+            id: chat.chat_uuid,
+            title: chat.chat_title,
+            messages: []
+          })
+        }
+        
+          let mesgs = (this.chatHistory.filter(ch => ch.id === chat.chat_uuid))[0].messages
+          mesgs.push({
+            "role": "user",
+            "content": chat.textContent_user_query
+          })
+          mesgs.push({
+            "role": "assistant",
+            "content": chat.textContent_assistant_formatted_response
+          })
+        }
+      
+      
+    },
+    startNewChat() {
+      const chatSessionId = crypto.randomUUID();
+      console.log("Start new chat", chatSessionId)
+      sessionStorage.setItem("chatSessionId", chatSessionId);
+      this.messages = []; // Clear messages for a new session
+      this.title = "New Chat";
+      //this.chatHistory.push({ id: chatSessionId, title: `Chat ${this.chatHistory.length + 1}` });
+    },
+    loadChat(chatId) {
+      console.log("Loading chat uuid:", chatId,  this.chatHistory);
+      sessionStorage.setItem("chatSessionId", chatId);
+      this.messages = this.chatHistory.filter(c => c.id === chatId)[0].messages
+      console.log(this.messages)
+    },
+    openMenu(event, chatId) {
+      this.menu.show = true;
+      this.menu.x = event.clientX;
+      this.menu.y = event.clientY;
+      this.menu.chatId = chatId;
+    },
+    shareChat(chatId) {
+      console.log("Sharing chat:", chatId);
+    },
+    renameChat(chatId) {
+      const chat = this.chatHistory.find((c) => c.id === chatId);
+      if (chat) {
+        this.renameDialog.chatId = chatId;
+        this.renameDialog.newTitle = chat.title;
+        this.renameDialog.show = true;
+      }
+    },
+    confirmRename() {
+      const chat = this.chatHistory.find((c) => c.id === this.renameDialog.chatId);
+      if (chat) {
+        chat.title = this.renameDialog.newTitle;
+        this.renameDialog.show = false;
+      }
+    },
+    archiveChat(chatId) {
+      console.log("Archiving chat:", chatId);
+    },
+    deleteChat(chatId) {
+      this.chatHistory = this.chatHistory.filter((chat) => chat.id !== chatId);
+    },
+    selectChat(chatId) {
+      this.loadChat(chatId);
+      this.searchDialog = false;
+    },
+    openSearch() {
+      this.searchDialog = true;
+      this.searchQuery = "";
+    },
     startProgress() {
       console.log("Snackbar startProgress triggered!");
       this.progress = 100;
@@ -232,7 +446,12 @@ export default {
       this.messages.push(userMessage);
       this.userInput = "";
       this.isLoading = true;
-
+      const chatSessionId = sessionStorage.getItem("chatSessionId")
+      if (!chatSessionId){
+        this.snackbar.show = true
+        this.snackbar.message = "Chat session not found"
+        return
+      }
       try {
         const response = await fetch("/api/chat/reasoning", {
           method: "POST",
@@ -243,6 +462,7 @@ export default {
             Authorization: `Bearer ${localStorage.getItem("jwtGoogle")}`,
           },
           body: JSON.stringify({
+            chatSessionId,
             activity: "stock_market_chat",
             messages: [...this.messages],
             email: this.userGoogle.email,
@@ -311,6 +531,7 @@ export default {
           this.scrollToBottom();
         });
       }
+      await this.getUserChatHistory()
     },
     onInputChange(text) {
       if (!text) return;
@@ -349,8 +570,18 @@ export default {
     },
   },
   computed: {
-    ...mapState(["loggedInGoogle", "userGoogle"]),
-  },
+  ...mapState([
+    "loggedInGoogle",
+    "userGoogle",
+  ]),
+  filteredChats() {
+      if (!this.searchQuery) return this.chatHistory;
+      return this.chatHistory.filter((chat) =>
+        chat.title.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+    },
+  
+},
 };
 </script>
 <style scoped>
@@ -445,5 +676,15 @@ export default {
 .red-button:active {
   background-color: #e0352b;
   transform: translateY(1px);
+}
+.chat-wrapper {
+  display: flex;
+  height: 100vh;
+}
+.sidebar {
+  background-color: #f5f5f5;
+}
+.chat-list-item {
+  position: relative;
 }
 </style>

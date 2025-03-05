@@ -98,7 +98,7 @@ insider_name - String
 insider_category - String Enum ("Promoter", "Emoloyee", "KMP", "Director", "Near Relative")
 shareholding_before_transaction - float
 shareholding_after_transaction -  float
-reporting_date DATE
+intimation_date DATE
 
 This data set can be used to answer standalone User questions around insider trades
 
@@ -160,8 +160,8 @@ const analysis = async function(mutual_funds, mutual_fund_stock_holdings, report
 	//your code and reasoning steps as comments
 }
 
-Remember that this is a standalone function and you cannot refer to earlier invocations of the function. Those may be presented to you just to give a good context about the current query. 
-Therefore, you should never use stuff like this.previousResult and so on.
+ALWAYS REMEBER : This is a standalone function, and you cannot refer to earlier invocations of the function. Those may be presented to you just to give a good context about the current query. 
+Results of earlier invocations will not be available in the arguments passed to this function. Therefore, any filters applied earlier should be applied again.
 
 Example:
 User_Query: Which mutual funds have star rating of 3 or above

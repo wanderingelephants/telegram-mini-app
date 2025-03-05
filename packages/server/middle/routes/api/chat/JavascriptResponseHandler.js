@@ -2,13 +2,12 @@ const path = require("path")
 const fs = require("fs")
 const dataFolder = process.env.DATA_ROOT_FOLDER
 const MAX_RESULTS_TO_FORMAT = 10
-const _getFilePath = function (basePath, sessionId, activity, filename) {
-    console.log("_getFilePath", { basePath, sessionId, activity, filename })
+const _getFilePath = function (basePath, chatSessionId, activity, filename) {
     const date = new Date();
     const year = date.getFullYear() + "";
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
-    return path.join(basePath, year, month, day, sessionId, activity, filename);
+    return path.join(basePath, year, month, day, chatSessionId, activity, filename);
 }
 class JavascriptResponseHandler {
     constructor(dbManager, messageManager, formattingLLMClient, activity, userQuery, customData, testAgainstFunction) {
@@ -45,7 +44,7 @@ class JavascriptResponseHandler {
         }
         functionText += `\nmodule.exports = ${functionName}`
         const generatedFileName = `${functionName}_${(new Date()).getTime()}.js`;
-        const generatedFilePath = _getFilePath(path.join(dataFolder, "generated_functions"), this.customData.sessionId, this.activity, generatedFileName);
+        const generatedFilePath = _getFilePath(path.join(dataFolder, "generated_functions"), this.customData.chatSessionId, this.activity, generatedFileName);
         fs.writeFileSync(generatedFilePath, `${gqlImportPrefix}\n${functionText}`);
         return { functionName, generatedFilePath }
     }
@@ -68,10 +67,7 @@ class JavascriptResponseHandler {
         functionName = functionAndPath.functionName
         generatedFilePath = functionAndPath.generatedFilePath
         //}
-        console.log({
-            functionName, generatedFilePath
-        })
-
+        
         try {
             switch (functionName) {
                 case "general_query":
@@ -94,12 +90,12 @@ class JavascriptResponseHandler {
         return { functionName, result }
     }
     async handleResponse(llmResponse) {
-        console.log("JavascriptResponse handleResponse", llmResponse)
+        let formattedResponse;
         let jsExecResponse = await this.executeJavaScript(llmResponse);
         let { result, functionName } = jsExecResponse
-        if (result == "Sorry, No Response") return result
+        if (result == "Sorry, No Response") return {formattedResponse, result}
         if (Array.isArray(result) && result.length > 10) result = result.slice(0, MAX_RESULTS_TO_FORMAT)
-        await this.messageManager.saveMessage(this.customData.sessionId, this.activity, { result }, "results.json")
+        await this.messageManager.saveMessage(this.customData.chatSessionId, this.activity, { result }, "results.json")
 
         let resultString = JSON.stringify(result)
         if (resultString.toLocaleLowerCase().indexOf("javascript") > -1) return "Sorry, No Response"
@@ -109,27 +105,37 @@ class JavascriptResponseHandler {
                 create a natural response from the Result, considering the   
                 User Question as context, to craft the formatted response. If the Question was not related
                 to Indian Stock Market, then format a polite refusal. Some times system generated response may 
-                contain software terms like function javascript. Remove them before crafting your response. End users are non-technical
+                contain software terms like 'function' 'javascript'. Remove them before crafting your response. End users are non-technical
                 non-programming background, hence response needs to be plain english.
                 `
-        await this.messageManager.saveMessage(this.customData.sessionId, this.activity, {
+        await this.messageManager.saveMessage(this.customData.chatSessionId, this.activity, {
             "role": 'user', content: [{
                 "type": 'text', "text": `This was the User Question: ${this.userQuery}\n
                               and in response, system generated this Result: ${resultString}
                               Output only your formatted response text, and nothing else. ` }]
         }, 'messages_formatted.json');
 
-        const messages = await this.messageManager.getMessages(this.customData.sessionId, this.activity, 'messages_formatted.json')
+        const messages = await this.messageManager.getMessages(this.customData.chatSessionId, this.activity, 'messages_formatted.json')
 
-        let formattedResponse;
-        if (functionName === "analysis")
-            formattedResponse = await this.formattingLLMClient.sendMessageToLLM(formattingPrompt, messages)
+       
+        if (functionName === "analysis"){
+            const chatHistory = await this.messageManager.getChatMessages(this.customData.chatSessionId)
+            const messagesToSendToFormatter = chatHistory["formatted_responses"]
+            messagesToSendToFormatter.push({
+                "role": "user",
+                "content": [{
+                    "type": "text",
+                    "text": `This is the User Question: ${this.userQuery} . In response to the User Question, the system generated this data: ${JSON.stringify(result)} . \n Output only your formatted response text, and nothing else. `
+                }]
+            })
+            formattedResponse = await this.formattingLLMClient.sendMessageToLLM(formattingPrompt, messagesToSendToFormatter)
+        }
         else if (functionName === "general_query") formattedResponse = result
         else formattedResponse = "No Response"
-        await this.messageManager.saveMessage(this.customData.sessionId, this.activity, { "role": 'assistant', content: [{ "type": 'text', "text": formattedResponse }] }, 'messages_formatted.json');
+        await this.messageManager.saveMessage(this.customData.chatSessionId, this.activity, { "role": 'assistant', content: [{ "type": 'text', "text": formattedResponse }] }, 'messages_formatted.json');
 
         console.log("formattedResponse", formattedResponse)
-        return formattedResponse
+        return {formattedResponse, result}
 
     }
 }

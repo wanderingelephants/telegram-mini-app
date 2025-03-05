@@ -11,7 +11,6 @@ const chatMessagesFileName = "chat_messages.json"
 const execResultsFileName = "results.json"
 const dataRootFolder = process.env.DATA_ROOT_FOLDER
 const isUnitTest = process.env.IS_MOCK_CHAT === "true" ? true : false
-console.log("isunitest", isUnitTest)
 const getLLMToUse = async (email, activity) => {
     return  isUnitTest === true ? (activity === "stock_market_chat" ? "JavascriptMockLLM" : "SummaryMockLLM") : process.env.LLM_TO_USE
 }
@@ -25,9 +24,8 @@ const getMaxMessageLength = async(email, activity) => {
   return  1000
 }
 const route = async (req, res) => {
-  const sessionId = req.sessionId;
-  const { email, activity, messages, customData } = req.body;
-  console.log("reasoning_v2", { email, activity, messages, customData })
+  const { email, activity, messages, customData, chatSessionId } = req.body;
+  //console.log("reasoning_v2", { email, activity, messages, customData, chatSessionId })
   let streaming
   let userLatestMessage = messages[messages.length - 1].content
   if (activity === "stock_market_chat" && userLatestMessage.length > await getMaxMessageLength(email, activity)) res.status(401).json("msg size")  
@@ -40,14 +38,19 @@ const route = async (req, res) => {
     let responseHandler;
     let messagesToSend;
     const messageManager = new MessageManager(path.join(dataRootFolder, "generated_functions"));
+    const chatHistory = await messageManager.getChatMessages(chatSessionId)
+    //console.log("chatHistory", chatHistory)
     switch(activity){
         case "stock_market_chat":
             streaming = true
-            let lastResultMessage = await messageManager.getLastMessage(sessionId, activity, execResultsFileName)
-            if (lastResultMessage.result) userLatestMessage = "Result of Previous function execution was : " + JSON.stringify(lastResultMessage.result) + "\n" + userLatestMessage
-            await messageManager.saveMessage(sessionId, activity, { "role": 'user', content: [{ "type": 'text', "text": userLatestMessage }] }, chatMessagesFileName);
-            responseHandler = new JavascriptResponseHandler(dbManager, messageManager, formattingLLMClient, activity, userLatestMessage, {sessionId, email})
-            messagesToSend = await messageManager.getMessages(sessionId, activity, chatMessagesFileName)
+            //let lastResultMessage = await messageManager.getLastMessage(chatSessionId, activity, execResultsFileName)
+            //if (lastResultMessage.result) userLatestMessage = "Result of Previous function execution was : " + JSON.stringify(lastResultMessage.result) + "\n" + userLatestMessage
+            if (chatHistory["results"].length > 0) userLatestMessage = `Result of Previous Function Execution was :  ${chatHistory["results"][chatHistory["results"].length - 1].result} .\n Latest User Question: ${messages[messages.length - 1].content}` 
+            await messageManager.saveMessage(chatSessionId, activity, { "role": 'user', content: [{ "type": 'text', "text": userLatestMessage }] }, chatMessagesFileName);
+            responseHandler = new JavascriptResponseHandler(dbManager, messageManager, formattingLLMClient, activity, messages[messages.length - 1].content, {chatSessionId, email})
+            //messagesToSend = await messageManager.getMessages(chatSessionId, activity, chatMessagesFileName)
+            messagesToSend = chatHistory["user_chats"]
+            messagesToSend.push({ "role": 'user', content: [{ "type": 'text', "text": userLatestMessage }]})
             break
         case "announcements_summary": 
             streaming = false
@@ -59,10 +62,12 @@ const route = async (req, res) => {
         res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive' });
     
     const llmResponse = await llmClient.sendMessageToLLM(systemPrompt, messagesToSend, customData);
-    if (activity === "stock_market_chat") await messageManager.saveMessage(sessionId, activity, { "role": 'assistant', "content": [{ "type": 'text', "text": llmResponse }] }, chatMessagesFileName);
+    if (activity === "stock_market_chat") await messageManager.saveMessage(chatSessionId, activity, { "role": 'assistant', "content": [{ "type": 'text', "text": llmResponse }] }, chatMessagesFileName);
     console.log("llmResponse", llmResponse)
-    const formattedResponse = await responseHandler.handleResponse(llmResponse)
-    
+    const handlerResponse = await responseHandler.handleResponse(llmResponse)
+    const {formattedResponse, result} = handlerResponse
+    const chat_title = messages[messages.length - 1].content; //FIXME this will be summary title of the Question
+    await messageManager.updateGQL(chatSessionId, chat_title, email, messages[messages.length - 1].content, llmResponse, JSON.stringify(result), formattedResponse)
     if (true == streaming) {
       let json;
       const lines = formattedResponse.split("\n")
@@ -77,25 +82,6 @@ const route = async (req, res) => {
         json = { "response": sendLine, "done": false }
         res.write(`data: ${JSON.stringify(json)}\n\n`);
       }
-      /*json = { "response": `<div style="display: flex; align-items: center;">
-  <button   
-    style="background-color: #ff3b30; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.2);" 
-    data-action="set-alert">
-    Set Alert
-  </button>
-  <svg
-  xmlns="http://www.w3.org/2000/svg"
-  width="24"
-  height="24"
-  viewBox="0 0 24 24"
-  style="margin-left: 8px; fill: #2196F3; cursor: pointer;"
-  data-action="show-snackbar"
-  data-message="This is like Google News Alert. When underlying data changes, and your query conditions are met, system will notify you. This can be used to set up investing or trading strategies, based on multiple signals of your choice."
->
-  <path d="M13,9H11V7H13M13,17H11V11H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
-</svg>
-</div>`, "done": false }
-        res.write(`data: ${JSON.stringify(json)}\n\n`);*/
       json = { "response": "", "done": true }
       res.write(`data: ${JSON.stringify(json)}\n\n`);
       res.end();

@@ -144,7 +144,6 @@ import { reverse_mapping_category_of_insider, reverse_mapping_regulation,
 import GoogleSignIn from "../components/GoogleSignIn";
 import StockWatchList from "./StockWatchList.vue"
 import MutualFundAnalysis from "../components/MutualFundAnalysis.vue";
-//import PromptChat from "./Assistant.vue";
 import {
   GET_STOCK_LIST,
   INSERT_PORTLFOLIO_STOCK,

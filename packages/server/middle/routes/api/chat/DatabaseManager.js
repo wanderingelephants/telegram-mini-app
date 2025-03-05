@@ -84,7 +84,8 @@ class DatabaseManager {
         mutual_fund_stock_holdings = normalizedMutualFundsData.stockHoldings
         const today = new Date();
         const toDate = today.toISOString().split("T")[0]
-        const fromDate = (new Date(today.getTime() - (10 * 24 * 60 * 60 * 1000))).toISOString().split("T")[0]
+        const fromDate = (new Date(today.getTime() - (30 * 24 * 60 * 60 * 1000))).toISOString().split("T")[0]
+        console.log("DatabaseManager fromDate, toDate", fromDate, toDate)
         const announcementQuery = `query stock_announcements($fromDate: date!, $toDate: date!){
         stock_announcements(where: {announcement_date: {_gte: $fromDate, _lte: $toDate}}){
           stock{

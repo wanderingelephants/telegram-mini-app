@@ -303,6 +303,27 @@
           - volume
         filter: {}
 - table:
+    name: user_chat
+    schema: public
+  object_relationships:
+    - name: user
+      using:
+        foreign_key_constraint_on: user_id
+  select_permissions:
+    - role: user
+      permission:
+        columns:
+          - chat_title
+          - chat_uuid
+          - created_at
+          - textContent_assistant_formatted_response
+          - textContent_user_query
+          - updated_at
+        filter:
+          user:
+            email:
+              _eq: X-Hasura-User-Id
+- table:
     name: user_config
     schema: public
   object_relationships:
@@ -368,6 +389,13 @@
           column: user_id
           table:
             name: portfolio_stocks
+            schema: public
+    - name: user_chats
+      using:
+        foreign_key_constraint_on:
+          column: user_id
+          table:
+            name: user_chat
             schema: public
     - name: user_configs
       using:
