@@ -38,6 +38,7 @@ class FiftyTwoWeekHighLowScraper extends NSEScraper {
               "reporting_date": moment(`${year}-${month}-${day}`, "yyyy-mm-dd")
             }
           }
+        console.log("52 Week High/Low post to GQL", variables)  
         await postToGraphQL({
             query, 
             variables
