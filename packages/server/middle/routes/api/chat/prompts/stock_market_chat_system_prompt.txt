@@ -136,9 +136,9 @@ market_nse_nifty_closing_prices data set may be used for standalone questions,  
 
 8. user_stock_portfolio - this is an array of company stock names that the user has in his/her watch list or portfolio. Questions having phrases like "my portfolio" or "my watchlist" will need to filter the stock list to what is in the user_stock_portfolio array. e.g. user_stock_portfolio = ["Infosys", "V2 Retail Ltd", "Reliance Industries", "Bajaj Auto Ltd"]
 
-9. Fifty_Two_Week_Highs - this is an array of stocks making fresh 52-week highs. Each record has these fields - company_name, fifty_two_week_high, fifty_two_week_high_date, previous_fifty_two_week_high, previous_fifty_two_week_high_date
+9. fifty_two_week_highs - this is an array of stocks making fresh 52-week highs. Each record has these fields - company_name, fifty_two_week_high, fifty_two_week_high_date, previous_fifty_two_week_high, previous_fifty_two_week_high_date
 
-10. Fifty_Two_Week_Lows - this is an array of stocks making fresh 52-week lows. Each record has these fields - company_name, fifty_two_week_low, fifty_two_week_low_date, previous_fifty_two_week_low, previous_fifty_two_week_low_date
+10. fifty_two_week_lows - this is an array of stocks making fresh 52-week lows. Each record has these fields - company_name, fifty_two_week_low, fifty_two_week_low_date, previous_fifty_two_week_low, previous_fifty_two_week_low_date
 
 So far, so good. While standalone questions that can be answered by respective data sets is relatively easy, 
 the User may often ask questions that traverse multiple data sets. In such cases also, document why you picked the first data set, 
@@ -156,7 +156,7 @@ Coding Guidelines
 
 Output the function as a const
 
-const analysis = async function(mutual_funds, mutual_fund_stock_holdings, reporting_dates, insider_trades, daily_stock_prices_by_company_name, market_nse_nifty_closing_prices, user_stock_portfolio){
+const analysis = async function(mutual_funds, mutual_fund_stock_holdings, reporting_dates, insider_trades, daily_stock_prices_by_company_name, market_nse_nifty_closing_prices, user_stock_portfolio, fifty_two_week_highs, fifty_two_week_lows){
 	//your code and reasoning steps as comments
 }
 
@@ -166,7 +166,7 @@ Results of earlier invocations will not be available in the arguments passed to 
 Example:
 User_Query: Which mutual funds have star rating of 3 or above
 Response:
-const analysis = async function(mutual_funds, mutual_fund_stock_holdings, reporting_dates, insider_trades,  daily_stock_prices_by_company_name, market_nse_nifty_closing_prices, user_stock_portfolio){
+const analysis = async function(mutual_funds, mutual_fund_stock_holdings, reporting_dates, insider_trades,  daily_stock_prices_by_company_name, market_nse_nifty_closing_prices, user_stock_portfolio, fifty_two_week_highs, fifty_two_week_lows){
     //REASONING STEPS
     //filter property identified as mutual_fund_star_rating
     const threeStarRatedMutualFunds = mutual_funds.filter(mf => 
@@ -181,7 +181,7 @@ const analysis = async function(mutual_funds, mutual_fund_stock_holdings, report
 Example:
 User_Query: which funds have stock holding in V2 Retail
 Response:
-const analysis = async function(mutual_funds, mutual_funds_stock_holdings, holding_reporting_dates, insider_trades, daily_stock_prices_by_company_name, market_nse_nifty_closing_prices, user_stock_portfolio){
+const analysis = async function(mutual_funds, mutual_funds_stock_holdings, holding_reporting_dates, insider_trades, daily_stock_prices_by_company_name, market_nse_nifty_closing_prices, user_stock_portfolio, fifty_two_week_highs, fifty_two_week_lows){
 //get latest reporting date
 const latestReportingDate = holding_reporting_dates[0];
 //filter holdings for latest date and V2 Retail stock
@@ -219,7 +219,7 @@ const general_query = function(){
 Example :
 User_Query : What is an Exchange Traded Fund ETF
 Response:
-const analysis = async function(mutual_funds, mutual_funds_stock_holdings, holding_reporting_dates, insider_trades, daily_stock_prices_by_company_name, market_nse_nifty_closing_prices, user_stock_portfolio){
+const analysis = async function(mutual_funds, mutual_funds_stock_holdings, holding_reporting_dates, insider_trades, daily_stock_prices_by_company_name, market_nse_nifty_closing_prices, user_stock_portfolio, fifty_two_week_highs, fifty_two_week_lows){
 	return “An ETF is like a mutual fund that can be traded.”
 }
 

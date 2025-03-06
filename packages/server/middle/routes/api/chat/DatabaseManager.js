@@ -195,6 +195,61 @@ class DatabaseManager {
         const t2 = Date.now()
         console.log("DatabaseManager :: Time Take to initData ", (t2 - t1))
 
+        resp = await postToGraphQL({
+            query: `{
+  "data": {
+    "fifty_two_week_high_low": [
+      {
+        "stock": {
+          "company_name": "Avanti Feeds Limited",
+          "company_sector": null
+        },
+        "reporting_date": "2025-03-06",
+        "new_high_low": 822,
+        "prev_high_low": 815,
+        "prev_high_low_date": "2025-03-05",
+        "change_percent": 0.36,
+        "is_high": true
+      },
+      {
+        "stock": {
+          "company_name": "Bohra Industries Limited",
+          "company_sector": null
+        },
+        "reporting_date": "2025-03-06",
+        "new_high_low": 30.14,
+        "prev_high_low": 28.71,
+        "prev_high_low_date": "2025-03-05",
+        "change_percent": 4.98,
+        "is_high": true
+      }`,
+      variables: {
+        fromDate, toDate
+      }
+        })
+        const { fifty_two_week_high_low } = resp.data;
+
+const fifty_two_week_highs = fifty_two_week_high_low
+  .filter(entry => entry.is_high)
+  .map(({ stock, new_high_low, prev_high_low, prev_high_low_date, ...rest }) => ({
+    company_name: stock.company_name,
+    company_sector: stock.company_sector,
+    new_high: new_high_low,
+    prev_high: prev_high_low,
+    prev_high_date: prev_high_low_date,
+    ...rest
+  }));
+
+const fifty_two_week_lows = fifty_two_week_high_low
+  .filter(entry => !entry.is_high)
+  .map(({ stock, new_high_low, prev_high_low, prev_high_low_date, ...rest }) => ({
+    company_name: stock.company_name,
+    company_sector: stock.company_sector,
+    new_low: new_high_low,
+    prev_low: prev_high_low,
+    prev_low_date: prev_high_low_date,
+    ...rest
+  }));
         this.data = {
             mutual_funds,
             mutual_fund_stock_holdings,
@@ -203,7 +258,8 @@ class DatabaseManager {
             corporate_announcements,
             insider_trades,
             daily_closing_stock_prices_by_company_name,
-            market_nse_nifty_closing_prices
+            market_nse_nifty_closing_prices,
+            fifty_two_week_highs, fifty_two_week_lows
         }
         this.isInitialized = true
         console.log("Database Manager initialized")
