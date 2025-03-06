@@ -114,16 +114,16 @@ class NSEScraper {
                 try {
                     const table = tables[key]
                     //const table = document.querySelector(`#${tableId}`);
-                    console.log("Table found:", !!table);
+                    //console.log("Table found:", !!table);
 
                     if (!table) return null;
 
                     const headers = columnHeaders[key]//["SYMBOL", "COMPANY NAME", "SUBJECT", "DETAILS", "ATTACHMENT", "BROADCAST DATE/TIME"];
-                    console.log("Headers:", headers);
+                    //console.log("Headers:", headers);
 
                     // Get all rows with class=" " and log the count
                     const rows = table.querySelectorAll('tbody tr[class=" "]');
-                    console.log("Number of matching rows found:", rows.length);
+                    //console.log("Number of matching rows found:", rows.length);
 
                     const records = Array.from(rows).map(row => {
                         const cells = Array.from(row.querySelectorAll('td'));
