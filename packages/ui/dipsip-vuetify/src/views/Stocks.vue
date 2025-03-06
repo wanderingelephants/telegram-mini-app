@@ -238,7 +238,6 @@ export default {
           },
           fetchPolicy: "no-cache"
         })
-        console.log(new Date(), "getAnnouncements", this.fromDate.toISOString().split("T")[0], this.toDate.toISOString().split("T")[0], resp)
         const flattened = this.extractArraysFromResponse(resp)
         this.announcements = flattened.announcements
         

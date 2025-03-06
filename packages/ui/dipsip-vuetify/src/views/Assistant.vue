@@ -5,7 +5,7 @@
       v-model="sidebarOpen"
       app
       class="sidebar"
-      width="250"
+      width="300"
     >
       <v-list>
   <!-- Top Row with Icons -->
@@ -38,36 +38,45 @@
 
   <!-- Chat History -->
   <v-list dense>
-         <v-list-item
-  v-for="chat in chatHistory"
-  :key="chat.id"
-  @click="loadChat(chat.id)"
-  class="chat-list-item"
-  @mouseenter="hoveredChatId = chat.id"
-  @mouseleave="hoveredChatId = null"
->
-  <v-list-item-content class="d-flex justify-space-between align-center">
-    <v-list-item-title>{{ chat.title }}</v-list-item-title>
+  <v-list-item
+    v-for="chat in chatHistory"
+    :key="chat.id"
+    @click="loadChat(chat.id)"
+    class="chat-list-item"
+    @mouseenter="hoveredChatId = chat.id"
+    @mouseleave="hoveredChatId = null"
+  >
+    <v-list-item-content class="d-flex justify-space-between align-center">
+      
+      <!-- Tooltip on Title Hov er -->
+      <v-list-item-title 
+        class="text-truncate chat-title"
+        v-tooltip.bottom="chat.title"
+      >
+        {{ chat.title }}
+      </v-list-item-title>
 
-    <!-- 3-dot menu (lightweight icon) -->
-    <!--<span v-if="hoveredChatId === chat.id" @click.stop="openMenu($event, chat.id)">
-      <v-icon small class="text-grey-darken-1">$mdiDotsHorizontal</v-icon>
-    </span> -->
-  </v-list-item-content>
-</v-list-item>
+      <!-- 3-dot menu (lightweight icon) -->
+      <span v-if="hoveredChatId === chat.id" @click.stop="openMenu($event, chat.id)">
+        <v-icon small class="text-grey-darken-1">$mdiDotsHorizontal</v-icon>
+      </span>
+
+    </v-list-item-content>
+  </v-list-item>
+</v-list>
 
 
-        </v-list>
 </v-list>
 
     </v-navigation-drawer>
     <!-- Chat Options Menu -->
     <v-menu
-      v-model="menu.show"
-      :position-x="menu.x"
-      :position-y="menu.y"
-      absolute
-    >
+  v-model="menu.show"
+  :position-x="menu.x"
+  :position-y="menu.y"
+  absolute
+  attach="body"
+>
       <v-list dense>
         <v-list-item @click="shareChat(menu.chatId)">
           <v-list-item-title>Share</v-list-item-title>
@@ -75,12 +84,13 @@
         <v-list-item @click="renameChat(menu.chatId)">
           <v-list-item-title>Rename</v-list-item-title>
         </v-list-item>
-        <v-list-item @click="archiveChat(menu.chatId)">
-          <v-list-item-title>Archive</v-list-item-title>
-        </v-list-item>
+       
         <v-list-item @click="deleteChat(menu.chatId)">
           <v-list-item-title class="text-error">Delete</v-list-item-title>
-        </v-list-item>
+        </v-list-item> 
+       <!--  <v-list-item @click="archiveChat(menu.chatId)">
+          <v-list-item-title>Archive</v-list-item-title>
+        </v-list-item>-->
       </v-list>
     </v-menu>
     <!-- Rename Chat Dialog -->
@@ -227,7 +237,6 @@ export default {
   mounted() {
     document.addEventListener("click", this.handleButtonClick);
     const chatSessionId = crypto.randomUUID();
-    console.log("Start new chat", chatSessionId)
     sessionStorage.setItem("chatSessionId", chatSessionId);
       
   },
@@ -236,7 +245,7 @@ export default {
   },
   data() {
     return {
-      sidebarOpen: true,
+      sidebarOpen: false,
       hoveredChatId: null,
       menu: {
         show: false,
@@ -289,7 +298,7 @@ export default {
       } 
     },
     "snackbar.show"(newVal) {
-      console.log("Snackbar visibility changed:", newVal);
+      
       if (newVal) {
         this.startProgress();
       } else {
@@ -328,30 +337,55 @@ export default {
           })
         }
       
-      
     },
     startNewChat() {
       const chatSessionId = crypto.randomUUID();
-      console.log("Start new chat", chatSessionId)
       sessionStorage.setItem("chatSessionId", chatSessionId);
       this.messages = []; // Clear messages for a new session
       this.title = "New Chat";
-      //this.chatHistory.push({ id: chatSessionId, title: `Chat ${this.chatHistory.length + 1}` });
     },
     loadChat(chatId) {
-      console.log("Loading chat uuid:", chatId,  this.chatHistory);
       sessionStorage.setItem("chatSessionId", chatId);
       this.messages = this.chatHistory.filter(c => c.id === chatId)[0].messages
       console.log(this.messages)
     },
     openMenu(event, chatId) {
-      this.menu.show = true;
-      this.menu.x = event.clientX;
-      this.menu.y = event.clientY;
-      this.menu.chatId = chatId;
-    },
-    shareChat(chatId) {
+  // Prevent the default event and stop propagation
+  event.preventDefault();
+  event.stopPropagation();
+  console.log("openMenu", event.clientX, event.clientY)
+  // Set the position based on the mouse click
+  this.menu.x = event.clientX;
+  this.menu.y = event.clientY;
+  this.menu.chatId = chatId;
+  this.menu.show = true;
+},
+    async shareChat(chatId) {
       console.log("Sharing chat:", chatId);
+      try{
+          const response = await fetch("/api/chat/share", {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("jwtGoogle")}`,
+          },
+          body: JSON.stringify({
+            chat_uuid: chatId
+          }),
+        });
+        if (response.status !== 200) {
+          this.snackbar.color = "error";
+          this.snackbar.message = "Not authorized";
+          this.snackbar.show = true;
+          return;
+        }
+        const data = await response.json()
+        if (data.url && data.url.endsWith(chatId)) window.open(data.url, '_blank');
+      }
+      catch(e){
+        console.error(e)
+      }
     },
     renameChat(chatId) {
       const chat = this.chatHistory.find((c) => c.id === chatId);
@@ -383,7 +417,6 @@ export default {
       this.searchQuery = "";
     },
     startProgress() {
-      console.log("Snackbar startProgress triggered!");
       this.progress = 100;
       const totalSteps = this.snackbar.timeout / 100;
       let currentStep = totalSteps;
@@ -392,7 +425,6 @@ export default {
 
       this.interval = setInterval(() => {
         currentStep--;
-        console.log("currentStep", currentStep)
         this.progress = (currentStep / totalSteps) * 100;
 
         if (currentStep <= 0) {
@@ -464,8 +496,7 @@ export default {
           body: JSON.stringify({
             chatSessionId,
             activity: "stock_market_chat",
-            messages: [...this.messages],
-            email: this.userGoogle.email,
+            messages: [...this.messages]
           }),
         });
         if (response.status !== 200) {

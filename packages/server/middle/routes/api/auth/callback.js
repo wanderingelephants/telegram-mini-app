@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken")
 
 let route = async (req, res) => {
-    console.log("AUTH CALLBACK")
     try {       
         let claims = {
             //"X-Hasura-Allowed-Roles": ["user"],
@@ -15,11 +14,7 @@ let route = async (req, res) => {
         }*/
         const authHeader = req.headers.authorization;
         const token = authHeader.split(' ')[1];
-        console.log("callback.js")
-        console.log(authHeader)
-        console.log(token)
         let decodedToken = jwt.decode(token);
-        console.log("decodedToken", decodedToken)
         if(decodedToken['https://hasura.io/jwt/claims']['x-hasura-role']) {
             claims['X-Hasura-Role'] =  decodedToken['https://hasura.io/jwt/claims']['x-hasura-role']
         }

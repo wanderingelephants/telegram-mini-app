@@ -24,7 +24,8 @@ const getMaxMessageLength = async(email, activity) => {
   return  1000
 }
 const route = async (req, res) => {
-  const { email, activity, messages, customData, chatSessionId } = req.body;
+  const email = req.user.email
+  const { activity, messages, customData, chatSessionId } = req.body;
   //console.log("reasoning_v2", { email, activity, messages, customData, chatSessionId })
   let streaming
   let userLatestMessage = messages[messages.length - 1].content

@@ -324,6 +324,24 @@
             email:
               _eq: X-Hasura-User-Id
 - table:
+    name: user_chat_share
+    schema: public
+  object_relationships:
+    - name: user
+      using:
+        foreign_key_constraint_on: user_id
+  select_permissions:
+    - role: user
+      permission:
+        columns:
+          - chat_title
+          - chat_uuid
+          - created_at
+          - textContent_assistant_formatted_response
+          - textContent_user_query
+          - updated_at
+        filter: {}
+- table:
     name: user_config
     schema: public
   object_relationships:

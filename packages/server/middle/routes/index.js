@@ -29,7 +29,6 @@ try {
   if (!idToken) {
     return res.status(401).json({ error: "No token provided" });
   }
-  console.log("route token verified")
   const decodedToken = await admin.auth().verifyIdToken(idToken);
   req.user = decodedToken;
   next();
@@ -45,7 +44,8 @@ const routes = {
             callback: require("./api/auth/callback")
         },
         chat: {
-            reasoning: require("./api/chat/reasoning_v2")
+            reasoning: require("./api/chat/reasoning_v2"),
+            share: require("./api/chat/share")
         },
         indices: {
             AUTOBEES: require("./api/indices/AUTOBEES.json"),
@@ -102,6 +102,7 @@ const routes = {
 router.post("/api/auth/google", routes.api.auth.google)
 router.get("/api/auth/callback", routes.api.auth.callback)
 router.post("/api/chat/reasoning", verifyToken, routes.api.chat.reasoning)
+router.post("/api/chat/share", verifyToken, routes.api.chat.share)
 router.post("/api/chat/summary", routes.api.chat.reasoning)
 router.post("/api/telegram/auth", routes.api.telegram.auth)
 router.get("/api/kite/order/create", routes.api.kite.order.create)

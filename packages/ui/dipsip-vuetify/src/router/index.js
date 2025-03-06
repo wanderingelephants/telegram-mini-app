@@ -11,6 +11,7 @@ import Utils from '@/views/Utils.vue'
 import Tools from '@/views/Tools.vue'
 import PromptInstruct from '@/views/PromptInstruct.vue'
 import Assistant from '@/views/Assistant.vue'
+import ChatView from '@/views/ChatView.vue'
 import Pricing from '@/views/Pricing.vue'
 import KiteConnectApp from '../components/KiteConnectApp'
 
@@ -39,6 +40,11 @@ const routes = [
     path: '/assistant',
     name: 'Assistant',
     component: Assistant
+  },
+  {
+    path: '/share/:uuid',
+    name: 'ChatView',
+    component: ChatView
   },
   {
     path: '/promptInstruct',

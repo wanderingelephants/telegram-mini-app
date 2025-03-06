@@ -139,8 +139,20 @@ const USER_CHAT_HISTORY = gql`query UserChatHistory($email: String!){
     updated_at
   }
 }`
+
+const CHAT_VIEW = gql`query UserChatHistory($chat_uuid: uuid!){
+  user_chat(where: {chat_uuid: {_eq: $chat_uuid}}, order_by: {updated_at: asc}){
+    chat_uuid
+    chat_title
+    textContent_user_query
+    textContent_assistant_formatted_response
+    created_at
+    updated_at
+  }
+}`
+
 export {
     GET_STOCK_LIST, INSERT_PORTLFOLIO_STOCK, GET_USER_STOCK_PORTFOLIO, DELETE_USER_STOCK_PORTFOLIO,
     GET_PORTFOLIO_ANNOUNCEMENTS, GET_USER_MF_PORTFOLIO, INSERT_USER_MF_PORTFOLIO, DELETE_USER_MF_PORTFOLIO,
-    INSERT_USER_CONFIG, DELETE_USER_CONFIG, USER_CHAT_HISTORY
+    INSERT_USER_CONFIG, DELETE_USER_CONFIG, USER_CHAT_HISTORY, CHAT_VIEW
 }
