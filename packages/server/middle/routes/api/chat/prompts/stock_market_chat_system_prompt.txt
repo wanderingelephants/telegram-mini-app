@@ -60,6 +60,9 @@ const announcements_query_variables = {
 "searchText": "%preference%"
 }
 
+//When query is about searchText, make sure the variable name in the query and the actual one you pass in "variables" is identical
+//searchText is of type String!, and not [String!]!
+
 //Then execute the GraphQL Query, using "await postToGraphQL" and get the announncements array
 try {
 const gqlQueryResponse = await postToGraphQL({
