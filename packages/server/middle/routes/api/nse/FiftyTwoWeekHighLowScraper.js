@@ -38,10 +38,16 @@ class FiftyTwoWeekHighLowScraper extends NSEScraper {
             }
           }
         console.log("52 Week High/Low post to GQL", variables)  
-        await postToGraphQL({
-            query, 
-            variables
-        })
+        try{
+            await postToGraphQL({
+                query, 
+                variables
+            })
+        }
+        catch(e){
+            console.error(e)
+        }
+        
 
     }
     async processTableData(tableData, keys) {

@@ -20,7 +20,7 @@ cron.schedule('17 16 * * 1-5', async () => {
     console.log("eod job", process.env.API_SERVER + `/api/kite/instrument/eod?dateStr=${year}-${month}-${day}`)
     let resp = await axios.get(process.env.API_SERVER + `/api/kite/instrument/eod?dateStr=${year}-${month}-${day}`)
     console.log("eod resp", resp)
-    resp = await axios.get(process.env.API_SERVER + "/api/nse/marketclose")
+    //resp = await axios.get(process.env.API_SERVER + "/api/nse/marketclose")
     console.log("eod resp", resp)
   }
   else console.log("EOD Jobs not enabled on this env")
