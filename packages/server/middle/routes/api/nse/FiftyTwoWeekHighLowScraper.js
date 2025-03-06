@@ -1,4 +1,3 @@
-const moment = require('moment');
 const path = require('path');
 const fs = require('fs');
 const { postToGraphQL } = require("../../../lib/helper")
@@ -35,7 +34,7 @@ class FiftyTwoWeekHighLowScraper extends NSEScraper {
               "prev_high_low": index === "fifty_two_weeks_high" ? this.parseNumber(announcement.PREV_HIGH.replace(/,/g, '')) : this.parseNumber(announcement.PREV_LOW.replace(/,/g, '')),
               "prev_high_low_date": index === "fifty_two_weeks_high" ? announcement.PREV_HIGH_DATE : announcement.PREV_LOW_DATE,
               "is_high": index === "fifty_two_weeks_high" ? true:false,
-              "reporting_date": moment(`${year}-${month}-${day}`, "yyyy-mm-dd")
+              "reporting_date": `${year}-${month}-${day}`
             }
           }
         console.log("52 Week High/Low post to GQL", variables)  

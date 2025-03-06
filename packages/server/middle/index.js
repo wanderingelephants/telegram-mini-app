@@ -14,7 +14,7 @@ const { DateTime } = require('luxon');
 const now = DateTime.now().setZone('Asia/Kolkata');
 const date = now.toFormat('yyyy-MM-dd');
 const [year, month, day] = date.split('-');
-cron.schedule('02 16 * * 1-5', async () => {
+cron.schedule('17 16 * * 1-5', async () => {
   console.log("Triggered EoD job", process.env.EOD_JOBS_ENABLED)
   if ("true" === process.env.EOD_JOBS_ENABLED){
     console.log("eod job", process.env.API_SERVER + `/api/kite/instrument/eod?dateStr=${year}-${month}-${day}`)

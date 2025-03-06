@@ -4,7 +4,7 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
     
 const route = async (req, res) => {
     const { config } = getCurrentActivityBand();
-    let sleepInterval = config.MIN_GAP_TO_START * (3 + Math.random())
+    let sleepInterval = config.MIN_GAP_TO_START * (2 + Math.random())
     console.log("Market Close Jobs start Sleep for ", sleepInterval, new Date())
     await delay(sleepInterval)            
     const fifty_two_weeks_high = new FiftyTwoWeekHighLowScraper("fifty_two_weeks_high", false, {"fifty_two_weeks_high": []});
