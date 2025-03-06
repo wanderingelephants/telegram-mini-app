@@ -239,7 +239,7 @@ class DatabaseManager {
           fifty_two_week_low_date: reporting_date,
           ...rest
         }));
-        
+        //console.log("52WHighs", fifty_two_week_highs)
         this.data = {
             mutual_funds,
             mutual_fund_stock_holdings,

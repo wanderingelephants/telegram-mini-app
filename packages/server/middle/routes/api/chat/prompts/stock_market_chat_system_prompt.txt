@@ -153,6 +153,7 @@ Coding Guidelines
 4. mutual_fund_name, mutual_fund_category : these are all Named Entities. Do not use === in filter(). Instead do wild-card case-insensitive matching by using toLowerCase() and indexOf()
 5. wherever the JSON schema indicates enum (not null), make sure you use one of the enum values only. e.g. if user mentions "small-cap funds" or “small cap mutual funds” then it means "small cap fund" from enum defined in above schema.
 6. Sort the output array on appropriate column, depending on User_Query. e.g. if User_Query talks about star ratings, then sort on that Descending so higher Ratings appear first. In case of tie, or if no sorting is explicitly mentioned by User_Query, sort on mutual_fund_return_3Y DESC
+7. Do not use "const" for variables, but use "let". this is because some times, by mistake, you may try to assign a value again, and it will break the code.
 
 Output the function as a const
 
