@@ -118,14 +118,14 @@ const cards = ref([
   },
   {
     title: "",
-    subtitle: "Assistant",
-    description: "Your Personal Assistant available 24 X 7, to answer general queries, and find hidden gems in the Indian Markets. Try <a href='/assistant'>Assistant</a>",
+    subtitle: "AI  Assistant",
+    description: "Your Personal Assistant available 24 X 7, to find hidden gems in the Indian Stock Markets. Try <a href='/assistant'>Assistant</a>",
     hasHtml: true
   },
   {
     title: "",
-    subtitle: "DipSIP ETF >>>> MF SIP",
-    description: "What is DipSIP ? Do you regret Buying at highs ? Try DipSip, the proven Contra strategy.<a href='/etfList'>DipSIP ETFs</a>",
+    subtitle: "Enterprise ?",
+    description: "Any Domain - Manufacturing, Pharma, Capital Markets. DipSip AI Assistant is a self-hosted small language model solution, where no data goes outside. If you want to build a knowledge tool like DipSip AI Assistant, then talk to us. ",
     hasHtml: true
   }
   
