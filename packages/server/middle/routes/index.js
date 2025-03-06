@@ -45,7 +45,8 @@ const routes = {
         },
         chat: {
             reasoning: require("./api/chat/reasoning_v2"),
-            share: require("./api/chat/share")
+            share: require("./api/chat/share"),
+            view: require("./api/chat/view")
         },
         indices: {
             AUTOBEES: require("./api/indices/AUTOBEES.json"),
@@ -103,6 +104,7 @@ router.post("/api/auth/google", routes.api.auth.google)
 router.get("/api/auth/callback", routes.api.auth.callback)
 router.post("/api/chat/reasoning", verifyToken, routes.api.chat.reasoning)
 router.post("/api/chat/share", verifyToken, routes.api.chat.share)
+router.get("/api/chat/view", routes.api.chat.view)
 router.post("/api/chat/summary", routes.api.chat.reasoning)
 router.post("/api/telegram/auth", routes.api.telegram.auth)
 router.get("/api/kite/order/create", routes.api.kite.order.create)

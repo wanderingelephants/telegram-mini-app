@@ -29,12 +29,11 @@ import {
 export default{
     async mounted(){
         console.log("mounted", this.$route.params)
-        const resp = await this.$apollo.query({
-          query: CHAT_VIEW, 
-          variables: {chat_uuid: this.$route.params.uuid}
-        })
+        const resp = await fetch("/api/chat/view?chat_uuid="+this.$route.params.uuid,  {method: "GET"})
+        console.log("resp", resp)
+        const data = await resp.json()
         this.chatHistory = []
-      for (const chat of resp.data.user_chat){
+      for (const chat of data){
         console.log("chat", chat)
         if ((this.chatHistory.filter(ch => ch.id === chat.chat_uuid)).length === 0){
           this.chatHistory.push({
