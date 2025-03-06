@@ -88,7 +88,7 @@ async function processSummaries(inputFolder, outputFolder, fileToSummarize) {
                 console.log("Updated Announcement Text", resp)
             }
             catch (e) {
-                console.error(e)
+                console.log(e)
             }
             
             // Prepare JSON payload
@@ -124,12 +124,12 @@ async function processSummaries(inputFolder, outputFolder, fileToSummarize) {
                 // Wait for 3 seconds before next request
                 await new Promise(resolve => setTimeout(resolve, 3000));
             } catch (error) {
-                console.error(error)
-                console.error(`Error occurred while processing ${file}:`, error.message);
+                console.log(error)
+                console.log(`Error occurred while processing ${file}:`, error.message);
             }
         }
     } catch (error) {
-        console.error(error)
+        console.log(error)
     }
 }
 const route = async (req, res) => {
