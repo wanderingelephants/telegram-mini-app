@@ -196,33 +196,20 @@ class DatabaseManager {
         console.log("DatabaseManager :: Time Take to initData ", (t2 - t1))
 
         resp = await postToGraphQL({
-            query: `{
-  "data": {
-    "fifty_two_week_high_low": [
-      {
-        "stock": {
-          "company_name": "Avanti Feeds Limited",
-          "company_sector": null
-        },
-        "reporting_date": "2025-03-06",
-        "new_high_low": 822,
-        "prev_high_low": 815,
-        "prev_high_low_date": "2025-03-05",
-        "change_percent": 0.36,
-        "is_high": true
-      },
-      {
-        "stock": {
-          "company_name": "Bohra Industries Limited",
-          "company_sector": null
-        },
-        "reporting_date": "2025-03-06",
-        "new_high_low": 30.14,
-        "prev_high_low": 28.71,
-        "prev_high_low_date": "2025-03-05",
-        "change_percent": 4.98,
-        "is_high": true
-      }`,
+            query: `query GetFiftyTwoWeekHighLow($fromDate: date!, $toDate: date!){
+  fifty_two_week_high_low(where: {reporting_date: {_gte: $fromDate, _lte: $toDate}}){
+    stock{
+      company_name
+      company_sector
+    }
+    reporting_date
+    new_high_low
+    prev_high_low
+    prev_high_low_date
+    change_percent
+    is_high
+  }
+}`,
       variables: {
         fromDate, toDate
       }
