@@ -4,3 +4,4 @@ sqlite_db
 *.env
 *firebase*.json
 failed_records*
+cmots.sh

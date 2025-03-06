@@ -112,6 +112,7 @@ const route = async(req, res) => {
     for (const email of Object.keys(symbolsToSend)){
         const trade_url_query = getQueryString(symbolsToSend[email])
         console.log(email, trade_url_query)
+        if (trade_url_query.length === 0) continue
         if (process.env.WEB_APP_HOST){
             const fullUrl = process.env.WEB_APP_HOST + "/trade" + trade_url_query
             console.log(email, fullUrl)
