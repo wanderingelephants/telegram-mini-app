@@ -39,12 +39,14 @@ const route = async (req, res) => {
     let formattingLLMClient = new LLMClient(await getFormattingLLMToUse(email, activity), await getModelToUse(email, activity))
     let responseHandler;
     let messagesToSend;
-    const messageManager = new MessageManager(path.join(dataRootFolder, "generated_functions"));
-    const chatHistory = await messageManager.getChatMessages(chatSessionId)
+    let messageManager
     //console.log("chatHistory", chatHistory)
     switch(activity){
         case "stock_market_chat":
             streaming = true
+            messageManager = new MessageManager(path.join(dataRootFolder, "generated_functions"));
+            const chatHistory = await messageManager.getChatMessages(chatSessionId)
+    
             //let lastResultMessage = await messageManager.getLastMessage(chatSessionId, activity, execResultsFileName)
             //if (lastResultMessage.result) userLatestMessage = "Result of Previous function execution was : " + JSON.stringify(lastResultMessage.result) + "\n" + userLatestMessage
             if (chatHistory["results"].length > 0) userLatestMessage = `Result of Previous Function Execution was :  ${chatHistory["results"][chatHistory["results"].length - 1].result} .\n Latest User Question: ${messages[messages.length - 1].content}` 
@@ -69,7 +71,7 @@ const route = async (req, res) => {
     const handlerResponse = await responseHandler.handleResponse(llmResponse)
     const {formattedResponse, result} = handlerResponse
     const chat_title = messages[messages.length - 1].content; //FIXME this will be summary title of the Question
-    await messageManager.updateGQL(chatSessionId, chat_title, email, messages[messages.length - 1].content, llmResponse, JSON.stringify(result), formattedResponse)
+    if (activity === "stock_market_chat") await messageManager.updateGQL(chatSessionId, chat_title, email, messages[messages.length - 1].content, llmResponse, JSON.stringify(result), formattedResponse)
     if (true == streaming) {
       let json;
       const lines = formattedResponse.split("\n")
