@@ -216,27 +216,30 @@ class DatabaseManager {
         })
         const { fifty_two_week_high_low } = resp.data;
 
-const fifty_two_week_highs = fifty_two_week_high_low
-  .filter(entry => entry.is_high)
-  .map(({ stock, new_high_low, prev_high_low, prev_high_low_date, ...rest }) => ({
-    company_name: stock.company_name,
-    company_sector: stock.company_sector,
-    new_high: new_high_low,
-    prev_high: prev_high_low,
-    prev_high_date: prev_high_low_date,
-    ...rest
-  }));
-
-const fifty_two_week_lows = fifty_two_week_high_low
-  .filter(entry => !entry.is_high)
-  .map(({ stock, new_high_low, prev_high_low, prev_high_low_date, ...rest }) => ({
-    company_name: stock.company_name,
-    company_sector: stock.company_sector,
-    new_low: new_high_low,
-    prev_low: prev_high_low,
-    prev_low_date: prev_high_low_date,
-    ...rest
-  }));
+        const fifty_two_week_highs = fifty_two_week_high_low
+        .filter(entry => entry.is_high)
+        .map(({ stock, new_high_low, prev_high_low, prev_high_low_date, reporting_date, ...rest }) => ({
+          company_name: stock.company_name,
+          company_sector: stock.company_sector,
+          new_high: new_high_low,
+          prev_high: prev_high_low,
+          prev_high_date: prev_high_low_date,
+          fifty_two_week_high_date: reporting_date,
+          ...rest
+        }));
+      
+      const fifty_two_week_lows = fifty_two_week_high_low
+        .filter(entry => !entry.is_high)
+        .map(({ stock, new_high_low, prev_high_low, prev_high_low_date, reporting_date, ...rest }) => ({
+          company_name: stock.company_name,
+          company_sector: stock.company_sector,
+          new_low: new_high_low,
+          prev_low: prev_high_low,
+          prev_low_date: prev_high_low_date,
+          fifty_two_week_low_date: reporting_date,
+          ...rest
+        }));
+        
         this.data = {
             mutual_funds,
             mutual_fund_stock_holdings,
