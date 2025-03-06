@@ -316,6 +316,8 @@
           - chat_title
           - chat_uuid
           - created_at
+          - id
+          - is_alert_set
           - textContent_assistant_formatted_response
           - textContent_user_query
           - updated_at
@@ -323,6 +325,16 @@
           user:
             email:
               _eq: X-Hasura-User-Id
+  update_permissions:
+    - role: user
+      permission:
+        columns:
+          - is_alert_set
+        filter:
+          user:
+            email:
+              _eq: X-Hasura-User-Id
+        check: null
 - table:
     name: user_chat_share
     schema: public

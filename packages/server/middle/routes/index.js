@@ -46,6 +46,7 @@ const routes = {
         chat: {
             reasoning: require("./api/chat/reasoning_v2"),
             share: require("./api/chat/share"),
+            setalert: require("./api/chat/setalert"),
             view: require("./api/chat/view")
         },
         indices: {
@@ -90,7 +91,6 @@ const routes = {
             summaries: require("./api/nse/summaries"),
             sendSummaries: require("./api/nse/sendSummaryEmails"),
             insider: require("./api/nse/process_insider_csv"),
-            scraper: require("./api/nse/scraper"),
             marketclose: require("./api/nse/market_close")
         },
         telegram:{
@@ -104,6 +104,7 @@ router.post("/api/auth/google", routes.api.auth.google)
 router.get("/api/auth/callback", routes.api.auth.callback)
 router.post("/api/chat/reasoning", verifyToken, routes.api.chat.reasoning)
 router.post("/api/chat/share", verifyToken, routes.api.chat.share)
+router.post("/api/chat/setalert", verifyToken, routes.api.chat.setalert)
 router.get("/api/chat/view", routes.api.chat.view)
 router.post("/api/chat/summary", routes.api.chat.reasoning)
 router.post("/api/telegram/auth", routes.api.telegram.auth)
@@ -118,7 +119,6 @@ router.get("/api/mutualfunds/list", routes.api.mutualfunds.list)
 //router.get("/api/mutualfunds/scrape", routes.api.mutualfunds.scrape)
 router.post("/api/mutualfunds/categoryScrape", routes.api.mutualfunds.categoryScrape)
 router.get("/api/nse/marketclose", routes.api.nse.marketclose)
-router.get("/api/nse/scraper", routes.api.nse.scraper)
 router.get("/api/nse/summaries", routes.api.nse.summaries)
 router.get("/api/nse/sendSummaries", routes.api.nse.sendSummaries)
 

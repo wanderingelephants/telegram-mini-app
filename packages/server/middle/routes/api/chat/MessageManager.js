@@ -40,6 +40,7 @@ class MessageManager {
     update_columns: [textContent_user_query,textContent_execution_result,
     textContent_assistant_response, textContent_assistant_formatted_response]
   }){
+    id
     chat_uuid
   }
 }`
@@ -65,6 +66,7 @@ class MessageManager {
             }
         }
         const resp = await postToGraphQL({ query, variables })
+        return resp
     }
     async saveMessage(chatSessionId, activity, message, filename) {
         const filePath = _getFilePath(this.basePath, chatSessionId, activity, filename);

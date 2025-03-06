@@ -144,6 +144,7 @@
                     {{ message.role === "user" ? "You" : "Assistant" }}
                   </v-card-title>
                   <v-card-text class="white-space-pre pt-0" v-html="message.content"></v-card-text>
+                  <v-btn color="primary" v-if="message.is_alert_set === true" @click="setAlert(message.id, message.chat_uuid, false)">Unset Alert</v-btn>
                 </v-card>
               </v-list-item>
             </template>
@@ -224,7 +225,7 @@
 
 <script>
 import {
-  USER_CHAT_HISTORY
+  USER_CHAT_HISTORY, UPDATE_USER_CHAT
 } from "../lib/helper/queries";
 
 import { mapState } from "vuex";
@@ -331,10 +332,16 @@ export default {
             "role": "user",
             "content": chat.textContent_user_query
           })
-          mesgs.push({
+          const chatRecord = {
             "role": "assistant",
             "content": chat.textContent_assistant_formatted_response
-          })
+          }
+          if (chat.is_alert_set === true) {
+            chatRecord["id"] = chat.id
+            chatRecord["is_alert_set"] = true
+            chatRecord["chat_uuid"] = chat.chat_uuid
+          }
+          mesgs.push(chatRecord)
         }
       
     },
@@ -446,7 +453,7 @@ export default {
       const action = target.getAttribute("data-action");
 
       if (action === "set-alert") {
-        this.setAlert();
+        this.setAlert(target.getAttribute("data-chatid"), target.getAttribute("data-chatuuid"), true);
       } else if (action === "show-snackbar") {
         const message = target.getAttribute("data-message") || "Information";
         this.snackbar.message = message;
@@ -454,9 +461,38 @@ export default {
         this.snackbar.show = true;
       }
     },
-    setAlert() {
-      // Your alert logic
-      console.log("Alert set!");
+    async setAlert(chat_id, chat_uuid, is_alert_set) {
+      try{
+        const response = await  this.$apollo.query({
+        query: UPDATE_USER_CHAT,
+        variables: {
+          chat_id, chat_uuid, is_alert_set
+        },
+        fetchPolicy: "no-cache"
+      })
+        console.log(response)
+        this.getUserChatHistory()
+        const message = is_alert_set === true  ? "Alert Set" : "Alert Removed"
+        this.snackbar.show = true
+        this.snackbar.message = message
+        this.snackbar.timeout = is_alert_set === true ? 4000 : 3000
+        
+      }
+      catch(e){
+        console.error(e)
+      }
+      /*const response = await fetch("/api/chat/setalert", {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("jwtGoogle")}`,
+          },
+          body: JSON.stringify({
+            chat_uuid, chat_id
+          }),
+      })
+      console.log("setAlert server response", response)*/
     },
     async sendMessage() {
       if (!this.userGoogle) {

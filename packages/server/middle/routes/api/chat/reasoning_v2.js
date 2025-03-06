@@ -70,9 +70,12 @@ const route = async (req, res) => {
     console.log("llmResponse", llmResponse)
     const handlerResponse = await responseHandler.handleResponse(llmResponse)
     const {formattedResponse, result} = handlerResponse
+    let chatId;
     const chat_title = messages[messages.length - 1].content; //FIXME this will be summary title of the Question
-    if (activity === "stock_market_chat") await messageManager.updateGQL(chatSessionId, chat_title, email, messages[messages.length - 1].content, llmResponse, JSON.stringify(result), formattedResponse)
-    if (true == streaming) {
+    if (activity === "stock_market_chat"){
+      const resp = await messageManager.updateGQL(chatSessionId, chat_title, email, messages[messages.length - 1].content, llmResponse, JSON.stringify(result), formattedResponse)
+      chatId = resp.data.insert_user_chat_one.id  
+    } if (true == streaming) {
       let json;
       const lines = formattedResponse.split("\n")
       for (const line of lines) {
@@ -86,6 +89,28 @@ const route = async (req, res) => {
         json = { "response": sendLine, "done": false }
         res.write(`data: ${JSON.stringify(json)}\n\n`);
       }
+      /*json = { "response": `<div style="display: flex; align-items: center;">
+  <button   
+    style="background-color: #ff3b30; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.2);" 
+    data-action="set-alert"
+    data-chatuuid="${chatSessionId}"
+    data-chatid="${chatId}"
+    >
+    Set Alert
+  </button>
+  <svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  style="margin-left: 8px; fill: #2196F3; cursor: pointer;"
+  data-action="show-snackbar"
+  data-message="This is like Google News Alert. When underlying data changes, and your query conditions are met, system will notify you. This can be used to set up investing or trading strategies, based on multiple signals of your choice."
+>
+  <path d="M13,9H11V7H13M13,17H11V11H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
+</svg>
+</div>`, "done": false }
+        res.write(`data: ${JSON.stringify(json)}\n\n`);*/
       json = { "response": "", "done": true }
       res.write(`data: ${JSON.stringify(json)}\n\n`);
       res.end();
