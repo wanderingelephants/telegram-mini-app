@@ -1,6 +1,7 @@
 const axios = require("axios")
 const { Anthropic } = require('@anthropic-ai/sdk');
-
+const fs = require("fs");
+const path = require("path")
 //Sends a chat request and sends back response. For Instruct also use chat model with  
 //sytem prompt and single message
 class LLMClient {
@@ -52,13 +53,9 @@ class LLMClient {
                 break;
 
             case 'JavascriptMockLLM':
-                llmResponse = `const analysis = function(mutual_funds, mutual_fund_stock_holdings, holding_reporting_dates, insider_trades, corporate_announcements, daily_closing_stock_prices_by_company_name, market_nse_nifty_closing_prices, user_stock_portfolio){
-                        return [
-                        {
-                            "mutual_fund_name" : "Motilal Oswal Small Cap"
-                        }
-                        ]
-                    }`
+                const filePath = path.join(process.env.DATA_ROOT_FOLDER, "generated_functions/2025/03/07/8de3ffe0-b388-4491-a302-7f6f0aa60ded/stock_market_chat", "analysis_1741321347634.js")
+                const fileContent = fs.readFileSync(filePath, "utf-8")
+                llmResponse = fileContent
                 break;
 
             case 'FormatMockLLM':
