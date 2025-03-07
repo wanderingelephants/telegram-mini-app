@@ -11,12 +11,13 @@ const cookieParser = require('cookie-parser');
 const WebsiteTrafficSimulator = require("./routes/api/nse/WebsiteTrafficSimulator")
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 const { DateTime } = require('luxon');
-const now = DateTime.now().setZone('Asia/Kolkata');
-const date = now.toFormat('yyyy-MM-dd');
-const [year, month, day] = date.split('-');
 cron.schedule('17 16 * * 1-5', async () => {
   console.log("Triggered EoD job", process.env.EOD_JOBS_ENABLED)
   if ("true" === process.env.EOD_JOBS_ENABLED){
+    const now = DateTime.now().setZone('Asia/Kolkata');
+const date = now.toFormat('yyyy-MM-dd');
+const [year, month, day] = date.split('-');
+
     console.log("eod job", process.env.API_SERVER + `/api/kite/instrument/eod?dateStr=${year}-${month}-${day}`)
     let resp = await axios.get(process.env.API_SERVER + `/api/kite/instrument/eod?dateStr=${year}-${month}-${day}`)
     console.log("eod resp", resp)
@@ -27,6 +28,7 @@ cron.schedule('17 16 * * 1-5', async () => {
 }, { timezone: "Asia/Kolkata" })
 cron.schedule('15 10 * * *', async () => {
   if ("true" === process.env.EOD_JOBS_ENABLED){
+    const now = DateTime.now().setZone('Asia/Kolkata');
     const yesterday = now.minus({ days: 1 });
     const ydayFormatted = yesterday.toFormat('yyyy-MM-dd');
     const [year, month, day] = ydayFormatted.split("-")
@@ -68,7 +70,10 @@ cron.schedule('*/15 * * * *', async () => {
     }
     console.log(new Date(), "process website traffic")
     const announcement_dir = path.join(process.env.DATA_ROOT_FOLDER, process.env.NSE_ANNOUNCEMENTS ? process.env.NSE_ANNOUNCEMENTS : "nse_announcements");
-
+    const now = DateTime.now().setZone('Asia/Kolkata');
+    const date = now.toFormat('yyyy-MM-dd');
+    const [year, month, day] = date.split('-');
+    
     for (const index of ['equities', 'sme']) {
       const txtPath = path.join(year, month, day, index, "txt")
       await fs.mkdirSync(path.join(announcement_dir, txtPath), { recursive: true })
