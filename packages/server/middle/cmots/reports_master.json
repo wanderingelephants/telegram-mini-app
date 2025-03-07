@@ -2,13 +2,22 @@
   {
     "ReportIndex": 2,
     "Report Name": "Company Master",
-    "API URL": "http://jwttoken.cmots.com/Aidea/api/CompanyMaster",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/CompanyMaster",
+    "API_URL_2": "",
     "Frequency": "EOD",
     "Updation Time": "11:30 PM",
     "Interval": "Once on trading day",
-    "Input": "NA",
-    "Input Description": "NA",
     "Columns": [
+      {
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)",
+        "Column Description": "Primary API URL"
+      },
+      {
+        "Column_Name": "Input",
+        "DataType": "varchar(100)",
+        "Column Description": "NA"
+      },
       {
         "Column_Name": "co_code",
         "DataType": "Int",
@@ -109,13 +118,22 @@
   {
     "ReportIndex": 3,
     "Report Name": "Sector Master",
-    "API URL": "http://jwttoken.cmots.com/Aidea/api/SectorMaster",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/SectorMaster",
+    "API_URL_2": "",
     "Frequency": "EOD",
     "Updation Time": "11:30 PM",
     "Interval": "Once on trading day",
-    "Input": "N/A",
-    "Input Description": "N/A",
     "Columns": [
+      {
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)",
+        "Column Description": "Primary API URL"
+      },
+      {
+        "Column_Name": "Input",
+        "DataType": "varchar(100)",
+        "Column Description": "N/A"
+      },
       {
         "Column_Name": "sect_code",
         "DataType": "int",
@@ -131,22 +149,31 @@
   {
     "ReportIndex": 4,
     "Report Name": "Index Master",
-    "API URL": "http://jwttoken.cmots.com/Aidea/api/Index-master/NSE",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/Index-master/NSE",
+    "API_URL_2": "http://jwttoken.cmots.com/Aidea/api/Index-master/BSE",
     "Frequency": "EOD",
     "Updation Time": "11:30 PM",
     "Interval": "Once on trading day",
-    "Input": "exchange",
-    "Input Description": "Exchange(BSE / NSE)",
     "Columns": [
+      {
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)",
+        "Column Description": "Primary API URL"
+      },
+      {
+        "Column_Name": "Input",
+        "DataType": "varchar(100)",
+        "Column Description": "Exchange(BSE / NSE)"
+      },
       {
         "Column_Name": "exchange",
         "DataType": "varchar(100)",
         "Column Description": "Exchange"
       },
       {
-        "Column_Name": "index_code",
-        "DataType": "int",
-        "Column Description": "Index Code"
+        "Column_Name": "API_URL_2",
+        "DataType": "varchar(255)",
+        "Column Description": "Secondary API URL"
       },
       {
         "Column_Name": "index_name",
@@ -163,13 +190,22 @@
   {
     "ReportIndex": 5,
     "Report Name": "Sector Wise Company",
-    "API URL": "http://jwttoken.cmots.com/Aidea/api/SectorWiseComp/00000006",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/SectorWiseComp/00000006",
+    "API_URL_2": "",
     "Frequency": "EOD",
     "Updation Time": "11:30 PM",
     "Interval": "Once on trading day",
-    "Input": "Sector Code",
-    "Input Description": "Sector Code",
     "Columns": [
+      {
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)",
+        "Column Description": "Primary API URL"
+      },
+      {
+        "Column_Name": "Input",
+        "DataType": "varchar(100)",
+        "Column Description": "Sector Code"
+      },
       {
         "Column_Name": "co_code",
         "DataType": "Int",
@@ -220,13 +256,22 @@
   {
     "ReportIndex": 6,
     "Report Name": " Index Wise Company",
-    "API URL": "http://jwttoken.cmots.com/Aidea/api/IndexWiseComp/26753",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/IndexWiseComp/26753",
+    "API_URL_2": "",
     "Frequency": "EOD",
     "Updation Time": "11:30 PM",
     "Interval": "Once on trading day",
-    "Input": "seccode",
-    "Input Description": "Index Code",
     "Columns": [
+      {
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)",
+        "Column Description": "Primary API URL"
+      },
+      {
+        "Column_Name": "Input",
+        "DataType": "varchar(100)",
+        "Column Description": "Index Code"
+      },
       {
         "Column_Name": "CMOTSCode",
         "DataType": "Int",
@@ -267,22 +312,31 @@
   {
     "ReportIndex": 7,
     "Report Name": "Exchange Holidays",
-    "API URL": "http://jwttoken.cmots.com/Aidea/api/Exchange-Holidays/NSE",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/Exchange-Holidays/NSE",
+    "API_URL_2": "http://jwttoken.cmots.com/Aidea/api/Exchange-Holidays/BSE",
     "Frequency": "EOD",
     "Updation Time": "11:30 PM",
     "Interval": "Once on trading day",
-    "Input": "Exchg",
-    "Input Description": "Exchange(BSE / NSE)",
     "Columns": [
+      {
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)",
+        "Column Description": "Primary API URL"
+      },
+      {
+        "Column_Name": "Input",
+        "DataType": "varchar(100)",
+        "Column Description": "Exchange(BSE / NSE)"
+      },
       {
         "Column_Name": "HolidayDate",
         "DataType": "Datetime",
         "Column Description": "Holiday Date"
       },
       {
-        "Column_Name": "Purpose",
-        "DataType": "Varchar(100)",
-        "Column Description": "Purpose"
+        "Column_Name": "API_URL_2",
+        "DataType": "varchar(255)",
+        "Column Description": "Secondary API URL"
       },
       {
         "Column_Name": "day",
@@ -294,13 +348,22 @@
   {
     "ReportIndex": 8,
     "Report Name": "Results Today",
-    "API URL": "http://jwttoken.cmots.com/Aidea/api/Today-Results",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/Today-Results",
+    "API_URL_2": "",
     "Frequency": "EOD",
     "Updation Time": "11:30 PM",
     "Interval": "Once on trading day",
-    "Input": "N/A",
-    "Input Description": "N/A",
     "Columns": [
+      {
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)",
+        "Column Description": "Primary API URL"
+      },
+      {
+        "Column_Name": "Input",
+        "DataType": "varchar(100)",
+        "Column Description": "N/A"
+      },
       {
         "Column_Name": "co_code",
         "DataType": "int",
@@ -336,13 +399,22 @@
   {
     "ReportIndex": 9,
     "Report Name": "Result Data Declaration List",
-    "API URL": "http://jwttoken.cmots.com/Aidea/api/ResultDataDeclarations/2024-08-10",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/ResultDataDeclarations/2024-08-10",
+    "API_URL_2": "",
     "Frequency": "EOD",
     "Updation Time": "11:30 PM",
     "Interval": "Once on trading day",
-    "Input": "latestdate",
-    "Input Description": "Latest Date",
     "Columns": [
+      {
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)",
+        "Column Description": "Primary API URL"
+      },
+      {
+        "Column_Name": "Input",
+        "DataType": "varchar(100)",
+        "Column Description": "Latest Date"
+      },
       {
         "Column_Name": "co_code",
         "DataType": "int",
@@ -363,13 +435,22 @@
   {
     "ReportIndex": 10,
     "Report Name": "Annual Report Data Declaration List",
-    "API URL": "http://jwttoken.cmots.com/Aidea/api/AnnualDataDeclarations/2024-08-10",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/AnnualDataDeclarations/2024-08-10",
+    "API_URL_2": "",
     "Frequency": "EOD",
     "Updation Time": "11:30 PM",
     "Interval": "Once on trading day",
-    "Input": "latestdate",
-    "Input Description": "Latest Date",
     "Columns": [
+      {
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)",
+        "Column Description": "Primary API URL"
+      },
+      {
+        "Column_Name": "Input",
+        "DataType": "varchar(100)",
+        "Column Description": "Latest Date"
+      },
       {
         "Column_Name": "co_code",
         "DataType": "int",

@@ -34,22 +34,47 @@ function parseCSVToJSON(csvFilePath) {
       currentReport = {
         ReportIndex: parseInt(record.ReportIndex),
         "Report Name": record["Report Name"],
-        "API URL": record["API URL"],
+        "API_URL": record["API URL"],
+        "API_URL_2": "", // Initialize empty, will be filled for special cases
         Frequency: record.Frequency,
         "Updation Time": record["Updation Time"],
         Interval: record.Interval,
-        Input: record.Input,
-        "Input Description": record["Input Description"],
         Columns: []
       };
       
-      // Add the first column from the current row
+      // Add API_URL as a column
+      currentReport.Columns.push({
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)", // Assuming appropriate data type
+        "Column Description": "Primary API URL"
+      });
+      
+      // Add Input as a column
+      currentReport.Columns.push({
+        "Column_Name": "Input",
+        "DataType": "varchar(100)", // Assuming appropriate data type
+        "Column Description": record["Input Description"]
+      });
+      
+      // Add the first column from the current row (Output/DataType/OutputDescription)
       currentReport.Columns.push({
         "Column_Name": record.Output,
         "DataType": record.DataType,
         "Column Description": record["Output Description"]
       });
     } 
+    // Check for secondary API URL (mainly for Index Master)
+    else if (currentReport && record["API URL"] && record["API URL"].trim() !== '') {
+      // Store the secondary URL
+      currentReport["API_URL_2"] = record["API URL"];
+      
+      // Add API_URL_2 as a column
+      currentReport.Columns.push({
+        "Column_Name": "API_URL_2",
+        "DataType": "varchar(255)", // Assuming appropriate data type
+        "Column Description": "Secondary API URL"
+      });
+    }
     // This is a continuation of the current report (additional columns)
     else if (currentReport && record.Output && record.Output.trim() !== '') {
       currentReport.Columns.push({
@@ -83,41 +108,10 @@ function processCSVFile(inputFilePath, outputFilePath) {
   }
 }
 
-/**
- * Handle the special case for record with ReportIndex 4 (Index Master)
- * which has two API URLs
- */
-function handleSpecialCases(jsonOutput) {
-  // Find Index Master record (ReportIndex: 4)
-  const indexMasterRecord = jsonOutput.find(record => record.ReportIndex === 4);
-  
-  if (indexMasterRecord) {
-    // Check if there's a second URL in the records
-    const secondUrl = records.find(record => 
-      !record.ReportIndex && 
-      record["API URL"] && 
-      record["API URL"].includes("Index-master/BSE")
-    );
-    
-    if (secondUrl) {
-      // Add the second URL to the API URL field
-      indexMasterRecord["API URL"] = [
-        indexMasterRecord["API URL"],
-        secondUrl["API URL"]
-      ];
-    }
-  }
-  
-  return jsonOutput;
-}
-
-//const inputFilePath = '/Users/sachetsingh1/telegram-mini-app/packages/server/middle/cmots/api_doc_master_data.csv';
-//const outputFilePath = '/Users/sachetsingh1/telegram-mini-app/packages/server/middle/cmots/reports_master.json';
-
 const inputFilePath = '/Users/sachetsingh1/telegram-mini-app/packages/server/middle/cmots/api_doc_financials.csv';
 const outputFilePath = '/Users/sachetsingh1/telegram-mini-app/packages/server/middle/cmots/reports_company_financials.json';
 
+
 processCSVFile(inputFilePath, outputFilePath);
 
-// If you want to use this as a module
 //module.exports = { parseCSVToJSON, processCSVFile };

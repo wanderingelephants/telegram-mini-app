@@ -2,13 +2,22 @@
   {
     "ReportIndex": 1,
     "Report Name": "Company Profile",
-    "API URL": "http://jwttoken.cmots.com/Aidea/api/CompanyProfile/476",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/CompanyProfile/476",
+    "API_URL_2": "",
     "Frequency": "EOD",
     "Updation Time": "11:30 PM",
     "Interval": "Once on trading day",
-    "Input": "cocode",
-    "Input Description": "CMOTS Company code",
     "Columns": [
+      {
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)",
+        "Column Description": "Primary API URL"
+      },
+      {
+        "Column_Name": "Input",
+        "DataType": "varchar(100)",
+        "Column Description": "CMOTS Company code"
+      },
       {
         "Column_Name": "lname",
         "DataType": "varchar(100)",
@@ -334,13 +343,22 @@
   {
     "ReportIndex": 2,
     "Report Name": "CompBackground",
-    "API URL": "http://jwttoken.cmots.com/Aidea/api/CompBackground/476",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/CompBackground/476",
+    "API_URL_2": "",
     "Frequency": "EOD",
     "Updation Time": "11:30 PM",
     "Interval": "Once on trading day",
-    "Input": "cocode",
-    "Input Description": "CMOTS Company code",
     "Columns": [
+      {
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)",
+        "Column Description": "Primary API URL"
+      },
+      {
+        "Column_Name": "Input",
+        "DataType": "varchar(100)",
+        "Column Description": "CMOTS Company code"
+      },
       {
         "Column_Name": "lname",
         "DataType": "varchar(100)",
@@ -666,13 +684,22 @@
   {
     "ReportIndex": 3,
     "Report Name": "Board Of Directors",
-    "API URL": "http://jwttoken.cmots.com/Aidea/api/BoardOfDirectors/476",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/BoardOfDirectors/476",
+    "API_URL_2": "",
     "Frequency": "EOD",
     "Updation Time": "11:30 PM",
     "Interval": "Once on trading day",
-    "Input": "cocode",
-    "Input Description": "CMOTS Company code",
     "Columns": [
+      {
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)",
+        "Column Description": "Primary API URL"
+      },
+      {
+        "Column_Name": "Input",
+        "DataType": "varchar(100)",
+        "Column Description": "CMOTS Company code"
+      },
       {
         "Column_Name": "slno",
         "DataType": "Int",
@@ -698,13 +725,22 @@
   {
     "ReportIndex": 4,
     "Report Name": "Director's Report",
-    "API URL": "http://jwttoken.cmots.com/Aidea/api/DirectorsReports/6",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/DirectorsReports/6",
+    "API_URL_2": "",
     "Frequency": "EOD",
     "Updation Time": "11:30 PM",
     "Interval": "Once on trading day",
-    "Input": "Cocode",
-    "Input Description": "CMOTS Company code",
     "Columns": [
+      {
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)",
+        "Column Description": "Primary API URL"
+      },
+      {
+        "Column_Name": "Input",
+        "DataType": "varchar(100)",
+        "Column Description": "CMOTS Company code"
+      },
       {
         "Column_Name": "co_code",
         "DataType": "Int",
@@ -735,13 +771,22 @@
   {
     "ReportIndex": 5,
     "Report Name": "Chairman's Report",
-    "API URL": "http://jwttoken.cmots.com/Aidea/api/ChairmansReport/6",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/ChairmansReport/6",
+    "API_URL_2": "",
     "Frequency": "EOD",
     "Updation Time": "11:30 PM",
     "Interval": "Once on trading day",
-    "Input": "Cocode",
-    "Input Description": "CMOTS Company code",
     "Columns": [
+      {
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)",
+        "Column Description": "Primary API URL"
+      },
+      {
+        "Column_Name": "Input",
+        "DataType": "varchar(100)",
+        "Column Description": "CMOTS Company code"
+      },
       {
         "Column_Name": "lname",
         "DataType": "varchar(100)",
@@ -762,13 +807,22 @@
   {
     "ReportIndex": 6,
     "Report Name": "Bankers",
-    "API URL": "http://jwttoken.cmots.com/Aidea/api/Bankers/6",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/Bankers/6",
+    "API_URL_2": "",
     "Frequency": "EOD",
     "Updation Time": "11:30 PM",
     "Interval": "Once on trading day",
-    "Input": "cocode",
-    "Input Description": "CMOTS Company code",
     "Columns": [
+      {
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)",
+        "Column Description": "Primary API URL"
+      },
+      {
+        "Column_Name": "Input",
+        "DataType": "varchar(100)",
+        "Column Description": "CMOTS Company code"
+      },
       {
         "Column_Name": "lname",
         "DataType": "varchar(100)",
@@ -784,13 +838,22 @@
   {
     "ReportIndex": 7,
     "Report Name": "Management (biodata)",
-    "API URL": "http://jwttoken.cmots.com/Aidea/api/Biodata/6",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/Biodata/6",
+    "API_URL_2": "",
     "Frequency": "EOD",
     "Updation Time": "11:30 PM",
     "Interval": "Once on trading day",
-    "Input": "cocode",
-    "Input Description": "CMOTS Company code",
     "Columns": [
+      {
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)",
+        "Column Description": "Primary API URL"
+      },
+      {
+        "Column_Name": "Input",
+        "DataType": "varchar(100)",
+        "Column Description": "CMOTS Company code"
+      },
       {
         "Column_Name": "lname",
         "DataType": "varchar(100)",
@@ -806,13 +869,22 @@
   {
     "ReportIndex": 8,
     "Report Name": "Auditor’s Report",
-    "API URL": "http://jwttoken.cmots.com/Aidea/api/AuditorsReports/6",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/AuditorsReports/6",
+    "API_URL_2": "",
     "Frequency": "EOD",
     "Updation Time": "11:30 PM",
     "Interval": "Once on trading day",
-    "Input": "cocode",
-    "Input Description": "CMOTS Company code",
     "Columns": [
+      {
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)",
+        "Column Description": "Primary API URL"
+      },
+      {
+        "Column_Name": "Input",
+        "DataType": "varchar(100)",
+        "Column Description": "CMOTS Company code"
+      },
       {
         "Column_Name": "co_code",
         "DataType": "int",
@@ -843,35 +915,53 @@
   {
     "ReportIndex": 9,
     "Report Name": "Notes toAccount",
-    "API URL": "http://jwttoken.cmots.com/Aidea/api/NotesToAccount/476/2024",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/NotesToAccount/476/2024",
+    "API_URL_2": "http://jwttoken.cmots.com/Aidea/api/NotesToAccount/476/-",
     "Frequency": "EOD",
     "Updation Time": "11:30 PM",
     "Interval": "Once on trading day",
-    "Input": "cocode",
-    "Input Description": "CMOTS Company code",
     "Columns": [
+      {
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)",
+        "Column Description": "Primary API URL"
+      },
+      {
+        "Column_Name": "Input",
+        "DataType": "varchar(100)",
+        "Column Description": "CMOTS Company code"
+      },
       {
         "Column_Name": "lname",
         "DataType": "varchar(100)",
         "Column Description": "LNAME"
       },
       {
-        "Column_Name": "memo",
-        "DataType": "ntext",
-        "Column Description": "MEMO"
+        "Column_Name": "API_URL_2",
+        "DataType": "varchar(255)",
+        "Column Description": "Secondary API URL"
       }
     ]
   },
   {
     "ReportIndex": 10,
     "Report Name": "Finished Products",
-    "API URL": "http://jwttoken.cmots.com/Aidea/api/FinishedProducts/6",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/FinishedProducts/6",
+    "API_URL_2": "",
     "Frequency": "EOD",
     "Updation Time": "11:30 PM",
     "Interval": "Once on trading day",
-    "Input": "cocode",
-    "Input Description": "CMOTS Company code",
     "Columns": [
+      {
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)",
+        "Column Description": "Primary API URL"
+      },
+      {
+        "Column_Name": "Input",
+        "DataType": "varchar(100)",
+        "Column Description": "CMOTS Company code"
+      },
       {
         "Column_Name": "co_code",
         "DataType": "int ",
@@ -932,13 +1022,22 @@
   {
     "ReportIndex": 11,
     "Report Name": "Raw Material",
-    "API URL": "http://jwttoken.cmots.com/Aidea/api/RawMaterials/6",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/RawMaterials/6",
+    "API_URL_2": "",
     "Frequency": "EOD",
     "Updation Time": "11:30 PM",
     "Interval": "Once on trading day",
-    "Input": "cocode",
-    "Input Description": "CMOTS Company code",
     "Columns": [
+      {
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)",
+        "Column Description": "Primary API URL"
+      },
+      {
+        "Column_Name": "Input",
+        "DataType": "varchar(100)",
+        "Column Description": "CMOTS Company code"
+      },
       {
         "Column_Name": "co_code",
         "DataType": "Int",
@@ -989,13 +1088,22 @@
   {
     "ReportIndex": 12,
     "Report Name": "Related Party Transaction",
-    "API URL": "http://jwttoken.cmots.com/Aidea/api/Related_Party_Transaction/6",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/Related_Party_Transaction/6",
+    "API_URL_2": "",
     "Frequency": "EOD",
     "Updation Time": "11:30 PM",
     "Interval": "Once on trading day",
-    "Input": "cocode ",
-    "Input Description": "CMOTS Company code",
     "Columns": [
+      {
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)",
+        "Column Description": "Primary API URL"
+      },
+      {
+        "Column_Name": "Input",
+        "DataType": "varchar(100)",
+        "Column Description": "CMOTS Company code"
+      },
       {
         "Column_Name": "co_code",
         "DataType": "Int",
@@ -1086,13 +1194,22 @@
   {
     "ReportIndex": 13,
     "Report Name": "Subsidiaries , JVs and Collaborations",
-    "API URL": "http://jwttoken.cmots.com/Aidea/api/Subsidiaries_JVs_Collaborations/6",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/Subsidiaries_JVs_Collaborations/6",
+    "API_URL_2": "",
     "Frequency": "EOD",
     "Updation Time": "11:30 PM",
     "Interval": "Once on trading day",
-    "Input": "cocode ",
-    "Input Description": "CMOTS Company code ",
     "Columns": [
+      {
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)",
+        "Column Description": "Primary API URL"
+      },
+      {
+        "Column_Name": "Input",
+        "DataType": "varchar(100)",
+        "Column Description": "CMOTS Company code "
+      },
       {
         "Column_Name": "lname",
         "DataType": "varchar(50)",
@@ -1123,13 +1240,22 @@
   {
     "ReportIndex": 14,
     "Report Name": " Deferred Tax",
-    "API URL": "http://jwttoken.cmots.com/Aidea/api/Deferred_Tax/6",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/Deferred_Tax/6",
+    "API_URL_2": "",
     "Frequency": "EOD",
     "Updation Time": "11:30 PM",
     "Interval": "Once on trading day",
-    "Input": "cocode ",
-    "Input Description": "CMOTS Company code ",
     "Columns": [
+      {
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)",
+        "Column Description": "Primary API URL"
+      },
+      {
+        "Column_Name": "Input",
+        "DataType": "varchar(100)",
+        "Column Description": "CMOTS Company code "
+      },
       {
         "Column_Name": "co_code",
         "DataType": "varchar(50)",
@@ -1565,13 +1691,22 @@
   {
     "ReportIndex": 15,
     "Report Name": " R & D",
-    "API URL": "http://jwttoken.cmots.com/Aidea/api/R_and_D/6",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/R_and_D/6",
+    "API_URL_2": "",
     "Frequency": "EOD",
     "Updation Time": "11:30 PM",
     "Interval": "Once on trading day",
-    "Input": "cocode ",
-    "Input Description": "CMOTS Company code ",
     "Columns": [
+      {
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)",
+        "Column Description": "Primary API URL"
+      },
+      {
+        "Column_Name": "Input",
+        "DataType": "varchar(100)",
+        "Column Description": "CMOTS Company code "
+      },
       {
         "Column_Name": "co_code",
         "DataType": "int ",
@@ -1612,13 +1747,22 @@
   {
     "ReportIndex": 16,
     "Report Name": "Chronological History ",
-    "API URL": "http://jwttoken.cmots.com/Aidea/api/ChronologicalHistory/6",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/ChronologicalHistory/6",
+    "API_URL_2": "",
     "Frequency": "EOD",
     "Updation Time": "11:30 PM",
     "Interval": "Once on trading day",
-    "Input": "cocode ",
-    "Input Description": "CMOTS Company code ",
     "Columns": [
+      {
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)",
+        "Column Description": "Primary API URL"
+      },
+      {
+        "Column_Name": "Input",
+        "DataType": "varchar(100)",
+        "Column Description": "CMOTS Company code "
+      },
       {
         "Column_Name": "lname",
         "DataType": "Varchar (100)",
@@ -1649,13 +1793,22 @@
   {
     "ReportIndex": 17,
     "Report Name": "Company History",
-    "API URL": "http://jwttoken.cmots.com/Aidea/api/CompanyHistory/6",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/CompanyHistory/6",
+    "API_URL_2": "",
     "Frequency": "EOD",
     "Updation Time": "11:30 PM",
     "Interval": "Once on trading day",
-    "Input": "cocode ",
-    "Input Description": "CMOTS Company code ",
     "Columns": [
+      {
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)",
+        "Column Description": "Primary API URL"
+      },
+      {
+        "Column_Name": "Input",
+        "DataType": "varchar(100)",
+        "Column Description": "CMOTS Company code "
+      },
       {
         "Column_Name": "lname",
         "DataType": "Varchar (100)",
@@ -1671,13 +1824,22 @@
   {
     "ReportIndex": 18,
     "Report Name": "Location ",
-    "API URL": "http://jwttoken.cmots.com/Aidea/api/locations/6",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/locations/6",
+    "API_URL_2": "",
     "Frequency": "EOD",
     "Updation Time": "11:30 PM",
     "Interval": "Once on trading day",
-    "Input": "cocode ",
-    "Input Description": "CMOTS Company code",
     "Columns": [
+      {
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)",
+        "Column Description": "Primary API URL"
+      },
+      {
+        "Column_Name": "Input",
+        "DataType": "varchar(100)",
+        "Column Description": "CMOTS Company code"
+      },
       {
         "Column_Name": "co_code",
         "DataType": "int ",
@@ -1733,13 +1895,22 @@
   {
     "ReportIndex": 19,
     "Report Name": "Credit Rating Info",
-    "API URL": "http://jwttoken.cmots.com/Aidea/api/CreditRatingInfo/476",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/CreditRatingInfo/476",
+    "API_URL_2": "",
     "Frequency": "EOD",
     "Updation Time": "11:30 PM",
     "Interval": "Once on trading day",
-    "Input": "cocode ",
-    "Input Description": "CMOTS Company code",
     "Columns": [
+      {
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)",
+        "Column Description": "Primary API URL"
+      },
+      {
+        "Column_Name": "Input",
+        "DataType": "varchar(100)",
+        "Column Description": "CMOTS Company code"
+      },
       {
         "Column_Name": "ratdate",
         "DataType": "datetime",
@@ -1790,13 +1961,22 @@
   {
     "ReportIndex": 20,
     "Report Name": " Employee Count",
-    "API URL": "http://jwttoken.cmots.com/Aidea/api/EmployeeCount/6",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/EmployeeCount/6",
+    "API_URL_2": "",
     "Frequency": "EOD",
     "Updation Time": "11:30 PM",
     "Interval": "Once on trading day",
-    "Input": "cocode ",
-    "Input Description": "CMOTS Company code",
     "Columns": [
+      {
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)",
+        "Column Description": "Primary API URL"
+      },
+      {
+        "Column_Name": "Input",
+        "DataType": "varchar(100)",
+        "Column Description": "CMOTS Company code"
+      },
       {
         "Column_Name": "yrc",
         "DataType": "int",
@@ -1837,13 +2017,22 @@
   {
     "ReportIndex": 21,
     "Report Name": "Corporate Governance",
-    "API URL": "http://jwttoken.cmots.com/Aidea/api/CorporateGovernance/6",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/CorporateGovernance/6",
+    "API_URL_2": "",
     "Frequency": "EOD",
     "Updation Time": "11:30 PM",
     "Interval": "Once on trading day",
-    "Input": "cocode ",
-    "Input Description": "CMOTS Company Code ",
     "Columns": [
+      {
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)",
+        "Column Description": "Primary API URL"
+      },
+      {
+        "Column_Name": "Input",
+        "DataType": "varchar(100)",
+        "Column Description": "CMOTS Company Code "
+      },
       {
         "Column_Name": "co_code",
         "DataType": "int",
@@ -1864,13 +2053,22 @@
   {
     "ReportIndex": 22,
     "Report Name": "Capital structure",
-    "API URL": "http://jwttoken.cmots.com/Aidea/api/capital-structure/1375",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/capital-structure/1375",
+    "API_URL_2": "",
     "Frequency": "EOD",
     "Updation Time": "11:30 PM",
     "Interval": "Once on trading day",
-    "Input": "co_code",
-    "Input Description": "CMOTS Company Code ",
     "Columns": [
+      {
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)",
+        "Column Description": "Primary API URL"
+      },
+      {
+        "Column_Name": "Input",
+        "DataType": "varchar(100)",
+        "Column Description": "CMOTS Company Code "
+      },
       {
         "Column_Name": "co_code",
         "DataType": "int",
@@ -1916,13 +2114,22 @@
   {
     "ReportIndex": 23,
     "Report Name": "Pledge Shares Details ",
-    "API URL": "http://jwttoken.cmots.com/Aidea/api/Pledgesharesdetails/6",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/Pledgesharesdetails/6",
+    "API_URL_2": "",
     "Frequency": "EOD",
     "Updation Time": "11:30 PM",
     "Interval": "Once on trading day",
-    "Input": "cocode ",
-    "Input Description": "CMOTS Company Code ",
     "Columns": [
+      {
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)",
+        "Column Description": "Primary API URL"
+      },
+      {
+        "Column_Name": "Input",
+        "DataType": "varchar(100)",
+        "Column Description": "CMOTS Company Code "
+      },
       {
         "Column_Name": "co_code",
         "DataType": "int",
@@ -1958,13 +2165,22 @@
   {
     "ReportIndex": 24,
     "Report Name": "CRAR",
-    "API URL": "http://jwttoken.cmots.com/Aidea/api/CRAR/4987",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/CRAR/4987",
+    "API_URL_2": "",
     "Frequency": "EOD",
     "Updation Time": "11:30 PM",
     "Interval": "Once on trading day",
-    "Input": "co_code",
-    "Input Description": "CMOTS Company Code ",
     "Columns": [
+      {
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)",
+        "Column Description": "Primary API URL"
+      },
+      {
+        "Column_Name": "Input",
+        "DataType": "varchar(100)",
+        "Column Description": "CMOTS Company Code "
+      },
       {
         "Column_Name": "co_code",
         "DataType": "int",
@@ -2005,13 +2221,22 @@
   {
     "ReportIndex": 25,
     "Report Name": "Bulk Deals",
-    "API URL": "http://jwttoken.cmots.com/Aidea/api/Bulk-Deals/nse/01-May-2024/04-Feb-2025",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/Bulk-Deals/nse/01-May-2024/04-Feb-2025",
+    "API_URL_2": "",
     "Frequency": "EOD",
     "Updation Time": "11:30 PM",
     "Interval": "Once on trading day",
-    "Input": "Exchange",
-    "Input Description": "Exchange-BSE/NSE",
     "Columns": [
+      {
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)",
+        "Column Description": "Primary API URL"
+      },
+      {
+        "Column_Name": "Input",
+        "DataType": "varchar(100)",
+        "Column Description": "Exchange-BSE/NSE"
+      },
       {
         "Column_Name": "date",
         "DataType": "datetime",
@@ -2062,13 +2287,22 @@
   {
     "ReportIndex": 26,
     "Report Name": "Block Deals",
-    "API URL": "http://jwttoken.cmots.com/Aidea/api/Block-Deals/nse/01-May-2024/04-Feb-2025",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/Block-Deals/nse/01-May-2024/04-Feb-2025",
+    "API_URL_2": "",
     "Frequency": "EOD",
     "Updation Time": "11:30 PM",
     "Interval": "Once on trading day",
-    "Input": "Exchange",
-    "Input Description": "Exchange-BSE/NSE",
     "Columns": [
+      {
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)",
+        "Column Description": "Primary API URL"
+      },
+      {
+        "Column_Name": "Input",
+        "DataType": "varchar(100)",
+        "Column Description": "Exchange-BSE/NSE"
+      },
       {
         "Column_Name": "date",
         "DataType": "datetime",
@@ -2119,13 +2353,22 @@
   {
     "ReportIndex": 27,
     "Report Name": "Insider Trading",
-    "API URL": "http://jwttoken.cmots.com/Aidea/api/InsiderTrading/476",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/InsiderTrading/476",
+    "API_URL_2": "",
     "Frequency": "EOD",
     "Updation Time": "11:30 PM",
     "Interval": "Once on trading day",
-    "Input": "co_code",
-    "Input Description": "CMOTS Company code",
     "Columns": [
+      {
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)",
+        "Column Description": "Primary API URL"
+      },
+      {
+        "Column_Name": "Input",
+        "DataType": "varchar(100)",
+        "Column Description": "CMOTS Company code"
+      },
       {
         "Column_Name": "co_code",
         "DataType": "Int",
@@ -2216,13 +2459,22 @@
   {
     "ReportIndex": 28,
     "Report Name": "Substantial Acquisition of Shares and Takeovers Data",
-    "API URL": "http://jwttoken.cmots.com/Aidea/api/SubstantialAcquisition/476",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/SubstantialAcquisition/476",
+    "API_URL_2": "",
     "Frequency": "EOD",
     "Updation Time": "11:30 PM",
     "Interval": "Once on trading day",
-    "Input": "cocode",
-    "Input Description": "CMOTS Company Code",
     "Columns": [
+      {
+        "Column_Name": "API_URL",
+        "DataType": "varchar(255)",
+        "Column Description": "Primary API URL"
+      },
+      {
+        "Column_Name": "Input",
+        "DataType": "varchar(100)",
+        "Column Description": "CMOTS Company Code"
+      },
       {
         "Column_Name": "co_code",
         "DataType": "Int",
