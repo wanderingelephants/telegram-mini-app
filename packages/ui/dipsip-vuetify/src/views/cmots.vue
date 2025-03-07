@@ -8,6 +8,8 @@
 </div>
 </template>
 <script>
+const authHeader = import.meta.env.VITE_cmots_token
+console.log(authHeader)
 export default{
     data(){
         return{
@@ -35,7 +37,7 @@ export default{
             method: "GET", 
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${process.env.cmots_token}`
+                "Authorization": `Bearer ${authHeader}`
             }
         })
         //console.log(response)

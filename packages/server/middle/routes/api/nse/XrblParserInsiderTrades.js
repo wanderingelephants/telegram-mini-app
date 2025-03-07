@@ -168,7 +168,8 @@ class InsiderTradesXrblParser {
     })
 }
   async parse(xrblFilePath) {
-    const xmlData = fs.readFileSync(xrblFilePath, 'utf8');
+    try {
+      const xmlData = fs.readFileSync(xrblFilePath, 'utf8');
     const result = xbrlParser.parseXbrlFile(xmlData)
     const record = {}
     record["SYMBOL"] = result["xbrli:xbrl"]["in-capmkt:NSESymbol"]["#text"]
@@ -194,7 +195,6 @@ class InsiderTradesXrblParser {
 
     console.log(record)
     let mutationObject
-    try {
       mutationObject = transformToMutationObject(record);
       console.log(mutationObject)
       await this.persist(mutationObject);

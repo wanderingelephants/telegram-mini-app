@@ -1,0 +1,390 @@
+[
+  {
+    "ReportIndex": 2,
+    "Report Name": "Company Master",
+    "API URL": "http://jwttoken.cmots.com/Aidea/api/CompanyMaster",
+    "Frequency": "EOD",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "NA",
+    "Input Description": "NA",
+    "Columns": [
+      {
+        "Column_Name": "co_code",
+        "DataType": "Int",
+        "Column Description": "CMOTS Company Code"
+      },
+      {
+        "Column_Name": "bsecode",
+        "DataType": "Int",
+        "Column Description": "BSE Scrip Code"
+      },
+      {
+        "Column_Name": "nsesymbol",
+        "DataType": "Varchar(100)",
+        "Column Description": "NSE Symbol"
+      },
+      {
+        "Column_Name": "companyname",
+        "DataType": "Varchar(100)",
+        "Column Description": "Company Name"
+      },
+      {
+        "Column_Name": "companyshortname",
+        "DataType": "Varchar(100)",
+        "Column Description": "Company Short Name"
+      },
+      {
+        "Column_Name": "categoryname",
+        "DataType": "Varchar(100)",
+        "Column Description": "Category Name"
+      },
+      {
+        "Column_Name": "isin",
+        "DataType": "Varchar(100)",
+        "Column Description": "ISIN"
+      },
+      {
+        "Column_Name": "bsegroup",
+        "DataType": "Varchar(100)",
+        "Column Description": "BSE Group"
+      },
+      {
+        "Column_Name": "mcaptype",
+        "DataType": "Varchar(100)",
+        "Column Description": "Mcap Type"
+      },
+      {
+        "Column_Name": "sectorcode",
+        "DataType": "Int",
+        "Column Description": "Sector Code"
+      },
+      {
+        "Column_Name": "sectorname",
+        "DataType": "Varchar(100)",
+        "Column Description": "Sector Name"
+      },
+      {
+        "Column_Name": "industrycode",
+        "DataType": "Int",
+        "Column Description": "Industry Code"
+      },
+      {
+        "Column_Name": "industryname",
+        "DataType": "Varchar(100)",
+        "Column Description": "Industry Name"
+      },
+      {
+        "Column_Name": "bselistedflag",
+        "DataType": "Varchar(100)",
+        "Column Description": "BSE Listed Flag"
+      },
+      {
+        "Column_Name": "nselistedflag",
+        "DataType": "Varchar(100)",
+        "Column Description": "NSE Listed Flag"
+      },
+      {
+        "Column_Name": "displaytype",
+        "DataType": "Varchar(100)",
+        "Column Description": "Display Type"
+      },
+      {
+        "Column_Name": "BSEStatus",
+        "DataType": "Varchar(100)",
+        "Column Description": "BSE Status"
+      },
+      {
+        "Column_Name": "NSEStatus",
+        "DataType": "Varchar(100)",
+        "Column Description": "NSE Status"
+      },
+      {
+        "Column_Name": "mcap",
+        "DataType": "Float",
+        "Column Description": "Market Capitalization"
+      }
+    ]
+  },
+  {
+    "ReportIndex": 3,
+    "Report Name": "Sector Master",
+    "API URL": "http://jwttoken.cmots.com/Aidea/api/SectorMaster",
+    "Frequency": "EOD",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "N/A",
+    "Input Description": "N/A",
+    "Columns": [
+      {
+        "Column_Name": "sect_code",
+        "DataType": "int",
+        "Column Description": "Sector Code"
+      },
+      {
+        "Column_Name": "sect_name",
+        "DataType": "varchar(100)",
+        "Column Description": "Sector Name"
+      }
+    ]
+  },
+  {
+    "ReportIndex": 4,
+    "Report Name": "Index Master",
+    "API URL": "http://jwttoken.cmots.com/Aidea/api/Index-master/NSE",
+    "Frequency": "EOD",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "exchange",
+    "Input Description": "Exchange(BSE / NSE)",
+    "Columns": [
+      {
+        "Column_Name": "exchange",
+        "DataType": "varchar(100)",
+        "Column Description": "Exchange"
+      },
+      {
+        "Column_Name": "index_code",
+        "DataType": "int",
+        "Column Description": "Index Code"
+      },
+      {
+        "Column_Name": "index_name",
+        "DataType": "varchar(100)",
+        "Column Description": "Index Name"
+      },
+      {
+        "Column_Name": "index_symbol",
+        "DataType": "varchar(100)",
+        "Column Description": "Index Symbol"
+      }
+    ]
+  },
+  {
+    "ReportIndex": 5,
+    "Report Name": "Sector Wise Company",
+    "API URL": "http://jwttoken.cmots.com/Aidea/api/SectorWiseComp/00000006",
+    "Frequency": "EOD",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "Sector Code",
+    "Input Description": "Sector Code",
+    "Columns": [
+      {
+        "Column_Name": "co_code",
+        "DataType": "Int",
+        "Column Description": "CMOTS Company Code"
+      },
+      {
+        "Column_Name": "co_name",
+        "DataType": "Varchar(100)",
+        "Column Description": "Company Name"
+      },
+      {
+        "Column_Name": "lname",
+        "DataType": "Varchar(100)",
+        "Column Description": "Last Name"
+      },
+      {
+        "Column_Name": "sc_code",
+        "DataType": "Int",
+        "Column Description": "BSE Scrip Code"
+      },
+      {
+        "Column_Name": "symbol",
+        "DataType": "Varchar(100)",
+        "Column Description": "NSE Company Symbol"
+      },
+      {
+        "Column_Name": "sect_name",
+        "DataType": "varchar(50)",
+        "Column Description": "Sector Name"
+      },
+      {
+        "Column_Name": "Exchange_BSE",
+        "DataType": "varchar(50)",
+        "Column Description": "Exchange BSE"
+      },
+      {
+        "Column_Name": "Exchange_NSE",
+        "DataType": "varchar(50)",
+        "Column Description": "Exchange NSE"
+      },
+      {
+        "Column_Name": "isin",
+        "DataType": "varchar(50)",
+        "Column Description": "ISIN"
+      }
+    ]
+  },
+  {
+    "ReportIndex": 6,
+    "Report Name": " Index Wise Company",
+    "API URL": "http://jwttoken.cmots.com/Aidea/api/IndexWiseComp/26753",
+    "Frequency": "EOD",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "seccode",
+    "Input Description": "Index Code",
+    "Columns": [
+      {
+        "Column_Name": "CMOTSCode",
+        "DataType": "Int",
+        "Column Description": "CMOTS Company Code"
+      },
+      {
+        "Column_Name": "CompanyShortName",
+        "DataType": "varchar(50)",
+        "Column Description": "Company Short Name"
+      },
+      {
+        "Column_Name": "CompanyLongName",
+        "DataType": "Varchar(100)",
+        "Column Description": "Company Long Name"
+      },
+      {
+        "Column_Name": "BSECode",
+        "DataType": "Int",
+        "Column Description": "Scrip Code"
+      },
+      {
+        "Column_Name": "NSESymbol",
+        "DataType": "varchar(50)",
+        "Column Description": "Symbol"
+      },
+      {
+        "Column_Name": "ISIN",
+        "DataType": "varchar(50)",
+        "Column Description": "ISIN"
+      },
+      {
+        "Column_Name": "SectorName",
+        "DataType": "Varchar(100)",
+        "Column Description": "Sector Name"
+      }
+    ]
+  },
+  {
+    "ReportIndex": 7,
+    "Report Name": "Exchange Holidays",
+    "API URL": "http://jwttoken.cmots.com/Aidea/api/Exchange-Holidays/NSE",
+    "Frequency": "EOD",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "Exchg",
+    "Input Description": "Exchange(BSE / NSE)",
+    "Columns": [
+      {
+        "Column_Name": "HolidayDate",
+        "DataType": "Datetime",
+        "Column Description": "Holiday Date"
+      },
+      {
+        "Column_Name": "Purpose",
+        "DataType": "Varchar(100)",
+        "Column Description": "Purpose"
+      },
+      {
+        "Column_Name": "day",
+        "DataType": "Varchar(100)",
+        "Column Description": "Day"
+      }
+    ]
+  },
+  {
+    "ReportIndex": 8,
+    "Report Name": "Results Today",
+    "API URL": "http://jwttoken.cmots.com/Aidea/api/Today-Results",
+    "Frequency": "EOD",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "N/A",
+    "Input Description": "N/A",
+    "Columns": [
+      {
+        "Column_Name": "co_code",
+        "DataType": "int",
+        "Column Description": "CMOTS Company Code"
+      },
+      {
+        "Column_Name": "symbol",
+        "DataType": "Varchar(100)",
+        "Column Description": "NSE Symbol"
+      },
+      {
+        "Column_Name": "isin",
+        "DataType": "Varchar(100)",
+        "Column Description": "ISIN"
+      },
+      {
+        "Column_Name": "co_name",
+        "DataType": "Varchar(100)",
+        "Column Description": "Company Name"
+      },
+      {
+        "Column_Name": "AnnouncementDate",
+        "DataType": "Datetime",
+        "Column Description": "Announcement Date"
+      },
+      {
+        "Column_Name": "ResultDate",
+        "DataType": "Datetime",
+        "Column Description": "Result Date"
+      }
+    ]
+  },
+  {
+    "ReportIndex": 9,
+    "Report Name": "Result Data Declaration List",
+    "API URL": "http://jwttoken.cmots.com/Aidea/api/ResultDataDeclarations/2024-08-10",
+    "Frequency": "EOD",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "latestdate",
+    "Input Description": "Latest Date",
+    "Columns": [
+      {
+        "Column_Name": "co_code",
+        "DataType": "int",
+        "Column Description": "CMOTS Company Code"
+      },
+      {
+        "Column_Name": "ResultDate",
+        "DataType": "Datetime",
+        "Column Description": "Result Date"
+      },
+      {
+        "Column_Name": "ReportType",
+        "DataType": "Varchar(100)",
+        "Column Description": "Report Type"
+      }
+    ]
+  },
+  {
+    "ReportIndex": 10,
+    "Report Name": "Annual Report Data Declaration List",
+    "API URL": "http://jwttoken.cmots.com/Aidea/api/AnnualDataDeclarations/2024-08-10",
+    "Frequency": "EOD",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "latestdate",
+    "Input Description": "Latest Date",
+    "Columns": [
+      {
+        "Column_Name": "co_code",
+        "DataType": "int",
+        "Column Description": "CMOTS Company Code"
+      },
+      {
+        "Column_Name": "ReportDate",
+        "DataType": "Datetime",
+        "Column Description": "Report Date"
+      },
+      {
+        "Column_Name": "ReportType",
+        "DataType": "Varchar(100)",
+        "Column Description": "Report Type"
+      }
+    ]
+  }
+]

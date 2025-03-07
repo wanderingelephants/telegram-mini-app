@@ -43,8 +43,19 @@ class InsiderScraper extends NSEScraper{
                             console.log("Upload to S3 failed")
                             console.error(e)
                         }
-                        await this.xrblParser.parse(path.join(targetPath, fileName))
-                        await this.updateActivityLog(announcement, index, year, month, day)
+                        try{
+                            await this.xrblParser.parse(path.join(targetPath, fileName))
+                        }
+                        catch(e){
+                            console.log("Err in xrblParser", e)
+                        }
+                        try{
+                            await this.updateActivityLog(announcement, index, year, month, day)
+                        }
+                        catch(e){
+                            console.log("err in updateActivityLog", e)
+                        }
+                        
                         documentLinksDownloaded[index].push(announcement.ATTACHMENT)
                     }
 

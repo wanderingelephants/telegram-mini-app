@@ -1,0 +1,314 @@
+ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Description,Output,DataType,Output Description
+1,Quarterly Results ,http://jwttoken.cmots.com/Aidea/api/QuarterlyResults/476/S,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,COLUMNNAME,Varchar(300),Column Name
+,,http://jwttoken.cmots.com/Aidea/api/QuarterlyResults/476/C,,,,TYPE(S/C),Standalone/Consolidated,RID,Int,RID
+,,,,,,,,Y202412,Float,Year 2024 December
+,,,,,,,,Y202409,Float,Year 2024 September
+,,,,,,,,Y202406,Float,Year 2024 June
+,,,,,,,,Y202403,Float,Year 2024 March
+,,,,,,,,Y202312,Float,Year 2023 December
+,,,,,,,,Y202309,Float,Year 2023 September
+,,,,,,,,Y202306,Float,Year 2023 June
+,,,,,,,,Y202303,Float,Year 2023 March
+,,,,,,,,Y202212,Float,Year 2022 December
+,,,,,,,,Y202209,Float,Year 2022 September
+,,,,,,,,Y202206,Float,Year 2022 June
+,,,,,,,,Y202203,Float,Year 2022 March
+,,,,,,,,rowno,Int,Row No
+2,Profit and Loss,http://jwttoken.cmots.com/Aidea/api/ProftandLoss/6/S,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,COLUMNNAME,Varchar(300),Column Name
+,,http://jwttoken.cmots.com/Aidea/api/ProftandLoss/6/C,,,,TYPE(S/C),Standalone/Consolidated,RID,Int,RID
+,,,,,,,,Y202403,Float,Year 2024 March
+,,,,,,,,Y202303,Float,Year 2023 March
+,,,,,,,,Y202112,Float,Year 2021 December
+,,,,,,,,rowno,Int,Row No
+3,Balance Sheet,http://jwttoken.cmots.com/Aidea/api/BalanceSheet/6/S,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,COLUMNNAME,Varchar(300),Column Name
+,,http://jwttoken.cmots.com/Aidea/api/BalanceSheet/6/C,,,,TYPE(S/C),Standalone/Consolidated,RID,Int,RID
+,,,,,,,,Y202403,Float,Year 2024 March
+,,,,,,,,Y202303,Float,Year 2023 March
+,,,,,,,,Y202112,Float,Year 2021 December
+,,,,,,,,rowno,Int,Row No
+4,Cash Flow,http://jwttoken.cmots.com/Aidea/api/CashFlow/93/S,EOD,11:30 PM,Once on trading day,cocode,CMOTS Company Code,COLUMNNAME,Varchar(300),Column Name
+,,http://jwttoken.cmots.com/Aidea/api/CashFlow/93/C,,,,TYPE(S/C),Standalone/Consolidated,RID,Int,RID
+,,,,,,,,Y202403,Float,Year 2024 March
+,,,,,,,,Y202303,Float,Year 2023 March
+,,,,,,,,Y202203,Float,Year 2022 March
+,,,,,,,,rowno,Int,Row No
+5,Half Yearly Results,http://jwttoken.cmots.com/Aidea/api/Half-Yearly-Results/21281/S,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,COLUMNNAME,Varchar(300),Column Name
+,,http://jwttoken.cmots.com/Aidea/api/Half-Yearly-Results/21281/C,,,,TYPE(S/C),Standalone/Consolidated,RID,Int,RID
+,,,,,,,,Y202403,Float,Year 2024 March
+,,,,,,,,Y202309,Float,Year 2023 September
+,,,,,,,,Y202209,Float,Year 2022 September
+,,,,,,,,rowno,Int,Row No
+6,Nine Months Results,http://jwttoken.cmots.com/Aidea/api/Nine-Month-Result/6/S,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,COLUMNNAME,Varchar(300),Column Name
+,,http://jwttoken.cmots.com/Aidea/api/Nine-Month-Result/6/C,,,,TYPE(S/C),Standalone/Consolidated,RID,Int,RID
+,,,,,,,,Y202412,Float,Year 2024 December
+,,,,,,,,Y202312,Float,Year 2023 December
+,,,,,,,,Y202209,Float,Year 2022 September
+,,,,,,,,rowno,Int,Row No
+7,Share Holding Pattern Detailed,http://jwttoken.cmots.com/Aidea/api/ShareholdingMorethanonePerDetails/476,EOD,11:30 PM,Once on trading day,co_code,CMOTS Company Code,co_code,int,CMOTS Company Code
+,,,,,,,,yrc,int,Year Count
+,,,,,,,,slno,int,Serial No
+,,,,,,,,type,varchar(100),Type
+,,,,,,,,name,varchar(100),Name
+,,,,,,,,PercentageStakeHolding,Float,Percentage Stake Holding
+8,Share Holding Aggregate,http://jwttoken.cmots.com/Aidea/api/Aggregate-Share-Holding/5400,EOD,11:30 PM,Once on trading day,cocode,CMOTS Company Code,co_code,int,CMOTS Company Code
+,,,,,,,,YRC,int,Year Count
+,,,,,,,,Promoters,Float,Promoters
+,,,,,,,,Retail,Float,Retailors
+,,,,,,,,ForeignInstitution,Float,Foreigh Institution
+,,,,,,,,MutualFund,Float,Mutual Fund
+,,,,,,,,OtherDomesticInstitution,Float,Other Domestic Institution
+,,,,,,,,Others,Float,Others
+9,Share Holding Pattern more than 1%,http://jwttoken.cmots.com/Aidea/api/ShareholdingMorethanOnePercent/476,EOD,11:30 PM,Once on trading day,co_code,CMOTS Company Code,co_code,Int,CMOTS Company Code
+,,,,,,,,date,Datetime,Date
+,,,,,,,,Type,varchar(100),Type
+,,,,,,,,Name,varchar(100),Name
+,,,,,,,,NOOFshares,Int,No of Shares
+,,,,,,,,perstake,Float,Percentage Stake
+10,Yearly Reports,http://jwttoken.cmots.com/Aidea/api/Yearly-Results/6/S,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,COLUMNNAME,Varchar(300),Column Name
+,,http://jwttoken.cmots.com/Aidea/api/Yearly-Results/6/C,,,,TYPE,Standalone/Consolidated,RID,Int,RID
+,,,,,,,,Y202403,Float,Year 2024 March
+,,,,,,,,Y202303,Float,Year 2023 March
+,,,,,,,,Y202112,Float,Year 2021 December
+,,,,,,,,rowno,Int,Row No
+11,Result Balance Sheet (Asset and Liabilities): Quarterly,http://jwttoken.cmots.com/Aidea/api/QuarterlyResults-BalanceSheet/476/S,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,COLUMNNAME,Varchar(300),Column Name
+,,http://jwttoken.cmots.com/Aidea/api/QuarterlyResults-BalanceSheet/476/C,,,,TYPE,Standalone/Consolidated,RID,Int,RID
+,,,,,,,,Y202409,Float,Year 2024 September
+,,,,,,,,Y202403,Float,Year 2024 March
+,,,,,,,,Y202309,Float,Year 2023 September
+,,,,,,,,Y202303,Float,Year 2023 March
+,,,,,,,,Y202209,Float,Year 2022 September
+,,,,,,,,Y202203,Float,Year 2022 March
+,,,,,,,,rowno,Int,Row No
+12,Result Balance Sheet (Asset and Liabilities): Half yearly,http://jwttoken.cmots.com/Aidea/api/Results-BalanceSheet-Half-yearly/476/S,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,COLUMNNAME,Varchar(300),Column Name
+,,http://jwttoken.cmots.com/Aidea/api/Results-BalanceSheet-Half-yearly/476/C,,,,TYPE,Standalone/Consolidated,RID,Int,RID
+,,,,,,,,Y202409,Float,Year 2024 September
+,,,,,,,,Y202403,Float,Year 2024 March
+,,,,,,,,Y202309,Float,Year 2023 September
+,,,,,,,,Y202303,Float,Year 2023 March
+,,,,,,,,Y202209,Float,Year 2022 September
+,,,,,,,,Y202203,Float,Year 2022 March
+,,,,,,,,rowno,Int,Row No
+13,Result Balance Sheet (Asset and Liabilities): Yearly,http://jwttoken.cmots.com/Aidea/api/Results-BalanceSheet-Yearly/6/S,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,COLUMNNAME,Varchar(300),Column Name
+,,http://jwttoken.cmots.com/Aidea/api/Results-BalanceSheet-Yearly/6/C,,,,TYPE,Standalone/Consolidated,RID,Int,RID
+,,,,,,,,Y202403,Float,Year 2024 March
+,,,,,,,,Y202303,Float,Year 2023 March
+,,,,,,,,Y202112,Float,Year 2021 December
+,,,,,,,,rowno,Int,Row No
+1,Margin Ratio,http://jwttoken.cmots.com/Aidea/api/MarginRatios/476/S,EOD,11:30 PM,Once on trading day,cocode,CMOTS Company code,co_code,Int,CMOTS Company code
+,,http://jwttoken.cmots.com/Aidea/api/MarginRatios/476/C,,,,Type,S For standalone / C for Consolidated,YRC,Int,Year Count
+,,,,,,,,PBIDTIM,Float,PBIDTIM(%)
+,,,,,,,,EBITM,Float,EBITM(%)
+,,,,,,,,PreTaxMargin,Float,Pre Tax Margin(%)
+,,,,,,,,PATM,Float,PATM(%)
+,,,,,,,,CPM,Float,CPM(%)
+2,Performance Ratios,http://jwttoken.cmots.com/Aidea/api/PerformanceRatios/476/S,EOD,11:30 PM,Once on trading day,cocode,CMOTS Company code,co_code,Int,CMOTS Company code
+,,http://jwttoken.cmots.com/Aidea/api/PerformanceRatios/476/C,,,,Type,S For standalone / C for Consolidated,YRC,Int,Year Count
+,,,,,,,,ROA,Float,ROA(%)
+,,,,,,,,ROE,Float,ROE(%)
+3, Efficiency Ratios,http://jwttoken.cmots.com/Aidea/api/EfficiencyRatios/476/S,EOD,11:30 PM,Once on trading day,cocode,CMOTS Company code,co_code,Int,CMOTS Company code
+,,http://jwttoken.cmots.com/Aidea/api/EfficiencyRatios/476/C,,,,Type,S For standalone / C for Consolidated,YRC,Int,Year Count
+,,,,,,,,FixedCapitals_Sales,Float,Fixed Capitals/Sales(x)
+,,,,,,,,ReceivableDays,Float,Receivable days
+,,,,,,,,InventoryDays,Float,Inventory days
+,,,,,,,,PayableDays,Float,Payable days
+4,Financial Stability Ratios,http://jwttoken.cmots.com/Aidea/api/FinancialStabilityRatios/476/S,EOD,11:30 PM,Once on trading day,cocode,CMOTS Company code,co_code,Int,CMOTS Company code
+,,http://jwttoken.cmots.com/Aidea/api/FinancialStabilityRatios/476/C,,,,Type,S For standalone / C for Consolidated,YRC,Int,Year Count
+,,,,,,,,TotalDebt_Equity,Float,Total Debt/Equity(x)
+,,,,,,,,CurrentRatio,Float,Current Ratio(x)
+,,,,,,,,QuickRatio,Float,Quick Ratio(x)
+,,,,,,,,InterestCover,Float,Interest cover(x)
+,,,,,,,,TotalDebt_MCap,Float,Total Debt/MCap(x)
+5,Valuation Ratios,http://jwttoken.cmots.com/Aidea/api/ValuationRatios/476/S,EOD,11:30 PM,Once on trading day,cocode,CMOTS Company code,co_code,Int,CMOTS Company code
+,,http://jwttoken.cmots.com/Aidea/api/ValuationRatios/476/C,,,,Type,S For standalone / C for Consolidated,YRC,Int,Year Count
+,,,,,,,,PE,Float,P/E(x)
+,,,,,,,,Price_BookValue,Float,Price/Book Value(x)
+,,,,,,,,DividendYield,Float,Dividend Yield(%)
+,,,,,,,,EV_EBITDA,Float,EV/EBITDA(x)
+,,,,,,,,Mcap_Sales,Float,Mcap/Sales
+6,Cash Flow Ratios,http://jwttoken.cmots.com/Aidea/api/CashFlowRatios/6/S,EOD,11:30 PM,Once on trading day,cocode,CMOTS Company code,co_code,Int,CMOTS Company code
+,,http://jwttoken.cmots.com/Aidea/api/CashFlowRatios/6/C,,,,Type,S For standalone / C for Consolidated,YRC,Int,Year Count
+,,,,,,,,CashFlowPerShare,Float,Cash Flow Per Share
+,,,,,,,,PricetoCashFlowRatio,Float,Price to Cash Flow Ratio
+,,,,,,,,FreeCashFlowperShare,Float,Free Cash Flow per Share
+,,,,,,,,PricetoFreeCashFlow,Float,Price to Free Cash Flow
+,,,,,,,,FreeCashFlowYield,Float,Free Cash Flow Yield
+,,,,,,,,Salestocashflowratio,Float,Sales to cash flow ratio's
+7,Growth Ratio,http://jwttoken.cmots.com/Aidea/api/GrowthRatio/6/S,EOD,11:30 PM,Once on trading day,cocode,"Company code
+(Mandatory)",co_code,int,CMOTS Company Code
+,,http://jwttoken.cmots.com/Aidea/api/GrowthRatio/6/C,,,,type(S/C),Type (S-Standalone/C-Consolidated) (Mandatory) ,YRC,int,Year Count
+,,,,,,,,NetSalesGrowth,float,NetSalesGrowth
+,,,,,,,,EBITDAGrowth,float,EBITDAGrowth
+,,,,,,,,EBITGrowth,float,EBITGrowth
+,,,,,,,,PATGrowth,float,PATGrowth
+,,,,,,,,EPS,float,EPS
+8,Liquidity Ratios,http://jwttoken.cmots.com/Aidea/api/LiquidityRatios/6/S,EOD,11:30 PM,Once on trading day,cocode,CMOTS Company code,co_code,Int,CMOTS Company code
+,,http://jwttoken.cmots.com/Aidea/api/LiquidityRatios/6/C,,,,Type,S For standalone / C for Consolidated,YRC,Int,Year Count
+,,,,,,,,Loans_to_Deposits,Int,Loans/Deposits(x)
+,,,,,,,,Cash_to_Deposits,Float,Cash/Deposits(x)
+,,,,,,,,Investment_toDeposits,Float,Investment/Deposits(x)
+,,,,,,,,IncLoan_to_Deposit,Float,Inc Loan/Deposit(%)
+,,,,,,,,Credit_to_Deposits,Float,Credit/Deposits(%)
+,,,,,,,,InterestExpended_to_Interestearned,Float,Interest Expended / Interest earned(%)
+,,,,,,,,Interestincome_to_Totalfunds,Float,Interest income / Total funds (%)
+,,,,,,,,InterestExpended_to_Totalfunds,Float,Interest Expended / Total funds (%)
+,,,,,,,,CASA,Float,CASA (%)
+9,TTM/Daily  Ratios ,http://jwttoken.cmots.com/Aidea/api/DailyRatios/476/S,EOD,11:30 PM,Once on trading day,Cocode,CMOTS Company Code,CO_CODE,Int,CMOTS Company Code
+,,http://jwttoken.cmots.com/Aidea/api/DailyRatios/476/C,,,,type,S – Standalone and C – Consolidated,TTMAson ,Int,TTMAson 
+,,,,,,,,MCAP ,Float,Market CAP
+,,,,,,,,EV ,Float,EV 
+,,,,,,,,PE ,Float,PE 
+,,,,,,,,PBV ,Float,PBV 
+,,,,,,,,DIVYIELD ,Float,DIVYIELD 
+,,,,,,,,EPS ,Float,EPS 
+,,,,,,,,BookValue ,Float,Book Value 
+,,,,,,,,ROA_TTM ,Float,ROA TTM 
+,,,,,,,,ROE_TTM ,Float,ROE TTM 
+,,,,,,,,ROCE_TTM ,Float,ROCE TTM 
+,,,,,,,,EBIT_TTM ,Float,EBIT TTM 
+,,,,,,,,EBITDA_TTM ,Float,EBITDA TTM 
+,,,,,,,,EV_Sales_TTM ,Float,EV Sales TTM 
+,,,,,,,,EV_EBITDA_TTM ,Float,EV EBITDA TTM 
+,,,,,,,,NetIncomeMargin_TTM ,Float,Net Income Margin TTM 
+,,,,,,,,GrossIncomeMargin_TTM ,Float,Gross Income Margin TTM 
+,,,,,,,,AssetTurnover_TTM ,Float,Asset Turnover TTM 
+,,,,,,,,CurrentRatio_TTM ,Float,Current Ratio TTM 
+,,,,,,,,Debt_Equity_TTM ,Float,Debt Equity TTM 
+,,,,,,,,Sales_TotalAssets_TTM ,Float,Sales Total Assets TTM 
+,,,,,,,,NetDebt_EBITDA_TTM ,Float,Net Debt EBITDA TTM 
+,,,,,,,,EBITDA_Margin_TTM ,Float,EBITDA Margin TTM 
+,,,,,,,,TotalShareHoldersEquity_TTM ,int,Total Share Holders Equity TTM 
+,,,,,,,,ShorttermDebt_TTM ,int,Short term Debt TTM 
+,,,,,,,,LongtermDebt_TTM ,int,Long term Debt TTM 
+,,,,,,,,SharesOutstanding ,bigint,Shares Outstanding 
+,,,,,,,,EPSDiluted ,Float,EPS Diluted 
+,,,,,,,,NetSales ,int,Net Sales 
+,,,,,,,,Netprofit ,int,Net profit 
+,,,,,,,,AnnualDividend,int,Annual Dividend
+,,,,,,,,COGS,Int,COGS
+,,,,,,,,PEGRatio_TTM,Float,PEG Ratio TTM
+,,,,,,,,DividendPayout_TTM,Float,Dividend Payout TTM
+,,,,,,,,Industry_PE,Float,Industry PE
+10,Quarterly Ratio,http://jwttoken.cmots.com/Aidea/api/QuarterlyRatio/476/S,EOD,11:30 PM,Once on trading day,Cocode,CMOTS Company Code,co_code ,int,CMOTS Company Code
+,,http://jwttoken.cmots.com/Aidea/api/QuarterlyRatio/476/C,,,,type,S – Standalone and C – Consolidated,QtrEnd ,int,Quarter End
+,,,,,,,,MCAP ,float,Market CAP
+,,,,,,,,EV ,float,EV 
+,,,,,,,,PE ,float,PE 
+,,,,,,,,PBV ,float,PBV 
+,,,,,,,,EPS ,float,EPS 
+,,,,,,,,BookValue ,float,BookValue 
+,,,,,,,,EBIT ,int,EBIT 
+,,   ,,,,,,EBITDA ,int,EBITDA 
+,,,,,,,,EV_Sales ,float,EV_Sales 
+,,,,,,,,EV_EBITDA ,float,EV_EBITDA 
+,,,,,,,,NetIncomeMargin ,float,Net Income Margin 
+,,,,,,,,GrossIncomeMargin ,float,Gross Income Margin 
+,,,,,,,,EBITDAMargin ,float,EBITDA Margin 
+,,,,,,,,EPSDiluted ,float,EPS Diluted 
+,,,,,,,,NetSales ,int,Net Sales 
+,,,,,,,,Netprofit ,int,Net profit 
+,,,,,,,,COGS,int,COGS
+11,Yearly Ratio,http://jwttoken.cmots.com/Aidea/api/YearlyRatio/6068/S,EOD,11:30 PM,Once on trading day,Cocode,CMOTS Company Code,CO_CODE ,int,CMOTS Company Code
+,,http://jwttoken.cmots.com/Aidea/api/YearlyRatio/6068/C,,,,type,S – Standalone and C – Consolidated,YearEnd ,int,Year End 
+,,,,,,,,MCAP ,float,Market CAP
+,,,,,,,,EV ,float,EV 
+,,,,,,,,PE ,float,PE 
+,,,,,,,,PBV ,float,PBV 
+,,,,,,,,DIVYIELD ,float,DIVYIELD 
+,,,,,,,,DividendPayout ,float,Dividend Payout 
+,,,,,,,,EPS ,float,EPS 
+,,,,,,,,BookValue ,float,BookValue 
+,,,,,,,,ROA ,float,ROA 
+,,,,,,,,ROE ,float,ROE 
+,,,,,,,,ROCE ,float,ROCE 
+,,,,,,,,EBIT ,float,EBIT 
+,,,,,,,,EBITDA ,float,EBITDA 
+,,,,,,,,EV_Sales ,float,EV_Sales 
+,,,,,,,,EV_EBITDA ,float,EV_EBITDA 
+,,,,,,,,NetIncomeMargin ,float,Net Income Margin 
+,,,,,,,,GrossIncomeMargin ,float,Gross Income Margin 
+,,,,,,,,AssetTurnover ,float,Asset Turnover 
+,,,,,,,,CurrentRatio ,float,Current Ratio 
+,,,,,,,,Debt_Equity ,float,Debt Equity 
+,,,,,,,,FCF_Margin ,float,FCF Margin 
+,,,,,,,,Sales_TotalAsset ,float,Sales TotalAsset 
+,,,,,,,,NetDebt_FCF ,float,Net Debt FCF 
+,,,,,,,,NetDebt_EBITDA ,float,Net Debt EBITDA 
+,,,,,,,,EBITDA_Margin ,float,EBITDA Margin 
+,,,,,,,,TotalShareHoldersEquity ,float,Total Share Holders Equity 
+,,,,,,,,ShorttermDebt ,float,Short term Debt 
+,,,,,,,,LongtermDebt ,float,Long term Debt 
+,,,,,,,,SharesOutstanding ,float,Shares Out Standing 
+,,,,,,,,NetSales ,float,Net Sales 
+,,,,,,,,Netprofit ,float,Net profit 
+,,,,,,,,AnnualDividend,float,Annual Dividend
+,,,,,,,,COGS,float,COGS
+,,,,,,,,RetainedEarnings,float,Retained Earnings
+12,Yearly Result Based Ratios,http://jwttoken.cmots.com/Aidea/api/YearlyResultBasedRatios/476/S,EOD,11:30 PM,Once on trading day,Cocode,CMOTS Company Code,CO_CODE ,int,CMOTS Company Code
+,,http://jwttoken.cmots.com/Aidea/api/YearlyResultBasedRatios/476/C,,,,type,S-Standalone/C-Consolidated,YearEnd ,int,Year End
+,,,,,,,,MCAP ,float,Market Cap
+,,,,,,,,EV ,float,EV
+,,,,,,,,PE ,float,PE
+,,,,,,,,PBV ,float,PBV 
+,,,,,,,,DIVYIELD ,float,DIV YIELD 
+,,,,,,,,DividendPayout ,float,Dividend Payout 
+,,,,,,,,EPS ,float,EPS 
+,,,,,,,,BookValue ,float,Book Value 
+,,,,,,,,ROA ,float,ROA 
+,,,,,,,,ROE ,float,ROE 
+,,,,,,,,ROCE ,float,ROCE 
+,,,,,,,,EBIT ,float,EBIT 
+,,,,,,,,EBITDA ,float,EBITDA 
+,,,,,,,,EV_Sales ,float,EV Sales 
+,,,,,,,,EV_EBITDA ,float,EV EBITDA 
+,,,,,,,,NetIncomeMargin ,float,Net Income Margin 
+,,,,,,,,GrossIncomeMargin ,float,Gross Income Margin 
+,,,,,,,,AssetTurnover ,float,Asset Turnover 
+,,,,,,,,CurrentRatio ,float,Current Ratio 
+,,,,,,,,Debt_Equity ,float,Debt Equity 
+,,,,,,,,NetDebt_EBITDA ,float,Net Debt EBITDA 
+,,,,,,,,EBITDA_Margin ,float,EBITDA Margin 
+,,,,,,,,TotalShareholdersEquity ,float,Total Share holders Equity 
+,,,,,,,,ShorttermDebt ,float,Short term Debt 
+,,,,,,,,LongTermDebt ,float,Long Term Debt 
+,,,,,,,,EPSDiluted ,float,EPS Diluted 
+,,,,,,,,NetSales ,float,Net Sales 
+,,,,,,,,Netprofit ,float,Net profit 
+,,,,,,,,AnnualDividend ,float,Annual Dividend
+,,,,,,,,COGS ,float,COGS 
+13,Return Ratios Non Bank,http://jwttoken.cmots.com/Aidea/api/RatiosReturn/476/S,EOD,11:30 PM,Once on trading day,cocode,"Company code
+(Mandatory)",CO_CODE,int,CMOTS Company Code
+,,http://jwttoken.cmots.com/Aidea/api/RatiosReturn/476/C,,,,type(S/C),Type (S-Standalone/C-Consolidated) (Mandatory) ,YRC,int,Year Count
+,,,,,,,,Return_ROE,float,Return roe 
+,,,,,,,,Return_ROE_NetProfit,int,Return roe net profit 
+,,,,,,,,Return_ROE_Networth,int,Return roe net worth 
+,,,,,,,,Return_ROCE,float,Return roce 
+,,,,,,,,Return_ROCE_EBIT,int,Return roce ebit 
+,,,,,,,,Return_ROCE_CapitalEmployed,int,Return roce capital employed 
+,,,,,,,,Return_ReturnOnAssets,float,Return return on assets 
+,,,,,,,,Return_ROA_NetProfit,int,Return roa net profit 
+,,,,,,,,Return_ROA_TotalFixedAssets,int,Return roa total fixed assets 
+14,Return Ratios Bank,http://jwttoken.cmots.com/Aidea/api/RatiosReturn/4987/S,EOD,11:30 PM,Once on trading day,cocode,"Company code
+(Mandatory)",CO_CODE,int,CMOTS Company Code
+,,http://jwttoken.cmots.com/Aidea/api/RatiosReturn/4987/C,,,,type(S/C),Type (S-Standalone/C-Consolidated) (Mandatory) ,YRC,int,Year Count
+,,,,,,,,Return_ROE,Float,Return_ROE
+,,,,,,,,Return_ROE_NetProfit,Float,Return_ROE_NetProfit
+,,,,,,,,Return_ROE_Networth,Float,Return_ROE_Networth
+,,,,,,,,Return_RO_Assets,Float,Return_RO_Assets
+,,,,,,,,Return_RO_Assets_NetProfit,Float,Return_RO_Assets_NetProfit
+,,,,,,,,Return_RO_Assets_TotalFixedAssets,Float,Return_RO_Assets_TotalFixedAssets
+,,,,,,,,Return_NetInterestMargin,Float,Return_NetInterestMargin
+,,,,,,,,Return_YieldOnAdvances,Float,Return_YieldOnAdvances
+,,,,,,,,Return_YieldOnAdvances_InterestEarned,Float,Return_YieldOnAdvances_InterestEarned
+,,,,,,,,Return_YieldOnAdvances_Advances,Float,Return_YieldOnAdvances_Advances
+15,Solvency Ratios,http://jwttoken.cmots.com/Aidea/api/RatiosSolvency/476/S,EOD,11:30 PM,Once on trading day,cocode,"Company code
+(Mandatory)",co_code,int,CMOTS Company Code
+,,http://jwttoken.cmots.com/Aidea/api/RatiosSolvency/476/C,,,,type(S/C),Type (S-Standalone/C-Consolidated) (Mandatory) ,yrc,int,Year Count
+,,,,,,,,solvency_totaldebttoequityratio,float,Solvency total debt to equity ratio
+,,,,,,,,solvency_totaldebttoequityratio_totaldebt,int,Solvency total debt to equity ratio and total  debt
+,,,,,,,,solvency_totaldebttoequityratio_networth,int,Solvency total debt to equity ratio net worth
+,,,,,,,,solvency_interestcoverageratio,float,Solvency interest coverage ratio 
+,,,,,,,,solvency_interestcoverageratio_ebit,int,Solvency interest coverage ratio ebit
+,,,,,,,,solvency_interestcoverageratio_interestpayments,int,Solvency interest coverage ratio interest payments
+,,,,,,,,solvency_currentratio,float,Solvency Current Ratio
+,,,,,,,,solvency_currentratio_currentasset,int,Solvency Current Ratio  Current   Asset
+,,,,,,,,solvency_currentratio_currentliabilities,int,Solvency Current Ratio Current   Liabilities
