@@ -49,6 +49,13 @@ const routes = {
             setalert: require("./api/chat/setalert"),
             view: require("./api/chat/view")
         },
+        cmots:{
+            dataloadmaster: require("../cmots/load_data/load_master_data"),
+            dataloadcompany: require("../cmots/load_data/load_company_data"),
+            company: require("../cmots/endpoints/company"),
+            master: require("../cmots/endpoints/master"),
+            fromdatetodate: require("../cmots/endpoints/fromdatetodate")
+        },
         indices: {
             AUTOBEES: require("./api/indices/AUTOBEES.json"),
             BANKBEES: require("./api/indices/BANKBEES.json"),
@@ -107,6 +114,13 @@ router.post("/api/chat/share", verifyToken, routes.api.chat.share)
 router.post("/api/chat/setalert", verifyToken, routes.api.chat.setalert)
 router.get("/api/chat/view", routes.api.chat.view)
 router.post("/api/chat/summary", routes.api.chat.reasoning)
+router.get("/api/cmots/dataloadmaster", routes.api.cmots.dataloadmaster)
+router.get("/api/cmots/dataloadcompany", routes.api.cmots.dataloadcompany)
+router.get("/api/cmots/master/:apiType", routes.api.cmots.master)
+router.get("/api/cmots/master/:apiType/:categoryId", routes.api.cmots.master)
+router.get("/api/cmots/company/:apiType/:companyId", routes.api.cmots.company)
+router.get("/api/cmots/company/:apiType/:companyId/:standaloneConsolidated", routes.api.cmots.company)
+router.get("/api/cmots/fromdatetodate/:apiType/:fromdate/:todate", routes.api.cmots.fromdatetodate)
 router.post("/api/telegram/auth", routes.api.telegram.auth)
 router.get("/api/kite/order/create", routes.api.kite.order.create)
 router.get("/api/kite/login/success", routes.api.kite.login.success)

@@ -1,0 +1,21 @@
+ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Description,Column_Name,Column_DataType,Column_Description
+25,Bulk Deals,http://jwttoken.cmots.com/Aidea/api/Bulk-Deals/nse/01-May-2024/04-Feb-2025,EOD,11:30 PM,Once on trading day,Exchange,Exchange-BSE/NSE,Output,OutputType,OutDesc
+,,,,,,,,date,datetime,Date
+,,,,,,,,co_code,int,CMOTS Company Code 
+,,,,,,,,scripcode,varchar(100),ScripCode
+,,,,,,,,serial,int,Serial
+,,,,,,,,scripname,varchar(100),ScripName
+,,,,,,,,clientname,varchar(100),ClientName
+,,,,,,,,buysell,varchar(20),buysell
+,,,,,,,,qtyshares,float,QTY SHARES
+,,,,,,,,avg_price,float,AVG PRICE
+26,Block Deals,http://jwttoken.cmots.com/Aidea/api/Block-Deals/nse/01-May-2024/04-Feb-2025,EOD,11:30 PM,Once on trading day,Exchange,Exchange-BSE/NSE,Output,OutputType,OutDesc
+,,,,,,,,date,datetime,Date
+,,,,,,,,co_code,int,CMOTS Company Code 
+,,,,,,,,scripcode,varchar(100),ScripCode
+,,,,,,,,serial,int,Serial
+,,,,,,,,scripname,varchar(100),ScripName
+,,,,,,,,clientname,varchar(100),ClientName
+,,,,,,,,buysell,varchar(20),buysell
+,,,,,,,,qtyshares,float,QTY SHARES
+,,,,,,,,avg_price,float,AVG PRICE

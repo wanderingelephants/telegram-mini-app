@@ -13,8 +13,10 @@ let route = async (req, res) => {
             return res.status(200).send(claims) 
         }*/
         const authHeader = req.headers.authorization;
+        console.log("authHeader", JSON.stringify(authHeader))
         const token = authHeader.split(' ')[1];
         let decodedToken = jwt.decode(token);
+        console.log("decodeToken", decodedToken)
         if(decodedToken['https://hasura.io/jwt/claims']['x-hasura-role']) {
             claims['X-Hasura-Role'] =  decodedToken['https://hasura.io/jwt/claims']['x-hasura-role']
         }

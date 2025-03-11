@@ -1,0 +1,11 @@
+ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Description,Column_Name,Column_DataType,Column_Description
+1,Quarterly Results,http://jwttoken.cmots.com/Aidea/api/QuarterlyResults/476/S,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description
+2,Profit and Loss,http://jwttoken.cmots.com/Aidea/api/ProftandLoss/6/S,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description
+3,Balance Sheet,http://jwttoken.cmots.com/Aidea/api/BalanceSheet/6/S,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description
+4,Cash Flow,http://jwttoken.cmots.com/Aidea/api/CashFlow/93/S,EOD,11:30 PM,Once on trading day,cocode,CMOTS Company Code,Column_Name,Column_DataType,Column_Description
+5,Half Yearly Results,http://jwttoken.cmots.com/Aidea/api/Half-Yearly-Results/21281/S,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description
+6,Nine Months Results,http://jwttoken.cmots.com/Aidea/api/Nine-Month-Result/6/S,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description
+10,Yearly Reports,http://jwttoken.cmots.com/Aidea/api/Yearly-Results/6/S,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description
+11,Result Balance Sheet (Asset and Liabilities): Quarterly,http://jwttoken.cmots.com/Aidea/api/QuarterlyResults-BalanceSheet/476/S,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description
+12,Result Balance Sheet (Asset and Liabilities): Half yearly,http://jwttoken.cmots.com/Aidea/api/Results-BalanceSheet-Half-yearly/476/S,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description
+13,Result Balance Sheet (Asset and Liabilities): Yearly,http://jwttoken.cmots.com/Aidea/api/Results-BalanceSheet-Yearly/6/S,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description

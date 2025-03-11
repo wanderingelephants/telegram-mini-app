@@ -1,0 +1,24 @@
+ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Description,Column_Name,Column_DataType,Column_Description
+7,Share Holding Pattern Detailed,http://jwttoken.cmots.com/Aidea/api/ShareholdingMorethanonePerDetails/476,EOD,11:30 PM,Once on trading day,co_code,CMOTS Company Code,Output,OutputType,OutDesc
+,,,,,,,,co_code,int,CMOTS Company Code
+,,,,,,,,yrc,int,Year Count
+,,,,,,,,slno,int,Serial No
+,,,,,,,,type,varchar(100),Type
+,,,,,,,,name,varchar(100),Name
+,,,,,,,,PercentageStakeHolding,Float,Percentage Stake Holding
+8,Share Holding Aggregate,http://jwttoken.cmots.com/Aidea/api/Aggregate-Share-Holding/5400,EOD,11:30 PM,Once on trading day,cocode,CMOTS Company Code,Output,OutputType,OutDesc
+,,,,,,,,co_code,int,CMOTS Company Code
+,,,,,,,,YRC,int,Year Count
+,,,,,,,,Promoters,Float,Promoters
+,,,,,,,,Retail,Float,Retailors
+,,,,,,,,ForeignInstitution,Float,Foreigh Institution
+,,,,,,,,MutualFund,Float,Mutual Fund
+,,,,,,,,OtherDomesticInstitution,Float,Other Domestic Institution
+,,,,,,,,Others,Float,Others
+9,Share Holding Pattern more than 1%,http://jwttoken.cmots.com/Aidea/api/ShareholdingMorethanOnePercent/476,EOD,11:30 PM,Once on trading day,co_code,CMOTS Company Code,Output,OutputType,OutDesc
+,,,,,,,,co_code,Int,CMOTS Company Code
+,,,,,,,,holding_date,Date,Date
+,,,,,,,,Type,varchar(100),Type
+,,,,,,,,Name,varchar(100),Name
+,,,,,,,,NOOFshares,BigInt,No of Shares
+,,,,,,,,perstake,Float,Percentage Stake
