@@ -1,2 +1,0 @@
--- Drop company_substantial_acquisition_of_shares_and_takeovers_data table
-DROP TABLE IF EXISTS "company_substantial_acquisition_of_shares_and_takeovers_data";

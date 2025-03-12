@@ -132,7 +132,17 @@ async function generateSchemas(csvFilePath, outputDir) {
               Column_Description: columnDescs[col] || col
             })),
             ...defaultColumns
-          ]
+          ],
+          UniqueColumns: ["co_code", "month", "quarter", "year"],
+          UniqueConstraintName: `${tableName}_co_code_mqy`,
+          ForeignKeys: [{
+            "Column_Name": "co_code",
+            "References": {
+              "Table_Name": "company_master",
+              "Column_Name": "co_code"
+            }
+          }],//{Column_Name: "", References: {Table_Name: "", Column_Name: ""}}
+          Indexes: ["co_code", "month", "quarter", "year"]
         };
         
         // Write schema to a JSON file

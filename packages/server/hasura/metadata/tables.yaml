@@ -478,6 +478,13 @@
           table:
             name: company_sector_wise_company
             schema: public
+    - name: company_index_wise_company
+      using:
+        foreign_key_constraint_on:
+          column: co_code
+          table:
+            name: company_index_wise_company
+            schema: public
     - name: company_results_today
       using:
         foreign_key_constraint_on:
@@ -515,6 +522,10 @@
 - table:
     name: company_index_wise_company
     schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
 - table:
     name: company_exchange_holidays
     schema: public
@@ -596,7 +607,7 @@
       using:
         foreign_key_constraint_on: co_code
 - table:
-    name: company_notes_toaccount
+    name: company_notes_to_account
     schema: public
   object_relationships:
     - name: company_master
@@ -624,7 +635,7 @@
       using:
         foreign_key_constraint_on: co_code
 - table:
-    name: company_subsidiaries_jvs_and_collaborations
+    name: company_subsidiaries_jvs_collaborations
     schema: public
   object_relationships:
     - name: company_master
@@ -694,7 +705,7 @@
       using:
         foreign_key_constraint_on: co_code
 - table:
-    name: company_pledge_shares_details
+    name: company_pledged_shares
     schema: public
   object_relationships:
     - name: company_master
@@ -715,42 +726,28 @@
       using:
         foreign_key_constraint_on: co_code
 - table:
-    name: company_substantial_acquisition_of_shares_and_takeovers_data
+    name: company_sast
     schema: public
   object_relationships:
     - name: company_master
       using:
         foreign_key_constraint_on: co_code
 - table:
-    name: company_bulk_deals
+    name: company_shp_detailed
     schema: public
   object_relationships:
     - name: company_master
       using:
         foreign_key_constraint_on: co_code
 - table:
-    name: company_block_deals
+    name: company_shp_aggregate
     schema: public
   object_relationships:
     - name: company_master
       using:
         foreign_key_constraint_on: co_code
 - table:
-    name: company_share_holding_pattern_detailed
-    schema: public
-  object_relationships:
-    - name: company_master
-      using:
-        foreign_key_constraint_on: co_code
-- table:
-    name: company_share_holding_aggregate
-    schema: public
-  object_relationships:
-    - name: company_master
-      using:
-        foreign_key_constraint_on: co_code
-- table:
-    name: company_share_holding_pattern_more_than_1_percent
+    name: company_shp_more_than_1_percent
     schema: public
   object_relationships:
     - name: company_master
@@ -813,7 +810,7 @@
       using:
         foreign_key_constraint_on: co_code
 - table:
-    name: company_ttm_daily_ratios
+    name: company_trailing_todate_ratios
     schema: public
   object_relationships:
     - name: company_master
@@ -862,6 +859,20 @@
       using:
         foreign_key_constraint_on: co_code
 - table:
+    name: company_bulk_deals
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_block_deals
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
     name: company_balance_sheet
     schema: public
   object_relationships:
@@ -904,21 +915,21 @@
       using:
         foreign_key_constraint_on: co_code
 - table:
-    name: company_result_balance_sheet_asset_and_liabilities_half_yearly
+    name: company_result_balance_sheet_half_yearly
     schema: public
   object_relationships:
     - name: company_master
       using:
         foreign_key_constraint_on: co_code
 - table:
-    name: company_result_balance_sheet_asset_and_liabilities_quarterly
+    name: company_result_balance_sheet_quarterly
     schema: public
   object_relationships:
     - name: company_master
       using:
         foreign_key_constraint_on: co_code
 - table:
-    name: company_result_balance_sheet_asset_and_liabilities_yearly
+    name: company_result_balance_sheet_yearly
     schema: public
   object_relationships:
     - name: company_master
@@ -931,3 +942,4 @@
     - name: company_master
       using:
         foreign_key_constraint_on: co_code
+

@@ -48,7 +48,7 @@ function generateMigration(inputJsonPath, migrationFolderPath, mutationFolderPat
     };
     exportList.push(tableName+"_insert")
     // Generate SQL migration
-    generateSqlMigration(sqlFolderPath, tableName, columns, isMasterTable);
+    generateSqlMigration(sqlFolderPath, table, columns, isMasterTable);
 
     let insertMutation = `const ${tableName}_insert = \`mutation ${tableName}_insert($object: ${tableName}_insert_input!){
       insert_${tableName}_one(object: $object){
@@ -77,7 +77,8 @@ function sleepSync(ms) {
  * @param {Array} columns - Table columns
  * @param {boolean} isMasterTable - Whether this is the master table
  */
-function generateSqlMigration(sqlFolderPath, tableName, columns, isMasterTable) {
+function generateSqlMigration(sqlFolderPath, table, columns, isMasterTable) {
+  const tableName = (table['Table Name']);
   const timestamp = new Date().getTime();
   const migrationFolder = path.join(sqlFolderPath, `${timestamp}_create_${tableName}`);
   
@@ -122,11 +123,7 @@ function generateSqlMigration(sqlFolderPath, tableName, columns, isMasterTable) 
     
     if (column.Column_Name.toLowerCase() !== 'input' || !needsCoCode) {
       const pgType = convertToPgType(column.Column_DataType);
-      let uniqueLabel = ""
-      if ((tableName === "company_master"  && column.Column_Name==="co_code")) uniqueLabel = "unique"
-      if (tableName === "company_sector_master"  && column.Column_Name==="sect_code") uniqueLabel = "unique"
-      if (tableName === "company_index_master"  && column.Column_Name==="index_code") uniqueLabel = "unique"
-      createTableSql += `  "${column.Column_Name}" ${pgType} ${uniqueLabel},\n`;
+      createTableSql += `  "${column.Column_Name}" ${pgType},\n`;
     }
     //console.log(column, hasCoCode, needsCoCode)
   
@@ -137,9 +134,28 @@ function generateSqlMigration(sqlFolderPath, tableName, columns, isMasterTable) 
     createTableSql += `  "co_code" integer,\n`;
     hasCoCode = true;
   }
-  
+  const lastIndex = createTableSql.lastIndexOf(",")
+  createTableSql = createTableSql.substring(0, lastIndex)
+  createTableSql += "\n"
+  for (let i=0; i<table.ForeignKeys.length; i++){
+    const fk = table.ForeignKeys[i]
+    if (i < table.ForeignKeys.length) createTableSql += ","
+    createTableSql += `  FOREIGN KEY ("${fk.Column_Name}") REFERENCES "${fk.References.Table_Name}" (${fk.References.Column_Name}) ON UPDATE restrict ON DELETE restrict`;
+    
+    createTableSql += "\n"
+  }
+  createTableSql += `);\n`;
+  // TABLE CLAUSE ENDS
+
+  // ADD UNIQUE CONSTRAINTS AND INDEXES AS ALTER TABLE NOW
+  createTableSql += `ALTER TABLE "public"."${tableName}" add constraint "${table.UniqueConstraintName}" unique (${table.UniqueColumns.map(col => `"${col}"`).join(", ")});\n`;
+
+  for (const idx of table.Indexes){
+    createTableSql += `CREATE INDEX "idx_${tableName}_${idx}" on "public"."${tableName}" using btree ("${idx}");\n`;
+  }
+
   // Add foreign key if needed
-  if (!isMasterTable && hasCoCode) {
+  /*if (!isMasterTable && hasCoCode) {
     createTableSql += `  FOREIGN KEY ("co_code") REFERENCES "company_master" (co_code) ON UPDATE restrict ON DELETE restrict\n`;
   } else if (!isMasterTable && hasCmotsCode){
     createTableSql += `  FOREIGN KEY ("cmotscode") REFERENCES "company_master" (co_code) ON UPDATE restrict ON DELETE restrict\n`;
@@ -156,6 +172,21 @@ function generateSqlMigration(sqlFolderPath, tableName, columns, isMasterTable) 
   if (tableName === "company_index_wise_company")
     createTableSql += `,FOREIGN KEY ("index_code") REFERENCES "company_index_master" (index_code) ON UPDATE restrict ON DELETE restrict\n`
   createTableSql += `);\n`;
+
+  if (tableName === "company_sector_wise_company"){
+    const plkCol = "sect_code"
+    createTableSql += `alter table "public"."${tableName}" add constraint "${tableName}_${plkCol}_co_code" unique ("${plkCol}", "co_code");`;
+  }
+  if (tableName === "company_index_wise_company"){
+    const plkCol = "index_code"
+    createTableSql += `alter table "public"."${tableName}" add constraint "${tableName}_index_code_cmotscode" unique ("${plkCol}", "cmotscode");`;
+  }
+  if (tableName === "company_annual_report_data_declaration_list"){
+    createTableSql += `alter table "public"."company_annual_report_data_declaration_list" add constraint "company_annual_report_data_declaration_list_uniq" unique ("reporttype", "reportdate", "co_code");`
+  }
+  if (tableName === "company_result_data_declaration_list"){
+    createTableSql += `alter table "public"."company_result_data_declaration_list" add constraint "company_result_data_declaration_list_reporttyperesultdatecocode" unique ("reporttype", "resultdate", "co_code");`
+  }
   if (!isMasterTable && hasCoCode) {
     //CREATE  INDEX "mf_aum_index" on  "public"."mutual_fund" using btree ("aum");
     createTableSql += `CREATE INDEX "${tableName}_co_code_index" on "public"."${tableName}" using btree ("co_code");\n`;
@@ -167,11 +198,20 @@ function generateSqlMigration(sqlFolderPath, tableName, columns, isMasterTable) 
   if (hasRecordDate){
     createTableSql += `CREATE INDEX "${tableName}_record_date_index" on "public"."${tableName}" using btree ("record_date");\n`;
   }
-  if (tableName === "company_sector_wise_company")
+  if (tableName === "company_sector_wise_company"){
     createTableSql += `CREATE INDEX "${tableName}_sect_code_index" on "public"."${tableName}" using btree ("sect_code");\n`;
-  if (tableName === "company_index_wise_company")
+  }
+  if (tableName === "company_index_wise_company"){
     createTableSql += `CREATE INDEX "${tableName}_index_code_index" on "public"."${tableName}" using btree ("index_code");\n`;
-  
+  }
+  if (tableName === "company_annual_report_data_declaration_list"){
+    createTableSql += `CREATE INDEX "${tableName}_reportdate_index" on "public"."${tableName}" using btree ("reportdate");\n`;
+    createTableSql += `CREATE INDEX "${tableName}_reporttype_index" on "public"."${tableName}" using btree ("reporttype");\n`;
+  }
+  if (tableName === "company_result_data_declaration_list"){
+    createTableSql += `CREATE INDEX "${tableName}_resultdate_index" on "public"."${tableName}" using btree ("resultdate");\n`;
+    createTableSql += `CREATE INDEX "${tableName}_reporttype_index" on "public"."${tableName}" using btree ("reporttype");\n`;
+  }   */
   // Write up.sql
   fs.writeFileSync(path.join(migrationFolder, 'up.sql'), createTableSql);
   

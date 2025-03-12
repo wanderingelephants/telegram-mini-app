@@ -64,9 +64,10 @@ ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Des
 ,,,,,,,,Interestincome_to_Totalfunds,Float,Interest income / Total funds (%)
 ,,,,,,,,InterestExpended_to_Totalfunds,Float,Interest Expended / Total funds (%)
 ,,,,,,,,CASA,Float,CASA (%)
-9,TTM/Daily  Ratios,http://jwttoken.cmots.com/Aidea/api/DailyRatios/476/S,EOD,11:30 PM,Once on trading day,Cocode,CMOTS Company Code,Output,OutputDataType,OutputDescription
+9,Trailing_ToDate_Ratios,http://jwttoken.cmots.com/Aidea/api/DailyRatios/476/S,EOD,11:30 PM,Once on trading day,Cocode,CMOTS Company Code,Output,OutputDataType,OutputDescription
 ,,,,,,,,TTMAson,Int,TTMAson
-,,,,,,,,co_code,Int,CMOTS Company code 
+,,,,,,,,co_code,Int,CMOTS Company code
+,,,,,,,,record_date,Date,Record Date 
 ,,,,,,,,MCAP,Float,Market CAP
 ,,,,,,,,EV,Float,EV 
 ,,,,,,,,PE,Float,PE 

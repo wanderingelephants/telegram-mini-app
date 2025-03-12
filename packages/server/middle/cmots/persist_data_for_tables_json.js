@@ -48,35 +48,94 @@ async function persistData(inputJsonPath) {
       column.pgDataType = pgType
     });
     console.log(table.API_URL)
-    const response = await axios.get(table.API_URL, axiosConfig);
+    const match_sector = table.API_URL.match(/SectorWiseComp\/(\d+)/);
+    const sect_code = match_sector ? parseInt(match_sector[1]) : null;
+    const match_index = table.API_URL.match(/IndexWiseComp\/(\d+)/);
+    const index_code = match_index ? parseInt(match_index[1]) : null;
+    let response;
+    try{
+      response = await axios.get(table.API_URL, axiosConfig);
+    }
+    catch(e){
+      console.log(e)
+    }
+    
+    if (!response.data){
+      console.log("response.data is null", response)
+      continue
+    }
+    if (!response.data.data){
+      console.log("response.data.data is null", response)
+      continue
+    }
     response.data.data = response.data.data.map(obj => ({
       ...obj,
+      ...(obj.CMOTSCode !== undefined ? { CMOTSCode: parseInt(obj.CMOTSCode) } : {}),
+      ...(obj.co_code !== undefined ? { co_code: parseInt(obj.co_code) } : {}),
+      ...(sect_code !== null ? { sect_code } : {}),
+      ...(index_code !== null ? { index_code } : {}),
       created_at: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
       updated_at: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
   }));
+    
     const transformedData = { ...response.data };
 
     if (transformedData.data) {
-      console.log("TRANSFORM TO LOWER CASE")
       transformedData.data = transformKeysToLowercase(transformedData.data);
     }
-    console.log(transformedData.data)
-    let primary_column =  "co_code"
-    if (tableName === "company_sector_master") primary_column = "sect_code"
-    if (tableName === "company_index_master") primary_column = "index_code"
-    const insertMutation = `mutation ${tableName}_insert($objects: [${tableName}_insert_input!]!){
-      insert_${tableName}(objects: $objects, on_conflict:{
-        constraint: ${tableName}_${primary_column}_key,
-        update_columns: [${primary_column}, updated_at]
-      }){
-        returning{
+    else {
+      console.log("transformedData.data not found", tableName)
+      console.log(transformedData)
+      continue;
+    }
+    if (transformedData.data.data && transformedData.data.data.length > 0){
+      console.log("transformedData.data.data legnth 0", tableName)
+      console.log(transformedData)
+      continue;
+    }
+    let unique_columns =  "co_code"
+    if (tableName === "company_sector_master") unique_columns = "sect_code"
+    if (tableName === "company_index_master") unique_columns = "index_code"
+    let unique_constraint_key = `${tableName}_${unique_columns}_key`
+    
+    if (tableName === "company_sector_wise_company"){
+      unique_columns = "sect_code, co_code"
+      unique_constraint_key = `${tableName}_${unique_columns.replaceAll(", ", "_")}`
+      
+    } 
+    if (tableName === "company_index_wise_company"){
+      unique_columns = "index_code, cmotscode"
+      unique_constraint_key = `${tableName}_${unique_columns.replaceAll(", ", "_")}`
+    }
+    if (tableName === "company_annual_report_data_declaration_list"){
+      unique_columns = "reporttype, reportdate, co_code"
+      unique_constraint_key = "company_annual_report_data_declaration_list_uniq";//`${tableName}_${unique_columns.replaceAll(", ", "_")}`
+    }
+    if (tableName === "company_result_data_declaration_list"){
+      unique_columns = "reporttype, resultdate, co_code"
+      unique_constraint_key = "company_result_data_declaration_list_reporttyperesultdatecocode"; //`${tableName}_${unique_columns.replaceAll(", ", "_")}`
+    }   
+    for (const record of transformedData.data){
+      const insertMutation = `mutation ${tableName}_insert($object: ${tableName}_insert_input!){
+        insert_${tableName}_one(object: $object, on_conflict:{
+          constraint: ${unique_constraint_key},
+          update_columns: [${unique_columns}, updated_at]
+        }){
           id
         }
+      }`
+      try{
+        await postToGraphQL({
+          query: insertMutation, variables: {object: record}
+        })
+      
       }
-    }`
-    await postToGraphQL({
-       query: insertMutation, variables: {objects: transformedData.data}
-     })
+      catch(e){
+        console.log(e)
+      }
+    }
+    
+    
   }
 
 

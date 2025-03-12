@@ -39,7 +39,7 @@ ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Des
 ,,,,,,,,Exchange_NSE,varchar(50),Exchange NSE
 ,,,,,,,,isin,varchar(50),ISIN
 6, Index Wise Company,http://jwttoken.cmots.com/Aidea/api/IndexWiseComp/26753,EOD,11:30 PM,Once on trading day,seccode,Index Code,Output,OutputType,OutDesc
-,,,,,,,,CMOTSCode,Int,CMOTS Company Code
+,,,,,,,,co_code,Int,CMOTS Company Code
 ,,,,,,,,CompanyShortName,varchar(50),Company Short Name
 ,,,,,,,,CompanyLongName,Varchar(100),Company Long Name
 ,,,,,,,,index_code,int,Index Code

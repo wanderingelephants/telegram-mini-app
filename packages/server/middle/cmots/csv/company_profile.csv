@@ -160,7 +160,7 @@ ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Des
 ,,,,,,,,symbol,varchar(100),symbol
 ,,,,,,,,memo,ntext,MEMO
 ,,,,,,,,yr,varchar(100),Year
-9,Notes toAccount,http://jwttoken.cmots.com/Aidea/api/NotesToAccount/476/2024,EOD,11:30 PM,Once on trading day,cocode,CMOTS Company code,Output,OutputType,OutDesc
+9,Notes to Account,http://jwttoken.cmots.com/Aidea/api/NotesToAccount/476/2024,EOD,11:30 PM,Once on trading day,cocode,CMOTS Company code,Output,OutputType,OutDesc
 ,,,,,,,,co_code,Int,CMOTS Company Code 
 ,,,,,,,,lname,varchar(100),LNAME
 ,,,,,,year,Year,memo,ntext,MEMO
@@ -204,14 +204,14 @@ ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Des
 ,,,,,,,,total,float,TOTAL
 ,,,,,,,,class,varchar(50),CLASS
 ,,,,,,,,flag,varchar(20),FLAG
-13,"Subsidiaries , JVs and Collaborations",http://jwttoken.cmots.com/Aidea/api/Subsidiaries_JVs_Collaborations/6,EOD,11:30 PM,Once on trading day,cocode ,CMOTS Company code,Output,OutputType,OutDesc
+13,"Subsidiaries_JVs_Collaborations",http://jwttoken.cmots.com/Aidea/api/Subsidiaries_JVs_Collaborations/6,EOD,11:30 PM,Once on trading day,cocode ,CMOTS Company code,Output,OutputType,OutDesc
 ,,,,,,,,co_code,Int,CMOTS Company Code 
 ,,,,,,,,lname,varchar(50),LNAME
 ,,,,,,,,coll_name,varchar(50),COLL_NAME
 ,,,,,,,,coll_ctry,varchar(50),COLL_CTRY
 ,,,,,,,,coll_country,float,PERC_SH
 ,,,,,,,,PERC_SH,float,PERC_SH
-14, Deferred Tax,http://jwttoken.cmots.com/Aidea/api/Deferred_Tax/6,EOD,11:30 PM,Once on trading day,cocode ,CMOTS Company code,Output,OutputType,OutDesc
+14,Deferred Tax,http://jwttoken.cmots.com/Aidea/api/Deferred_Tax/6,EOD,11:30 PM,Once on trading day,cocode ,CMOTS Company code,Output,OutputType,OutDesc
 ,,,,,,,,co_code,Int,CMOTS company code 
 ,,,,,,,,yrc,Int,Year
 ,,,,,,,,aseg1,varchar(50),ASEG1
@@ -298,7 +298,7 @@ ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Des
 ,,,,,,,,ltotal,varchar(50),LTOTAL
 ,,,,,,,,year,float,YEAR
 ,,,,,,,,flag,Varchar(50),FLAG
-15, R & D,http://jwttoken.cmots.com/Aidea/api/R_and_D/6,EOD,11:30 PM,Once on trading day,cocode ,CMOTS Company code,Output,OutputType,OutDesc
+15,R_and_D,http://jwttoken.cmots.com/Aidea/api/R_and_D/6,EOD,11:30 PM,Once on trading day,cocode ,CMOTS Company code,Output,OutputType,OutDesc
 ,,,,,,,,co_code,int,CMOTS company code 
 ,,,,,,,,yrc,int ,Year Count
 ,,,,,,,,capital,float,Capital
@@ -306,7 +306,7 @@ ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Des
 ,,,,,,,,percentage,float,Percentage
 ,,,,,,,,year,float,Year
 ,,,,,,,,flag,varchar,Flag
-16,Chronological History ,http://jwttoken.cmots.com/Aidea/api/ChronologicalHistory/6,EOD,11:30 PM,Once on trading day,cocode ,CMOTS Company code,Output,OutputType,OutDesc
+16,Chronological History,http://jwttoken.cmots.com/Aidea/api/ChronologicalHistory/6,EOD,11:30 PM,Once on trading day,cocode ,CMOTS Company code,Output,OutputType,OutDesc
 ,,,,,,,,co_code,Int,CMOTS Company Code 
 ,,,,,,,,lname,Varchar (100),Company Long Name
 ,,,,,,,,yrc,int ,year
@@ -317,7 +317,7 @@ ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Des
 ,,,,,,,,co_code,Int,CMOTS Company Code 
 ,,,,,,,,lname,Varchar (100),Company Long Name
 ,,,,,,,,memo,ntext,company history description - Memo
-18,Location ,http://jwttoken.cmots.com/Aidea/api/locations/6,EOD,11:30 PM,Once on trading day,cocode ,CMOTS Company code,Output,OutputType,OutDesc
+18,Location,http://jwttoken.cmots.com/Aidea/api/locations/6,EOD,11:30 PM,Once on trading day,cocode ,CMOTS Company code,Output,OutputType,OutDesc
 ,,,,,,,,co_code,int,CMOTS company code 
 ,,,,,,,,type,varchar(50),TYPE
 ,,,,,,,,add1,varchar(50),ADD1
@@ -361,7 +361,7 @@ ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Des
 ,,,,,,,,FaceValue,int,FaceValue
 ,,,,,,,,EquitySharesPaidUp,int,EquitySharesPaidUp
 ,,,,,,,,EquityPaidUp,float,EquityPaidUp
-23,Pledge Shares Details ,http://jwttoken.cmots.com/Aidea/api/Pledgesharesdetails/6,EOD,11:30 PM,Once on trading day,cocode ,CMOTS Company Code,Output,OutputType,OutDesc
+23,Pledged Shares,http://jwttoken.cmots.com/Aidea/api/Pledgesharesdetails/6,EOD,11:30 PM,Once on trading day,cocode ,CMOTS Company Code,Output,OutputType,OutDesc
 ,,,,,,,,co_code,int,CMOTS Company Code 
 ,,,,,,,,date,datetime,date
 ,,,,,,,,type,varchar(50),Type
@@ -394,7 +394,7 @@ ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Des
 ,,,,,,,,todateofacquisition,Datetime,ToDate of Acquisition
 ,,,,,,,,modeofacquisition,Varchar(100),Mode of Acquisition
 ,,,,,,,,ExchangeReportedDate,Datetime,ExchangeReportedDate
-28,Substantial Acquisition of Shares and Takeovers Data,http://jwttoken.cmots.com/Aidea/api/SubstantialAcquisition/476,EOD,11:30 PM,Once on trading day,cocode,CMOTS Company Code,Output,OutputType,OutDesc
+28,SAST,http://jwttoken.cmots.com/Aidea/api/SubstantialAcquisition/476,EOD,11:30 PM,Once on trading day,cocode,CMOTS Company Code,Output,OutputType,OutDesc
 ,,,,,,,,co_code,Int,CMOTS Company Code
 ,,,,,,,,SecurityName,varchar(100),Security Name
 ,,,,,,,,NameofAcquirer_Seller,varchar(100),Name of Acquirer Seller
