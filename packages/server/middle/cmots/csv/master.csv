@@ -31,6 +31,7 @@ ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Des
 ,,,,,,,,co_code,Int,CMOTS Company Code
 ,,,,,,,,co_name,Varchar(100),Company Name
 ,,,,,,,,lname,Varchar(100),Last Name
+,,,,,,,,sect_code,int,Sector Code
 ,,,,,,,,sc_code,Int,BSE Scrip Code
 ,,,,,,,,symbol,Varchar(100),NSE Company Symbol
 ,,,,,,,,sect_name,varchar(50),Sector Name
@@ -41,6 +42,7 @@ ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Des
 ,,,,,,,,CMOTSCode,Int,CMOTS Company Code
 ,,,,,,,,CompanyShortName,varchar(50),Company Short Name
 ,,,,,,,,CompanyLongName,Varchar(100),Company Long Name
+,,,,,,,,index_code,int,Index Code
 ,,,,,,,,BSECode,Int,Scrip Code
 ,,,,,,,,NSESymbol,varchar(50),Symbol
 ,,,,,,,,ISIN,varchar(50),ISIN

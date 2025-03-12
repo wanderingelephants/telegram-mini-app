@@ -1,5 +1,5 @@
 #!/bin/bash
-
+#delete FROM hdb_catalog.schema_migrations;
 # Load environment variables from .env.pg
 if [ -f .env.pg ]; then
     source .env.pg

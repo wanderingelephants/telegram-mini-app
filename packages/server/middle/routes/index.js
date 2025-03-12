@@ -50,8 +50,6 @@ const routes = {
             view: require("./api/chat/view")
         },
         cmots:{
-            dataloadmaster: require("../cmots/load_data/load_master_data"),
-            dataloadcompany: require("../cmots/load_data/load_company_data"),
             company: require("../cmots/endpoints/company"),
             master: require("../cmots/endpoints/master"),
             fromdatetodate: require("../cmots/endpoints/fromdatetodate")
@@ -114,8 +112,6 @@ router.post("/api/chat/share", verifyToken, routes.api.chat.share)
 router.post("/api/chat/setalert", verifyToken, routes.api.chat.setalert)
 router.get("/api/chat/view", routes.api.chat.view)
 router.post("/api/chat/summary", routes.api.chat.reasoning)
-router.get("/api/cmots/dataloadmaster", routes.api.cmots.dataloadmaster)
-router.get("/api/cmots/dataloadcompany", routes.api.cmots.dataloadcompany)
 router.get("/api/cmots/master/:apiType", routes.api.cmots.master)
 router.get("/api/cmots/master/:apiType/:categoryId", routes.api.cmots.master)
 router.get("/api/cmots/company/:apiType/:companyId", routes.api.cmots.company)

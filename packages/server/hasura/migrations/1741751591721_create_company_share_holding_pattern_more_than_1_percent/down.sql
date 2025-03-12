@@ -1,0 +1,2 @@
+-- Drop company_share_holding_pattern_more_than_1_percent table
+DROP TABLE IF EXISTS "company_share_holding_pattern_more_than_1_percent";

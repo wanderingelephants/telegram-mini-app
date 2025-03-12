@@ -467,3 +467,467 @@
           email:
             _eq: X-Hasura-User-Id
         check: null
+- table:
+    name: company_master
+    schema: public
+  array_relationships:
+    - name: company_sector_wise_company
+      using:
+        foreign_key_constraint_on:
+          column: co_code
+          table:
+            name: company_sector_wise_company
+            schema: public
+    - name: company_results_today
+      using:
+        foreign_key_constraint_on:
+          column: co_code
+          table:
+            name: company_results_today
+            schema: public
+    - name: company_result_data_declaration_list
+      using:
+        foreign_key_constraint_on:
+          column: co_code
+          table:
+            name: company_result_data_declaration_list
+            schema: public
+    - name: company_annual_report_data_declaration_list
+      using:
+        foreign_key_constraint_on:
+          column: co_code
+          table:
+            name: company_annual_report_data_declaration_list
+            schema: public
+- table:
+    name: company_sector_master
+    schema: public
+- table:
+    name: company_index_master
+    schema: public
+- table:
+    name: company_sector_wise_company
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_index_wise_company
+    schema: public
+- table:
+    name: company_exchange_holidays
+    schema: public
+- table:
+    name: company_results_today
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_result_data_declaration_list
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_annual_report_data_declaration_list
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_profile
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_compbackground
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_board_of_directors
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_directors_report
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_chairmans_report
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_bankers
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_management_biodata
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_auditors_report
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_notes_toaccount
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_finished_products
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_raw_material
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_related_party_transaction
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_subsidiaries_jvs_and_collaborations
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_deferred_tax
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_r_and_d
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_chronological_history
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_history
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_location
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_credit_rating_info
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_employee_count
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_corporate_governance
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_capital_structure
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_pledge_shares_details
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_crar
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_insider_trading
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_substantial_acquisition_of_shares_and_takeovers_data
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_bulk_deals
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_block_deals
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_share_holding_pattern_detailed
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_share_holding_aggregate
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_share_holding_pattern_more_than_1_percent
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_margin_ratio
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_performance_ratios
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_efficiency_ratios
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_financial_stability_ratios
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_valuation_ratios
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_cash_flow_ratios
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_growth_ratio
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_liquidity_ratios
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_ttm_daily_ratios
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_quarterly_ratio
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_yearly_ratio
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_yearly_result_based_ratios
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_return_ratios_non_bank
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_return_ratios_bank
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_solvency_ratios
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_balance_sheet
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_cash_flow
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_half_yearly_results
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_nine_months_results
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_profit_and_loss
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_quarterly_results
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_result_balance_sheet_asset_and_liabilities_half_yearly
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_result_balance_sheet_asset_and_liabilities_quarterly
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_result_balance_sheet_asset_and_liabilities_yearly
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_yearly_reports
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
