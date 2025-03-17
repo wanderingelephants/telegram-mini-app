@@ -1,5 +1,7 @@
 const fs = require('fs');
+const path = require('path');
 const { parse } = require('csv-parse/sync');
+const abbreviateColumnName = require('./abbreviateColumnName');
 
 /**
  * Normalize PostgreSQL compatible data type
@@ -18,6 +20,7 @@ function normalizeDataType(dataType) {
   if (type.includes('varchar') || type.includes('char')) return 'text';
   if (type.includes('timestamp')) return 'timestamptz';
   if (type.includes('date')) return 'date';
+  if (type.includes('datetime')) return 'date';
 
   // Default to text for unrecognized types
   return 'text';
@@ -32,23 +35,13 @@ function normalizeName(name) {
   if (!name) return '';
   name = name.trim()
   // Convert to lowercase
-  let normalized = name.toLowerCase();
 
-  normalized = normalized.trim()
-  normalized = normalized.replaceAll(",", "")
-  normalized = normalized.replaceAll(":", "")
-  normalized = normalized.replaceAll("%", "_percent")
-  normalized = normalized.replaceAll("'", "")
-  normalized = normalized.replaceAll("’", "")
-  normalized = normalized.replaceAll("(", "")
-  normalized = normalized.replaceAll(")", "")
-  normalized = normalized.replaceAll("/", "_")
-  normalized = normalized.replaceAll("&", "and")
-  // Replace special characters with underscores
-  normalized = normalized.replace(/[&'"/]/g, '_');
+  let normalized = name.trim()
+    .toLowerCase().replace(/[^a-zA-Z0-9]+/g, '_');
+  // Keep 'or' as is (for cases like "sales_or_income")
 
-  // Replace spaces with underscores
-  normalized = normalized.replace(/\s+/g, '_');
+  normalized = normalized.toLowerCase().replace(/\s+/g, "_");
+  normalized = normalized.replace(/_+/g, "_");
 
   // Handle column named "date" specifically
   if (normalized === 'date') {
@@ -71,96 +64,40 @@ function generatenormalized(reportName) {
   return normalized.startsWith("company") ? normalized : "company_" + normalized
 }
 
-function processConstraints(currentTable){
+function processConstraints(currentTable) {
   const tableName = currentTable["Table Name"]
-        console.log("adding table to array", currentTable.ReportIndex, tableName)
-        //Unique constraints
-        if (tableName === "company_master") currentTable["UniqueColumns"].push("co_code")
-        if (tableName === "company_sector_master") currentTable["UniqueColumns"].push("sect_code")
-        if (tableName === "company_index_master") currentTable["UniqueColumns"].push("index_code")
+  const unique_columns = []
+  const indexed_columns = []
+  for (const ColumnDef of currentTable.Columns) {
+    if (ColumnDef.Is_Unique && ColumnDef.Is_Unique.toLowerCase() === "true") unique_columns.push(ColumnDef.Column_Name)
+    if (ColumnDef.Is_Index && ColumnDef.Is_Index.toLowerCase() === "true") indexed_columns.push(ColumnDef.Column_Name)
+  }
+  currentTable["UniqueColumns"] = unique_columns
+  currentTable["Indexes"] = indexed_columns
 
-        if (tableName === "company_sector_wise_company") {
-          currentTable["UniqueColumns"].push("sect_code")
-          
-        }
-        if (tableName === "company_index_wise_company") {
-          currentTable["UniqueColumns"].push("index_code")
-          
-        }
-        if (tableName === "company_annual_report_data_declaration_list") {
-          currentTable["UniqueColumns"].push("reporttype")
-          currentTable["UniqueColumns"].push("reportdate")
-          
-        }
-        if (tableName === "company_result_data_declaration_list") {
-          currentTable["UniqueColumns"].push("reporttype")
-          currentTable["UniqueColumns"].push("resultdate")
-          
-        }
-        if (tableName === "company_exchange_holidays") {
-          currentTable["UniqueColumns"].push("holidaydate")
-        }
-        if (tableName === "company_results_today") {
-          
-          currentTable["UniqueColumns"].push("resultdate")
-        }
-        if (tableName === "company_trailing_todate_ratios"){
-          
-          currentTable["UniqueColumns"].push("record_date")
-        }
-        if (currentTable.Columns.filter(c => c.Column_Name.toLowerCase() === "yrc").length > 0){
-          currentTable["UniqueColumns"].push("yrc")
-        }
-        if (tableName !== "company_master" && currentTable.Columns.filter(c => c.Column_Name.toLowerCase() === "co_code").length > 0){
-          currentTable["UniqueColumns"].push("co_code")
-        }
-        let uniqueConstraintName = `${currentTable["Table Name"]}_${currentTable["UniqueColumns"].join("_")}`
-        if (uniqueConstraintName.length > 63) uniqueConstraintName = uniqueConstraintName.substring(0, 62)
-        currentTable.UniqueConstraintName = uniqueConstraintName
-
-        //Foreign Keys
-        if (!tableName.endsWith("_master")){
-          console.log("Process FKs for", tableName)
-          if (currentTable.Columns.filter(c => c.Column_Name === "co_code").length > 0){
-            currentTable.ForeignKeys.push({
-              Column_Name: "co_code", 
-              References: {"Table_Name": "company_master", "Column_Name": "co_code"}
-            })
-          }
-          if (tableName === "company_sector_wise_company") {
-            currentTable.ForeignKeys.push({
-              Column_Name: "sect_code", 
-              References: {"Table_Name": "company_sector_master", "Column_Name": "sect_code"}
-            })
-          }
-          if (tableName === "company_index_wise_company") {
-            currentTable.ForeignKeys.push({
-              Column_Name: "index_code", 
-              References: {"Table_Name": "company_index_master", "Column_Name": "index_code"}
-            })
-          }
-        }
-
-        //Indexes
-        
-        for (const fk of currentTable.ForeignKeys){
-          currentTable.Indexes.push(fk.Column_Name)
-        }
-        for (const col of currentTable.Columns){
-          if (col.Column_Name.toLowerCase().endsWith("date")){
-            currentTable.Indexes.push(col.Column_Name)
-          }
-        }
-        
-        if (tableName === "company_annual_report_data_declaration_list") {
-          currentTable["Indexes"].push("reporttype")
-          
-        }
-        if (tableName === "company_result_data_declaration_list") {
-          currentTable["Indexes"].push("reporttype")
-          
-        }
+  if (currentTable.Columns.filter(c => c.Column_Name === "index_code").length > 0) {
+    if (tableName !== "company_index_master")
+      currentTable.ForeignKeys.push({
+        Column_Name: "index_code",
+        References: { "Table_Name": "company_index_master", "Column_Name": "index_code" }
+      })
+  }
+  if (currentTable.Columns.filter(c => c.Column_Name === "sect_code").length > 0) {
+    if (tableName !== "company_sector_master")
+      currentTable.ForeignKeys.push({
+        Column_Name: "sect_code",
+        References: { "Table_Name": "company_sector_master", "Column_Name": "sect_code" }
+      })
+  }
+  if (currentTable.Columns.filter(c => c.Column_Name === "co_code").length > 0) {
+    if (tableName !== "company_master")
+      currentTable.ForeignKeys.push({
+        Column_Name: "co_code",
+        References: { "Table_Name": "company_master", "Column_Name": "co_code" }
+      })
+  }
 }
+
 /**
  * Process CSV data and convert to PostgreSQL schema JSON
  * @param {string} csvFilePath - Path to the CSV file
@@ -188,16 +125,21 @@ function processCSV(csvFilePath) {
         processConstraints(currentTable)
         tables.push(currentTable);
       }
+      let input = ""
+      if (record.Input.toLowerCase() === "cocode" || record.Input.toLowerCase() === "co_code") input = "co_code"
+      if (record.Input.toLowerCase() === "sectcode" || record.Input.toLowerCase() === "sect_code") input = "sect_code"
+      if (record.Input.toLowerCase() === "indexcode" || record.Input.toLowerCase() === "index_code") input = "index_code"
 
       // Start a new table
       currentTable = {
         ReportIndex: parseInt(record.ReportIndex),
         "Table Name": generatenormalized(record["Report Name"]),
+        "Table Description": (record["Report Name"]),
         API_URL: record["API URL"],
         Frequency: record.Frequency,
         "Updation Time": record["Updation Time"],
         Interval: record.Interval,
-        Input: record.Input,
+        Input: input,
         "Input Description": record["Input Description"],
         Columns: [],
         UniqueColumns: [],
@@ -219,12 +161,23 @@ function processCSV(csvFilePath) {
     // Check if this is a column definition row
     else if (currentTable && record.Column_Name && record.Column_Name.trim() !== '' &&
       record.Column_Name.toLowerCase() !== 'output') {
+      let desc = record.Column_Name
+      desc = desc.replace(/\s+/g, " ");
+      if (desc === "CMOTS Company Code") desc = "co_code"
+      desc = abbreviateColumnName(desc)
+      desc = desc.replace(/_+/g, "_");
+
+      const abbreviated = desc//abbreviateColumnName(desc)
       // Add the column to the current table
-      currentTable.Columns.push({
-        Column_Name: normalizeName(record.Column_Name),
-        Column_DataType: normalizeDataType(record.Column_DataType),
-        Column_Description: record.Column_Description
-      });
+      if (currentTable.Columns.findIndex(c => c.Column_Name === abbreviated) === -1)
+        currentTable.Columns.push({
+          Column_Name: abbreviated,
+          Column_DataType: normalizeDataType(record.Column_DataType),
+          Column_Description: desc,
+          Is_Unique: record.Is_Unique,
+          Is_Index: record.Is_Index
+        });
+      else console.log("Column already exists", abbreviated)
     }
   }
 
@@ -240,13 +193,18 @@ function processCSV(csvFilePath) {
 /**
  * Main function to convert CSV to JSON
  * @param {string} inputFile - Path to the input CSV file
- * @param {string} outputFile - Path to the output JSON file
+ * @param {string} outputFolder - Path to the output JSON file
  */
-function convertCsvToJson(inputFile, outputFile) {
+function convertCsvToJson(inputFile, outputFolder) {
+  fs.mkdirSync(outputFolder, { recursive: true })
   try {
     const tables = processCSV(inputFile);
-    fs.writeFileSync(outputFile, JSON.stringify(tables, null, 2));
-    console.log(`Conversion completed successfully. Output written to ${outputFile}`);
+    for (const table of tables) {
+      const outputFile = path.join(outputFolder, `${table["Table Name"]}.json`)
+      fs.writeFileSync(outputFile, JSON.stringify([table], null, 2));
+      //console.log(`Conversion completed successfully. Output written to ${outputFile}`);
+    }
+
   } catch (error) {
     console.error('Error during conversion:', error);
   }
@@ -255,12 +213,12 @@ function convertCsvToJson(inputFile, outputFile) {
 // If this script is run directly (not imported)
 if (require.main === module) {
   const inputFile = process.argv[2];
-  const outputFile = process.argv[3] || 'output.json';
+  const outputFolder = process.argv[3] || 'output.json';
 
   if (!inputFile) {
     console.error('Please provide an input CSV file path');
     process.exit(1);
   }
 
-  convertCsvToJson(inputFile, outputFile);
+  convertCsvToJson(inputFile, outputFolder);
 }

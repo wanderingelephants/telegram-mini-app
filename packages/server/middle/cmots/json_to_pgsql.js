@@ -7,7 +7,7 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
  * @param {string} inputJsonPath - Path to input JSON file
  * @param {string} migrationFolderPath - Path to output migration folder
  */
-function generateMigration(inputJsonPath, migrationFolderPath, mutationFolderPath) {
+function generateMigration(inputJsonPath, migrationFolderPath) {
   // Read and parse the JSON file
   const jsonData = JSON.parse(fs.readFileSync(inputJsonPath, 'utf8'));
   // Create migration folder if it doesn't exist
@@ -15,9 +15,9 @@ function generateMigration(inputJsonPath, migrationFolderPath, mutationFolderPat
     fs.mkdirSync(migrationFolderPath, { recursive: true });
   }
 
-  if (!fs.existsSync(mutationFolderPath)) {
+  /*if (!fs.existsSync(mutationFolderPath)) {
     fs.mkdirSync(mutationFolderPath, { recursive: true });
-  }
+  }*/
   //fs.writeFileSync(path.join(mutationFolderPath, "mutations.js"), "")
 
   // Create SQL folder for migrations
@@ -50,12 +50,12 @@ function generateMigration(inputJsonPath, migrationFolderPath, mutationFolderPat
     // Generate SQL migration
     generateSqlMigration(sqlFolderPath, table, columns, isMasterTable);
 
-    let insertMutation = `const ${tableName}_insert = \`mutation ${tableName}_insert($object: ${tableName}_insert_input!){
+    /*let insertMutation = `const ${tableName}_insert = \`mutation ${tableName}_insert($object: ${tableName}_insert_input!){
       insert_${tableName}_one(object: $object){
         id
       }
     }\`\nmodule.exports = ${tableName}_insert`
-    fs.writeFileSync(path.join(mutationFolderPath, `mutation_${tableName}.js`), insertMutation)
+    fs.writeFileSync(path.join(mutationFolderPath, `mutation_${tableName}.js`), insertMutation)*/
   });
   
   // Generate consolidated Hasura metadata for all tables (appending to existing)
@@ -94,9 +94,7 @@ function generateSqlMigration(sqlFolderPath, table, columns, isMasterTable) {
   
   // Process columns
   let hasCoCode = false;
-  let hasCmotsCode = false;
-  let needsCoCode = false;
-  let hasRecordDate = false;
+  //let needsCoCode = false;
   /*{
     "Column_Name": "Input",
     "DataType": "varchar(100)",
@@ -108,32 +106,21 @@ function generateSqlMigration(sqlFolderPath, table, columns, isMasterTable) {
     if (column.Column_Name === 'co_code') {
       hasCoCode = true;
     }
-    if (column.Column_Name === 'cmotscode') {
-      hasCmotsCode = true;
-    }
-    if (column.Column_Name === 'record_date') {
-      hasRecordDate = true;
-    }
     
-    if (column.Column_Name.toLowerCase() === 'input' && 
-        column.Column_Description && 
-        column.Column_Description.toLowerCase().includes('cmots company code')) {
-      needsCoCode = true;
-    }
-    
-    if (column.Column_Name.toLowerCase() !== 'input' || !needsCoCode) {
+    //if (column.Column_Name.toLowerCase() !== 'input' || !needsCoCode) {
       const pgType = convertToPgType(column.Column_DataType);
-      createTableSql += `  "${column.Column_Name}" ${pgType},\n`;
-    }
+      const notNullLabel = column.Column_Name.toLowerCase() === "co_code" ? " not null" : ""
+      createTableSql += `  "${column.Column_Name}" ${pgType} ${notNullLabel},\n`;
+    //}
     //console.log(column, hasCoCode, needsCoCode)
   
   });
   
   // Add co_code column if needed
-  if (needsCoCode && !hasCoCode) {
+  /*if (needsCoCode && !hasCoCode) {
     createTableSql += `  "co_code" integer,\n`;
     hasCoCode = true;
-  }
+  }*/
   const lastIndex = createTableSql.lastIndexOf(",")
   createTableSql = createTableSql.substring(0, lastIndex)
   createTableSql += "\n"
@@ -148,7 +135,7 @@ function generateSqlMigration(sqlFolderPath, table, columns, isMasterTable) {
   // TABLE CLAUSE ENDS
 
   // ADD UNIQUE CONSTRAINTS AND INDEXES AS ALTER TABLE NOW
-  createTableSql += `ALTER TABLE "public"."${tableName}" add constraint "${table.UniqueConstraintName}" unique (${table.UniqueColumns.map(col => `"${col}"`).join(", ")});\n`;
+  createTableSql += `ALTER TABLE "public"."${tableName}" add constraint "u_${tableName}" unique (${table.UniqueColumns.map(col => `"${col}"`).join(", ")});\n`;
 
   for (const idx of table.Indexes){
     createTableSql += `CREATE INDEX "idx_${tableName}_${idx}" on "public"."${tableName}" using btree ("${idx}");\n`;
@@ -297,7 +284,7 @@ function appendTableMetadata(metadataFolderPath, tablesMap) {
     }
     
     const tableInfo = tablesMap[tableName];
-    const isMasterTable = tableInfo.isMasterTable;
+    const isMasterTable = tableName.toLowerCase().endsWith("_master");
     const columns = tableInfo.columns;
     
     const tableMetadata = {
@@ -321,17 +308,15 @@ function appendTableMetadata(metadataFolderPath, tablesMap) {
     
     // Check for relationships
     const hasCoCode = columns.some(col => col.Column_Name === 'co_code');
-    const hasInputWithCMOTS = columns.some(col => 
-      col.Column_Name.toLowerCase() === 'input' && 
-      col.Column_Description && 
-      col.Column_Description.toLowerCase().includes('cmots company code')
-    );
+    const hasSectCode = columns.some(col => col.Column_Name === 'sect_code');
+    const hasIndexCode = columns.some(col => col.Column_Name === 'index_code');
+    
     
     const objectRelationships = [];
     const arrayRelationships = [];
     
     
-    if (!isMasterTable && (hasCoCode || hasInputWithCMOTS)) {
+    if (!isMasterTable && hasCoCode) {
       // Add object relationship to company_master
       objectRelationships.push({
         name: "company_master",
@@ -340,26 +325,85 @@ function appendTableMetadata(metadataFolderPath, tablesMap) {
         }
       });
     }
+    if (!isMasterTable && hasSectCode) {
+      // Add object relationship to company_master
+      objectRelationships.push({
+        name: "company_sector_master",
+        using: {
+          foreign_key_constraint_on: "sect_code"
+        }
+      });
+    }
+    if (!isMasterTable && hasIndexCode) {
+      // Add object relationship to company_master
+      objectRelationships.push({
+        name: "company_index_master",
+        using: {
+          foreign_key_constraint_on: "index_code"
+        }
+      });
+    }
     
     // If this is the master table, add array relationships to all child tables
-    if (isMasterTable) {
+    if (tableName === "company_master") {
       Object.keys(tablesMap).forEach(childTableName => {
         if (childTableName === tableName) return; // Skip self
         
         const childTableInfo = tablesMap[childTableName];
         const childHasCoCode = childTableInfo.columns.some(col => col.Column_Name === 'co_code');
-        const childHasInputWithCMOTS = childTableInfo.columns.some(col => 
-          col.Column_Name.toLowerCase() === 'input' && 
-          col.Column_Description && 
-          col.Column_Description.toLowerCase().includes('cmots company code')
-        );
         
-        if (childHasCoCode || childHasInputWithCMOTS) {
+        if (childHasCoCode) {
           arrayRelationships.push({
             name: childTableName,
             using: {
               foreign_key_constraint_on: {
                 column: "co_code",
+                table: {
+                  name: childTableName,
+                  schema: "public"
+                }
+              }
+            }
+          });
+        }
+      });
+    }
+    if (tableName === "company_sector_master") {
+      Object.keys(tablesMap).forEach(childTableName => {
+        if (childTableName === tableName) return; // Skip self
+        
+        const childTableInfo = tablesMap[childTableName];
+        const childHasCoCode = childTableInfo.columns.some(col => col.Column_Name === 'sect_code');
+        
+        if (childHasCoCode) {
+          arrayRelationships.push({
+            name: childTableName,
+            using: {
+              foreign_key_constraint_on: {
+                column: "sect_code",
+                table: {
+                  name: childTableName,
+                  schema: "public"
+                }
+              }
+            }
+          });
+        }
+      });
+    }
+    if (tableName === "company_index_master") {
+      Object.keys(tablesMap).forEach(childTableName => {
+        if (childTableName === tableName) return; // Skip self
+        
+        const childTableInfo = tablesMap[childTableName];
+        const childHasCoCode = childTableInfo.columns.some(col => col.Column_Name === 'index_code');
+        
+        if (childHasCoCode) {
+          arrayRelationships.push({
+            name: childTableName,
+            using: {
+              foreign_key_constraint_on: {
+                column: "index_code",
                 table: {
                   name: childTableName,
                   schema: "public"
@@ -414,7 +458,7 @@ if (require.main === module) {
   
   const inputJsonPath = process.argv[2];
   const migrationFolderPath = process.argv[3];
-  const mutationFolderPath = process.argv[4];
+  //const mutationFolderPath = process.argv[4];
   
-  generateMigration(inputJsonPath, migrationFolderPath, mutationFolderPath);
+  generateMigration(inputJsonPath, migrationFolderPath);
 }

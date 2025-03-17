@@ -1,35 +1,86 @@
 const axios = require('axios');
 const fs = require('fs');
+const moment = require("moment")
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 const { postToGraphQL } = require("../lib/helper");
+const { table } = require('console');
 const cmots_api_token = process.env.cmots_api_token
+const abbreviateColumnName = require("./abbreviateColumnName")
+
 const axiosConfig = {
   headers: {
     'Authorization': `Bearer ${cmots_api_token}`
   }
 };
-function transformKeysToLowercase(data) {
-  if (Array.isArray(data)) {
-    
-      data = data.map(item => transformKeysToLowercase(item));
-      return data
+const safeParseInt = (value) => {
+  const parsed = parseInt(value);
+  return isNaN(parsed) ? null : parsed;
+};
+const formatISTDateTime = () => moment().utcOffset(330).format("YYYY-MM-DD HH:mm:ss");
+const formatDate = (dateStr) => {
+  if (!dateStr) return null;
+  const parsedDate = moment(dateStr, ["YYYY-MM-DD HH:mm:ss", "DD/MM/YYYY", "YYYY/MM/DD", "DD-MM-YYYY"]);
+  return parsedDate.isValid() ? parsedDate.utcOffset(330).format("YYYY-MM-DD") : dateStr;
+};
+/*function cleanName(name) {
+  return name
+    .toLowerCase()
+    .replace(/[&(),:.\/\s-]+/g, '_')  // Replace special chars with underscore
+    .replace(/[%]+/g, '_percent')
+    .replace(/_+/g, '_')              // Replace multiple underscores with one
+    .replace(/^_|_$/g, '')            // Remove leading/trailing underscores
+    .replace(/or/g, 'or')             // Keep 'or' as is (for cases like "sales_or_income")
+    .trim();
+}*/
+function expandObject(input, co_code) {
+  const output = [];
+  const { COLUMNNAME, RID, rowno, ...rest } = input;
+  const key = abbreviateColumnName(COLUMNNAME); // Clean the column name
+  for (const prop in rest) {
+    const match = prop.match(/^Y(\d{4})(\d{2})$/);// Match format YYYYYQQ
+    if (match) {
+      const year = parseInt(match[1], 10);
+      const quarter = parseInt(match[2], 10);
+      const month = quarter * 3;
+      
+      output.push({
+        [key]: rest[prop],
+        month,
+        quarter,
+        year,
+        co_code,
+        created_at: formatISTDateTime(),
+        updated_at: formatISTDateTime(),
+      });
     }
+  }
+  
+  return output;
+}
+function transformKeysToLowercase(data, tableDef) {
+  if (Array.isArray(data)) {
+
+    data = data.map(item => transformKeysToLowercase(item, tableDef));
+    return data
+  }
   else if (data !== null && typeof data === 'object') {
     return Object.keys(data).reduce((acc, key) => {
-      const value = data[key];
-      const lowerKey = key.toLowerCase();
-
+      let value = data[key];
+      let lowerKey = abbreviateColumnName(key);
       if (value !== null && typeof value === 'object') {
-        acc[lowerKey] = transformKeysToLowercase(value);
+        acc[lowerKey] = transformKeysToLowercase(value, tableDef);
       } else {
+        if (lowerKey === "date") lowerKey = "record_date"
+        if (lowerKey === "cmotscode") lowerKey = "co_code"
+        //console.log("lowerKey", lowerKey)
+        const columnDef = tableDef.Columns.filter(c => c.Column_Name.toLowerCase() === lowerKey)[0]
+        if (columnDef.Column_DataType === "text") value += ""
         acc[lowerKey] = value;
       }
 
       return acc;
     }, {});
   }
-  data[created_at] = new Date(); data[updated_date] = new Date()
-  //console.log("transformKeysTOLowercase", data)
   return data;
 }
 async function persistData(inputJsonPath) {
@@ -38,8 +89,8 @@ async function persistData(inputJsonPath) {
   // Create migration folder if it doesn't exist
 
 
-  for (table of jsonData) {
-    const tableName = (table['Table Name']);
+  for (let table of jsonData) {
+    
     const columns = table.Columns;
     columns.forEach(column => {
       column.Column_Name = column.Column_Name.trim()
@@ -48,101 +99,121 @@ async function persistData(inputJsonPath) {
       column.pgDataType = pgType
     });
     console.log(table.API_URL)
-    const match_sector = table.API_URL.match(/SectorWiseComp\/(\d+)/);
-    const sect_code = match_sector ? parseInt(match_sector[1]) : null;
-    const match_index = table.API_URL.match(/IndexWiseComp\/(\d+)/);
-    const index_code = match_index ? parseInt(match_index[1]) : null;
+    //const match_sector = table.API_URL.match(/SectorWiseComp\/(\d+)/);
+    //const sect_code = match_sector ? parseInt(match_sector[1]) : null;
+    //const match_index = table.API_URL.match(/IndexWiseComp\/(\d+)/);
+    //const index_code = match_index ? parseInt(match_index[1]) : null;
     let response;
-    try{
+    try {
       response = await axios.get(table.API_URL, axiosConfig);
     }
-    catch(e){
+    catch (e) {
       console.log(e)
     }
-    
-    if (!response.data){
+
+    if (!response.data) {
       console.log("response.data is null", response)
       continue
     }
-    if (!response.data.data){
+    if (!response.data.data) {
       console.log("response.data.data is null", response)
       continue
     }
-    response.data.data = response.data.data.map(obj => ({
-      ...obj,
-      ...(obj.CMOTSCode !== undefined ? { CMOTSCode: parseInt(obj.CMOTSCode) } : {}),
-      ...(obj.co_code !== undefined ? { co_code: parseInt(obj.co_code) } : {}),
-      ...(sect_code !== null ? { sect_code } : {}),
-      ...(index_code !== null ? { index_code } : {}),
-      created_at: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
-      updated_at: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
-  }));
-    
-    const transformedData = { ...response.data };
+    console.log("Record size", response.data.data.length)
+    for (const record of response.data.data) {
+      if (record.COLUMNNAME === null) continue;
+      !record.COLUMNNAME ? await processNonResultsData(table, record) : await processResultsData(table, record) 
+    }
 
-    if (transformedData.data) {
-      transformedData.data = transformKeysToLowercase(transformedData.data);
-    }
-    else {
-      console.log("transformedData.data not found", tableName)
-      console.log(transformedData)
-      continue;
-    }
-    if (transformedData.data.data && transformedData.data.data.length > 0){
-      console.log("transformedData.data.data legnth 0", tableName)
-      console.log(transformedData)
-      continue;
-    }
-    let unique_columns =  "co_code"
-    if (tableName === "company_sector_master") unique_columns = "sect_code"
-    if (tableName === "company_index_master") unique_columns = "index_code"
-    let unique_constraint_key = `${tableName}_${unique_columns}_key`
-    
-    if (tableName === "company_sector_wise_company"){
-      unique_columns = "sect_code, co_code"
-      unique_constraint_key = `${tableName}_${unique_columns.replaceAll(", ", "_")}`
-      
-    } 
-    if (tableName === "company_index_wise_company"){
-      unique_columns = "index_code, cmotscode"
-      unique_constraint_key = `${tableName}_${unique_columns.replaceAll(", ", "_")}`
-    }
-    if (tableName === "company_annual_report_data_declaration_list"){
-      unique_columns = "reporttype, reportdate, co_code"
-      unique_constraint_key = "company_annual_report_data_declaration_list_uniq";//`${tableName}_${unique_columns.replaceAll(", ", "_")}`
-    }
-    if (tableName === "company_result_data_declaration_list"){
-      unique_columns = "reporttype, resultdate, co_code"
-      unique_constraint_key = "company_result_data_declaration_list_reporttyperesultdatecocode"; //`${tableName}_${unique_columns.replaceAll(", ", "_")}`
-    }   
-    for (const record of transformedData.data){
-      const insertMutation = `mutation ${tableName}_insert($object: ${tableName}_insert_input!){
-        insert_${tableName}_one(object: $object, on_conflict:{
-          constraint: ${unique_constraint_key},
-          update_columns: [${unique_columns}, updated_at]
-        }){
-          id
-        }
-      }`
-      try{
-        await postToGraphQL({
-          query: insertMutation, variables: {object: record}
-        })
-      
-      }
-      catch(e){
-        console.log(e)
-      }
-    }
-    
-    
   }
 
 
 
   //await postToGraphQL()
 }
+async function processResultsData(table, record) {
+  const parts = table.API_URL.split('/');
+  const len = parts.length;
+  const key = abbreviateColumnName(record.COLUMNNAME); 
+  // Number is either the last token or second last token
+  const possibleNumber = parts[len - 2].match(/^\d+$/) ? parts[len - 2] : parts[len - 1];
 
+  const co_code = parseInt(possibleNumber)
+
+  const mutationVariables = expandObject(record, co_code)
+  const tableName = (table['Table Name']);
+  const insertMutation = `mutation ${tableName}_insert($objects: [${tableName}_insert_input!]!){
+  insert_${tableName}(objects: $objects, on_conflict:{
+    constraint: u_${tableName},
+    update_columns: [${key}]
+  }){
+    returning{
+      id
+    }
+  }
+}`
+  try {
+    await postToGraphQL({
+      query: insertMutation, variables: { objects: mutationVariables }
+    })
+
+  }
+  catch (e) {
+    console.log(e)
+  }
+
+}
+async function processNonResultsData(table, record) {
+  //console.log("processNonResultsData", record)
+  let mutationVariables = {};
+  mutationVariables = transformKeysToLowercase(record, table)
+  mutationVariables["created_at"] = formatISTDateTime(); mutationVariables["updated_at"] = formatISTDateTime()
+  if (mutationVariables["cmotscode"]) {
+    mutationVariables["co_code"] = safeParseInt(mutationVariables["cmotscode"])
+    delete mutationVariables.cmotscode
+  }
+  const apiInputKey = table["Input"]; //co_code, sect_code or index_code, passed as param to API_URL
+  if ("co_code" === apiInputKey || "sect_code" === apiInputKey || "index_code" === apiInputKey) {
+    if (!mutationVariables[apiInputKey]) {
+      const parts = table.API_URL.split('/');
+      const len = parts.length;
+      const possibleNumber = parts[len - 2].match(/^\d+$/) ? parts[len - 2] : parts[len - 1];
+      mutationVariables[apiInputKey] = parseInt(possibleNumber)
+    }
+  }
+  const columns = table.Columns;
+  const tableName = table["Table Name"];
+  Object.keys(mutationVariables).forEach((key) => {
+    const columnDef = columns.find(col => col.Column_Name.toLowerCase() === key.toLowerCase());
+    //console.log("columnDef", columnDef)
+    if (columnDef) {
+      if (columnDef.Column_DataType === "date") {
+        mutationVariables[key] = formatDate(mutationVariables[key]); // Convert to IST date format
+      } else if (columnDef.Column_DataType.toLowerCase() === "integer" || columnDef.Column_DataType.toLowerCase === "int") {
+        mutationVariables[key] = safeParseInt(mutationVariables[key]);
+      }
+    }
+  });
+
+  const insertMutation = `mutation ${tableName}_insert($object: ${tableName}_insert_input!){
+      insert_${tableName}_one(object: $object, on_conflict:{
+        constraint: u_${tableName},
+        update_columns: [${table['UniqueColumns']}, updated_at]
+      }){
+        id
+      }
+    }`
+  
+  try {
+    await postToGraphQL({
+      query: insertMutation, variables: { object: mutationVariables }
+    })
+
+  }
+  catch (e) {
+    console.log(e)
+  }
+}
 /**
  * Convert database types to PostgreSQL types
  * @param {string} dataType - Original data type

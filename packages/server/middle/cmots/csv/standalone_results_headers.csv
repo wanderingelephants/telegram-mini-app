@@ -5,7 +5,7 @@ ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Des
 4,Cash Flow,http://jwttoken.cmots.com/Aidea/api/CashFlow/93/S,EOD,11:30 PM,Once on trading day,cocode,CMOTS Company Code,Column_Name,Column_DataType,Column_Description
 5,Half Yearly Results,http://jwttoken.cmots.com/Aidea/api/Half-Yearly-Results/21281/S,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description
 6,Nine Months Results,http://jwttoken.cmots.com/Aidea/api/Nine-Month-Result/6/S,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description
-10,Yearly Reports,http://jwttoken.cmots.com/Aidea/api/Yearly-Results/6/S,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description
-11,Result Balance Sheet Quarterly,http://jwttoken.cmots.com/Aidea/api/QuarterlyResults-BalanceSheet/476/S,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description
-12,Result Balance Sheet Half yearly,http://jwttoken.cmots.com/Aidea/api/Results-BalanceSheet-Half-yearly/476/S,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description
-13,Result Balance Sheet Yearly,http://jwttoken.cmots.com/Aidea/api/Results-BalanceSheet-Yearly/6/S,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description
+10,Yearly Results,http://jwttoken.cmots.com/Aidea/api/Yearly-Results/6/S,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description
+11,Balance Sheet Quarterly,http://jwttoken.cmots.com/Aidea/api/QuarterlyResults-BalanceSheet/476/S,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description
+12,Balance Sheet Half yearly,http://jwttoken.cmots.com/Aidea/api/Results-BalanceSheet-Half-yearly/476/S,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description
+13,Balance Sheet Yearly,http://jwttoken.cmots.com/Aidea/api/Results-BalanceSheet-Yearly/6/S,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description

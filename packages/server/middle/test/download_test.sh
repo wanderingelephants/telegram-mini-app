@@ -60,3 +60,7 @@ curl -X GET http://jwttoken.cmots.com/Aidea/api/IndexWiseComp/75348 \
 
 curl -X GET http://jwttoken.cmots.com/Aidea/api/Today-Results \
 -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImFpZGVhIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNzQxMTYzNjA3LCJleHAiOjE3NDI0NTk2MDcsImlhdCI6MTc0MTE2MzYwNywiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo1MDE5MSIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTAxOTEifQ.BcOEW6MX2D-lDBPaOOAqLcvrTz3kLW8G08bAZaqEoA0"
+
+
+curl -X GET http://jwttoken.cmots.com/Aidea/api/GroupMaster/NSE \
+-H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImFpZGVhIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNzQxMTYzNjA3LCJleHAiOjE3NDI0NTk2MDcsImlhdCI6MTc0MTE2MzYwNywiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo1MDE5MSIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTAxOTEifQ.BcOEW6MX2D-lDBPaOOAqLcvrTz3kLW8G08bAZaqEoA0"

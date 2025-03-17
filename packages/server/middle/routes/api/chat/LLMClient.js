@@ -25,10 +25,17 @@ class LLMClient {
                     const resp = await anthropic.messages.create({
                         model: this.langModel,
                         max_tokens: 1024,
-                        system: systemPrompt,
+                        system: [{
+                            "type":"text",
+                            "text": systemPrompt,
+                            "cache_control": {"type": "ephemeral"}
+                        }
+                            
+                        ],
                         messages: llmStructuredMessages,
                         temperature: this.temperature
                     });
+                    console.log("LLM Full Response", resp)
                     llmResponse = resp.content[0].text.trim();
                 }
                 catch (e) {
@@ -53,9 +60,24 @@ class LLMClient {
                 break;
 
             case 'JavascriptMockLLM':
-                const filePath = path.join(process.env.DATA_ROOT_FOLDER, "generated_functions/2025/03/07/8de3ffe0-b388-4491-a302-7f6f0aa60ded/stock_market_chat", "analysis_1741321347634.js")
-                const fileContent = fs.readFileSync(filePath, "utf-8")
-                llmResponse = fileContent
+                //const filePath = path.join(process.env.DATA_ROOT_FOLDER, "generated_functions/2025/03/07/8de3ffe0-b388-4491-a302-7f6f0aa60ded/stock_market_chat", "analysis_1741321347634.js")
+                //const fileContent = fs.readFileSync(filePath, "utf-8")
+                llmResponse = `const analysis = async function(mutual_funds, mutual_funds_stock_holdings, holding_reporting_dates, insider_trades, daily_stock_prices_by_company_name, market_nse_nifty_closing_prices, user_stock_portfolio, fifty_two_week_highs, fifty_two_week_lows, company_master_data, company_trailing_twelve_months_ratios){
+    // Filter company master data for midcap companies in cement sector
+    console.log("company master", company_master_data)
+    let midcapCementCompanies = company_master_data.filter(company => 
+        company.company_sector_name.toLowerCase().indexOf('cement') !== -1 &&
+        company.company_market_cap_label.toLowerCase() === 'mid cap'
+    );
+
+    // If no specific sorting is mentioned, sort by market cap value descending
+    let sortedMidcapCementCompanies = midcapCementCompanies.sort((a, b) => 
+        b.comapny_market_cap_value - a.comapny_market_cap_value
+    );
+
+    return sortedMidcapCementCompanies;
+}
+`
                 break;
 
             case 'FormatMockLLM':

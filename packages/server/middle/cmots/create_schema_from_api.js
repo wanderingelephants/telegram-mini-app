@@ -2,17 +2,12 @@ const fs = require('fs');
 const { parse } = require('csv-parse/sync');
 const axios = require('axios');
 const path = require('path');
+const abbreviateColumnName = require("./abbreviateColumnName")
 
 // Function to clean column names for PostgreSQL
 function cleanName(name) {
-  return name
-    .toLowerCase()
-    .replace(/[&(),:.\/\s-]+/g, '_')  // Replace special chars with underscore
-    .replace(/[%]+/g, '_percent')
-    .replace(/_+/g, '_')              // Replace multiple underscores with one
-    .replace(/^_|_$/g, '')            // Remove leading/trailing underscores
-    .replace(/or/g, 'or')             // Keep 'or' as is (for cases like "sales_or_income")
-    .trim();
+  return name.trim()
+  .toLowerCase().replace(/[^a-zA-Z0-9]+/g, '_');
 }
 
 // Function to extract column names from API response
@@ -26,11 +21,20 @@ function extractColumnNames(data) {
   const columnDescs = {};
   
   data.forEach(item => {
-    if (item.COLUMNNAME && columns.indexOf(cleanName(item.COLUMNNAME)) === -1) {
-      const cleanedName = cleanName(item.COLUMNNAME);
+    
+    if (item.COLUMNNAME){
+      //console.log("scema from api", item.COLUMNNAME)
+      const abbreviated = abbreviateColumnName(item.COLUMNNAME)
+      if (columns.indexOf(abbreviated) === -1){
+        columns.push(abbreviated);
+        columnDescs[abbreviated] = item.COLUMNNAME.trim();
+      }
+    }
+    /*if (item.COLUMNNAME && columns.indexOf(abbreviateColumnName(item.COLUMNNAME)) === -1) {
+      const cleanedName = abbreviateColumnName(item.COLUMNNAME);
       columns.push(cleanedName);
       columnDescs[cleanedName] = item.COLUMNNAME.trim(); // Store original name for description
-    }
+    }*/
   });
 
   return { columns, columnDescs };
@@ -97,8 +101,7 @@ async function generateSchemas(csvFilePath, outputDir) {
 
     // Process each record in the CSV
     for (const record of records) {
-        console.log(record)
-      const reportIndex = parseInt(record.ReportIndex);
+        const reportIndex = parseInt(record.ReportIndex);
       const reportName = record['Report Name'];
       const apiUrl = record["API URL"];
       
@@ -120,6 +123,8 @@ async function generateSchemas(csvFilePath, outputDir) {
         const schema = {
           ReportIndex: reportIndex,
           "Table Name": tableName,
+          "Table Description": reportName,
+          Input: "co_code",
           API_URL: apiUrl,
           API_URL_2: apiUrl2,
           Frequency: record.Frequency,
@@ -148,7 +153,7 @@ async function generateSchemas(csvFilePath, outputDir) {
         // Write schema to a JSON file
         const outputFile = path.join(outputDir, `${tableName}.json`);
         fs.writeFileSync(outputFile, JSON.stringify([schema], null, 2));
-        console.log(`Schema saved to ${outputFile}`);
+        //console.log(`Schema saved to ${outputFile}`);
       } catch (error) {
         console.error(`Error processing ${reportName} (${reportIndex}):`, error.message);
       }
