@@ -47,7 +47,13 @@ const routes = {
             reasoning: require("./api/chat/reasoning_v2"),
             share: require("./api/chat/share"),
             setalert: require("./api/chat/setalert"),
-            view: require("./api/chat/view")
+            view: require("./api/chat/view"),
+            promptfields: require("../cmots/endpoints/promptfields")
+        },
+        cmots:{
+            company: require("../cmots/endpoints/company"),
+            master: require("../cmots/endpoints/master"),
+            fromdatetodate: require("../cmots/endpoints/fromdatetodate")
         },
         indices: {
             AUTOBEES: require("./api/indices/AUTOBEES.json"),
@@ -106,7 +112,13 @@ router.post("/api/chat/reasoning", verifyToken, routes.api.chat.reasoning)
 router.post("/api/chat/share", verifyToken, routes.api.chat.share)
 router.post("/api/chat/setalert", verifyToken, routes.api.chat.setalert)
 router.get("/api/chat/view", routes.api.chat.view)
+router.get("/api/chat/promptfields", routes.api.chat.promptfields)
 router.post("/api/chat/summary", routes.api.chat.reasoning)
+router.get("/api/cmots/master/:apiType", routes.api.cmots.master)
+router.get("/api/cmots/master/:apiType/:categoryId", routes.api.cmots.master)
+router.get("/api/cmots/company/:apiType/:companyId", routes.api.cmots.company)
+router.get("/api/cmots/company/:apiType/:companyId/:standaloneConsolidated", routes.api.cmots.company)
+router.get("/api/cmots/fromdatetodate/:apiType/:fromdate/:todate", routes.api.cmots.fromdatetodate)
 router.post("/api/telegram/auth", routes.api.telegram.auth)
 router.get("/api/kite/order/create", routes.api.kite.order.create)
 router.get("/api/kite/login/success", routes.api.kite.login.success)

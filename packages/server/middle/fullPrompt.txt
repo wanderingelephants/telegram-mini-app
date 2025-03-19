@@ -1,0 +1,131 @@
+You have to write a single node.js javascript function that analyzes indian stock market, mutual funds, and companies financial data. In response to a <User Question>, you have to write logic to pick the appropriate arrays , fields and then process them. Broadly, there are 2 sets of data - 
+1. cached pre-loaded arrays - these are typically light numeric data like financial ratios, metrics, quarterly results
+2. on-demand loaded arrays - these are typically long text data like corporate announcements, annual reports, directors reports etc. these will typically be searched for keywords, for which there will be a helper function to fire a GraphQL query
+
+Following is the list of arrays in each category. Array name followed by its fields. End users will most often refer to approximate business names, and not exact field names specified here. 
+Field names are simply internal database column names. There will a "notes" field that gives additional explanation about the fields, whereever necessary
+e.g. they may refer to "mutual_fund_name" as simply "fund" or "MF". "balance_sheet" as "Balance Sheet" or "BalanceSheet" or with typos also.
+Your code will always need to use "field_name". e.g. if end user refers to Balance Sheet's Insurance Related Assets, then the field_name to use will be "insurance_related_assets_non_current_"
+
+"Market Cap Category" / company_market_cap_label has values - "Micro Cap", "Small Cap", "Mid Cap", "Large Cap"
+"Market Cap" / company_market_cap - this is company's market cap in Crores (Cr) Indian Rupees (INR)
+
+<cached pre-loaded arrays>
+[{"array_name":"mutual_funds","fields":["mutual_fund_name","mutual_fund_category","mutual_fund_star_rating","mutual_fund_fee_percentage","mutual_fund_aum"],"notes":"mutual_fund_category - String Enum ('small cap fund', 'mid cap fund', 'large cap fund', 'multi cap fund', elss', 'tax advantage fund'). mutual_fund_star_rating - Integer Enum (1,2,3,4,5)"},{"array_name":"mutual_funds_stock_holdings","fields":["mutual_fund_name","mutual_fund_category","mutual_fund_star_rating","mutual_fund_fee_percentage","mutual_fund_aum","company_name","company_sector","stock_holding_percentage_in_fund","stock_holding_reporting_date"],"notes":"each object reprsents a stock's percentage holding in the mutual fund"},{"array_name":"mutual_fund_stock_holding_reporting_dates","fields":"","notes":"An Array of Date , each of which represents mutual funds stock holding reporting date."},{"array_name":"Balance_Sheet","fields":["non_current_assets_","fixed_assets","property_plant_and_equipments","right_of_use_assets","intangible_assets","intangible_assets_under_development","capital_work_in_progress","non_current_investments","investment_properties","investments_in_subsidiaries_associates_and_joint_venture","investments_of_life_insurance_business","investments_long_term","long_term_loans_and_advances","other_non_current_assets","long_term_loans_and_advances_and_other_non_current_assets","biological_assets_other_than_bearer_plants_non_current_","loans_long_term","others_financial_assets_long_term","current_tax_assets_long_term","insurance_related_assets_non_current_","other_non_current_assets_lt_","deferred_tax_assets","total_non_current_assets","current_assets_","inventories","biological_assets_other_than_bearer_plants_current_","current_investments","cash_and_cash_equivalents","bank_balances_other_than_cash_and_cash_equivalents","trade_receivables","short_term_loans_and_advances","other_current_assets","short_term_loans_and_advances_and_other_current_assets","loans_short_term","others_financial_assets_short_term","current_tax_assets_short_term","insurance_related_assets_current_","other_current_assets_st_","assets_classified_as_held_for_sale","total_current_assets","total_assets","current_liabilities_","short_term_borrowings","lease_liabilities_current_","trade_payables","other_current_liabilities","others_financial_liabilities_short_term","insurance_related_liabilities_current_","quarter","year"]},{"array_name":"Balance_Sheet_Half_yearly","fields":["sources_of_funds_","share_capital","reserves_surplus","equity_share_warrants","equity_application_money","esop_outstanding","loan_funds","secured_loan","unsecured_loan","foreign_currency_monetaryitem_translation_diff_l_","deferred_tax_liability","other_liabilities","total_liabilities","application_of_funds_","fixed_assets","intangible_assets","loans","investments","foreign_currency_monetaryitem_translation_diff_a_","current_assets_loans_advances","inventories","sundry_debtors","cash_bank_balance","other_current_assets","loans_advances","current_liabilities_provisions","current_liabilities","provisions","net_current_assets","deferred_tax_assets","miscellaneous_exp_not_w_off","prft_loss_a_c","other_assets","total_assets","quarter","year"]},{"array_name":"Balance_Sheet_Quarterly","fields":["sources_of_funds_","share_capital","reserves_surplus","equity_share_warrants","equity_application_money","esop_outstanding","loan_funds","secured_loan","unsecured_loan","foreign_currency_monetaryitem_translation_diff_l_","deferred_tax_liability","other_liabilities","total_liabilities","application_of_funds_","fixed_assets","intangible_assets","loans","investments","foreign_currency_monetaryitem_translation_diff_a_","current_assets_loans_advances","inventories","sundry_debtors","cash_bank_balance","other_current_assets","loans_advances","current_liabilities_provisions","current_liabilities","provisions","net_current_assets","deferred_tax_assets","miscellaneous_exp_not_w_off","prft_loss_a_c","other_assets","total_assets","quarter","year"]},{"array_name":"Balance_Sheet_Yearly","fields":["sources_of_funds_","share_capital","reserves_surplus","equity_share_warrants","equity_application_money","esop_outstanding","loan_funds","secured_loan","unsecured_loan","foreign_currency_monetaryitem_translation_diff_l_","deferred_tax_liability","other_liabilities","total_liabilities","application_of_funds_","fixed_assets","intangible_assets","loans","investments","foreign_currency_monetaryitem_translation_diff_a_","current_assets_loans_advances","inventories","sundry_debtors","cash_bank_balance","other_current_assets","loans_advances","current_liabilities_provisions","current_liabilities","provisions","net_current_assets","deferred_tax_assets","miscellaneous_exp_not_w_off","prft_loss_a_c","other_assets","total_assets","quarter","year"]},{"array_name":"Cash_Flow","fields":["cash_flows_from_operating_actvts","net_prft_b4_tax_extraordinary_items","prft_b4_tax_from_continuing_ops","prft_b4_tax_from_discontd_ops","total_adjustments","interest_inc","interest_expense","dividend_inc","inc_from_investments","minority_interest","fin_lease_rental_charges","depreciation_and_amortization","net_gain_on_lease_modification","unrealised_and_realised_gain_loss","impairment_gain_losses","gain_loss_on_foreign_exchange","gain_loss_on_sale_of_property_and_equipment","prft_loss_on_sale_of_investments","provision_and_write_off","employee_stock_compensation_exp","share_of_prft_loss_of_joint_venture","statutory_exp","other_adjustments","operating_inc_b4_working_capital_changes","increase_decrease_in_assets_","receivables","non_current_receivables","current_assets","inventories","loans_and_advances","long_term_loans_and_advances","investments","long_term_investments","net_stock_on_hire","leased_assets_net_of_sale","trade_bill_s_purchased","land_and_development","prepaid_exp_and_other_current_assets","other_current_assets","other_non_current_assets","increase_decrease_in_liabilities_","accounts_payable","long_term_accounts_payable","current_liabilities_and_provisions","non_current_liabilities_and_provisions","taxes_payable","change_in_borrowing","change_in_long_term_borrowing","change_in_deposits","change_in_long_term_deposits","quarter","year"]},{"array_name":"Cash_Flow_Ratios","fields":["yrc","cashflowpershare","pricetocashflowratio","freecashflowpershare","pricetofreecashflow","freecashflowyield","salestocashflowratio"]},{"array_name":"Director's_Report","fields":["lname","directorrep","year","symbol"]},{"array_name":"Efficiency_Ratios","fields":["yrc","fixedcapitals_sales","receivabledays","inventorydays","payabledays"]},{"array_name":"Financial_Stability_Ratios","fields":["yrc","totaldebt_equity","currentratio","quickratio","interestcover","totaldebt_mcap"]},{"array_name":"Growth_Ratio","fields":["yrc","netsalesgrowth","ebitdagrowth","ebitgrowth","patgrowth","eps"]},{"array_name":"Half_Yearly_Results","fields":["gross_sales_inc_from_ops","less_excise_duty","net_sales_inc_from_ops","other_operating_inc","total_inc_from_ops_net_","total_exp","cost_of_sales","employee_cost","depreciation_amortization_and_depletion_expense","provisions_write_offs","administrative_and_selling_exp","other_exp","pre_operation_exp_capitalised","prft_from_ops_b4_other_inc_fin_costs_and_exceptional_items","other_inc","prft_from_ordnry_actvts_b4_fin_costs_and_exceptional_items","fin_costs","prft_from_ordnry_actvts_aft_fin_costs_but_b4_exceptional_items","exceptional_items","other_adjustments_b4_tax","prft_from_ordnry_actvts_b4_tax","total_tax","net_prft_from_ordnry_actvts_aft_tax","prft_loss_from_discontd_ops","net_prft_from_ordnry_actvts_discontd_ops_aft_tax","extraordinary_items","other_adjustments_aft_tax","net_prft_aft_tax_for_the_period","other_comprehensive_inc","total_comprehensive_inc","equity","reserve_surplus","face_value","eps_","eps_b4_exceptional_extraordinary_items_basic","eps_b4_exceptional_extraordinary_items_diluted","eps_aft_exceptional_extraordinary_items_basic","eps_aft_exceptional_extraordinary_items_diluted","book_value_unit_curr_","dividend_per_share_rs_","dividend_","no_of_employees","debt_equity_ratio","debt_service_coverage_ratio","interest_service_coverage_ratio","debenture_redemption_reserve_rs_cr_","paid_up_debt_capital_rs_cr_","quarter","year"]},{"array_name":"Insider_Trading","fields":["companyname","personname","category","typeofsecuritiesheldprior","numberofsecuritiesheldprior","percentage_securitiesheldprior","valueofsecurities","totalsecurities","transactiontype","typeofsecuritiesheldpost","numberofsecuritiesheldpost","percentage_securitiesheldpost","fromdateofacquisition","todateofacquisition","modeofacquisition","exchangereporteddate"]},{"array_name":"Liquidity_Ratios","fields":["yrc","loans_to_deposits","cash_to_deposits","investment_todeposits","incloan_to_deposit","credit_to_deposits","interestexpended_to_interestearned","interestincome_to_totalfunds","interestexpended_to_totalfunds","casa"]},{"array_name":"Margin_Ratio","fields":["yrc","pbidtim","ebitm","pretaxmargin","patm","cpm"]},{"array_name":"Nine_Months_Results","fields":["gross_sales_inc_from_ops","less_excise_duty","net_sales_inc_from_ops","other_operating_inc","total_inc_from_ops_net_","total_exp","cost_of_sales","employee_cost","depreciation_amortization_and_depletion_expense","provisions_write_offs","administrative_and_selling_exp","other_exp","pre_operation_exp_capitalised","prft_from_ops_b4_other_inc_fin_costs_and_exceptional_items","other_inc","prft_from_ordnry_actvts_b4_fin_costs_and_exceptional_items","fin_costs","prft_from_ordnry_actvts_aft_fin_costs_but_b4_exceptional_items","exceptional_items","other_adjustments_b4_tax","prft_from_ordnry_actvts_b4_tax","total_tax","net_prft_from_ordnry_actvts_aft_tax","prft_loss_from_discontd_ops","net_prft_from_ordnry_actvts_discontd_ops_aft_tax","extraordinary_items","other_adjustments_aft_tax","net_prft_aft_tax_for_the_period","other_comprehensive_inc","total_comprehensive_inc","equity","reserve_surplus","face_value","eps_","eps_b4_exceptional_extraordinary_items_basic","eps_b4_exceptional_extraordinary_items_diluted","eps_aft_exceptional_extraordinary_items_basic","eps_aft_exceptional_extraordinary_items_diluted","book_value_unit_curr_","dividend_per_share_rs_","dividend_","no_of_employees","debt_equity_ratio","debt_service_coverage_ratio","interest_service_coverage_ratio","debenture_redemption_reserve_rs_cr_","paid_up_debt_capital_rs_cr_","quarter","year"]},{"array_name":"Performance_Ratios","fields":["yrc","roa","roe"]},{"array_name":"Profit_and_Loss","fields":["revenue_from_ops","sale_of_products","sale_of_services","inc_from_investment_and_financial_services","inc_from_insurance_ops","other_operating_revenue","less_excise_duty_gst","revenue_from_ops_net","other_inc","total_revenue","changes_in_inventories","cost_of_material_consumed","internally_manufactured_intermediates_consumed","purchases_of_stock_in_trade","employee_benefits","total_other_exp","manufacturing_operating_exp","administrative_and_selling_exp","other_exp","fin_costs","depreciation_and_amortization","total_exp","prft_b4_exceptional_items_and_tax","exceptional_items_b4_tax","prft_b4_extraordinary_items_and_tax","extraordinary_items_b4_tax","other_adjustments_b4_tax","prft_b4_tax","taxation","current_tax","mat_credit_entitlement","deferred_tax","other_tax","adjust_for_previous_year","prft_aft_tax","extraordinary_items_aft_tax","discontd_ops_aft_tax","prft_loss_from_discontinuing_ops","tax_exp_of_discontinuing_ops","prft_attributable_to_shareholders","adjustments_to_net_inc","preference_dividend","prft_attributable_to_equity_shareholders","earning_per_share_basic","earning_per_share_diluted","operation_prft_b4_depreciation","operating_prft_aft_depreciation","dividend_per_share","dividend_percentage","equity_dividend","quarter","year"]},{"array_name":"Quarterly_Ratio","fields":["qtrend","mcap","ev","pe","pbv","eps","bookvalue","ebit","ebitda","ev_sales","ev_ebitda","netincomemargin","grossincomemargin","ebitdamargin","epsdiluted","netsales","netprofit","cogs"]},{"array_name":"Quarterly_Results","fields":["gross_sales_inc_from_ops","less_excise_duty","net_sales_inc_from_ops","other_operating_inc","total_inc_from_ops_net_","total_exp","cost_of_sales","employee_cost","depreciation_amortization_and_depletion_expense","provisions_write_offs","administrative_and_selling_exp","other_exp","pre_operation_exp_capitalised","prft_from_ops_b4_other_inc_fin_costs_and_exceptional_items","other_inc","prft_from_ordnry_actvts_b4_fin_costs_and_exceptional_items","fin_costs","prft_from_ordnry_actvts_aft_fin_costs_but_b4_exceptional_items","exceptional_items","other_adjustments_b4_tax","prft_from_ordnry_actvts_b4_tax","total_tax","net_prft_from_ordnry_actvts_aft_tax","prft_loss_from_discontd_ops","net_prft_from_ordnry_actvts_discontd_ops_aft_tax","extraordinary_items","other_adjustments_aft_tax","net_prft_aft_tax_for_the_period","other_comprehensive_inc","total_comprehensive_inc","equity","reserve_surplus","face_value","eps_","eps_b4_exceptional_extraordinary_items_basic","eps_b4_exceptional_extraordinary_items_diluted","eps_aft_exceptional_extraordinary_items_basic","eps_aft_exceptional_extraordinary_items_diluted","book_value_unit_curr_","dividend_per_share_rs_","dividend_","no_of_employees","debt_equity_ratio","debt_service_coverage_ratio","interest_service_coverage_ratio","debenture_redemption_reserve_rs_cr_","paid_up_debt_capital_rs_cr_","quarter","year"]},{"array_name":"Return_Ratios_Bank","fields":["yrc","return_roe","return_roe_netprofit","return_roe_networth","return_ro_assets","return_ro_assets_netprofit","return_ro_assets_totalfixedassets","return_netinterestmargin","return_yieldonadvances","return_yieldonadvances_interestearned","return_yieldonadvances_advances"]},{"array_name":"Return_Ratios_Non_Bank","fields":["yrc","return_roe","return_roe_netprofit","return_roe_networth","return_roce","return_roce_ebit","return_roce_capitalemployed","return_returnonassets","return_roa_netprofit","return_roa_totalfixedassets"]},{"array_name":"Solvency_Ratios","fields":["yrc","solvency_totaldebttoequityratio","solvency_totaldebttoequityratio_totaldebt","solvency_totaldebttoequityratio_networth","solvency_interestcoverageratio","solvency_interestcoverageratio_ebit","solvency_interestcoverageratio_interestpayments","solvency_currentratio","solvency_currentratio_currentasset","solvency_currentratio_currentliabilities"]},{"array_name":"Trailing_TwelveMonths_Ratios","fields":["ttmason","record_date","mcap","ev","pe","pbv","divyield","eps","bookvalue","roa_ttm","roe_ttm","roce_ttm","ebit_ttm","ebitda_ttm","ev_sales_ttm","ev_ebitda_ttm","netincomemargin_ttm","grossincomemargin_ttm","assetturnover_ttm","currentratio_ttm","debt_equity_ttm","sales_totalassets_ttm","netdebt_ebitda_ttm","ebitda_margin_ttm","totalshareholdersequity_ttm","shorttermdebt_ttm","longtermdebt_ttm","sharesoutstanding","epsdiluted","netsales","netprofit","annualdividend","cogs","pegratio_ttm","dividendpayout_ttm","industry_pe"]},{"array_name":"Valuation_Ratios","fields":["yrc","pe","price_bookvalue","dividendyield","ev_ebitda","mcap_sales"]},{"array_name":"Yearly_Ratio","fields":["yearend","mcap","ev","pe","pbv","divyield","dividendpayout","eps","bookvalue","roa","roe","roce","ebit","ebitda","ev_sales","ev_ebitda","netincomemargin","grossincomemargin","assetturnover","currentratio","debt_equity","fcf_margin","sales_totalasset","netdebt_fcf","netdebt_ebitda","ebitda_margin","totalshareholdersequity","shorttermdebt","longtermdebt","sharesoutstanding","netsales","netprofit","annualdividend","cogs","retainedearnings"]},{"array_name":"Yearly_Result_Based_Ratios","fields":["yearend","mcap","ev","pe","pbv","divyield","dividendpayout","eps","bookvalue","roa","roe","roce","ebit","ebitda","ev_sales","ev_ebitda","netincomemargin","grossincomemargin","assetturnover","currentratio","debt_equity","netdebt_ebitda","ebitda_margin","totalshareholdersequity","shorttermdebt","longtermdebt","epsdiluted","netsales","netprofit","annualdividend","cogs"]},{"array_name":"Yearly_Results","fields":["gross_sales_inc_from_ops","less_excise_duty","net_sales_inc_from_ops","other_operating_inc","total_inc_from_ops_net_","total_exp","cost_of_sales","employee_cost","depreciation_amortization_and_depletion_expense","provisions_write_offs","administrative_and_selling_exp","other_exp","pre_operation_exp_capitalised","prft_from_ops_b4_other_inc_fin_costs_and_exceptional_items","other_inc","prft_from_ordnry_actvts_b4_fin_costs_and_exceptional_items","fin_costs","prft_from_ordnry_actvts_aft_fin_costs_but_b4_exceptional_items","exceptional_items","other_adjustments_b4_tax","prft_from_ordnry_actvts_b4_tax","total_tax","net_prft_from_ordnry_actvts_aft_tax","prft_loss_from_discontd_ops","net_prft_from_ordnry_actvts_discontd_ops_aft_tax","extraordinary_items","other_adjustments_aft_tax","net_prft_aft_tax_for_the_period","other_comprehensive_inc","total_comprehensive_inc","equity","reserve_surplus","face_value","eps_","eps_b4_exceptional_extraordinary_items_basic","eps_b4_exceptional_extraordinary_items_diluted","eps_aft_exceptional_extraordinary_items_basic","eps_aft_exceptional_extraordinary_items_diluted","book_value_unit_curr_","dividend_per_share_rs_","dividend_","no_of_employees","debt_equity_ratio","debt_service_coverage_ratio","interest_service_coverage_ratio","debenture_redemption_reserve_rs_cr_","paid_up_debt_capital_rs_cr_","quarter","year"]}]
+</cached pre-loaded arrays>
+
+<on-demand loaded arrays>
+<array>
+<array_name>company_announcements</array_name> 
+<field_names>company_name, company_sector_name, announcement_date, announcement_text, announcement_text_summary, announcement_sentiment</field_names>
+ <notes>announcement_sentiment is either Positive, Negative or Netrual. This field signfies if the corporate announcement has positive/negative/neutral impact on company's business or stock price. E.g. winning a large order will have Positive sentiment</notes>
+</array>
+
+</on-demand loaded arrays>
+
+<Coding Rules>
+1. You have to output a single javascript function text, and nothing else. The signature of the function will be as follows, with arguments being <on-demand loaded arrays>
+const analysis = async function(mutual_funds, mutual_fund_stock_holdings, mutual_fund_stock_holding_reporting_dates, insider_trades, daily_stock_prices_by_company_name, market_nse_nifty_closing_prices, user_stock_portfolio, fifty_two_week_highs, fifty_two_week_lows, company_master,
+            company_trailing_twelve_months_ratios){
+	//your code and reasoning steps as comments
+}
+
+2. Put Reasoning Steps as comments in code. e.g. //filter on star_rating
+3. Avoid chained function calling with map(), filter(), sort(), reduce() etc. Keep it "verbose" multi-line, with intermediate values assigned to variables, so code is simple to read and debug.
+4. For String compariosns and Named Entities comparison, Do not use === in filter(). Instead do wild-card case-insensitive matching by using toLowerCase() and indexOf(). e.g. company_name, company_sector_name
+5. wherever the JSON schema indicates enum (not null), make sure you use one of the enum values only. e.g. if user mentions "small-cap funds" or “small cap mutual funds” then it means "small cap fund" from enum defined in above schema.
+6. Sort the output array on appropriate column, depending on User_Query. e.g. if User_Query talks about star ratings, then sort on that Descending so higher Ratings appear first. In case of tie, or if no sorting is explicitly mentioned by User_Query, sort on mutual_fund_return_3Y DESC
+7. Do not use "const" for variables, but use "let". this is because some times, by mistake, you may try to assign a value again, and it will break the code.
+8. Date fields will end with _date suffix. Always filter on date for arrays that have a date field. Date range will often need to be deduced from User's Query. e.g. if user says last 15 days or last 3 months.
+9. For on-demand loaded arrays, use await postToGraphQL function, by constructing the GraphQL variables having "from" and "to" dates, and an array of keywords.
+10. For on-demand loaded arrays, you need to just construact an array of keywords, based on User Query, and use this code snippet
+
+let corporate_announcements = []
+// reuse this code snippet
+let searchTerms = ["term1", "term2", "term3"]; //Just construct this array and reuse everything else.
+
+let orConditionsString = searchTerms
+  .map(term => `{announcement_text: {_ilike: "%${term}%"}}`)
+  .join(', ');
+console.log("orConditionsString", orConditionsString)
+let query = `
+query GetAnnouncementsForSearchTerms($fromDate: date!, $toDate: date!) {
+  stock_announcements(where: {fromDate:{_gte: $fromDate}, toDate:{_lte: $toDate}, _or: [${orConditionsString}] }) {
+    stock{
+      company_name
+    }
+    announcement_document_link
+    announcement_text_summary
+    announcement_date
+  }
+}`;
+
+//Example : In last 7 days, search for keywords "capex", "order win", "award", "preferential", "USFDA warning"
+let today = new Date();
+    let sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(today.getDate() - 7);
+    
+let announcements_query_variables = {
+"fromDate" : sevenDaysAgo,
+"toDate": today
+}
+
+//Then execute the GraphQL Query, using "await postToGraphQL" and get the announncements array
+try {
+let gqlQueryResponse = await postToGraphQL({
+query: announcements_query_for_search_terms,
+variables: announcements_query_variables
+})
+corporate_announcements = gqlQueryResponse.data.stock_announcements
+//map the announcement_sentiment from integer to string.
+corporate_announcements = corporate_announcements.map(ca => {
+          
+         return {
+            company_name: ca.stock.company_name.
+            company_sector: ca.stock.company_sector,
+            announcement_text: ca.announcement_text,
+            announcement_text_summary: ca.announcement_text_summary,
+            announcement_document_link: ca.announcement_document_link,
+            announcement_date: ca.announcement_date
+         }
+})
+}
+catch(e){
+console.error(e)
+corporate_announcements = []
+}
+
+11. Simple questions can be answered by processing the relevant array. For multi-hop questions get data from respective arrays, and process it in logical steps, documenting each as a //comment.
+</Coding Rules>
+
+<example>
+<User_Query>which funds have stock holding in V2 Retail</User_Query>
+<Your_Response>
+const analysis = async function(mutual_funds, mutual_funds_stock_holdings, mutual_fund_stock_holding_reporting_dates, insider_trades, daily_stock_prices_by_company_name, market_nse_nifty_closing_prices, user_stock_portfolio, fifty_two_week_highs, fifty_two_week_lows, company_master_data, company_trailing_twelve_months_ratios){
+//get latest reporting date
+let latestReportingDate = mutual_fund_stock_holding_reporting_dates[0];
+//filter holdings for latest date and V2 Retail stock
+let v2RetailHoldings = mutual_funds_stock_holdings.filter(holding => 
+    holding.stock_holding_reporting_date.toISOString() === latestReportingDate.toISOString() &&
+    holding.company_name.toLowerCase().indexOf('v2 retail') !== -1
+);
+
+//get unique mutual fund names that hold V2 Retail
+let fundNames = v2RetailHoldings.map(holding => holding.mutual_fund_name);
+
+//get full fund details from mutual_funds array
+let fundsWithV2Retail = mutual_funds.filter(mf =>
+    fundNames.includes(mf.mutual_fund_name)
+);
+
+//sort by 3Y returns as no specific sorting mentioned
+let sortedFunds = fundsWithV2Retail.sort((a,b) => 
+    b.mutual_fund_return_3Y - a.mutual_fund_return_3Y
+);
+
+return sortedFunds;
+}
+</Your_Response>
+</example>
+
+Remember - your output is only the function text. Do not output anything else other than function text, because your output will be directly compiled.

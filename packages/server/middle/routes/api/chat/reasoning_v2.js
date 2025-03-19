@@ -39,7 +39,11 @@ const route = async (req, res) => {
   try {  
     const PROMPTS_FOLDER = path.join(__dirname, 'prompts');
     const systemPromptPath = path.join(PROMPTS_FOLDER, `${activity}_system_prompt.txt`);
-    const systemPrompt = await readFile(systemPromptPath, 'utf-8');
+    const cachedArraysDefinition = path.join(process.env.DATA_ROOT_FOLDER, "graphql_fields.txt")
+    const arrayContent = fs.readFileSync(cachedArraysDefinition, "utf-8")
+    let systemPrompt = await readFile(systemPromptPath, 'utf-8');
+    systemPrompt = systemPrompt.replace("{{cached_pre_loaded_graphql_fields}}", arrayContent)
+    fs.writeFileSync("fullPrompt.txt", systemPrompt)
     const llmClient = new LLMClient(await getLLMToUse(email, activity), await getModelToUse(email, activity));
     let formattingLLMClient = new LLMClient(await getFormattingLLMToUse(email, activity), await getModelToUse(email, activity))
     let responseHandler;

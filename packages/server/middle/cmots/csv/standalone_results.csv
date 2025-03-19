@@ -1,0 +1,86 @@
+ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Description,Column_Name,Column_DataType,Column_Description
+1,Quarterly Results,http://jwttoken.cmots.com/Aidea/api/QuarterlyResults/476/S,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Output,OutputDataType,OutputDescription
+,,,,,,,,RID,Int,RID
+,,,,,,,,COLUMNNAME,Varchar(300),Column Name
+,,,,,,,,Y202412,Float,Year 2024 December
+,,,,,,,,Y202409,Float,Year 2024 September
+,,,,,,,,Y202406,Float,Year 2024 June
+,,,,,,,,Y202403,Float,Year 2024 March
+,,,,,,,,Y202312,Float,Year 2023 December
+,,,,,,,,Y202309,Float,Year 2023 September
+,,,,,,,,Y202306,Float,Year 2023 June
+,,,,,,,,Y202303,Float,Year 2023 March
+,,,,,,,,Y202212,Float,Year 2022 December
+,,,,,,,,Y202209,Float,Year 2022 September
+,,,,,,,,Y202206,Float,Year 2022 June
+,,,,,,,,Y202203,Float,Year 2022 March
+,,,,,,,,rowno,Int,Row No
+2,Profit and Loss,http://jwttoken.cmots.com/Aidea/api/ProftandLoss/6/S,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Output,OutputDataType,OutputDescription
+,,,,,,,,COLUMNNAME,Varchar(300),Column Name
+,,,,,,,,RID,Int,RID
+,,,,,,,,Y202403,Float,Year 2024 March
+,,,,,,,,Y202303,Float,Year 2023 March
+,,,,,,,,Y202112,Float,Year 2021 December
+,,,,,,,,rowno,Int,Row No
+3,Balance Sheet,http://jwttoken.cmots.com/Aidea/api/BalanceSheet/6/S,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Output,OutputDataType,OutputDescription
+,,,,,,,,RID,Int,RID
+,,,,,,,,COLUMNNAME,Varchar(300),Column Name
+,,,,,,,,Y202403,Float,Year 2024 March
+,,,,,,,,Y202303,Float,Year 2023 March
+,,,,,,,,Y202112,Float,Year 2021 December
+,,,,,,,,rowno,Int,Row No
+4,Cash Flow,http://jwttoken.cmots.com/Aidea/api/CashFlow/93/S,EOD,11:30 PM,Once on trading day,cocode,CMOTS Company Code,Output,OutputDataType,OutputDescription
+,,,,,,,,RID,Int,RID
+,,,,,,,,COLUMNNAME,Varchar(300),Column Name
+,,,,,,,,Y202403,Float,Year 2024 March
+,,,,,,,,Y202303,Float,Year 2023 March
+,,,,,,,,Y202203,Float,Year 2022 March
+,,,,,,,,rowno,Int,Row No
+5,Half Yearly Results,http://jwttoken.cmots.com/Aidea/api/Half-Yearly-Results/21281/S,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Output,OutputDataType,OutputDescription
+,,,,,,,,RID,Int,RID
+,,,,,,,,COLUMNNAME,Varchar(300),Column Name
+,,,,,,,,Y202403,Float,Year 2024 March
+,,,,,,,,Y202309,Float,Year 2023 September
+,,,,,,,,Y202209,Float,Year 2022 September
+,,,,,,,,rowno,Int,Row No
+6,Nine Months Results,http://jwttoken.cmots.com/Aidea/api/Nine-Month-Result/6/S,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Output,OutputDataType,OutputDescription
+,,,,,,,,RID,Int,RID
+,,,,,,,,COLUMNNAME,Varchar(300),Column Name
+,,,,,,,,Y202412,Float,Year 2024 December
+,,,,,,,,Y202312,Float,Year 2023 December
+,,,,,,,,Y202209,Float,Year 2022 September
+,,,,,,,,rowno,Int,Row No
+10,Yearly Reports,http://jwttoken.cmots.com/Aidea/api/Yearly-Results/6/S,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Output,OutputDataType,OutputDescription
+,,,,,,,,RID,Int,RID
+,,,,,,,,COLUMNNAME,Varchar(300),Column Name
+,,,,,,,,Y202403,Float,Year 2024 March
+,,,,,,,,Y202303,Float,Year 2023 March
+,,,,,,,,Y202112,Float,Year 2021 December
+,,,,,,,,rowno,Int,Row No
+11,Result Balance Sheet (Asset and Liabilities): Quarterly,http://jwttoken.cmots.com/Aidea/api/QuarterlyResults-BalanceSheet/476/S,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Output,OutputDataType,OutputDescription
+,,,,,,,,RID,Int,RID
+,,,,,,,,COLUMNNAME,Varchar(300),Column Name
+,,,,,,,,Y202409,Float,Year 2024 September
+,,,,,,,,Y202403,Float,Year 2024 March
+,,,,,,,,Y202309,Float,Year 2023 September
+,,,,,,,,Y202303,Float,Year 2023 March
+,,,,,,,,Y202209,Float,Year 2022 September
+,,,,,,,,Y202203,Float,Year 2022 March
+,,,,,,,,rowno,Int,Row No
+12,Result Balance Sheet (Asset and Liabilities): Half yearly,http://jwttoken.cmots.com/Aidea/api/Results-BalanceSheet-Half-yearly/476/S,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Output,OutputDataType,OutputDescription
+,,,,,,,,RID,Int,RID
+,,,,,,,,COLUMNNAME,Varchar(300),Column Name
+,,,,,,,,Y202409,Float,Year 2024 September
+,,,,,,,,Y202403,Float,Year 2024 March
+,,,,,,,,Y202309,Float,Year 2023 September
+,,,,,,,,Y202303,Float,Year 2023 March
+,,,,,,,,Y202209,Float,Year 2022 September
+,,,,,,,,Y202203,Float,Year 2022 March
+,,,,,,,,rowno,Int,Row No
+13,Result Balance Sheet (Asset and Liabilities): Yearly,http://jwttoken.cmots.com/Aidea/api/Results-BalanceSheet-Yearly/6/S,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Output,OutputDataType,OutputDescription
+,,,,,,,,RID,Int,RID
+,,,,,,,,COLUMNNAME,Varchar(300),Column Name
+,,,,,,,,Y202403,Float,Year 2024 March
+,,,,,,,,Y202303,Float,Year 2023 March
+,,,,,,,,Y202112,Float,Year 2021 December
+,,,,,,,,rowno,Int,Row No

@@ -78,7 +78,8 @@ class JavascriptResponseHandler {
                     const analysis = require(generatedFilePath)
                     const dbData = await this.dbManager.getData()
                     const user_stock_portfolio = await this.dbManager.getUserStockPortfolio(this.customData.email)
-                    result = await analysis(dbData.mutual_funds, dbData.mutual_fund_stock_holdings, dbData.holding_reporting_dates, dbData.insider_trades, dbData.daily_closing_stock_prices_by_company_name, dbData.market_nse_nifty_closing_prices, user_stock_portfolio, dbData.fifty_two_week_highs, dbData.fifty_two_week_lows)
+                    result = await analysis(dbData.mutual_funds, dbData.mutual_fund_stock_holdings, dbData.holding_reporting_dates, dbData.insider_trades, dbData.daily_closing_stock_prices_by_company_name, dbData.market_nse_nifty_closing_prices, user_stock_portfolio, dbData.fifty_two_week_highs, dbData.fifty_two_week_lows,dbData.company_master,
+                        dbData.company_trailing_twelve_months_ratios)
                     break;
             }
 

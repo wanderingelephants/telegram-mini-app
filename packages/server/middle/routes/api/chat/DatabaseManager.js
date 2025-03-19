@@ -1,5 +1,6 @@
 const { postToGraphQL } = require("../../../lib/helper")
 const { getMutualFundHoldingsJSONArray, normalizeMutualFundsData } = require('../mutualfunds/getData')
+const moment = require("moment")
 const { reverse_mapping_category_of_insider, reverse_mapping_regulation,
     reverse_mapping_type_of_security, reverse_mapping_mode_of_transaction,
     reverse_mapping_transaction_type, reverse_mapping_exchange,
@@ -239,7 +240,60 @@ class DatabaseManager {
           fifty_two_week_low_date: reporting_date,
           ...rest
         }));
-        //console.log("52WHighs", fifty_two_week_highs)
+
+        resp = await postToGraphQL({
+          query: `query TTMRatios{
+  company_trailing_todate_ratios{
+    company_master{
+      company_name :  companyname 
+    }
+    ratios_date: ttmason
+    pe
+    netsales
+    netprofit
+    netdebt_ebitda_ttm
+    netdebt_ebitda_ttm
+    netincomemargin_ttm
+    industry_pe
+    ev_sales_ttm
+    pbv
+    assetturnover_ttm
+    ev_sales_ttm
+  }
+}`,
+          variables: {}
+        })
+        const company_trailing_twelve_months_ratios = resp.data.company_trailing_todate_ratios.map(item => {
+          const formattedDate = moment(item.ratios_date.toString(), 'YYYYMM')
+            .add(1, 'month')
+            .subtract(1, 'day')
+            .format('YYYY-MM-DD');
+        
+          return {
+            company_name: item.company_master.company_name,
+            ratios_date: formattedDate,
+            pe: item.pe,
+            netsales: item.netsales,
+            netprofit: item.netprofit,
+            netdebt_ebitda_ttm: item.netdebt_ebitda_ttm,
+            netincomemargin_ttm: item.netincomemargin_ttm,
+            industry_pe: item.industry_pe,
+            ev_sales_ttm: item.ev_sales_ttm,
+            pbv: item.pbv,
+            assetturnover_ttm: item.assetturnover_ttm
+          };
+        });
+        resp = await postToGraphQL({
+          query: `query company_master{
+  company_master{
+    company_name: companyname
+    company_sector_name: sectorname
+    company_market_cap_label: mcaptype
+    company_market_cap_value_INR_crores: mcap
+  }
+}`, variables: {}
+        })
+        const company_master = resp.data.company_master
         this.data = {
             mutual_funds,
             mutual_fund_stock_holdings,
@@ -249,7 +303,9 @@ class DatabaseManager {
             insider_trades,
             daily_closing_stock_prices_by_company_name,
             market_nse_nifty_closing_prices,
-            fifty_two_week_highs, fifty_two_week_lows
+            fifty_two_week_highs, fifty_two_week_lows,
+            company_master,
+            company_trailing_twelve_months_ratios
         }
         this.isInitialized = true
         console.log("Database Manager initialized")

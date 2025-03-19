@@ -9,7 +9,6 @@
 </template>
 <script>
 const authHeader = import.meta.env.VITE_cmots_token
-console.log(authHeader)
 export default{
     data(){
         return{
