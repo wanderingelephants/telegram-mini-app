@@ -129,11 +129,18 @@ function processCSV(csvFilePath) {
       if (record.Input.toLowerCase() === "cocode" || record.Input.toLowerCase() === "co_code") input = "co_code"
       if (record.Input.toLowerCase() === "sectcode" || record.Input.toLowerCase() === "sect_code") input = "sect_code"
       if (record.Input.toLowerCase() === "indexcode" || record.Input.toLowerCase() === "index_code") input = "index_code"
+      const normalized = generatenormalized(record["Report Name"])
 
+      const promptableRetail =  ["company_master_data", "company_insider_trading"]
+      const promptableEnterprise = ["company_director_s_report"]
+      let promptQL = ""
+      if (normalized.indexOf("_ratio") > -1 || promptableRetail.indexOf(normalized) > -1) promptQL = "Retail"
+      if (promptableEnterprise.indexOf(normalized) > -1) promptQL = "Enterprise"
       // Start a new table
       currentTable = {
         ReportIndex: parseInt(record.ReportIndex),
-        "Table Name": generatenormalized(record["Report Name"]),
+        "Table Name": normalized,
+        "PromptQL": promptQL,
         "Table Description": (record["Report Name"]),
         API_URL: record["API URL"],
         Frequency: record.Frequency,
@@ -150,12 +157,14 @@ function processCSV(csvFilePath) {
       currentTable.Columns.push({
         Column_Name: "created_at",
         Column_DataType: "timestamp",
-        Column_Description: "created time"
+        Column_Description: "created time",
+        PromptQL: false
       });
       currentTable.Columns.push({
         Column_Name: "updated_at",
         Column_DataType: "timestamp",
-        Column_Description: "updated time"
+        Column_Description: "updated time",
+        PromptQL: false
       });
     }
     // Check if this is a column definition row
@@ -168,6 +177,7 @@ function processCSV(csvFilePath) {
       desc = desc.replace(/_+/g, "_");
 
       const abbreviated = desc//abbreviateColumnName(desc)
+      const promptQL = abbreviated === "co_code" ? false : true
       // Add the column to the current table
       if (currentTable.Columns.findIndex(c => c.Column_Name === abbreviated) === -1)
         currentTable.Columns.push({
@@ -175,7 +185,8 @@ function processCSV(csvFilePath) {
           Column_DataType: normalizeDataType(record.Column_DataType),
           Column_Description: desc,
           Is_Unique: record.Is_Unique,
-          Is_Index: record.Is_Index
+          Is_Index: record.Is_Index,
+          PromptQL: promptQL
         });
       else console.log("Column already exists", abbreviated)
     }

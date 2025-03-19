@@ -45,32 +45,36 @@ const defaultColumns = [
   {
     "Column_Name": "created_at",
     "Column_DataType": "timestamptz",
-    "Column_Description": "created timestamp"
+    "Column_Description": "created timestamp",
+    "PromptQL": false
   },
   {
     "Column_Name": "updated_at",
     "Column_DataType": "timestamptz",
-    "Column_Description": "updated timestamp"
+    "Column_Description": "updated timestamp",
+    "PromptQL": false
   },
   {
     "Column_Name": "co_code",
     "Column_DataType": "int",
-    "Column_Description": "CMOTS Company Code"
+    "Column_Description": "CMOTS Company Code",
+    "PromptQL": false
   },
   {
     "Column_Name": "month",
     "Column_DataType": "int",
-    "Column_Description": "CMOTS Company Code"
+    "Column_Description": "Month",
+    "PromptQL": false
   },
   {
     "Column_Name": "quarter",
     "Column_DataType": "int",
-    "Column_Description": "CMOTS Company Code"
+    "Column_Description": "Quarter",
   },
   {
     "Column_Name": "year",
     "Column_DataType": "int",
-    "Column_Description": "CMOTS Company Code"
+    "Column_Description": "Year",
   }
 ];
 
@@ -124,6 +128,7 @@ async function generateSchemas(csvFilePath, outputDir) {
           ReportIndex: reportIndex,
           "Table Name": tableName,
           "Table Description": reportName,
+          "PromptQL": "Enterprise",
           Input: "co_code",
           API_URL: apiUrl,
           API_URL_2: apiUrl2,

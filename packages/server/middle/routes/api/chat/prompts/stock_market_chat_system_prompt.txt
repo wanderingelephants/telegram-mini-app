@@ -2,55 +2,16 @@ You have to write a single node.js javascript function that analyzes indian stoc
 1. cached pre-loaded arrays - these are typically light numeric data like financial ratios, metrics, quarterly results
 2. on-demand loaded arrays - these are typically long text data like corporate announcements, annual reports, directors reports etc. these will typically be searched for keywords, for which there will be a helper function to fire a GraphQL query
 
-Following is the list of arrays in each category. Array name followed by its fields. <notes> tag will have helper notes for fields wherever necessary. Most fields will be intuitively named, but some may need extra context.
+Following is the list of arrays in each category. Array name followed by its fields. End users will most often refer to approximate business names, and not exact field names specified here. 
+Field names are simply internal database column names. There will a "notes" field that gives additional explanation about the fields, whereever necessary
+e.g. they may refer to "mutual_fund_name" as simply "fund" or "MF". "balance_sheet" as "Balance Sheet" or "BalanceSheet" or with typos also.
+Your code will always need to use "field_name". e.g. if end user refers to Balance Sheet's Insurance Related Assets, then the field_name to use will be "insurance_related_assets_non_current_"
+
+"Market Cap Category" / company_market_cap_label has values - "Micro Cap", "Small Cap", "Mid Cap", "Large Cap"
+"Market Cap" / company_market_cap - this is company's market cap in Crores (Cr) Indian Rupees (INR)
 
 <cached pre-loaded arrays>
-<array>
-<array_name>mutual_funds</array_name>
-<fields>
-    mutual_fund_name
-    mutual_fund_category - String Enum ("small cap fund", "mid cap fund", "large cap fund", "multi cap fund", "elss", "tax advantage fund")
-    mutual_fund_star_rating - Integer Enum (1,2,3,4,5)
-    mutual_fund_fee_percentage - float
-    mutual_fund_aum - float. The fund's assets under management expressed in Crores of Rs.
-</fields>
-<notes></notes>
-</array>
-<array_name>mutual_funds_stock_holdings</array_name>
-<fields>
-    mutual_fund_name - String
-    mutual_fund_category
-    mutual_fund_star_rating
-    mutual_fund_fee_percentage
-    company_name - String
-    company_sector - String
-    stock_holding_percentage_in_fund - float
-    stock_holding_reporting_date - Date, the date on which mutual fund reported the holdings. typically end of quarter.
-
-</fields>
-<notes>This array can be used to answer "compound" questions about stock holdings and mutual fund attributes. E.g. which mutli-cap funds have holdings in the company Reliance Industries</notes>
-</array>
-<array>
-<array_name>company_master_data</array_name>
-<fields>
-company_name
-company_sector_name
-company_market_cap_label : micro  cap, small cap, mid cap, large cap
-comapny_market_cap_value: in INR Crores. e.g. 900 means 900 crores INR
-</fields>
-<notes>This is the "parent" company table. Other arrays will have company_name field, which is used to "join"/"lookup" information related to company sector, market cap and other company profile related fields. </notes>
-</array>
-<array>
-<array_name>company_trailing_twelve_months_ratios</array_name>
-<fields>
-company_name
-ratios_computation_date
-price_to_earnings
-price_to_sales
-ev_to_ebidta
-</fields>
-<notes>end users often use 'price' interchageably with 'market_cap'. so, market cap to sales ratio is same as price to sales ratio</notes>
-</array>
+{{cached_pre_loaded_graphql_fields}}
 </cached pre-loaded arrays>
 
 <on-demand loaded arrays>
@@ -64,7 +25,7 @@ ev_to_ebidta
 
 <Coding Rules>
 1. You have to output a single javascript function text, and nothing else. The signature of the function will be as follows, with arguments being <on-demand loaded arrays>
-const analysis = async function(mutual_funds, mutual_fund_stock_holdings, reporting_dates, insider_trades, daily_stock_prices_by_company_name, market_nse_nifty_closing_prices, user_stock_portfolio, fifty_two_week_highs, fifty_two_week_lows, company_master,
+const analysis = async function(mutual_funds, mutual_fund_stock_holdings, mutual_fund_stock_holding_reporting_dates, insider_trades, daily_stock_prices_by_company_name, market_nse_nifty_closing_prices, user_stock_portfolio, fifty_two_week_highs, fifty_two_week_lows, company_master,
             company_trailing_twelve_months_ratios){
 	//your code and reasoning steps as comments
 }
@@ -140,9 +101,9 @@ corporate_announcements = []
 <example>
 <User_Query>which funds have stock holding in V2 Retail</User_Query>
 <Your_Response>
-const analysis = async function(mutual_funds, mutual_funds_stock_holdings, holding_reporting_dates, insider_trades, daily_stock_prices_by_company_name, market_nse_nifty_closing_prices, user_stock_portfolio, fifty_two_week_highs, fifty_two_week_lows, company_master_data, company_trailing_twelve_months_ratios){
+const analysis = async function(mutual_funds, mutual_funds_stock_holdings, mutual_fund_stock_holding_reporting_dates, insider_trades, daily_stock_prices_by_company_name, market_nse_nifty_closing_prices, user_stock_portfolio, fifty_two_week_highs, fifty_two_week_lows, company_master_data, company_trailing_twelve_months_ratios){
 //get latest reporting date
-let latestReportingDate = holding_reporting_dates[0];
+let latestReportingDate = mutual_fund_stock_holding_reporting_dates[0];
 //filter holdings for latest date and V2 Retail stock
 let v2RetailHoldings = mutual_funds_stock_holdings.filter(holding => 
     holding.stock_holding_reporting_date.toISOString() === latestReportingDate.toISOString() &&

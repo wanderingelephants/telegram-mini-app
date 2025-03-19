@@ -47,7 +47,8 @@ const routes = {
             reasoning: require("./api/chat/reasoning_v2"),
             share: require("./api/chat/share"),
             setalert: require("./api/chat/setalert"),
-            view: require("./api/chat/view")
+            view: require("./api/chat/view"),
+            promptfields: require("../cmots/endpoints/promptfields")
         },
         cmots:{
             company: require("../cmots/endpoints/company"),
@@ -111,6 +112,7 @@ router.post("/api/chat/reasoning", verifyToken, routes.api.chat.reasoning)
 router.post("/api/chat/share", verifyToken, routes.api.chat.share)
 router.post("/api/chat/setalert", verifyToken, routes.api.chat.setalert)
 router.get("/api/chat/view", routes.api.chat.view)
+router.get("/api/chat/promptfields", routes.api.chat.promptfields)
 router.post("/api/chat/summary", routes.api.chat.reasoning)
 router.get("/api/cmots/master/:apiType", routes.api.cmots.master)
 router.get("/api/cmots/master/:apiType/:categoryId", routes.api.cmots.master)
