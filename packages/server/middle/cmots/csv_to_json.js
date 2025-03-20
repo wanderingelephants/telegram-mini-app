@@ -131,7 +131,7 @@ function processCSV(csvFilePath) {
       if (record.Input.toLowerCase() === "indexcode" || record.Input.toLowerCase() === "index_code") input = "index_code"
       const normalized = generatenormalized(record["Report Name"])
 
-      const promptableRetail =  ["company_master_data", "company_insider_trading"]
+      const promptableRetail =  ["company_master", "company_insider_trading"]
       const promptableEnterprise = ["company_director_s_report"]
       let promptQL = ""
       if (normalized.indexOf("_ratio") > -1 || promptableRetail.indexOf(normalized) > -1) promptQL = "Retail"
@@ -157,14 +157,12 @@ function processCSV(csvFilePath) {
       currentTable.Columns.push({
         Column_Name: "created_at",
         Column_DataType: "timestamp",
-        Column_Description: "created time",
-        PromptQL: false
+        Column_Description: "created time"
       });
       currentTable.Columns.push({
         Column_Name: "updated_at",
         Column_DataType: "timestamp",
-        Column_Description: "updated time",
-        PromptQL: false
+        Column_Description: "updated time"
       });
     }
     // Check if this is a column definition row
@@ -177,17 +175,23 @@ function processCSV(csvFilePath) {
       desc = desc.replace(/_+/g, "_");
 
       const abbreviated = desc//abbreviateColumnName(desc)
-      const promptQL = abbreviated === "co_code" ? false : true
+      gqlAlias = abbreviated === "co_code" ? "co_code" : record.GQL_Alias ? record.GQL_Alias : currentTable["Table Name"].indexOf("_ratio") > -1 ? record.Column_Name : "" 
+      /*if (currentTable["Table Name"].indexOf("solvency") > -1){
+        console.log(currentTable["Table Name"], abbreviated, record.Column_Name, gqlAlias)
+      }*/
+      
       // Add the column to the current table
-      if (currentTable.Columns.findIndex(c => c.Column_Name === abbreviated) === -1)
+      if (currentTable.Columns.findIndex(c => c.Column_Name === abbreviated) === -1){
         currentTable.Columns.push({
           Column_Name: abbreviated,
           Column_DataType: normalizeDataType(record.Column_DataType),
           Column_Description: desc,
           Is_Unique: record.Is_Unique,
-          Is_Index: record.Is_Index,
-          PromptQL: promptQL
+          Is_Index: record.Is_Index
         });
+        if (gqlAlias !== "") currentTable.Columns[currentTable.Columns.length-1]["GQL_Alias"] = gqlAlias
+      
+      }
       else console.log("Column already exists", abbreviated)
     }
   }

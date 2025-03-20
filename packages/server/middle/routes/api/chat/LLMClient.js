@@ -62,22 +62,52 @@ class LLMClient {
             case 'JavascriptMockLLM':
                 //const filePath = path.join(process.env.DATA_ROOT_FOLDER, "generated_functions/2025/03/07/8de3ffe0-b388-4491-a302-7f6f0aa60ded/stock_market_chat", "analysis_1741321347634.js")
                 //const fileContent = fs.readFileSync(filePath, "utf-8")
-                llmResponse = `const analysis = async function(mutual_funds, mutual_funds_stock_holdings, holding_reporting_dates, insider_trades, daily_stock_prices_by_company_name, market_nse_nifty_closing_prices, user_stock_portfolio, fifty_two_week_highs, fifty_two_week_lows, company_master_data, company_trailing_twelve_months_ratios){
-    // Filter company master data for midcap companies in cement sector
-    console.log("company master", company_master_data)
-    let midcapCementCompanies = company_master_data.filter(company => 
-        company.company_sector_name.toLowerCase().indexOf('cement') !== -1 &&
-        company.company_market_cap_label.toLowerCase() === 'mid cap'
+                llmResponse = `const {postToGraphQL} = require(process.env.GRAPHQL_MODULE_PATH)
+const analysis = async function(pre_populated_arrays){
+    //Step 1: Validate input arrays
+    if (!pre_populated_arrays.company_cash_flow_ratios || pre_populated_arrays.company_cash_flow_ratios.length === 0) {
+        console.error("No cash flow ratio data available");
+        return [];
+    }
+
+    //Step 2: Robust filtering for positive free cash flow per share with company name
+    let companiesWithPositiveFreeCashFlow = pre_populated_arrays.company_cash_flow_ratios.filter(company => {
+        // Use multiple checks to ensure data validity
+        let freeCashFlowValue = company.FreeCashFlowperShare;
+        return freeCashFlowValue !== null && 
+               freeCashFlowValue !== undefined && 
+               parseFloat(freeCashFlowValue) > 0;
+    });
+
+    //Step 3: If no companies found, return empty array with logging
+    if (companiesWithPositiveFreeCashFlow.length === 0) {
+        console.warn("No companies found with positive free cash flow per share");
+        return [];
+    }
+
+    //Step 4: Sort companies by free cash flow per share in descending order
+    let sortedCompanies = companiesWithPositiveFreeCashFlow.sort((a, b) => 
+        parseFloat(b.FreeCashFlowperShare) - parseFloat(a.FreeCashFlowperShare)
     );
 
-    // If no specific sorting is mentioned, sort by market cap value descending
-    let sortedMidcapCementCompanies = midcapCementCompanies.sort((a, b) => 
-        b.comapny_market_cap_value - a.comapny_market_cap_value
-    );
+    //Step 5: Enrich data with company details from company_master
+    let enrichedCompanies = sortedCompanies.map(cashFlowCompany => {
+        // Find corresponding company name from company_master
+        let companyDetails = pre_populated_arrays.company_master.find(company => 
+            company.company_name !== null && company.company_name !== undefined
+        );
 
-    return sortedMidcapCementCompanies;
+        return {
+            companyName: companyDetails ? companyDetails.company_name : "Unknown",
+            freeCashFlowPerShare: parseFloat(cashFlowCompany.FreeCashFlowperShare),
+            year: cashFlowCompany.YRC  // Assuming YRC is the year of reporting
+        };
+    });
+
+    //Step 6: Return top 50 companies or all if less than 50
+    return enrichedCompanies.slice(0, 50);
 }
-`
+module.exports = analysis`
                 break;
 
             case 'FormatMockLLM':
