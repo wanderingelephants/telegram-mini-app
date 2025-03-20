@@ -1,6 +1,8 @@
 const { postToGraphQL } = require("../../../lib/helper")
 const { getMutualFundHoldingsJSONArray, normalizeMutualFundsData } = require('../mutualfunds/getData')
 const moment = require("moment")
+const fs = require("fs")
+const path = require("path")
 const { reverse_mapping_category_of_insider, reverse_mapping_regulation,
     reverse_mapping_type_of_security, reverse_mapping_mode_of_transaction,
     reverse_mapping_transaction_type, reverse_mapping_exchange,
@@ -32,7 +34,7 @@ class DatabaseManager {
             return DatabaseManager.instance;
         }
         
-        this.data = null;
+        this.pre_populated_arrays = {};
         this.isInitialized = false;
         DatabaseManager.instance = this;
     }
@@ -42,8 +44,9 @@ class DatabaseManager {
         if (!this.isInitialized) {
             await this.initData();
         }
-        return this.data;
+        return this.pre_populated_arrays;
     }
+    
     async getUserStockPortfolio(email){
         const user_stock_portfolio_query = `query userStocks($email: String!){
             portfolio_stocks(where: {user: {email: {_eq: $email}}}){
@@ -59,7 +62,69 @@ class DatabaseManager {
         })
         return stock_portfolio_resp.data.portfolio_stocks.map(s => s.stock.company_name)
     }
-    async initData() {
+    async runMutationForTable(table){
+      const tableName = table["Table Name"]
+      let mutation = `query ${tableName}_all{
+        ${tableName}{
+      `
+      //console.log(tableName)
+      const columns = table.Columns.filter(c => c.GQL_Alias !== null)
+      for (const col  of columns){
+        //console.log(col.GQL_Alias)
+        //mutation += (col.GQL_Alias === "co_code") ? table["Table Name"]==="company_master_table"  :  `` 
+        if (col.GQL_Alias){
+          if (col.GQL_Alias === "co_code"){
+            if (table["Table Name"]!=="company_master"){
+               mutation += `\ncompany_master {
+                company_short_name: companyshortname
+                company_name: companyname
+                company_nse_symbol: nsesymbol
+                company_sector_name: sectorname
+              }`
+            }
+          }
+          else {
+              mutation += `${col.GQL_Alias}:${col.Column_Name}\n`
+          }
+        } 
+      }
+      mutation += `}
+      }`
+      console.log(mutation)
+      try{
+        const resp = await postToGraphQL({query: mutation, variables: {}})
+        return resp.data[tableName]
+      }
+      catch(e){
+        console.log("error in running mutation", mutation)
+        return []
+      }
+    }
+    async  initData(){
+      if (this.isInitialized === true){
+        console.log("Database already initialized")
+        return
+      }
+      const all_tables_json = fs.readFileSync(path.join(process.env.DATA_ROOT_FOLDER, "all_tables.json"), "utf-8")
+      const all_tables = JSON.parse(all_tables_json)
+      const promptable = all_tables.filter(c => (c.PromptQL === "Retail" || c.PromptQL === "Enterprise"))
+      //const promptable = all_tables.filter(c => c["Table Name"] === "company_cash_flow_ratios")
+      
+      for (const table of promptable){
+        try{
+          const tableData = await this.runMutationForTable(table)
+          this.pre_populated_arrays[table["Table Name"]] = tableData
+        }
+        catch(e){
+          console.log("Error in mutation processing for table", table["Table Name"], e)
+        }
+        
+      }
+      this.isInitialized = true
+      console.log("Database Manager initialized", (this.pre_populated_arrays))
+      return this.pre_populated_arrays
+    }
+    /*async initData() {
         if (this.isInitialized === true){
             console.log("Database already initialized")
             return
@@ -294,7 +359,7 @@ class DatabaseManager {
 }`, variables: {}
         })
         const company_master = resp.data.company_master
-        this.data = {
+        this.pre_populated_arrays = {
             mutual_funds,
             mutual_fund_stock_holdings,
             mutual_fund_data,
@@ -309,7 +374,7 @@ class DatabaseManager {
         }
         this.isInitialized = true
         console.log("Database Manager initialized")
-        return this.data
-    }
+        return this.pre_populated_arrays
+    }*/
 }
 module.exports = new DatabaseManager()

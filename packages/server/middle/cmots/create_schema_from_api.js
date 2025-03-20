@@ -46,25 +46,25 @@ const defaultColumns = [
     "Column_Name": "created_at",
     "Column_DataType": "timestamptz",
     "Column_Description": "created timestamp",
-    "PromptQL": false
+    
   },
   {
     "Column_Name": "updated_at",
     "Column_DataType": "timestamptz",
     "Column_Description": "updated timestamp",
-    "PromptQL": false
+    
   },
   {
     "Column_Name": "co_code",
     "Column_DataType": "int",
     "Column_Description": "CMOTS Company Code",
-    "PromptQL": false
+    
   },
   {
     "Column_Name": "month",
     "Column_DataType": "int",
     "Column_Description": "Month",
-    "PromptQL": false
+    
   },
   {
     "Column_Name": "quarter",

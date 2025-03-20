@@ -1,5 +1,6 @@
 const path = require("path")
 const fs = require("fs")
+const { pre_populated_arrays } = require("./DatabaseManager")
 const dataFolder = process.env.DATA_ROOT_FOLDER
 const MAX_RESULTS_TO_FORMAT = 10
 const _getFilePath = function (basePath, chatSessionId, activity, filename) {
@@ -76,10 +77,11 @@ class JavascriptResponseHandler {
                     break;
                 case "analysis":
                     const analysis = require(generatedFilePath)
-                    const dbData = await this.dbManager.getData()
+                    const pre_populated_arrays = await this.dbManager.getData()
                     const user_stock_portfolio = await this.dbManager.getUserStockPortfolio(this.customData.email)
-                    result = await analysis(dbData.mutual_funds, dbData.mutual_fund_stock_holdings, dbData.holding_reporting_dates, dbData.insider_trades, dbData.daily_closing_stock_prices_by_company_name, dbData.market_nse_nifty_closing_prices, user_stock_portfolio, dbData.fifty_two_week_highs, dbData.fifty_two_week_lows,dbData.company_master,
-                        dbData.company_trailing_twelve_months_ratios)
+                    pre_populated_arrays["user_stock_portfolio"] = user_stock_portfolio
+                    result = await analysis(pre_populated_arrays)
+                    console.log("JS Result", result)
                     break;
             }
 
@@ -116,7 +118,7 @@ class JavascriptResponseHandler {
                               Output only your formatted response text, and nothing else. ` }]
         }, 'messages_formatted.json');
 
-        const messages = await this.messageManager.getMessages(this.customData.chatSessionId, this.activity, 'messages_formatted.json')
+        //const messages = await this.messageManager.getMessages(this.customData.chatSessionId, this.activity, 'messages_formatted.json')
 
        
         if (functionName === "analysis"){

@@ -109,7 +109,7 @@ function generateSqlMigration(sqlFolderPath, table, columns, isMasterTable) {
     
     //if (column.Column_Name.toLowerCase() !== 'input' || !needsCoCode) {
       const pgType = convertToPgType(column.Column_DataType);
-      const notNullLabel = column.Column_Name.toLowerCase() === "co_code" ? " not null" : ""
+      const notNullLabel = column.Column_Name.toLowerCase() === "co_code" || column.Column_Name.toLowerCase() === "sect_code" || column.Column_Name.toLowerCase() === "index_code"? " not null" : ""
       createTableSql += `  "${column.Column_Name}" ${pgType} ${notNullLabel},\n`;
     //}
     //console.log(column, hasCoCode, needsCoCode)
