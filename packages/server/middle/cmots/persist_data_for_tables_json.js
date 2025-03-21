@@ -83,6 +83,58 @@ function transformKeysToLowercase(data, tableDef) {
   }
   return data;
 }
+async function processTableApiURL(table){
+  console.log(table.API_URL, table.Input)
+  let response;
+    try {
+      response = await axios.get(table.API_URL, axiosConfig);
+      if (!response.data) {
+        console.log("response.data is null", response)
+        return
+      }
+      if (!response.data.data) {
+        console.log("response.data.data is null", response)
+        return
+      }
+      console.log("Record size", response.data.data.length)
+      for (const record of response.data.data) {
+        if (record.COLUMNNAME === null) continue;
+        !record.COLUMNNAME ? await processNonResultsData(table, record) : await processResultsData(table, record) 
+      }
+    }
+    catch (e) {
+      console.log(e)
+    }
+}
+async function getMasterCodes(masterTableName){
+  let codes =  []
+  let code_column_name = ""
+  switch (masterTableName.toLowerCase()){
+    case "company_index_master":
+      code_column_name = "index_code"
+      break;
+    case "company_sector_master":
+      code_column_name = "sect_code"
+      break;
+    case "company_master":
+      code_column_name = "co_code"
+      break;
+      
+  }
+  try{
+    const query = `query get_${masterTableName}{
+      ${masterTableName}{
+        ${code_column_name}
+      }
+    }`
+    const resp = await postToGraphQL({query, variables:{}})
+    codes = resp.data[masterTableName].map(o => o[`${code_column_name}`])
+  }
+  catch(e){
+    console.error(e)
+  }
+  return codes
+}
 async function persistData(inputJsonPath) {
   // Read and parse the JSON file
   const jsonData = JSON.parse(fs.readFileSync(inputJsonPath, 'utf8'));
@@ -90,7 +142,6 @@ async function persistData(inputJsonPath) {
 
 
   for (let table of jsonData) {
-    
     const columns = table.Columns;
     columns.forEach(column => {
       column.Column_Name = column.Column_Name.trim()
@@ -98,38 +149,61 @@ async function persistData(inputJsonPath) {
       const pgType = convertToPgType(column.Column_DataType);
       column.pgDataType = pgType
     });
-    console.log(table.API_URL)
-    //const match_sector = table.API_URL.match(/SectorWiseComp\/(\d+)/);
-    //const sect_code = match_sector ? parseInt(match_sector[1]) : null;
-    //const match_index = table.API_URL.match(/IndexWiseComp\/(\d+)/);
-    //const index_code = match_index ? parseInt(match_index[1]) : null;
-    let response;
-    try {
-      response = await axios.get(table.API_URL, axiosConfig);
+    
+    if (table["Table Name"].toLowerCase().endsWith("_master"))
+    {
+      await processTableApiURL(table)
+      return
     }
-    catch (e) {
-      console.log(e)
+    if (table.Input === "index_code" || table.Input  === "sect_code" || table.Input ===  "co_code"){
+      await processChildrenOfMaster(table)
+      return
     }
-
-    if (!response.data) {
-      console.log("response.data is null", response)
-      continue
+    if (table.Input === "latestdate"){
+      const latestDate = moment().subtract(1, "days").utcOffset(330).format("YYYY-MM-DD");
+      table.API_URL = table.API_URL.replace(/[^/]+$/, latestDate);
+      console.log(table.API_URL);
+      await processTableApiURL(table)
+      return
     }
-    if (!response.data.data) {
-      console.log("response.data.data is null", response)
-      continue
-    }
-    console.log("Record size", response.data.data.length)
-    for (const record of response.data.data) {
-      if (record.COLUMNNAME === null) continue;
-      !record.COLUMNNAME ? await processNonResultsData(table, record) : await processResultsData(table, record) 
-    }
-
+    
   }
 
-
-
-  //await postToGraphQL()
+}
+async  function processChildrenOfMaster(table){
+  let masterCodes = []
+    switch(table.Input){
+      case "index_code":
+      console.log("iterate over index code");
+      masterCodes = await getMasterCodes("company_index_master")
+      for (const sect_code of masterCodes){
+        table.API_URL = table.API_URL.replace(/\/(\d+)(\/[^\/]+)?$/, `/${sect_code}$2`);
+        console.log(table.API_URL)
+        await processTableApiURL(table)
+      }
+      
+      break;
+      case "sect_code":
+      masterCodes = await getMasterCodes("company_sector_master")
+        
+      console.log("iterate over sect code");
+      for (const sect_code of masterCodes){
+        table.API_URL = table.API_URL.replace(/\/(\d+)(\/[^\/]+)?$/, `/${sect_code}$2`);
+        console.log(table.API_URL)
+        await processTableApiURL(table)
+      }
+      break;
+      case "co_code":
+      console.log("iterate over co code");
+      masterCodes = await getMasterCodes("company_master")
+      for (const sect_code of masterCodes){
+        table.API_URL = table.API_URL.replace(/\/(\d+)(\/[^\/]+)?$/, `/${sect_code}$2`);
+        console.log(table.API_URL)
+        await processTableApiURL(table)
+      }
+      
+      break;
+    }
 }
 async function processResultsData(table, record) {
   const parts = table.API_URL.split('/');

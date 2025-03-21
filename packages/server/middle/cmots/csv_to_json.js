@@ -125,7 +125,7 @@ function processCSV(csvFilePath) {
         processConstraints(currentTable)
         tables.push(currentTable);
       }
-      let input = ""
+      let input = record.Input.toLowerCase()
       if (record.Input.toLowerCase() === "cocode" || record.Input.toLowerCase() === "co_code") input = "co_code"
       if (record.Input.toLowerCase() === "sectcode" || record.Input.toLowerCase() === "sect_code") input = "sect_code"
       if (record.Input.toLowerCase() === "indexcode" || record.Input.toLowerCase() === "index_code") input = "index_code"
