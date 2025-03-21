@@ -1,8 +1,25 @@
-node csv_to_json.js /Users/sachetsingh1/telegram-mini-app/packages/server/middle/cmots/csv/tables_all.csv /Users/sachetsingh1/telegram-mini-app/packages/server/middle/cmots/json
+ #node csv_to_json.js /Users/sachetsingh1/telegram-mini-app/packages/server/middle/cmots/csv/tables_all.csv /Users/sachetsingh1/telegram-mini-app/packages/server/middle/cmots/json
+#node csv_to_json.js /Users/sachetsingh1/telegram-mini-app/packages/server/middle/cmots/csv/tables_bigints.csv /Users/sachetsingh1/telegram-mini-app/packages/server/middle/cmots/json
+
+ #node csv_to_json.js /Users/sachetsingh1/telegram-mini-app/packages/server/middle/cmots/csv/tables_financials.csv /Users/sachetsingh1/telegram-mini-app/packages/server/middle/cmots/json
 #node  --env-file=../.env create_schema_from_api /Users/sachetsingh1/telegram-mini-app/packages/server/middle/cmots/csv/standalone_results_headers.csv /Users/sachetsingh1/telegram-mini-app/packages/server/middle/cmots/json
- jq -s '[.[][]]' json/company_index_master.json json/company_sector_master.json json/company_master.json $(ls json/*.json | grep -v '_master.json' | grep -v 'all_tables.json') > json/all_tables.json
+ #jq -s '[.[][]]' json/company_index_master.json json/company_sector_master.json json/company_master.json $(ls json/*.json | grep -v '_master.json' | grep -v 'all_tables.json') > json/all_tables.json
  #curl -X GET http://localhost:3000/api/chat/promptfields
+ #node --env-file=../.env json_to_pgsql.js json/company_insider_trading.json ../../hasura
+ #node --env-file=../.env json_to_pgsql.js json/company_sast.json ../../hasura
+ #node --env-file=../.env json_to_pgsql.js json/company_shp_more_than_1_percent.json ../../hasura
 #node --env-file=../.env json_to_pgsql.js json/all_tables.json ../../hasura
+#node --env-file=../.env json_to_pgsql.js json/company_balance_sheet.json ../../hasura
+# node --env-file=../.env json_to_pgsql.js json/company_quarterly_results.json ../../hasura
+# node --env-file=../.env json_to_pgsql.js json/company_profit_and_loss.json ../../hasura
+# node --env-file=../.env json_to_pgsql.js json/company_balance_sheet.json ../../hasura
+# node --env-file=../.env json_to_pgsql.js json/company_cash_flow.json ../../hasura
+# node --env-file=../.env json_to_pgsql.js json/company_half_yearly_results.json ../../hasura
+# node --env-file=../.env json_to_pgsql.js json/company_nine_months_results.json ../../hasura
+# node --env-file=../.env json_to_pgsql.js json/company_yearly_results.json ../../hasura
+# node --env-file=../.env json_to_pgsql.js json/company_balance_sheet_quarterly.json ../../hasura
+# node --env-file=../.env json_to_pgsql.js json/company_balance_sheet_half_yearly.json ../../hasura
+# node --env-file=../.env json_to_pgsql.js json/company_balance_sheet_yearly.json ../../hasura
 
 #ls -l json | grep -v 'all_tables.json'| awk 'NR>1 {print "node --env-file=../.env persist_data_for_tables_json.js json/" $NF}'  
 
@@ -10,7 +27,7 @@ node csv_to_json.js /Users/sachetsingh1/telegram-mini-app/packages/server/middle
 #   node --env-file=../.env persist_data_for_tables_json.js json/company_sector_master.json
 #   node --env-file=../.env persist_data_for_tables_json.js json/company_master.json
 
-#node --env-file=../.env persist_data_for_tables_json.js json/company_annual_report_data_declaration_list.json
+# node --env-file=../.env persist_data_for_tables_json.js json/company_annual_report_data_declaration_list.json
 #  node --env-file=../.env persist_data_for_tables_json.js json/company_auditor_s_report.json
 #  node --env-file=../.env persist_data_for_tables_json.js json/company_balance_sheet.json
 #  node --env-file=../.env persist_data_for_tables_json.js json/company_bankers.json
@@ -37,7 +54,7 @@ node csv_to_json.js /Users/sachetsingh1/telegram-mini-app/packages/server/middle
 # node --env-file=../.env persist_data_for_tables_json.js json/company_insider_trading.json
 # node --env-file=../.env persist_data_for_tables_json.js json/company_liquidity_ratios.json
 # node --env-file=../.env persist_data_for_tables_json.js json/company_location.json
-# node --env-file=../.env persist_data_for_tables_json.js json/company_management_biodata_.json
+# node --env-file=../.env persist_data_for_tables_json.js json/company_management_biodata.json
 # node --env-file=../.env persist_data_for_tables_json.js json/company_margin_ratio.json
 # node --env-file=../.env persist_data_for_tables_json.js json/company_nine_months_results.json
 # node --env-file=../.env persist_data_for_tables_json.js json/company_notes_to_account.json

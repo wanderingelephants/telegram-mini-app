@@ -217,7 +217,7 @@ ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Des
 ,,,,,,,,co_code,Int,CMOTS Company Code,TRUE,TRUE,
 ,,,,,,,,lname,varchar(100),Company Long Name,,,
 ,,,,,,,,bnk_name,varchar(50),Bank Name,TRUE,TRUE,bank_name
-7,Management (biodata),http://jwttoken.cmots.com/Aidea/api/Biodata/6,EOD,11:30 PM,Once on trading day,cocode,CMOTS Company code,Output,OutputType,OutDesc,,,
+7,Management Biodata,http://jwttoken.cmots.com/Aidea/api/Biodata/6,EOD,11:30 PM,Once on trading day,cocode,CMOTS Company code,Output,OutputType,OutDesc,,,
 ,,,,,,,,co_code,Int,CMOTS Company Code,TRUE,TRUE,
 ,,,,,,,,lname,varchar(100),Company Long Name,,,
 ,,,,,,,,memo,ntext,memo,,,
@@ -427,7 +427,7 @@ ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Des
 ,,,,,,,,EquityIssued,float,EquityIssued,,,
 ,,,,,,,,EquitySubs,float,EquitySubs,,,
 ,,,,,,,,FaceValue,int,FaceValue,,,
-,,,,,,,,EquitySharesPaidUp,BigInt,EquitySharesPaidUp,,,
+,,,,,,,,EquitySharesPaidUp,float,EquitySharesPaidUp,,,
 ,,,,,,,,EquityPaidUp,float,EquityPaidUp,,,
 23,Pledged Shares,http://jwttoken.cmots.com/Aidea/api/Pledgesharesdetails/6,EOD,11:30 PM,Once on trading day,cocode,CMOTS Company Code,Output,OutputType,OutDesc,,,
 ,,,,,,,,co_code,int,CMOTS Company Code,TRUE,TRUE,
@@ -450,13 +450,13 @@ ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Des
 ,,,,,,,,personname,Varchar(100),PERSON NAME,TRUE,TRUE,insider_name
 ,,,,,,,,category,Varchar(100),CATEGORY,TRUE,TRUE,insider_category
 ,,,,,,,,typeofsecuritiesheldprior,Varchar(100),Type of Securities held Prior,TRUE,TRUE,type_of_securities_before
-,,,,,,,,numberofsecuritiesheldprior,Int,Number of Securities held Prior,,,number_of_securites_before
+,,,,,,,,numberofsecuritiesheldprior,float,Number of Securities held Prior,,,number_of_securites_before
 ,,,,,,,,percentage_securitiesheldprior,Float,Percentage Securitie sheld Prior,,,percent_of_securites_before
-,,,,,,,,valueofsecurities,Int,Value of Securities,,,value_of_securites_before
-,,,,,,,,totalsecurities,Int,Total Securities,,,total_securities
+,,,,,,,,valueofsecurities,float,Value of Securities,,,value_of_securites_before
+,,,,,,,,totalsecurities,float,Total Securities,,,total_securities
 ,,,,,,,,transactiontype,Varchar(100),Transaction Type,TRUE,TRUE,transaction_type
 ,,,,,,,,typeofsecuritiesheldpost,varchar(50),Type of Securities held Post,,,type_of_securities_post_after
-,,,,,,,,numberofsecuritiesheldpost,Int,Number of Securities held Post,,,number_of_securites_after
+,,,,,,,,numberofsecuritiesheldpost,float,Number of Securities held Post,,,number_of_securites_after
 ,,,,,,,,percentage_securitiesheldpost,Float,Securities held Post(%),,,percentage_of_securites_after
 ,,,,,,,,fromdateofacquisition,Datetime,FromDate of Acquisition,TRUE,TRUE,from_date_of_transaction
 ,,,,,,,,todateofacquisition,Datetime,ToDate of Acquisition,TRUE,TRUE,to_date_of_transaction
@@ -470,9 +470,9 @@ ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Des
 ,,,,,,,,TransactionPeriod,Datetime,Transaction Period,TRUE,TRUE,transaction_date
 ,,,,,,,,Acq_Sale,varchar(100),Acquired Sale,TRUE,TRUE,acquistion_or_sale
 ,,,,,,,,ModeofBuy_Sale,varchar(100),Mode of Buy Sale,TRUE,TRUE,transaction_mode
-,,,,,,,,TransactedQuantity,Int,Transacted Quantity,,,transacted_quantity
+,,,,,,,,TransactedQuantity,float,Transacted Quantity,,,transacted_quantity
 ,,,,,,,,TransactedQuantity_PerChange,Float,Transacted Quantity Per Change,,,transacted_quantity_percent_change
-,,,,,,,,HoldingAfterTransactionQuantity,Int,Holding After Transaction Quantity,,,holding_quantity_after_transaction
+,,,,,,,,HoldingAfterTransactionQuantity,float,Holding After Transaction Quantity,,,holding_quantity_after_transaction
 ,,,,,,,,HoldingAfterTransaction_PerChange_TotalCapital,Float,Holding After Transaction Percentage Change Total Capital,,,holding_percentage_change_in_total_capital
 ,,,,,,,,HoldingAfterTransaction_PerChange_DilutedCapital,Float,Holding After Transaction Pecentage Change Diluted Capital,,,holding_percentage_change_in_diluted_capital
 ,,,,,,,,ExchangeReportedDate,Datetime,Exchange Reported Date,TRUE,TRUE,transaction_date
@@ -497,7 +497,7 @@ ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Des
 ,,,,,,,,date,Date,Date,TRUE,TRUE,report_date
 ,,,,,,,,Type,varchar(100),Type,TRUE,TRUE,shareholder_type
 ,,,,,,,,Name,varchar(100),Name,TRUE,TRUE,shareholder_name
-,,,,,,,,NOOFshares,BigInt,No of Shares,,,number_of_shares
+,,,,,,,,NOOFshares,float,No of Shares,,,number_of_shares
 ,,,,,,,,perstake,Float,Percentage Stake,,,percentage_stake
 1,Margin Ratio,http://jwttoken.cmots.com/Aidea/api/MarginRatios/476/C,EOD,11:30 PM,Once on trading day,cocode,CMOTS Company code,Output,OutputDataType,OutputDescription,,,
 ,,,,,,,,YRC,Int,Year Count,TRUE,TRUE,

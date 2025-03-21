@@ -32,23 +32,33 @@ const formatDate = (dateStr) => {
     .replace(/or/g, 'or')             // Keep 'or' as is (for cases like "sales_or_income")
     .trim();
 }*/
-function expandObject(input, co_code) {
+let key_category = ""
+function expandObject(input, co_code, isconsolidated) {
   const output = [];
   const { COLUMNNAME, RID, rowno, ...rest } = input;
-  const key = abbreviateColumnName(COLUMNNAME); // Clean the column name
+  let key = COLUMNNAME//abbreviateColumnName(COLUMNNAME); // Clean the column name
+  if (key.endsWith(":")) {
+    key_category = key;
+    key = ""
+  }
   for (const prop in rest) {
     const match = prop.match(/^Y(\d{4})(\d{2})$/);// Match format YYYYYQQ
     if (match) {
       const year = parseInt(match[1], 10);
-      const quarter = parseInt(match[2], 10);
-      const month = quarter * 3;
+      const month = parseInt(match[2], 10);
+      const quarter = month / 3;
       
       output.push({
-        [key]: rest[prop],
+        key,
+        key_category,
+        value: rest[prop],
+        isconsolidated,
         month,
         quarter,
         year,
         co_code,
+        rid: RID,
+        rowno, 
         created_at: formatISTDateTime(),
         updated_at: formatISTDateTime(),
       });
@@ -83,28 +93,50 @@ function transformKeysToLowercase(data, tableDef) {
   }
   return data;
 }
-async function processTableApiURL(table){
-  console.log(table.API_URL, table.Input)
+async function processTableApiURL(table, maxTries = 3) {
+  let attempts = 0;
   let response;
+
+  while (attempts < maxTries) {
     try {
+      console.log(table.API_URL)
       response = await axios.get(table.API_URL, axiosConfig);
       if (!response.data) {
-        console.log("response.data is null", response)
-        return
+        console.log("response.data is null", response);
+        return;
       }
       if (!response.data.data) {
-        console.log("response.data.data is null", response)
-        return
+        console.log("response.data.data is null for url", table.API_URL, response.data);
+        return;
       }
-      console.log("Record size", response.data.data.length)
+      console.log("Record size", response.data.data.length);
+      
+      if (response.data.data.length > 0) {
+        if (response.data.data[0].rowno) {
+          response.data.data = response.data.data.sort((a, b) => a.rowno - b.rowno);
+          await processResultsData(table, response);
+          return;
+        }
+      }
       for (const record of response.data.data) {
         if (record.COLUMNNAME === null) continue;
-        !record.COLUMNNAME ? await processNonResultsData(table, record) : await processResultsData(table, record) 
+        if (!record.COLUMNNAME) await processNonResultsData(table, record);
+      }
+      return; // Exit function if API call is successful
+    } catch (e) {
+      console.error(`Attempt ${attempts + 1} failed:`, e.message, table.API_URL);
+      if (e.code === 'ETIMEDOUT') {
+        attempts++;
+        if (attempts < maxTries) {
+          console.log(`Retrying (${attempts}/${maxTries})...`);
+          await new Promise(res => setTimeout(res, 2000)); // Wait before retrying
+        }
+      } else {
+        break; // If the error is not a timeout, stop retrying
       }
     }
-    catch (e) {
-      console.log(e)
-    }
+  }
+  console.error("Max retries reached. Unable to fetch data.");
 }
 async function getMasterCodes(masterTableName){
   let codes =  []
@@ -136,6 +168,7 @@ async function getMasterCodes(masterTableName){
   return codes
 }
 async function persistData(inputJsonPath) {
+  let t1 = new Date()
   // Read and parse the JSON file
   const jsonData = JSON.parse(fs.readFileSync(inputJsonPath, 'utf8'));
   // Create migration folder if it doesn't exist
@@ -168,6 +201,8 @@ async function persistData(inputJsonPath) {
     }
     
   }
+  let t2 = new Date()
+  console.log("time taken", t2.getTime() - t1.getTime())
 
 }
 async  function processChildrenOfMaster(table){
@@ -189,37 +224,44 @@ async  function processChildrenOfMaster(table){
       console.log("iterate over sect code");
       for (const sect_code of masterCodes){
         table.API_URL = table.API_URL.replace(/\/(\d+)(\/[^\/]+)?$/, `/${sect_code}$2`);
-        console.log(table.API_URL)
         await processTableApiURL(table)
       }
       break;
       case "co_code":
-      console.log("iterate over co code");
       masterCodes = await getMasterCodes("company_master")
-      for (const sect_code of masterCodes){
-        table.API_URL = table.API_URL.replace(/\/(\d+)(\/[^\/]+)?$/, `/${sect_code}$2`);
-        console.log(table.API_URL)
+      for (const co_code of masterCodes){
+        table.API_URL = table.API_URL.replace(/\/(\d+)(\/[^\/]+)?$/, `/${co_code}$2`);
         await processTableApiURL(table)
+        if (table.API_URL.endsWith("/C")){
+          table.API_URL = table.API_URL.replace(/\/[^\/]+$/, `/S`);
+          await processTableApiURL(table)
+        }
+        else if (table.API_URL.endsWith("/S")){
+          table.API_URL = table.API_URL.replace(/\/[^\/]+$/, `/C`);
+          await processTableApiURL(table)
+        }
       }
       
       break;
     }
 }
-async function processResultsData(table, record) {
+async function processResultsData(table, response) {
   const parts = table.API_URL.split('/');
+  const isconsolidated = parts[parts.length - 1]  === "C"  ? true : false
   const len = parts.length;
-  const key = abbreviateColumnName(record.COLUMNNAME); 
-  // Number is either the last token or second last token
   const possibleNumber = parts[len - 2].match(/^\d+$/) ? parts[len - 2] : parts[len - 1];
-
   const co_code = parseInt(possibleNumber)
-
-  const mutationVariables = expandObject(record, co_code)
+  let mutationVariables = []
+  for (const record of response.data.data) {
+    if (record.COLUMNNAME === null) continue;
+    const mutationVariablesForRecord = expandObject(record, co_code, isconsolidated)
+    mutationVariables = mutationVariables.concat(mutationVariablesForRecord)  
+  }
   const tableName = (table['Table Name']);
   const insertMutation = `mutation ${tableName}_insert($objects: [${tableName}_insert_input!]!){
   insert_${tableName}(objects: $objects, on_conflict:{
     constraint: u_${tableName},
-    update_columns: [${key}]
+    update_columns: [value]
   }){
     returning{
       id
@@ -327,5 +369,5 @@ if (require.main === module) {
 
   const inputJsonPath = process.argv[2];
 
-  persistData(inputJsonPath);
+  persistData(inputJsonPath).then(r => console.log(r));
 }

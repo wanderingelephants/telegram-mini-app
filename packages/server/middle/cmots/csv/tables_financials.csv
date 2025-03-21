@@ -1,0 +1,111 @@
+ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Description,Column_Name,Column_DataType,Column_Description,Is_Unique,Is_Index,GQL_Alias
+1,Quarterly Results,http://jwttoken.cmots.com/Aidea/api/QuarterlyResults/476/C,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description,,,
+,,,,,,,,co_code,Int,CMOTS Company Code,TRUE,TRUE,
+,,,,,,,,isConsolidated,Boolean,Standalone/Consolidated,TRUE,TRUE,
+,,,,,,,,key_category,Varchar(100),Balance Sheet Field Category,TRUE,TRUE,
+,,,,,,,,key,Varchar(100),Balance Sheet Field,TRUE,TRUE,
+,,,,,,,,value,float,Balance Sheet Field Value,,,
+,,,,,,,,month,int,Month,TRUE,TRUE,Month
+,,,,,,,,quarter,int,Quarter,TRUE,TRUE,Quarter
+,,,,,,,,year,int,Year,TRUE,TRUE,Year
+,,,,,,,,rowno,int,rowno,TRUE,TRUE,RowNo
+,,,,,,,,RID,int,RID,TRUE,TRUE,RID
+2,Profit and Loss,http://jwttoken.cmots.com/Aidea/api/ProftandLoss/6/C,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description,,,
+,,,,,,,,co_code,Int,CMOTS Company Code,TRUE,TRUE,
+,,,,,,,,isConsolidated,Boolean,Standalone/Consolidated,TRUE,TRUE,
+,,,,,,,,key_category,Varchar(100),Balance Sheet Field Category,TRUE,TRUE,
+,,,,,,,,key,Varchar(100),Balance Sheet Field,TRUE,TRUE,
+,,,,,,,,value,float,Balance Sheet Field Value,,,
+,,,,,,,,month,int,Month,TRUE,TRUE,Month
+,,,,,,,,quarter,int,Quarter,TRUE,TRUE,Quarter
+,,,,,,,,year,int,Year,TRUE,TRUE,Year
+,,,,,,,,rowno,int,rowno,TRUE,TRUE,RowNo
+,,,,,,,,RID,int,RID,TRUE,TRUE,RID
+3,Balance Sheet,http://jwttoken.cmots.com/Aidea/api/BalanceSheet/6/C,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description,,,
+,,,,,,,,co_code,Int,CMOTS Company Code,TRUE,TRUE,
+,,,,,,,,isConsolidated,Boolean,Standalone/Consolidated,TRUE,TRUE,
+,,,,,,,,key_category,Varchar(100),Balance Sheet Field Category,TRUE,TRUE,
+,,,,,,,,key,Varchar(100),Balance Sheet Field,TRUE,TRUE,
+,,,,,,,,value,float,Balance Sheet Field Value,,,
+,,,,,,,,month,int,Month,TRUE,TRUE,Month
+,,,,,,,,quarter,int,Quarter,TRUE,TRUE,Quarter
+,,,,,,,,year,int,Year,TRUE,TRUE,Year
+,,,,,,,,rowno,int,rowno,TRUE,TRUE,RowNo
+,,,,,,,,RID,int,RID,TRUE,TRUE,RID
+4,Cash Flow,http://jwttoken.cmots.com/Aidea/api/CashFlow/93/C,EOD,11:30 PM,Once on trading day,cocode,CMOTS Company Code,Column_Name,Column_DataType,Column_Description,,,
+,,,,,,,,co_code,Int,CMOTS Company Code,TRUE,TRUE,
+,,,,,,,,isConsolidated,Boolean,Standalone/Consolidated,TRUE,TRUE,
+,,,,,,,,key_category,Varchar(100),Balance Sheet Field Category,TRUE,TRUE,
+,,,,,,,,key,Varchar(100),Balance Sheet Field,TRUE,TRUE,
+,,,,,,,,value,float,Balance Sheet Field Value,,,
+,,,,,,,,month,int,Month,TRUE,TRUE,Month
+,,,,,,,,quarter,int,Quarter,TRUE,TRUE,Quarter
+,,,,,,,,year,int,Year,TRUE,TRUE,Year
+,,,,,,,,rowno,int,rowno,TRUE,TRUE,RowNo
+,,,,,,,,RID,int,RID,TRUE,TRUE,RID
+5,Half Yearly Results,http://jwttoken.cmots.com/Aidea/api/Half-Yearly-Results/21281/C,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description,,,
+,,,,,,,,co_code,Int,CMOTS Company Code,TRUE,TRUE,
+,,,,,,,,isConsolidated,Boolean,Standalone/Consolidated,TRUE,TRUE,
+,,,,,,,,key_category,Varchar(100),Balance Sheet Field Category,TRUE,TRUE,
+,,,,,,,,key,Varchar(100),Balance Sheet Field,TRUE,TRUE,
+,,,,,,,,value,float,Balance Sheet Field Value,,,
+,,,,,,,,month,int,Month,TRUE,TRUE,Month
+,,,,,,,,quarter,int,Quarter,TRUE,TRUE,Quarter
+,,,,,,,,year,int,Year,TRUE,TRUE,Year
+,,,,,,,,rowno,int,rowno,TRUE,TRUE,RowNo
+,,,,,,,,RID,int,RID,TRUE,TRUE,RID
+6,Nine Months Results,http://jwttoken.cmots.com/Aidea/api/Nine-Month-Result/6/C,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description,,,
+,,,,,,,,co_code,Int,CMOTS Company Code,TRUE,TRUE,
+,,,,,,,,isConsolidated,Boolean,Standalone/Consolidated,TRUE,TRUE,
+,,,,,,,,key_category,Varchar(100),Balance Sheet Field Category,TRUE,TRUE,
+,,,,,,,,key,Varchar(100),Balance Sheet Field,TRUE,TRUE,
+,,,,,,,,value,float,Balance Sheet Field Value,,,
+,,,,,,,,month,int,Month,TRUE,TRUE,Month
+,,,,,,,,quarter,int,Quarter,TRUE,TRUE,Quarter
+,,,,,,,,year,int,Year,TRUE,TRUE,Year
+,,,,,,,,rowno,int,rowno,TRUE,TRUE,RowNo
+,,,,,,,,RID,int,RID,TRUE,TRUE,RID
+10,Yearly Results,http://jwttoken.cmots.com/Aidea/api/Yearly-Results/6/C,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description,,,
+,,,,,,,,co_code,Int,CMOTS Company Code,TRUE,TRUE,
+,,,,,,,,isConsolidated,Boolean,Standalone/Consolidated,TRUE,TRUE,
+,,,,,,,,key_category,Varchar(100),Balance Sheet Field Category,TRUE,TRUE,
+,,,,,,,,key,Varchar(100),Balance Sheet Field,TRUE,TRUE,
+,,,,,,,,value,float,Balance Sheet Field Value,,,
+,,,,,,,,month,int,Month,TRUE,TRUE,Month
+,,,,,,,,quarter,int,Quarter,TRUE,TRUE,Quarter
+,,,,,,,,year,int,Year,TRUE,TRUE,Year
+,,,,,,,,rowno,int,rowno,TRUE,TRUE,RowNo
+,,,,,,,,RID,int,RID,TRUE,TRUE,RID
+11,Balance Sheet Quarterly,http://jwttoken.cmots.com/Aidea/api/QuarterlyResults-BalanceSheet/476/C,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description,,,
+,,,,,,,,co_code,Int,CMOTS Company Code,TRUE,TRUE,
+,,,,,,,,isConsolidated,Boolean,Standalone/Consolidated,TRUE,TRUE,
+,,,,,,,,key_category,Varchar(100),Balance Sheet Field Category,TRUE,TRUE,
+,,,,,,,,key,Varchar(100),Balance Sheet Field,TRUE,TRUE,
+,,,,,,,,value,float,Balance Sheet Field Value,,,
+,,,,,,,,month,int,Month,TRUE,TRUE,Month
+,,,,,,,,quarter,int,Quarter,TRUE,TRUE,Quarter
+,,,,,,,,year,int,Year,TRUE,TRUE,Year
+,,,,,,,,rowno,int,rowno,TRUE,TRUE,RowNo
+,,,,,,,,RID,int,RID,TRUE,TRUE,RID
+12,Balance Sheet Half yearly,http://jwttoken.cmots.com/Aidea/api/Results-BalanceSheet-Half-yearly/476/C,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description,,,
+,,,,,,,,co_code,Int,CMOTS Company Code,TRUE,TRUE,
+,,,,,,,,isConsolidated,Boolean,Standalone/Consolidated,TRUE,TRUE,
+,,,,,,,,key_category,Varchar(100),Balance Sheet Field Category,TRUE,TRUE,
+,,,,,,,,key,Varchar(100),Balance Sheet Field,TRUE,TRUE,
+,,,,,,,,value,float,Balance Sheet Field Value,,,
+,,,,,,,,month,int,Month,TRUE,TRUE,Month
+,,,,,,,,quarter,int,Quarter,TRUE,TRUE,Quarter
+,,,,,,,,year,int,Year,TRUE,TRUE,Year
+,,,,,,,,rowno,int,rowno,TRUE,TRUE,RowNo
+,,,,,,,,RID,int,RID,TRUE,TRUE,RID
+13,Balance Sheet Yearly,http://jwttoken.cmots.com/Aidea/api/Results-BalanceSheet-Yearly/6/C,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description,,,
+,,,,,,,,co_code,Int,CMOTS Company Code,TRUE,TRUE,
+,,,,,,,,isConsolidated,Boolean,Standalone/Consolidated,TRUE,TRUE,
+,,,,,,,,key_category,Varchar(100),Balance Sheet Field Category,TRUE,TRUE,
+,,,,,,,,key,Varchar(100),Balance Sheet Field,TRUE,TRUE,
+,,,,,,,,value,float,Balance Sheet Field Value,,,
+,,,,,,,,month,int,Month,TRUE,TRUE,Month
+,,,,,,,,quarter,int,Quarter,TRUE,TRUE,Quarter
+,,,,,,,,year,int,Year,TRUE,TRUE,Year
+,,,,,,,,rowno,int,rowno,TRUE,TRUE,RowNo
+,,,,,,,,RID,int,RID,TRUE,TRUE,RID

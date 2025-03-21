@@ -15,6 +15,8 @@ function normalizeDataType(dataType) {
   const type = dataType.toLowerCase();
 
   // Handle specific mappings according to requirements
+  if (type === "boolean") return "boolean";
+  if (type === "bigint") return "bigint";
   if (type === 'int' || type.includes('integer')) return 'integer';
   if (type === 'float' || type.includes('number') || type.includes('decimal')) return 'numeric';
   if (type.includes('varchar') || type.includes('char')) return 'text';
