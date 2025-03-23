@@ -19,6 +19,30 @@
       <v-card class="mb-6" flat>
         <v-card-title>{{ tab.label }}</v-card-title>
         <v-card-subtitle>All Fields are Promptable in AI Assistant</v-card-subtitle>
+        <div>
+    <v-icon
+      size="small"
+      color="grey"
+      class="ml-1"
+      @click="dialog = true"
+    >
+      $mdiInformationOutline
+    </v-icon>
+
+    <v-dialog v-model="dialog" max-width="400">
+      <v-card>
+        <v-card-title class="headline">Prompts Help</v-card-title>
+        <v-card-text>
+          In your Prompts, you can include any of the financial fields across Balance Sheet, PnL, Cashflow and others, and combine them 
+          arbitrarily with any technical or subjective signals. E.g. "Get me companies whose Cash and Cash Equivalents is more than X, and who made announcements related to large order wins in last 15 days. Show me only companies below 5000 Cr marketcap and those who hit 52-Week highs in last 30 days"
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" @click="dialog = false">Close</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </div>
         <v-card-text>
           <component :is="tab.component" :symbol="symbol" :entity="tab.entity"/>
         </v-card-text>
@@ -74,6 +98,7 @@ export default {
   },
   data() {
     return {
+      dialog: false,
       selectedTab: "CompanyDetails",
       symbol: "",
       //symbol: this.$route.params.symbol || "",

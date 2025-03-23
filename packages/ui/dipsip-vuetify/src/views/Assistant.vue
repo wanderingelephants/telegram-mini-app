@@ -177,6 +177,7 @@
             append-inner-icon="$send"
             @click:append-inner="sendMessage"
           />
+          <span><v-icon @click="sendMessage">$mdiSend</v-icon></span>
         </v-card-actions>
       </div>
     </v-card>

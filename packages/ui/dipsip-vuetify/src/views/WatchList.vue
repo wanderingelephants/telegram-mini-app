@@ -109,8 +109,7 @@ export default {
   components: {
     MutualFundAnalysis,
   //  PromptChat,
-    GoogleSignIn,
-    StockWatchList
+    GoogleSignIn
   },
   data() {
     return {
