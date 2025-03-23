@@ -178,6 +178,9 @@ function processCSV(csvFilePath) {
 
       const abbreviated = desc//abbreviateColumnName(desc)
       gqlAlias = abbreviated === "co_code" ? "co_code" : record.GQL_Alias ? record.GQL_Alias : currentTable["Table Name"].indexOf("_ratio") > -1 ? record.Column_Name : "" 
+      if (currentTable["Table Name"].toLowerCase().indexOf("trailing_twelvemonths")){
+        if (gqlAlias.toLowerCase() === "ttmason" || gqlAlias.toLowerCase() === "date" || gqlAlias.toLowerCase() === "record_date") gqlAlias = ""
+      }
       /*if (currentTable["Table Name"].indexOf("solvency") > -1){
         console.log(currentTable["Table Name"], abbreviated, record.Column_Name, gqlAlias)
       }*/

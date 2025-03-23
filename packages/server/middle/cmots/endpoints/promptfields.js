@@ -1,6 +1,7 @@
 const fs = require("fs")
 const path = require("path")
-const data = require("../json/all_tables.json")
+const data = require("../json/all_tables.json");
+const { postToGraphQL } = require("../../lib/helper");
 let mf_data = require(path.join(process.env.DATA_ROOT_FOLDER, "mutual_funds.json")).filter(c => (c.PromptQL === "Retail" || c.PromptQL === "Enterprise"));
 
 const route = async (req, res) => {
@@ -11,8 +12,8 @@ const route = async (req, res) => {
     try{
         const forDisplay = "true" ===  req.query.forDisplay.toLowerCase() ? true : false
         console.log("forDisplay", forDisplay)
-        let promptable = data.filter(c => (c.PromptQL === "Retail" || c.PromptQL === "Enterprise"))
-
+        let promptable = data.filter(c => (c["Table Name"].toLowerCase().indexOf("_ratio") > -1))
+        console.log("promptable", promptable.length)
         let table_identifier = "Table Name"
         let mappedData;
         
@@ -36,21 +37,18 @@ const route = async (req, res) => {
                   }
             })
         }
+        let finalData = [];
+        finalData = mf_data.concat(mappedData);
+        //console.log(finalData)
+        for (const fin of ["balance_sheet", "cash_flow", "profit_and_loss"]){
+            const distinctKeysQuery = `query {company_${fin}(distinct_on: key) {key}}`
+            const resp = await postToGraphQL({query: distinctKeysQuery, variables: {}})
+            const fields = resp.data[`company_${fin}`].filter(r =>  r.key !== "").map(r => r.key.trim())
+            console.log(Array.isArray(finalData), finalData.length)
+            forDisplay ? finalData.push({PromptQL: 'Retail', array_name: fin, fields}) : finalData.push({array_name: fin, fields})
+        }
         
-        
-        //const promptable = data.filter(c => (c["Table Name"] === "company_master"))
-        //console.log(promptable)
-        /*const mapped_column = forDisplay === true ? "GQL_Alias" :  "Column_Name"
-        const mappedData = promptable.map(item => {
-            const fields = item.Columns.filter(c => (c.GQL_Alias && c.GQL_Alias !== "" && c.GQL_Alias !== "co_code")).map(col => col[mapped_column])
-            if (forDisplay === false) fields.push("co_code")
-            return {
-            array_name: item[`${forDisplay === true ? "Table Description": "Table Name"}`].replaceAll(" ", "_"),
-            //visibility: item["PromptQL"],
-            fields
-            }
-        });*/
-        const finalData = mf_data.concat(mappedData)
+        //finalData = mf_data.concat(mappedData)
         //console.log(JSON.stringify(mappedData))
         if (forDisplay === false)  fs.writeFileSync(path.join(process.env.DATA_ROOT_FOLDER, "graphql_fields.txt"), JSON.stringify(finalData))
         res.status(200).json(finalData)
