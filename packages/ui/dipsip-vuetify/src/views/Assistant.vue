@@ -282,7 +282,7 @@ export default {
        progress: 100,
       interval: null,
       distilledModel: "reasoning_dseek",
-      title: "Stock Market Helper Agent",
+      title: "Stock Market AI Assistant",
       subTitles: [
         "Ask what Google/ChatGPT cannot answer. E.g.",
         "Which stocks are present in only 2 mutual funds",

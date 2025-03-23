@@ -78,7 +78,7 @@ fi
 
 
 
-curl -X GET http://jwttoken.cmots.com/Aidea/api/CashFlow/93/S \
+curl -X GET http://jwttoken.cmots.com/Aidea/api/BalanceSheet/6/C \
 -H "Authorization: Bearer $cmots_api_token" 
 
 #| jq -r '.data[].COLUMNNAME'

@@ -47,7 +47,7 @@ function expandObject(input, co_code, isconsolidated) {
       const year = parseInt(match[1], 10);
       const month = parseInt(match[2], 10);
       const quarter = month / 3;
-      
+
       output.push({
         key,
         key_category,
@@ -58,13 +58,13 @@ function expandObject(input, co_code, isconsolidated) {
         year,
         co_code,
         rid: RID,
-        rowno, 
+        rowno,
         created_at: formatISTDateTime(),
         updated_at: formatISTDateTime(),
       });
     }
   }
-  
+
   return output;
 }
 function transformKeysToLowercase(data, tableDef) {
@@ -110,18 +110,21 @@ async function processTableApiURL(table, maxTries = 3) {
         return;
       }
       console.log("Record size", response.data.data.length);
-      
+
       if (response.data.data.length > 0) {
         if (response.data.data[0].rowno) {
           response.data.data = response.data.data.sort((a, b) => a.rowno - b.rowno);
           await processResultsData(table, response);
           return;
         }
+        else {
+          await processNonResultsData(table, response)
+        }
       }
-      for (const record of response.data.data) {
+      /*for (const record of response.data.data) {
         if (record.COLUMNNAME === null) continue;
         if (!record.COLUMNNAME) await processNonResultsData(table, record);
-      }
+      }*/
       return; // Exit function if API call is successful
     } catch (e) {
       console.error(`Attempt ${attempts + 1} failed:`, e.message, table.API_URL);
@@ -138,10 +141,10 @@ async function processTableApiURL(table, maxTries = 3) {
   }
   console.error("Max retries reached. Unable to fetch data.");
 }
-async function getMasterCodes(masterTableName){
-  let codes =  []
+async function getMasterCodes(masterTableName) {
+  let codes = []
   let code_column_name = ""
-  switch (masterTableName.toLowerCase()){
+  switch (masterTableName.toLowerCase()) {
     case "company_index_master":
       code_column_name = "index_code"
       break;
@@ -151,18 +154,18 @@ async function getMasterCodes(masterTableName){
     case "company_master":
       code_column_name = "co_code"
       break;
-      
+
   }
-  try{
+  try {
     const query = `query get_${masterTableName}{
       ${masterTableName}{
         ${code_column_name}
       }
     }`
-    const resp = await postToGraphQL({query, variables:{}})
+    const resp = await postToGraphQL({ query, variables: {} })
     codes = resp.data[masterTableName].map(o => o[`${code_column_name}`])
   }
-  catch(e){
+  catch (e) {
     console.error(e)
   }
   return codes
@@ -182,72 +185,71 @@ async function persistData(inputJsonPath) {
       const pgType = convertToPgType(column.Column_DataType);
       column.pgDataType = pgType
     });
-    
-    if (table["Table Name"].toLowerCase().endsWith("_master"))
-    {
+
+    if (table["Table Name"].toLowerCase().endsWith("_master")) {
       await processTableApiURL(table)
       return
     }
-    if (table.Input === "index_code" || table.Input  === "sect_code" || table.Input ===  "co_code"){
+    if (table.Input === "index_code" || table.Input === "sect_code" || table.Input === "co_code") {
       await processChildrenOfMaster(table)
       return
     }
-    if (table.Input === "latestdate"){
+    if (table.Input === "latestdate") {
       const latestDate = moment().subtract(1, "days").utcOffset(330).format("YYYY-MM-DD");
       table.API_URL = table.API_URL.replace(/[^/]+$/, latestDate);
       console.log(table.API_URL);
       await processTableApiURL(table)
       return
     }
-    
+
   }
   let t2 = new Date()
   console.log("time taken", t2.getTime() - t1.getTime())
 
 }
-async  function processChildrenOfMaster(table){
+async function processChildrenOfMaster(table) {
   let masterCodes = []
-    switch(table.Input){
-      case "index_code":
+  switch (table.Input) {
+    case "index_code":
       console.log("iterate over index code");
       masterCodes = await getMasterCodes("company_index_master")
-      for (const sect_code of masterCodes){
+      for (const sect_code of masterCodes) {
         table.API_URL = table.API_URL.replace(/\/(\d+)(\/[^\/]+)?$/, `/${sect_code}$2`);
         console.log(table.API_URL)
         await processTableApiURL(table)
       }
-      
+
       break;
-      case "sect_code":
+    case "sect_code":
       masterCodes = await getMasterCodes("company_sector_master")
-        
+
       console.log("iterate over sect code");
-      for (const sect_code of masterCodes){
+      for (const sect_code of masterCodes) {
         table.API_URL = table.API_URL.replace(/\/(\d+)(\/[^\/]+)?$/, `/${sect_code}$2`);
         await processTableApiURL(table)
       }
       break;
-      case "co_code":
+    case "co_code":
       masterCodes = await getMasterCodes("company_master")
-      for (const co_code of masterCodes){
+      for (const co_code of masterCodes) {
         table.API_URL = table.API_URL.replace(/\/(\d+)(\/[^\/]+)?$/, `/${co_code}$2`);
         await processTableApiURL(table)
-        if (table.API_URL.endsWith("/C")){
+        if (table.API_URL.endsWith("/C")) {
           table.API_URL = table.API_URL.replace(/\/[^\/]+$/, `/S`);
           await processTableApiURL(table)
         }
-        else if (table.API_URL.endsWith("/S")){
+        else if (table.API_URL.endsWith("/S")) {
           table.API_URL = table.API_URL.replace(/\/[^\/]+$/, `/C`);
           await processTableApiURL(table)
         }
       }
-      
+
       break;
-    }
+  }
 }
 async function processResultsData(table, response) {
   const parts = table.API_URL.split('/');
-  const isconsolidated = parts[parts.length - 1]  === "C"  ? true : false
+  const isconsolidated = parts[parts.length - 1] === "C" ? true : false
   const len = parts.length;
   const possibleNumber = parts[len - 2].match(/^\d+$/) ? parts[len - 2] : parts[len - 1];
   const co_code = parseInt(possibleNumber)
@@ -255,7 +257,7 @@ async function processResultsData(table, response) {
   for (const record of response.data.data) {
     if (record.COLUMNNAME === null) continue;
     const mutationVariablesForRecord = expandObject(record, co_code, isconsolidated)
-    mutationVariables = mutationVariables.concat(mutationVariablesForRecord)  
+    mutationVariables = mutationVariables.concat(mutationVariablesForRecord)
   }
   const tableName = (table['Table Name']);
   const insertMutation = `mutation ${tableName}_insert($objects: [${tableName}_insert_input!]!){
@@ -279,50 +281,59 @@ async function processResultsData(table, response) {
   }
 
 }
-async function processNonResultsData(table, record) {
+async function processNonResultsData(table, response) {
   //console.log("processNonResultsData", record)
-  let mutationVariables = {};
-  mutationVariables = transformKeysToLowercase(record, table)
-  mutationVariables["created_at"] = formatISTDateTime(); mutationVariables["updated_at"] = formatISTDateTime()
-  if (mutationVariables["cmotscode"]) {
-    mutationVariables["co_code"] = safeParseInt(mutationVariables["cmotscode"])
-    delete mutationVariables.cmotscode
-  }
-  const apiInputKey = table["Input"]; //co_code, sect_code or index_code, passed as param to API_URL
-  if ("co_code" === apiInputKey || "sect_code" === apiInputKey || "index_code" === apiInputKey) {
-    if (!mutationVariables[apiInputKey]) {
-      const parts = table.API_URL.split('/');
-      const len = parts.length;
-      const possibleNumber = parts[len - 2].match(/^\d+$/) ? parts[len - 2] : parts[len - 1];
-      mutationVariables[apiInputKey] = parseInt(possibleNumber)
+  let mutationVariablesAll = []
+  for (const record of response.data.data) {
+    let mutationVariables = {};
+    mutationVariables = transformKeysToLowercase(record, table)
+    mutationVariables["created_at"] = formatISTDateTime(); mutationVariables["updated_at"] = formatISTDateTime()
+    if (mutationVariables["cmotscode"]) {
+      mutationVariables["co_code"] = safeParseInt(mutationVariables["cmotscode"])
+      delete mutationVariables.cmotscode
     }
-  }
-  const columns = table.Columns;
-  const tableName = table["Table Name"];
-  Object.keys(mutationVariables).forEach((key) => {
-    const columnDef = columns.find(col => col.Column_Name.toLowerCase() === key.toLowerCase());
-    //console.log("columnDef", columnDef)
-    if (columnDef) {
-      if (columnDef.Column_DataType === "date") {
-        mutationVariables[key] = formatDate(mutationVariables[key]); // Convert to IST date format
-      } else if (columnDef.Column_DataType.toLowerCase() === "integer" || columnDef.Column_DataType.toLowerCase === "int") {
-        mutationVariables[key] = safeParseInt(mutationVariables[key]);
+    const apiInputKey = table["Input"]; //co_code, sect_code or index_code, passed as param to API_URL
+    if ("co_code" === apiInputKey || "sect_code" === apiInputKey || "index_code" === apiInputKey) {
+      if (!mutationVariables[apiInputKey]) {
+        const parts = table.API_URL.split('/');
+        const len = parts.length;
+        const possibleNumber = parts[len - 2].match(/^\d+$/) ? parts[len - 2] : parts[len - 1];
+        mutationVariables[apiInputKey] = parseInt(possibleNumber)
       }
     }
-  });
+    const columns = table.Columns;
+    Object.keys(mutationVariables).forEach((key) => {
+      const columnDef = columns.find(col => col.Column_Name.toLowerCase() === key.toLowerCase());
+      //console.log("columnDef", columnDef)
+      if (columnDef) {
+        if (columnDef.Column_DataType === "date") {
+          mutationVariables[key] = formatDate(mutationVariables[key]); // Convert to IST date format
+        } else if (columnDef.Column_DataType.toLowerCase() === "integer" || columnDef.Column_DataType.toLowerCase === "int") {
+          mutationVariables[key] = safeParseInt(mutationVariables[key]);
+        }
+      }
+    });
+    mutationVariablesAll = mutationVariablesAll.concat(mutationVariables)
+  }
+    
+  const tableName = table["Table Name"]
+  const nonUniqueColumns = table.Columns
+    .filter(col => !table.UniqueColumns.includes(col.Column_Name) && col.Column_Name !== "created_at")
+    .map(col => col.Column_Name);
+  const updateColumns = [...nonUniqueColumns].join(", ");
 
-  const insertMutation = `mutation ${tableName}_insert($object: ${tableName}_insert_input!){
-      insert_${tableName}_one(object: $object, on_conflict:{
+  const insertMutation = `mutation ${tableName}_insert($objects: [${tableName}_insert_input!]!){
+      insert_${tableName}(objects: $objects, on_conflict:{
         constraint: u_${tableName},
-        update_columns: [${table['UniqueColumns']}, updated_at]
+        update_columns: [${updateColumns}]
       }){
-        id
+        affected_rows
       }
     }`
-  
+  console.log(insertMutation)
   try {
     await postToGraphQL({
-      query: insertMutation, variables: { object: mutationVariables }
+      query: insertMutation, variables: { objects: mutationVariablesAll }
     })
 
   }

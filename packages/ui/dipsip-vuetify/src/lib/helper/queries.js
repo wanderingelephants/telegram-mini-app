@@ -49,9 +49,9 @@ mutation deleteUserMutualFundPortfolio($mutual_fund_id: Int!, $email: String!){
 const GET_USER_STOCK_PORTFOLIO  = gql `
 query  GetUserStockPortfolio($email: String!){
         portfolio_stocks(where: {user: {email : {_eq: $email}}}){
-						stock{
-              id
-              company_name
+						company_master{
+              id: co_code
+              company_name: companyname
             }
   			}
 }

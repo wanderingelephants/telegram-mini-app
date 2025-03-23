@@ -93,9 +93,16 @@ const routes = [
     component: Tools
   },
   {
-    path: '/stocks',
-    name: 'Stocks',
-    component: () => import('@/views/Stocks.vue')
+    path: '/company/:symbol',
+    name: 'CompanyDetails',
+    component: () => import('@/views/Company.vue'),
+    props: true
+  },
+  {
+    path: '/watchlist',
+    name: 'WatchList',
+    component: () => import('@/views/WatchList.vue'),
+    props: true
   },
   {
     path: '/trade',

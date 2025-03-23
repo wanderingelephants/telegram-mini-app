@@ -28,9 +28,7 @@ import {
 
 export default{
     async mounted(){
-        console.log("mounted", this.$route.params)
         const resp = await fetch("/api/chat/view?chat_uuid="+this.$route.params.uuid,  {method: "GET"})
-        console.log("resp", resp)
         const data = await resp.json()
         this.chatHistory = []
       for (const chat of data){
