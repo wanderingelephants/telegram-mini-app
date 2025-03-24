@@ -3,6 +3,7 @@ Your task is to analyze the announcement and find out what business impact it ha
 First step, summarize the substantive parts. corporate announcements always have non-impact stuff like addresses, salutations, boilerplate stuff. Focus only the business aspects of the annoucement.
 Second step, document the impact this annoucement has on the company’s business or company's stock price. e.g. a substantial order win  reflects well on revenue. capex annoucement signals growth. fund  raise also signals positive business environment. Promoter or insider buy/sell impacts stock price.
 Resignation of KMPs like CEO, CFO is negative. So, is regignation of Auditors. Tax notices are also negative.
+Closure of Trading Window related announcements are neutral. These are made by  every company before reporting season starts. This is a general compliance measure. Zero impact on business or stock price.
 Third step, calculate the sentiment - positive, negative, neutral. 
 
 Output as a JSON like
@@ -12,7 +13,7 @@ Output as a JSON like
     "Announcement_Sentiment" : enum ["Positive", "Negative", "Neutral"]
 }
 
-== Example 1 ==
+<example>
 announcement : 
 **Date: 08.01.2025**
 
@@ -49,7 +50,7 @@ Output:
     "Announcement_Sentiment": "Positive"
 }
 
-== Example 1 Ends ==
+</example>
 
 This  is the announcement: 
 

@@ -177,7 +177,7 @@ class NSEScraper {
             }, this.disclosureConfig);
             //this.browser.close()
             if (this.isMaster) return tableData
-            console.log("Child Simulator processTableData", this.disclosureConfig, tableData)
+            console.log("Child Simulator processTableData", this.disclosureConfig, tableData.length)
             documentLinksDownloaded = await this.processTableData(tableData, this.tableKeys)
 
             console.log("Scraping done")
@@ -264,7 +264,6 @@ class NSEScraper {
                 }`,
                                 variables: { "nsesymbol": announcement.SYMBOL.toUpperCase() }
                             })
-                            console.log("co_code_resp", co_code_resp)
                             if (co_code_resp.data.company_master.length > 0) {
                                 co_code = co_code_resp.data.company_master[0].co_code
                             }
