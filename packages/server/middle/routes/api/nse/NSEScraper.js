@@ -63,6 +63,7 @@ class NSEScraper {
         this.page = null;
         this.typeOfDisclosure = typeOfDisclosure;
         this.disclosureConfig = disclosures[typeOfDisclosure]
+        console.log("NSEScraper constructor", this.typeOfDisclosure, this.disclosureConfig)
         this.isMaster = isMaster
         this.storage_dir = path.join(process.env.DATA_ROOT_FOLDER, this.disclosureConfig["storage_dir_suffix"]);
         //this.announcement_url = announcement_url;
@@ -175,19 +176,22 @@ class NSEScraper {
         }, this.disclosureConfig);
         //this.browser.close()
         if (this.isMaster) return tableData
-        console.log("Child Simulator processTableData", this.disclosureConfig)
+        console.log("Child Simulator processTableData", this.disclosureConfig, tableData)
         documentLinksDownloaded = await this.processTableData(tableData, this.tableKeys)
        
         console.log("Scraping done")
         return documentLinksDownloaded;
     }
-    async updateGQL(announcement, index, year, month, day){
+    async updateGQL(announcement, index, year, month, day, co_code){
         try {
             await postToGraphQL({
-                query: `mutation StockAnnouncementInsertOne($object: stock_announcements_insert_input!) {
-insert_stock_announcements_one(object: $object) {
-id
-}
+                query: `mutation company_announcement_insert($object: company_announcements_insert_input!){
+  insert_company_announcements_one(object: $object, on_conflict:{
+    constraint: u_company_announcements,
+    update_columns: [announcement_record_date]
+  }){
+    id
+  }
 }`,
                 variables: {
                     "object": {
@@ -196,17 +200,7 @@ id
                         "announcement_text_summary": "",
                         "announcement_sentiment": -1,
                         "announcement_impact": "",
-                        "stock": {
-                            "data": {
-                                "symbol": announcement.SYMBOL,
-                                "company_name": announcement["COMPANY NAME"],
-                                "segment": index.toLowerCase() === "sme" ? 1 : 0
-                            },
-                            "on_conflict": {
-                                "constraint": "stock_symbol_key",
-                                "update_columns": ["symbol", "company_name"]
-                            }
-                        }
+                        "co_code": co_code
                     }
                 }
             })
@@ -255,6 +249,27 @@ id
                         console.log("Target PDF exists. Skip", targetPath)
                     }
                     else {
+                        let co_code;
+                        try{
+                            const co_code_resp = await postToGraphQL({
+                                query: `query company_master_by_symbol($nsesymbol: String!){
+                  company_master(where: {nsesymbol: {_eq: $nsesymbol}}){
+                    co_code
+                  }
+                }`,
+                                variables: {"nsesymbol": announcement.SYMBOL.toUpperCase()}
+                            })
+                            if  (co_code_resp.data.company_master.length > 0 ){
+                                co_code = co_code_resp.data.company_master[0].co_code
+                            }
+                            else {
+                                console.log("co_code not found. Will not download PDF or process further", announcement)
+                                return;
+                            }
+                        }
+                        catch(e){
+                            console.log(e)
+                        }
                         await fetchPDF(announcement.ATTACHMENT, path.join(targetPath, fileName), SMART_PROXY_URL)
                         try {
                             await uploadFileToS3("announcementsnse", this.storage_dir, path.join(year, month, day, index, "pdf", fileName))
@@ -263,7 +278,7 @@ id
                             console.log("Upload to S3 failed")
                             console.error(e)
                         }
-                        await this.updateGQL(announcement, index, year, month, day)
+                        await this.updateGQL(announcement, index, year, month, day, co_code)
                         await this.updateActivityLog(announcement, index, year, month, day)
                         documentLinksDownloaded[index].push(announcement.ATTACHMENT)
                     }

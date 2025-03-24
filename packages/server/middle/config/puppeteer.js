@@ -1,7 +1,7 @@
 const SMART_PROXY_URL = process.env.SMART_PROXY_URL
 
 const getPuppeteerConfig = () => {
-    const isDevelopment = process.env.NODE_ENV === 'development';
+    const isDevelopment = process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'dev';
     const isLinux = process.platform === 'linux';
     const baseArgs = ['--no-sandbox',
         '--disable-setuid-sandbox',

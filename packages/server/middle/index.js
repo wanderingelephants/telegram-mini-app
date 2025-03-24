@@ -50,8 +50,8 @@ cron.schedule('55 * * * *', async () => {
     return
   }
   console.log('Starting traffic simulation insider_trades at:', new Date().toISOString());
-  let simulator = new WebsiteTrafficSimulator("insider_trades", true, []);
-  await simulator.simulateTraffic();
+  //let simulator = new WebsiteTrafficSimulator("insider_trades", true, []);
+  //await simulator.simulateTraffic();
   console.log('Done traffic simulation insider_trades at:', new Date().toISOString());
   simulator = new WebsiteTrafficSimulator("announcements", true, []);
   await simulator.simulateTraffic();
