@@ -264,12 +264,13 @@ class NSEScraper {
                 }`,
                                 variables: { "nsesymbol": announcement.SYMBOL.toUpperCase() }
                             })
+                            console.log("co_code_resp", co_code_resp)
                             if (co_code_resp.data.company_master.length > 0) {
                                 co_code = co_code_resp.data.company_master[0].co_code
                             }
                             else {
                                 console.log("co_code not found. Will not download PDF or process further", announcement)
-                                return;
+                                continue;
                             }
                         }
                         catch (e) {

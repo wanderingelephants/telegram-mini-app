@@ -44,7 +44,7 @@ cron.schedule('30 12 * * 1-5', async () => {
   }
   else console.log("DipSip Alert Jobs not enabled on this env")
 }, { timezone: "Asia/Kolkata" })
-cron.schedule('45 * * * *', async () => {
+cron.schedule('55 * * * *', async () => {
   if (!process.env.PDF_PROCESS_URL) {
     console.log("PDF_PROCESS_URL not  defined")
     return
