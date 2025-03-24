@@ -63,15 +63,11 @@
 </v-col>
 </v-row>
               <v-btn @click="getAnnouncements" color="primary">Fetch Announcements</v-btn>
-            <stock-watch-list :announcements="announcements" :insiderTrades="insiderTrades" :candles="candles"/>
+            <announcements :announcements="announcements" :insiderTrades="insiderTrades" :candles="candles"/>
             </v-card-text>
           </v-card>
         </v-col>
       </v-row>
-      <!-- INFORMATIOn DISPLAY FOR THE WATCH LIST -->
-      <!--<v-row>
-        <stock-watch-list :announcements="announcements" :insiderTrades="insiderTrades"/>
-      </v-row> -->
       <!-- Error Snackbar -->
       <v-snackbar v-model="showError" color="error" timeout="3000">
         {{ errorMessage }}
@@ -109,7 +105,8 @@ export default {
   components: {
     MutualFundAnalysis,
   //  PromptChat,
-    GoogleSignIn
+    GoogleSignIn,
+    Announcements
   },
   data() {
     return {

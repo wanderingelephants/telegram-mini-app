@@ -46,6 +46,12 @@
       type="card"
       class="mt-4"
     ></v-skeleton-loader>
+    <v-snackbar
+    v-model="snackbar.show"
+    :timeout="snackbar.timeout"
+    :color="snackbar.color">
+    {{ snackbar.message }}
+  </v-snackbar>
   </div>
 </template>
 
@@ -104,8 +110,9 @@ export default {
             },
             fetchPolicy: "no-cache",
           });
-          this.snack.message =  "Added to Watch List"
-          this.snack.show = true
+          this.snackbar.color = "success"
+          this.snackbar.message =  "Added to Watch List"
+          this.snackbar.show = true
         } catch (e) {
           console.error(e);
         }

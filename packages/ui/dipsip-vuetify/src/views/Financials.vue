@@ -174,12 +174,10 @@ export default {
       }
     },
     processBalanceSheetData() {
-      console.log("processBalanceSheetData", this.company_balance_sheet.length)
       if (!this.company_balance_sheet.length) return;
       
       // Extract unique years and sort them
       this.years = [...new Set(this.company_balance_sheet.map(item => item.year))].sort();
-      console.log(this.years)
       // Create headers
       this.headers = [
         { text: 'Particulars', value: 'name', align: 'left', sortable: false, width: '40%' },
@@ -190,7 +188,6 @@ export default {
           sortable: false
         }))
       ];
-      console.log("heaers", this.headers)
       // Group items by category and key
       const categoriesMap = {};
       
@@ -214,7 +211,6 @@ export default {
         
         categoriesMap[key_category].items[key].values[year] = value;
       });
-      console.log("expandedCategories", this.expandedCategories)
       // Format data for display
       const displayData = [];
       
@@ -249,11 +245,7 @@ export default {
           });
         });
       });
-      console.log("displayData", displayData)
       this.company_balance_sheet_display = displayData;
-      //this.formatBalanceSheetData()
-      //console.log(this.headers)
-      //console.log("formattedBalanceSheetData", JSON.stringify(this.formattedBalanceSheetData))
     },
     
     calculateCategoryTotals(items) {

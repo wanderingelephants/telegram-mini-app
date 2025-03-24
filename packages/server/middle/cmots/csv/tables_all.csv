@@ -2,7 +2,7 @@ ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Des
 1,Company Master,http://jwttoken.cmots.com/Aidea/api/CompanyMaster,EOD,11:30 PM,Once on trading day,NA,NA,Output,OutputType,OutDesc,,,
 ,,,,,,,,co_code,Int,CMOTS Company Code,TRUE,TRUE,
 ,,,,,,,,bsecode,Int,BSE Scrip Code,,,
-,,,,,,,,nsesymbol,Varchar(100),NSE Symbol,,,
+,,,,,,,,nsesymbol,Varchar(100),NSE Symbol,TRUE,TRUE,
 ,,,,,,,,companyname,Varchar(100),Company Name,,,company_name
 ,,,,,,,,companyshortname,Varchar(100),Company Short Name,,,
 ,,,,,,,,categoryname,Varchar(100),Category Name,,,

@@ -112,7 +112,7 @@ const routes = {
 };
 router.post("/api/auth/google", routes.api.auth.google)
 router.get("/api/auth/callback", routes.api.auth.callback)
-router.get("/api/company/details/:companyEncId/:entity", verifyToken, routes.api.company.details)
+router.get("/api/company/details/:symbol/:entity", verifyToken, routes.api.company.details)
 router.get("/api/company/list", routes.api.company.list)
 router.post("/api/chat/reasoning", verifyToken, routes.api.chat.reasoning)
 router.post("/api/chat/share", verifyToken, routes.api.chat.share)

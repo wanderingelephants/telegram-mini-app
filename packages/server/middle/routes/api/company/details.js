@@ -2,12 +2,7 @@ const { postToGraphQL } = require("../../../lib/helper")
 
 const route = async(req, res) => {
     try{
-        const encId = req.params.companyEncId
-        const toks = encId.split("-")
-        const n1 = parseInt(toks[0], 8)
-        const n2 = parseInt(toks[1], 16)
-        console.log({encId, n1, n2})
-        if (n1 !== n2) res.status(500).json("error")
+        const symbol = req.params.symbol
         const entity = req.params.entity
         let table = ""
         let columns = []
@@ -33,17 +28,18 @@ const route = async(req, res) => {
         const columnList = [...columns].join("\n ")
         console.log(columnList)
         const consolidatedFilter = entity === "balancesheet" || entity === "cashflow" || entity === "profitloss"   ? "isconsolidated: {_eq: true}," : ""
-        const query = `query ${table}_get_all($co_code: Int!){
-            ${table}(where: {${consolidatedFilter}co_code: {_eq: $co_code}}){
+        const query = `query ${table}_get_all($symbol: String!){
+            ${table}(where: {${consolidatedFilter}company_master: {nsesymbol: {_eq: $symbol}}}){
                 ${columnList}
                 company: company_master{
                     name: companyname,
-                    id: co_code
+                    symbol: nsesymbol,
+                    id: co_code,
                 }
             }
         }`
         console.log(query)
-        const resp = await postToGraphQL({query, variables:{"co_code": n1}})
+        const resp = await postToGraphQL({query, variables:{"symbol": symbol}})
         res.status(200).json(resp.data[table])
     }
     catch(e){
