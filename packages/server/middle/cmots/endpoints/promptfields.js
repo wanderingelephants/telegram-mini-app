@@ -2,7 +2,7 @@ const fs = require("fs")
 const path = require("path")
 const data = require("./all_tables.json");
 const { postToGraphQL } = require("../../lib/helper");
-let mf_data = require(path.join(process.env.DATA_ROOT_FOLDER, "mutual_funds.json")).filter(c => (c.PromptQL === "Retail" || c.PromptQL === "Enterprise"));
+let mf_data = require("./mutual_funds.json").filter(c => (c.PromptQL === "Retail" || c.PromptQL === "Enterprise"));
 
 const route = async (req, res) => {
     if (!req.query.forDisplay){
