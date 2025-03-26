@@ -1,1 +1,0 @@
-node --env-file=../.env hasura_test.js

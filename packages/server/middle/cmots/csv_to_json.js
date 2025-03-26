@@ -195,6 +195,17 @@ function processCSV(csvFilePath) {
           Is_Index: record.Is_Index
         });
         if (gqlAlias !== "") currentTable.Columns[currentTable.Columns.length-1]["GQL_Alias"] = gqlAlias
+        if (abbreviated === "yrc"){
+          for (const mqr of ["month", "quarter", "year"]){
+            currentTable.Columns.push({
+              Column_Name: mqr,
+              Column_DataType: "int",
+              Column_Description: mqr,
+              Is_Unique: record.Is_Unique,
+              Is_Index: record.Is_Index
+            });
+          }
+        }
       
       }
       else console.log("Column already exists", abbreviated)

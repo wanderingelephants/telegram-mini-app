@@ -78,7 +78,13 @@ fi
 
 
 
-curl -X GET http://jwttoken.cmots.com/Aidea/api/BalanceSheet/6/C \
--H "Authorization: Bearer $cmots_api_token" 
+#curl -X GET http://jwttoken.cmots.com/Aidea/api/BalanceSheet/6/C \
+#-H "Authorization: Bearer $cmots_api_token" 
 
 #| jq -r '.data[].COLUMNNAME'
+
+#curl -X GET  http://jwttoken.cmots.com/Aidea/api/Bulk-Deals/nse/22-Mar-2025/24-Mar-2025 \
+#-H "Authorization: Bearer $cmots_api_token" 
+
+curl -X GET  http://jwttoken.cmots.com/Aidea/api/Block-Deals/nse/01-Mar-2025/24-Mar-2025 \
+-H "Authorization: Bearer $cmots_api_token" 

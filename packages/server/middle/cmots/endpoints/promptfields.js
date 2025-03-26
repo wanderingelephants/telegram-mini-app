@@ -1,8 +1,8 @@
 const fs = require("fs")
 const path = require("path")
-const data = require("./all_tables.json");
+const data = require(path.join(process.env.DATA_ROOT_FOLDER, "all_tables.json"));
 const { postToGraphQL } = require("../../lib/helper");
-let mf_data = require("./mutual_funds.json").filter(c => (c.PromptQL === "Retail" || c.PromptQL === "Enterprise"));
+let mf_data = require(path.join(process.env.DATA_ROOT_FOLDER, "mutual_funds.json")).filter(c => (c.PromptQL === "Retail" || c.PromptQL === "Enterprise"));
 
 const route = async (req, res) => {
     if (!req.query.forDisplay){
@@ -18,7 +18,6 @@ const route = async (req, res) => {
         let mappedData;
         
         if (forDisplay){
-            promptable = promptable.filter(c => c["Table Name"] !== "company_master")
             mf_data = mf_data.map(({array_name, fields, PromptQL})=>({array_name, fields, PromptQL}))
             table_identifier = "Table Description"
             mappedData = promptable.map(item => {

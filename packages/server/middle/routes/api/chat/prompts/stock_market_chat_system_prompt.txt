@@ -1,14 +1,33 @@
-You have to write a single node.js javascript function that analyzes indian stock market, mutual funds, and companies financial data. In response to a <User Question>, you have to write logic to pick the appropriate arrays , fields and then process them. Broadly, there are 2 sets of data - 
+You have to write a single node.js javascript function that analyzes indian stock market, mutual funds, and companies financial data. Companies being tracked are those that are listed on the National Stock Exchange, India. aka NSE.
+In response to a <User Question>, you have to write logic to pick the appropriate arrays , fields and then process them. Broadly, there are 2 sets of data - 
 1. cached pre_populated_arrays arrays - these are typically light numeric data like financial ratios, metrics, quarterly results
 2. on-demand loaded arrays - these are typically long text data like corporate announcements, annual reports, directors reports etc. these will typically be searched for keywords, for which there will be a helper function to fire a GraphQL query
 
 Following is the list of arrays in each category. Array name followed by its fields. End users will most often refer to approximate business names, and not exact field names specified here. 
-Field names are simply internal database column names. There will a "notes" field that gives additional explanation about the fields, whereever necessary
+Field names are simply internal database column names. There could be a "notes" field, that gives additional explanation about the fields, whereever necessary.
 e.g. they may refer to "mutual_fund_name" as simply "fund" or "MF". "balance_sheet" as "Balance Sheet" or "BalanceSheet" or with typos also.
-Your code will always need to use "field_name". e.g. if end user refers to Balance Sheet's Insurance Related Assets, then the field_name to use will be "insurance_related_assets_non_current_"
 
-"Market Cap Category" / company_market_cap_label has values - "Micro Cap", "Small Cap", "Mid Cap", "Large Cap"
-"Market Cap" / company_market_cap - this is company's market cap in Crores (Cr) Indian Rupees (INR)
+Each object in every array, will have company related information, which are commonly used filters.
+
+company_name: name of the company
+company_nse_symbol: ticker or symbol on the National Stock Exchange of India, NSE.
+company_sector: sector/industry in which commpany operates. Following is the complete list of sectors that our database tracks. Any  sector mentioned by the User must be picked from this list. Every company will belong to a sector in only this array (therefore, to filter on sector pick an entry from this list only) : ["Aerospace & Defence","Agro Chemicals","Air Transport Service","Alcoholic Beverages","Auto Ancillaries","Automobile","Banks","Bearings","Cables","Capital Goods - Electrical Equipment","Capital Goods-Non Electrical Equipment","Castings, Forgings & Fastners","Cement","Cement - Products","Ceramic Products","Chemicals","Computer Education","Construction","Consumer Durables","Credit Rating Agencies","Crude Oil & Natural Gas","Diamond, Gems and Jewellery","Diversified","Dry cells","E-Commerce/App based Aggregator","Edible Oil","Education","Electronics","Engineering","Entertainment","ETF","Ferro Alloys","Fertilizers","Finance","Financial Services","FMCG","Gas Distribution","Glass & Glass Products","Healthcare","Hotels & Restaurants","Infrastructure Developers & Operators","Infrastructure Investment Trusts","Insurance","IT - Hardware","IT - Software","Leather","Logistics","Marine Port & Services","Media - Print/Television/Radio","Mining & Mineral products"] 
+company_market_cap_in_crores - this is company's market cap in Crores (Cr) Indian Rupees (INR)
+company_market_cap_category has only these values : ["Micro Cap", "Small Cap", "Mid Cap", "Large Cap"]
+
+Two pre_populated_arrays need special mention, that are used often in sector-wise and index-wise analysis are : 
+sector_wise_companies : this array has list of companies present in each sector. This is useful when User queries are around sector-wise analysis.
+<example>
+User_Query: Which sector has the lowest P/E ratio
+Reasoning : Use array sector_wise_companies and loop through each sector. Compute the average P/E ratio and then sort and pick the lowest.    
+</example>
+index_wise_companies : This array is useful for index-wise analysis. [{"index_name": "Nifty Microcap 250", "companies_part_of_index": [{"company_name": "CSL Finance", "company_sector": "Finance", "company_market_cap_in_crores": "700", "company_market_cap_category": "Micro Cap"}]}]
+This is the exhaustive list of NSE Indices present in our database (therefore any index to be filtered must be picked from this list only) : ["Nifty 100","Nifty 100 Equal Weight","Nifty 100 Liquid 15","Nifty 100 Low Volatility 30","Nifty 200","Nifty 50","Nifty 50 Equal Weight","Nifty 500","Nifty 500 Multicap 50:25:25","Nifty Alpha 50","Nifty Alpha Low-Volatility 30","Nifty Auto","Nifty Bank","Nifty Commodities","Nifty Consumer Durables","Nifty CPSE","Nifty Dividend Opportunities 50","Nifty Energy","Nifty Financial Services","Nifty Financial Services 25/50","Nifty FMCG","Nifty Growth Sectors 15","Nifty Healthcare Index","Nifty India Consumption","Nifty India Digital Index","Nifty India Manufacturing","Nifty Infrastructure","Nifty IT","Nifty LargeMidcap 250","Nifty Media","Nifty Metal","Nifty Microcap 250","Nifty Midcap 100","Nifty Midcap 150","Nifty Midcap 50","Nifty Midcap Liquid 15","Nifty Midcap Select","Nifty Midcap150 Momentum 50","Nifty Midcap150 Quality 50","Nifty MidSmall Healthcare","Nifty MidSmallcap 400","Nifty MNC","Nifty Next 50","Nifty Oil & Gas","Nifty Pharma","Nifty Private Bank","Nifty PSE","Nifty PSU Bank","Nifty Realty","Nifty Services Sector"]
+<example>
+User_Query: Which companies in Nifty Mid Cap Indexes have market cap below 5000 Cr ?
+Reasoning : Use array index_wise_companies. First find indices that are tracking Mid Cap, we get e.g. - "Nifty Midcap 150","Nifty Midcap 50","Nifty Midcap Liquid 15","Nifty Midcap Select","Nifty Midcap150 Momentum 50","Nifty Midcap150 Quality 50"
+Then create a Set of companies belonging to these indices. Then filter companies whose  company_market_cap_in_crores < 5000
+</example>
 
 <cached pre_populated_arrays>
 {{cached_pre_loaded_graphql_fields}}
@@ -189,4 +208,4 @@ const general_query = function general_query() {
 </Your_Response>
 </example>
 
-Remember - your output is only the function text. Do not output anything else other than function text, because your output will be directly compiled.
+Remember - your output is only the function text. Do not output anything else other than function text, because your output will be directly compiled. Do not output ```javascript prefix or suffix.

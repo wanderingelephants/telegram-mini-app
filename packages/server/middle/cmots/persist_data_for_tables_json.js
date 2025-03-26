@@ -82,10 +82,9 @@ function transformKeysToLowercase(data, tableDef) {
       } else {
         if (lowerKey === "date") lowerKey = "record_date"
         if (lowerKey === "cmotscode") lowerKey = "co_code"
-        //console.log("lowerKey", lowerKey)
         const columnDef = tableDef.Columns.filter(c => c.Column_Name.toLowerCase() === lowerKey)[0]
-        if (columnDef.Column_DataType === "text") value += ""
-        acc[lowerKey] = value;
+        if (columnDef && columnDef.Column_DataType === "text") value += ""
+        if (columnDef) acc[lowerKey] = value;
       }
 
       return acc;
@@ -93,13 +92,13 @@ function transformKeysToLowercase(data, tableDef) {
   }
   return data;
 }
-async function processTableApiURL(table, maxTries = 3) {
+async function processTableApiURL(table, maxTries = 3, batch = true) {
   let attempts = 0;
   let response;
 
   while (attempts < maxTries) {
     try {
-      console.log(table.API_URL)
+      console.log("table.API_URL", table.API_URL)
       response = await axios.get(table.API_URL, axiosConfig);
       if (!response.data) {
         console.log("response.data is null", response);
@@ -109,9 +108,9 @@ async function processTableApiURL(table, maxTries = 3) {
         console.log("response.data.data is null for url", table.API_URL, response.data);
         return;
       }
-      console.log("Record size", response.data.data.length);
+      console.log("Records", response.data.data.length);
 
-      if (response.data.data.length > 0) {
+      if (batch === true &&  response.data.data.length > 0) {
         if (response.data.data[0].rowno) {
           response.data.data = response.data.data.sort((a, b) => a.rowno - b.rowno);
           await processResultsData(table, response);
@@ -121,10 +120,14 @@ async function processTableApiURL(table, maxTries = 3) {
           await processNonResultsData(table, response)
         }
       }
-      /*for (const record of response.data.data) {
-        if (record.COLUMNNAME === null) continue;
-        if (!record.COLUMNNAME) await processNonResultsData(table, record);
-      }*/
+      if ( batch === false){
+        for (const record of response.data.data) {
+          if (record.COLUMNNAME === null) continue;
+          const res = {data: {data: [record]}}
+          if (!record.COLUMNNAME) await processNonResultsData(table, res);
+        }
+      }
+      
       return; // Exit function if API call is successful
     } catch (e) {
       console.error(`Attempt ${attempts + 1} failed:`, e.message, table.API_URL);
@@ -175,8 +178,7 @@ async function persistData(inputJsonPath) {
   // Read and parse the JSON file
   const jsonData = JSON.parse(fs.readFileSync(inputJsonPath, 'utf8'));
   // Create migration folder if it doesn't exist
-
-
+  
   for (let table of jsonData) {
     const columns = table.Columns;
     columns.forEach(column => {
@@ -197,15 +199,25 @@ async function persistData(inputJsonPath) {
     if (table.Input === "latestdate") {
       const latestDate = moment().subtract(1, "days").utcOffset(330).format("YYYY-MM-DD");
       table.API_URL = table.API_URL.replace(/[^/]+$/, latestDate);
-      console.log(table.API_URL);
       await processTableApiURL(table)
+      return
+    }
+    if (table.Input === "daterange") {
+      const nowIST = moment().utcOffset(330);
+      const yesterday = nowIST.clone().subtract(1, 'days').format("DD-MMM-YYYY");
+      const dayBeforeYesterday = nowIST.clone().subtract(2, 'days').format("DD-MMM-YYYY");
+      const urlSegments = table.API_URL.split('/');
+      urlSegments[urlSegments.length - 2] = dayBeforeYesterday;
+      urlSegments[urlSegments.length - 1] = yesterday;
+      const updatedUrl = urlSegments.join('/');
+      table.API_URL = updatedUrl
+      await processTableApiURL(table, 3, false)
       return
     }
 
   }
   let t2 = new Date()
-  console.log("time taken", t2.getTime() - t1.getTime())
-
+  
 }
 async function processChildrenOfMaster(table) {
   let masterCodes = []
@@ -215,8 +227,7 @@ async function processChildrenOfMaster(table) {
       masterCodes = await getMasterCodes("company_index_master")
       for (const sect_code of masterCodes) {
         table.API_URL = table.API_URL.replace(/\/(\d+)(\/[^\/]+)?$/, `/${sect_code}$2`);
-        console.log(table.API_URL)
-        await processTableApiURL(table)
+        await processTableApiURL(table, 3, false)
       }
 
       break;
@@ -226,7 +237,7 @@ async function processChildrenOfMaster(table) {
       console.log("iterate over sect code");
       for (const sect_code of masterCodes) {
         table.API_URL = table.API_URL.replace(/\/(\d+)(\/[^\/]+)?$/, `/${sect_code}$2`);
-        await processTableApiURL(table)
+        await processTableApiURL(table, 3, false)
       }
       break;
     case "co_code":
@@ -243,7 +254,6 @@ async function processChildrenOfMaster(table) {
           await processTableApiURL(table)
         }
       }
-
       break;
   }
 }
@@ -282,7 +292,6 @@ async function processResultsData(table, response) {
 
 }
 async function processNonResultsData(table, response) {
-  //console.log("processNonResultsData", record)
   let mutationVariablesAll = []
   for (const record of response.data.data) {
     let mutationVariables = {};
@@ -292,10 +301,14 @@ async function processNonResultsData(table, response) {
       mutationVariables["co_code"] = safeParseInt(mutationVariables["cmotscode"])
       delete mutationVariables.cmotscode
     }
+    const parts = table.API_URL.split('/');
+    if (table.API_URL.endsWith("/C")  || table.API_URL.endsWith("/S")){
+      const isconsolidated = parts[parts.length - 1] === "C" ? true : false     
+      mutationVariables["isconsolidated"] = isconsolidated
+    }
     const apiInputKey = table["Input"]; //co_code, sect_code or index_code, passed as param to API_URL
     if ("co_code" === apiInputKey || "sect_code" === apiInputKey || "index_code" === apiInputKey) {
       if (!mutationVariables[apiInputKey]) {
-        const parts = table.API_URL.split('/');
         const len = parts.length;
         const possibleNumber = parts[len - 2].match(/^\d+$/) ? parts[len - 2] : parts[len - 1];
         mutationVariables[apiInputKey] = parseInt(possibleNumber)
@@ -304,12 +317,23 @@ async function processNonResultsData(table, response) {
     const columns = table.Columns;
     Object.keys(mutationVariables).forEach((key) => {
       const columnDef = columns.find(col => col.Column_Name.toLowerCase() === key.toLowerCase());
-      //console.log("columnDef", columnDef)
       if (columnDef) {
         if (columnDef.Column_DataType === "date") {
           mutationVariables[key] = formatDate(mutationVariables[key]); // Convert to IST date format
         } else if (columnDef.Column_DataType.toLowerCase() === "integer" || columnDef.Column_DataType.toLowerCase === "int") {
           mutationVariables[key] = safeParseInt(mutationVariables[key]);
+          if (key === "yrc"){
+            const yrc = mutationVariables[key]
+            const month = yrc%100
+            const quarter = month/3
+            const year = (yrc - month)/100
+            mutationVariables["month"] = month
+            mutationVariables["quarter"] = quarter
+            mutationVariables["year"] = year
+          }
+        }
+        else if (columnDef.Column_Name.toLowerCase() === "buysell"){
+          mutationVariables["buysell"] = mutationVariables["buysell"] === "B" ? true : false
         }
       }
     });
@@ -330,7 +354,6 @@ async function processNonResultsData(table, response) {
         affected_rows
       }
     }`
-  console.log(insertMutation)
   try {
     await postToGraphQL({
       query: insertMutation, variables: { objects: mutationVariablesAll }

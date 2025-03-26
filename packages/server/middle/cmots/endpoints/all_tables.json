@@ -150,7 +150,7 @@
         "Column_DataType": "text",
         "Column_Description": "nsesymbol",
         "Is_Unique": "",
-        "Is_Index": ""
+        "Is_Index": "TRUE"
       },
       {
         "Column_Name": "companyname",
@@ -272,7 +272,115 @@
     "UniqueConstraintName": "",
     "ForeignKeys": [],
     "Indexes": [
-      "co_code"
+      "co_code",
+      "nsesymbol"
+    ]
+  },
+  {
+    "ReportIndex": 54,
+    "Table Name": "company_announcements",
+    "PromptQL": "",
+    "Table Description": "Company Announcements",
+    "API_URL": "",
+    "Frequency": "EOD",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "co_code",
+    "Input Description": "CMOTS Company Code",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "co_code",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "co_code"
+      },
+      {
+        "Column_Name": "announcement_record_date",
+        "Column_DataType": "date",
+        "Column_Description": "announcement_record_date",
+        "Is_Unique": "",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "announcement_document_link",
+        "Column_DataType": "text",
+        "Column_Description": "announcement_document_link",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "announcement_text",
+        "Column_DataType": "text",
+        "Column_Description": "announcement_text",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "announcement_text_summary",
+        "Column_DataType": "text",
+        "Column_Description": "announcement_text_summary",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "announcement_category",
+        "Column_DataType": "text",
+        "Column_Description": "announcement_category",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "announcement_sub_category",
+        "Column_DataType": "text",
+        "Column_Description": "announcement_sub_category",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "announcement_impact",
+        "Column_DataType": "text",
+        "Column_Description": "announcement_impact",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "announcement_sentiment",
+        "Column_DataType": "text",
+        "Column_Description": "announcement_sentiment",
+        "Is_Unique": "",
+        "Is_Index": ""
+      }
+    ],
+    "UniqueColumns": [
+      "co_code",
+      "announcement_document_link"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [
+      {
+        "Column_Name": "co_code",
+        "References": {
+          "Table_Name": "company_master",
+          "Column_Name": "co_code"
+        }
+      }
+    ],
+    "Indexes": [
+      "co_code",
+      "announcement_record_date",
+      "announcement_document_link"
     ]
   },
   {
@@ -1016,6 +1124,93 @@
     ]
   },
   {
+    "ReportIndex": 56,
+    "Table Name": "company_block_deals",
+    "PromptQL": "",
+    "Table Description": "Company Block Deals",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/Block-Deals/nse/22-Mar-2025/24-Mar-2025",
+    "Frequency": "EOD",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "daterange",
+    "Input Description": "DateRange",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "co_code",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "co_code"
+      },
+      {
+        "Column_Name": "record_date",
+        "Column_DataType": "date",
+        "Column_Description": "record_date",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "clientname",
+        "Column_DataType": "text",
+        "Column_Description": "clientname",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "buysell",
+        "Column_DataType": "boolean",
+        "Column_Description": "buysell",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "avg_price",
+        "Column_DataType": "numeric",
+        "Column_Description": "avg_price",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "qtyshares",
+        "Column_DataType": "integer",
+        "Column_Description": "qtyshares",
+        "Is_Unique": "",
+        "Is_Index": ""
+      }
+    ],
+    "UniqueColumns": [
+      "co_code",
+      "record_date",
+      "clientname"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [
+      {
+        "Column_Name": "co_code",
+        "References": {
+          "Table_Name": "company_master",
+          "Column_Name": "co_code"
+        }
+      }
+    ],
+    "Indexes": [
+      "co_code",
+      "record_date",
+      "clientname"
+    ]
+  },
+  {
     "ReportIndex": 12,
     "Table Name": "company_board_of_directors",
     "PromptQL": "",
@@ -1096,6 +1291,93 @@
     ]
   },
   {
+    "ReportIndex": 56,
+    "Table Name": "company_bulk_deals",
+    "PromptQL": "",
+    "Table Description": "Company Bulk Deals",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/Bulk-Deals/nse/22-Mar-2025/24-Mar-2025",
+    "Frequency": "EOD",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "daterange",
+    "Input Description": "DateRange",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "co_code",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "co_code"
+      },
+      {
+        "Column_Name": "record_date",
+        "Column_DataType": "date",
+        "Column_Description": "record_date",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "clientname",
+        "Column_DataType": "text",
+        "Column_Description": "clientname",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "buysell",
+        "Column_DataType": "boolean",
+        "Column_Description": "buysell",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "avg_price",
+        "Column_DataType": "numeric",
+        "Column_Description": "avg_price",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "qtyshares",
+        "Column_DataType": "integer",
+        "Column_Description": "qtyshares",
+        "Is_Unique": "",
+        "Is_Index": ""
+      }
+    ],
+    "UniqueColumns": [
+      "co_code",
+      "record_date",
+      "clientname"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [
+      {
+        "Column_Name": "co_code",
+        "References": {
+          "Table_Name": "company_master",
+          "Column_Name": "co_code"
+        }
+      }
+    ],
+    "Indexes": [
+      "co_code",
+      "record_date",
+      "clientname"
+    ]
+  },
+  {
     "ReportIndex": 31,
     "Table Name": "company_capital_structure",
     "PromptQL": "",
@@ -1129,6 +1411,27 @@
         "Column_Name": "yrc",
         "Column_DataType": "integer",
         "Column_Description": "yrc",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "month",
+        "Column_DataType": "int",
+        "Column_Description": "month",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "quarter",
+        "Column_DataType": "int",
+        "Column_Description": "quarter",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "year",
+        "Column_DataType": "int",
+        "Column_Description": "year",
         "Is_Unique": "TRUE",
         "Is_Index": "TRUE"
       },
@@ -1177,7 +1480,10 @@
     ],
     "UniqueColumns": [
       "co_code",
-      "yrc"
+      "yrc",
+      "month",
+      "quarter",
+      "year"
     ],
     "UniqueConstraintName": "",
     "ForeignKeys": [
@@ -1191,7 +1497,10 @@
     ],
     "Indexes": [
       "co_code",
-      "yrc"
+      "yrc",
+      "month",
+      "quarter",
+      "year"
     ]
   },
   {
@@ -1357,6 +1666,27 @@
         "GQL_Alias": "YRC"
       },
       {
+        "Column_Name": "month",
+        "Column_DataType": "int",
+        "Column_Description": "month",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "quarter",
+        "Column_DataType": "int",
+        "Column_Description": "quarter",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "year",
+        "Column_DataType": "int",
+        "Column_Description": "year",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
         "Column_Name": "co_code",
         "Column_DataType": "integer",
         "Column_Description": "co_code",
@@ -1411,11 +1741,23 @@
         "Is_Unique": "",
         "Is_Index": "",
         "GQL_Alias": "Salestocashflowratio"
+      },
+      {
+        "Column_Name": "isconsolidated",
+        "Column_DataType": "boolean",
+        "Column_Description": "isconsolidated",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "isConsolidated"
       }
     ],
     "UniqueColumns": [
       "yrc",
-      "co_code"
+      "month",
+      "quarter",
+      "year",
+      "co_code",
+      "isconsolidated"
     ],
     "UniqueConstraintName": "",
     "ForeignKeys": [
@@ -1429,7 +1771,11 @@
     ],
     "Indexes": [
       "yrc",
-      "co_code"
+      "month",
+      "quarter",
+      "year",
+      "co_code",
+      "isconsolidated"
     ]
   },
   {
@@ -1549,6 +1895,27 @@
         "Is_Index": "TRUE"
       },
       {
+        "Column_Name": "month",
+        "Column_DataType": "int",
+        "Column_Description": "month",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "quarter",
+        "Column_DataType": "int",
+        "Column_Description": "quarter",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "year",
+        "Column_DataType": "int",
+        "Column_Description": "year",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
         "Column_Name": "eqtyason",
         "Column_DataType": "text",
         "Column_Description": "eqtyason",
@@ -1573,6 +1940,9 @@
     "UniqueColumns": [
       "co_code",
       "yrc",
+      "month",
+      "quarter",
+      "year",
       "eqtyason"
     ],
     "UniqueConstraintName": "",
@@ -1588,6 +1958,9 @@
     "Indexes": [
       "co_code",
       "yrc",
+      "month",
+      "quarter",
+      "year",
       "eqtyason"
     ]
   },
@@ -2182,6 +2555,27 @@
         "Is_Index": "TRUE"
       },
       {
+        "Column_Name": "month",
+        "Column_DataType": "int",
+        "Column_Description": "month",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "quarter",
+        "Column_DataType": "int",
+        "Column_Description": "quarter",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "year",
+        "Column_DataType": "int",
+        "Column_Description": "year",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
         "Column_Name": "grossnonperformingassets",
         "Column_DataType": "numeric",
         "Column_Description": "grossnonperformingassets",
@@ -2224,7 +2618,10 @@
     ],
     "UniqueColumns": [
       "co_code",
-      "yrc"
+      "yrc",
+      "month",
+      "quarter",
+      "year"
     ],
     "UniqueConstraintName": "",
     "ForeignKeys": [
@@ -2238,7 +2635,10 @@
     ],
     "Indexes": [
       "co_code",
-      "yrc"
+      "yrc",
+      "month",
+      "quarter",
+      "year"
     ]
   },
   {
@@ -2398,6 +2798,27 @@
         "Column_Name": "yrc",
         "Column_DataType": "integer",
         "Column_Description": "yrc",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "month",
+        "Column_DataType": "int",
+        "Column_Description": "month",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "quarter",
+        "Column_DataType": "int",
+        "Column_Description": "quarter",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "year",
+        "Column_DataType": "int",
+        "Column_Description": "year",
         "Is_Unique": "TRUE",
         "Is_Index": "TRUE"
       },
@@ -2976,13 +3397,6 @@
         "Is_Index": ""
       },
       {
-        "Column_Name": "year",
-        "Column_DataType": "integer",
-        "Column_Description": "year",
-        "Is_Unique": "TRUE",
-        "Is_Index": "TRUE"
-      },
-      {
         "Column_Name": "flag",
         "Column_DataType": "text",
         "Column_Description": "flag",
@@ -2993,6 +3407,8 @@
     "UniqueColumns": [
       "co_code",
       "yrc",
+      "month",
+      "quarter",
       "year",
       "flag"
     ],
@@ -3009,6 +3425,8 @@
     "Indexes": [
       "co_code",
       "yrc",
+      "month",
+      "quarter",
       "year",
       "flag"
     ]
@@ -3123,6 +3541,27 @@
         "GQL_Alias": "YRC"
       },
       {
+        "Column_Name": "month",
+        "Column_DataType": "int",
+        "Column_Description": "month",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "quarter",
+        "Column_DataType": "int",
+        "Column_Description": "quarter",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "year",
+        "Column_DataType": "int",
+        "Column_Description": "year",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
         "Column_Name": "co_code",
         "Column_DataType": "integer",
         "Column_Description": "co_code",
@@ -3161,11 +3600,47 @@
         "Is_Unique": "",
         "Is_Index": "",
         "GQL_Alias": "PayableDays"
+      },
+      {
+        "Column_Name": "costincomeratio",
+        "Column_DataType": "numeric",
+        "Column_Description": "costincomeratio",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "CostIncomeRatio"
+      },
+      {
+        "Column_Name": "corecostincomeratio",
+        "Column_DataType": "numeric",
+        "Column_Description": "corecostincomeratio",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "CoreCostIncomeRatio"
+      },
+      {
+        "Column_Name": "operatingcoststoassets",
+        "Column_DataType": "numeric",
+        "Column_Description": "operatingcoststoassets",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "OperatingCostsToAssets"
+      },
+      {
+        "Column_Name": "isconsolidated",
+        "Column_DataType": "boolean",
+        "Column_Description": "isconsolidated",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "isConsolidated"
       }
     ],
     "UniqueColumns": [
       "yrc",
-      "co_code"
+      "month",
+      "quarter",
+      "year",
+      "co_code",
+      "isconsolidated"
     ],
     "UniqueConstraintName": "",
     "ForeignKeys": [
@@ -3179,7 +3654,11 @@
     ],
     "Indexes": [
       "yrc",
-      "co_code"
+      "month",
+      "quarter",
+      "year",
+      "co_code",
+      "isconsolidated"
     ]
   },
   {
@@ -3216,6 +3695,27 @@
         "Column_Name": "yrc",
         "Column_DataType": "integer",
         "Column_Description": "yrc",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "month",
+        "Column_DataType": "int",
+        "Column_Description": "month",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "quarter",
+        "Column_DataType": "int",
+        "Column_Description": "quarter",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "year",
+        "Column_DataType": "int",
+        "Column_Description": "year",
         "Is_Unique": "TRUE",
         "Is_Index": "TRUE"
       },
@@ -3264,7 +3764,10 @@
     ],
     "UniqueColumns": [
       "co_code",
-      "yrc"
+      "yrc",
+      "month",
+      "quarter",
+      "year"
     ],
     "UniqueConstraintName": "",
     "ForeignKeys": [
@@ -3278,7 +3781,10 @@
     ],
     "Indexes": [
       "co_code",
-      "yrc"
+      "yrc",
+      "month",
+      "quarter",
+      "year"
     ]
   },
   {
@@ -3365,6 +3871,27 @@
         "GQL_Alias": "YRC"
       },
       {
+        "Column_Name": "month",
+        "Column_DataType": "int",
+        "Column_Description": "month",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "quarter",
+        "Column_DataType": "int",
+        "Column_Description": "quarter",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "year",
+        "Column_DataType": "int",
+        "Column_Description": "year",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
         "Column_Name": "co_code",
         "Column_DataType": "integer",
         "Column_Description": "co_code",
@@ -3411,11 +3938,23 @@
         "Is_Unique": "",
         "Is_Index": "",
         "GQL_Alias": "TotalDebt_MCap"
+      },
+      {
+        "Column_Name": "isconsolidated",
+        "Column_DataType": "boolean",
+        "Column_Description": "isconsolidated",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "isConsolidated"
       }
     ],
     "UniqueColumns": [
       "yrc",
-      "co_code"
+      "month",
+      "quarter",
+      "year",
+      "co_code",
+      "isconsolidated"
     ],
     "UniqueConstraintName": "",
     "ForeignKeys": [
@@ -3429,7 +3968,11 @@
     ],
     "Indexes": [
       "yrc",
-      "co_code"
+      "month",
+      "quarter",
+      "year",
+      "co_code",
+      "isconsolidated"
     ]
   },
   {
@@ -3473,6 +4016,27 @@
         "Column_Name": "yrc",
         "Column_DataType": "integer",
         "Column_Description": "yrc",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "month",
+        "Column_DataType": "int",
+        "Column_Description": "month",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "quarter",
+        "Column_DataType": "int",
+        "Column_Description": "quarter",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "year",
+        "Column_DataType": "int",
+        "Column_Description": "year",
         "Is_Unique": "TRUE",
         "Is_Index": "TRUE"
       },
@@ -3543,6 +4107,9 @@
       "co_code",
       "lname",
       "yrc",
+      "month",
+      "quarter",
+      "year",
       "prname",
       "uom"
     ],
@@ -3560,6 +4127,9 @@
       "co_code",
       "lname",
       "yrc",
+      "month",
+      "quarter",
+      "year",
       "prname",
       "uom"
     ]
@@ -3593,6 +4163,27 @@
         "Is_Unique": "TRUE",
         "Is_Index": "TRUE",
         "GQL_Alias": "YRC"
+      },
+      {
+        "Column_Name": "month",
+        "Column_DataType": "int",
+        "Column_Description": "month",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "quarter",
+        "Column_DataType": "int",
+        "Column_Description": "quarter",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "year",
+        "Column_DataType": "int",
+        "Column_Description": "year",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
       },
       {
         "Column_Name": "co_code",
@@ -3635,17 +4226,61 @@
         "GQL_Alias": "PATGrowth"
       },
       {
+        "Column_Name": "coreoperatingincomegrowth",
+        "Column_DataType": "numeric",
+        "Column_Description": "coreoperatingincomegrowth",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "CoreOperatingIncomeGrowth"
+      },
+      {
+        "Column_Name": "netprofitgrowth",
+        "Column_DataType": "numeric",
+        "Column_Description": "netprofitgrowth",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "NetProfitGrowth"
+      },
+      {
+        "Column_Name": "bvpsgrowth",
+        "Column_DataType": "numeric",
+        "Column_Description": "bvpsgrowth",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "BVPSGrowth"
+      },
+      {
+        "Column_Name": "advancesgrowth",
+        "Column_DataType": "numeric",
+        "Column_Description": "advancesgrowth",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "AdvancesGrowth"
+      },
+      {
         "Column_Name": "eps",
         "Column_DataType": "numeric",
         "Column_Description": "eps",
         "Is_Unique": "",
         "Is_Index": "",
         "GQL_Alias": "EPS"
+      },
+      {
+        "Column_Name": "isconsolidated",
+        "Column_DataType": "boolean",
+        "Column_Description": "isconsolidated",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "isConsolidated"
       }
     ],
     "UniqueColumns": [
       "yrc",
-      "co_code"
+      "month",
+      "quarter",
+      "year",
+      "co_code",
+      "isconsolidated"
     ],
     "UniqueConstraintName": "",
     "ForeignKeys": [
@@ -3659,7 +4294,11 @@
     ],
     "Indexes": [
       "yrc",
-      "co_code"
+      "month",
+      "quarter",
+      "year",
+      "co_code",
+      "isconsolidated"
     ]
   },
   {
@@ -4185,6 +4824,27 @@
         "GQL_Alias": "YRC"
       },
       {
+        "Column_Name": "month",
+        "Column_DataType": "int",
+        "Column_Description": "month",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "quarter",
+        "Column_DataType": "int",
+        "Column_Description": "quarter",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "year",
+        "Column_DataType": "int",
+        "Column_Description": "year",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
         "Column_Name": "co_code",
         "Column_DataType": "integer",
         "Column_Description": "co_code",
@@ -4263,11 +4923,23 @@
         "Is_Unique": "",
         "Is_Index": "",
         "GQL_Alias": "CASA"
+      },
+      {
+        "Column_Name": "isconsolidated",
+        "Column_DataType": "boolean",
+        "Column_Description": "isconsolidated",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "isConsolidated"
       }
     ],
     "UniqueColumns": [
       "yrc",
-      "co_code"
+      "month",
+      "quarter",
+      "year",
+      "co_code",
+      "isconsolidated"
     ],
     "UniqueConstraintName": "",
     "ForeignKeys": [
@@ -4281,7 +4953,11 @@
     ],
     "Indexes": [
       "yrc",
-      "co_code"
+      "month",
+      "quarter",
+      "year",
+      "co_code",
+      "isconsolidated"
     ]
   },
   {
@@ -4497,6 +5173,27 @@
         "GQL_Alias": "YRC"
       },
       {
+        "Column_Name": "month",
+        "Column_DataType": "int",
+        "Column_Description": "month",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "quarter",
+        "Column_DataType": "int",
+        "Column_Description": "quarter",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "year",
+        "Column_DataType": "int",
+        "Column_Description": "year",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
         "Column_Name": "co_code",
         "Column_DataType": "integer",
         "Column_Description": "co_code",
@@ -4537,17 +5234,61 @@
         "GQL_Alias": "PATM"
       },
       {
+        "Column_Name": "yieldonadvances",
+        "Column_DataType": "numeric",
+        "Column_Description": "yieldonadvances",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "YieldonAdvances"
+      },
+      {
+        "Column_Name": "yieldoninvestments",
+        "Column_DataType": "numeric",
+        "Column_Description": "yieldoninvestments",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "YieldonInvestments"
+      },
+      {
+        "Column_Name": "costofliabilities",
+        "Column_DataType": "numeric",
+        "Column_Description": "costofliabilities",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "CostofLiabilities"
+      },
+      {
+        "Column_Name": "nim",
+        "Column_DataType": "numeric",
+        "Column_Description": "nim",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "NIM"
+      },
+      {
         "Column_Name": "cpm",
         "Column_DataType": "numeric",
         "Column_Description": "cpm",
         "Is_Unique": "",
         "Is_Index": "",
         "GQL_Alias": "CPM"
+      },
+      {
+        "Column_Name": "isconsolidated",
+        "Column_DataType": "boolean",
+        "Column_Description": "isconsolidated",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "isConsolidated"
       }
     ],
     "UniqueColumns": [
       "yrc",
-      "co_code"
+      "month",
+      "quarter",
+      "year",
+      "co_code",
+      "isconsolidated"
     ],
     "UniqueConstraintName": "",
     "ForeignKeys": [
@@ -4561,7 +5302,110 @@
     ],
     "Indexes": [
       "yrc",
-      "co_code"
+      "month",
+      "quarter",
+      "year",
+      "co_code",
+      "isconsolidated"
+    ]
+  },
+  {
+    "ReportIndex": 55,
+    "Table Name": "company_new_fiftytwo_week_highlow",
+    "PromptQL": "",
+    "Table Description": "Company New FiftyTwo Week HighLow",
+    "API_URL": "",
+    "Frequency": "EOD",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "co_code",
+    "Input Description": "CMOTS Company Code",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "co_code",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "co_code"
+      },
+      {
+        "Column_Name": "record_date",
+        "Column_DataType": "date",
+        "Column_Description": "record_date",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "last_traded_price",
+        "Column_DataType": "numeric",
+        "Column_Description": "last_traded_price",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "change_percent",
+        "Column_DataType": "numeric",
+        "Column_Description": "change_percent",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "new_high_low",
+        "Column_DataType": "numeric",
+        "Column_Description": "new_high_low",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "prev_high_low",
+        "Column_DataType": "numeric",
+        "Column_Description": "prev_high_low",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "prev_high_low_record_date",
+        "Column_DataType": "date",
+        "Column_Description": "prev_high_low_record_date",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "is_high",
+        "Column_DataType": "boolean",
+        "Column_Description": "is_high",
+        "Is_Unique": "",
+        "Is_Index": ""
+      }
+    ],
+    "UniqueColumns": [
+      "co_code",
+      "record_date"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [
+      {
+        "Column_Name": "co_code",
+        "References": {
+          "Table_Name": "company_master",
+          "Column_Name": "co_code"
+        }
+      }
+    ],
+    "Indexes": [
+      "co_code",
+      "record_date"
     ]
   },
   {
@@ -4797,6 +5641,27 @@
         "GQL_Alias": "YRC"
       },
       {
+        "Column_Name": "month",
+        "Column_DataType": "int",
+        "Column_Description": "month",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "quarter",
+        "Column_DataType": "int",
+        "Column_Description": "quarter",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "year",
+        "Column_DataType": "int",
+        "Column_Description": "year",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
         "Column_Name": "co_code",
         "Column_DataType": "integer",
         "Column_Description": "co_code",
@@ -4819,11 +5684,23 @@
         "Is_Unique": "",
         "Is_Index": "",
         "GQL_Alias": "ROE"
+      },
+      {
+        "Column_Name": "isconsolidated",
+        "Column_DataType": "boolean",
+        "Column_Description": "isconsolidated",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "isConsolidated"
       }
     ],
     "UniqueColumns": [
       "yrc",
-      "co_code"
+      "month",
+      "quarter",
+      "year",
+      "co_code",
+      "isconsolidated"
     ],
     "UniqueConstraintName": "",
     "ForeignKeys": [
@@ -4837,7 +5714,11 @@
     ],
     "Indexes": [
       "yrc",
-      "co_code"
+      "month",
+      "quarter",
+      "year",
+      "co_code",
+      "isconsolidated"
     ]
   },
   {
@@ -5728,11 +6609,20 @@
         "Is_Unique": "",
         "Is_Index": "",
         "GQL_Alias": "COGS"
+      },
+      {
+        "Column_Name": "isconsolidated",
+        "Column_DataType": "boolean",
+        "Column_Description": "isconsolidated",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "isConsolidated"
       }
     ],
     "UniqueColumns": [
       "qtrend",
-      "co_code"
+      "co_code",
+      "isconsolidated"
     ],
     "UniqueConstraintName": "",
     "ForeignKeys": [
@@ -5746,7 +6636,8 @@
     ],
     "Indexes": [
       "qtrend",
-      "co_code"
+      "co_code",
+      "isconsolidated"
     ]
   },
   {
@@ -5919,6 +6810,27 @@
         "Is_Index": "TRUE"
       },
       {
+        "Column_Name": "month",
+        "Column_DataType": "int",
+        "Column_Description": "month",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "quarter",
+        "Column_DataType": "int",
+        "Column_Description": "quarter",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "year",
+        "Column_DataType": "int",
+        "Column_Description": "year",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
         "Column_Name": "capital",
         "Column_DataType": "numeric",
         "Column_Description": "capital",
@@ -5940,13 +6852,6 @@
         "Is_Index": ""
       },
       {
-        "Column_Name": "year",
-        "Column_DataType": "numeric",
-        "Column_Description": "year",
-        "Is_Unique": "TRUE",
-        "Is_Index": "TRUE"
-      },
-      {
         "Column_Name": "flag",
         "Column_DataType": "text",
         "Column_Description": "flag",
@@ -5957,6 +6862,8 @@
     "UniqueColumns": [
       "co_code",
       "yrc",
+      "month",
+      "quarter",
       "year",
       "flag"
     ],
@@ -5973,6 +6880,8 @@
     "Indexes": [
       "co_code",
       "yrc",
+      "month",
+      "quarter",
       "year",
       "flag"
     ]
@@ -6022,6 +6931,27 @@
         "Is_Index": "TRUE"
       },
       {
+        "Column_Name": "month",
+        "Column_DataType": "int",
+        "Column_Description": "month",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "quarter",
+        "Column_DataType": "int",
+        "Column_Description": "quarter",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "year",
+        "Column_DataType": "int",
+        "Column_Description": "year",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
         "Column_Name": "prname",
         "Column_DataType": "text",
         "Column_Description": "prname",
@@ -6054,13 +6984,6 @@
         "GQL_Alias": "value"
       },
       {
-        "Column_Name": "year",
-        "Column_DataType": "integer",
-        "Column_Description": "year",
-        "Is_Unique": "TRUE",
-        "Is_Index": "TRUE"
-      },
-      {
         "Column_Name": "symbol",
         "Column_DataType": "text",
         "Column_Description": "symbol",
@@ -6071,9 +6994,11 @@
     "UniqueColumns": [
       "co_code",
       "yrc",
+      "month",
+      "quarter",
+      "year",
       "prname",
       "uom",
-      "year",
       "symbol"
     ],
     "UniqueConstraintName": "",
@@ -6089,9 +7014,11 @@
     "Indexes": [
       "co_code",
       "yrc",
+      "month",
+      "quarter",
+      "year",
       "prname",
       "uom",
-      "year",
       "symbol"
     ]
   },
@@ -6129,6 +7056,27 @@
         "Column_Name": "yrc",
         "Column_DataType": "integer",
         "Column_Description": "yrc",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "month",
+        "Column_DataType": "int",
+        "Column_Description": "month",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "quarter",
+        "Column_DataType": "int",
+        "Column_Description": "quarter",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "year",
+        "Column_DataType": "int",
+        "Column_Description": "year",
         "Is_Unique": "TRUE",
         "Is_Index": "TRUE"
       },
@@ -6251,6 +7199,9 @@
     "UniqueColumns": [
       "co_code",
       "yrc",
+      "month",
+      "quarter",
+      "year",
       "slno",
       "nat_trans",
       "type",
@@ -6271,6 +7222,9 @@
     "Indexes": [
       "co_code",
       "yrc",
+      "month",
+      "quarter",
+      "year",
       "slno",
       "nat_trans",
       "type",
@@ -6461,6 +7415,27 @@
         "GQL_Alias": "YRC"
       },
       {
+        "Column_Name": "month",
+        "Column_DataType": "int",
+        "Column_Description": "month",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "quarter",
+        "Column_DataType": "int",
+        "Column_Description": "quarter",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "year",
+        "Column_DataType": "int",
+        "Column_Description": "year",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
         "Column_Name": "co_code",
         "Column_DataType": "integer",
         "Column_Description": "co_code",
@@ -6547,11 +7522,23 @@
         "Is_Unique": "",
         "Is_Index": "",
         "GQL_Alias": "Return_YieldOnAdvances_Advances"
+      },
+      {
+        "Column_Name": "isconsolidated",
+        "Column_DataType": "boolean",
+        "Column_Description": "isconsolidated",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "isConsolidated"
       }
     ],
     "UniqueColumns": [
       "yrc",
-      "co_code"
+      "month",
+      "quarter",
+      "year",
+      "co_code",
+      "isconsolidated"
     ],
     "UniqueConstraintName": "",
     "ForeignKeys": [
@@ -6565,7 +7552,11 @@
     ],
     "Indexes": [
       "yrc",
-      "co_code"
+      "month",
+      "quarter",
+      "year",
+      "co_code",
+      "isconsolidated"
     ]
   },
   {
@@ -6597,6 +7588,27 @@
         "Is_Unique": "TRUE",
         "Is_Index": "TRUE",
         "GQL_Alias": "YRC"
+      },
+      {
+        "Column_Name": "month",
+        "Column_DataType": "int",
+        "Column_Description": "month",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "quarter",
+        "Column_DataType": "int",
+        "Column_Description": "quarter",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "year",
+        "Column_DataType": "int",
+        "Column_Description": "year",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
       },
       {
         "Column_Name": "co_code",
@@ -6677,11 +7689,23 @@
         "Is_Unique": "",
         "Is_Index": "",
         "GQL_Alias": "Return_ROA_TotalFixedAssets"
+      },
+      {
+        "Column_Name": "isconsolidated",
+        "Column_DataType": "boolean",
+        "Column_Description": "isconsolidated",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "isConsolidated"
       }
     ],
     "UniqueColumns": [
       "yrc",
-      "co_code"
+      "month",
+      "quarter",
+      "year",
+      "co_code",
+      "isconsolidated"
     ],
     "UniqueConstraintName": "",
     "ForeignKeys": [
@@ -6695,7 +7719,11 @@
     ],
     "Indexes": [
       "yrc",
-      "co_code"
+      "month",
+      "quarter",
+      "year",
+      "co_code",
+      "isconsolidated"
     ]
   },
   {
@@ -7015,6 +8043,27 @@
         "GQL_Alias": "year"
       },
       {
+        "Column_Name": "month",
+        "Column_DataType": "int",
+        "Column_Description": "month",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "quarter",
+        "Column_DataType": "int",
+        "Column_Description": "quarter",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "year",
+        "Column_DataType": "int",
+        "Column_Description": "year",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
         "Column_Name": "promoters",
         "Column_DataType": "numeric",
         "Column_Description": "promoters",
@@ -7065,7 +8114,10 @@
     ],
     "UniqueColumns": [
       "co_code",
-      "yrc"
+      "yrc",
+      "month",
+      "quarter",
+      "year"
     ],
     "UniqueConstraintName": "",
     "ForeignKeys": [
@@ -7079,7 +8131,10 @@
     ],
     "Indexes": [
       "co_code",
-      "yrc"
+      "yrc",
+      "month",
+      "quarter",
+      "year"
     ]
   },
   {
@@ -7121,6 +8176,27 @@
         "GQL_Alias": "year"
       },
       {
+        "Column_Name": "month",
+        "Column_DataType": "int",
+        "Column_Description": "month",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "quarter",
+        "Column_DataType": "int",
+        "Column_Description": "quarter",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "year",
+        "Column_DataType": "int",
+        "Column_Description": "year",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
         "Column_Name": "slno",
         "Column_DataType": "integer",
         "Column_Description": "slno",
@@ -7155,6 +8231,9 @@
     "UniqueColumns": [
       "co_code",
       "yrc",
+      "month",
+      "quarter",
+      "year",
       "slno",
       "type",
       "name"
@@ -7172,6 +8251,9 @@
     "Indexes": [
       "co_code",
       "yrc",
+      "month",
+      "quarter",
+      "year",
       "slno",
       "type",
       "name"
@@ -7302,6 +8384,27 @@
         "GQL_Alias": "yrc"
       },
       {
+        "Column_Name": "month",
+        "Column_DataType": "int",
+        "Column_Description": "month",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "quarter",
+        "Column_DataType": "int",
+        "Column_Description": "quarter",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "year",
+        "Column_DataType": "int",
+        "Column_Description": "year",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
         "Column_Name": "co_code",
         "Column_DataType": "integer",
         "Column_Description": "co_code",
@@ -7380,11 +8483,23 @@
         "Is_Unique": "",
         "Is_Index": "",
         "GQL_Alias": "solvency_currentratio_currentliabilities"
+      },
+      {
+        "Column_Name": "isconsolidated",
+        "Column_DataType": "boolean",
+        "Column_Description": "isconsolidated",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "isConsolidated"
       }
     ],
     "UniqueColumns": [
       "yrc",
-      "co_code"
+      "month",
+      "quarter",
+      "year",
+      "co_code",
+      "isconsolidated"
     ],
     "UniqueConstraintName": "",
     "ForeignKeys": [
@@ -7398,7 +8513,11 @@
     ],
     "Indexes": [
       "yrc",
-      "co_code"
+      "month",
+      "quarter",
+      "year",
+      "co_code",
+      "isconsolidated"
     ]
   },
   {
@@ -7523,8 +8642,7 @@
         "Column_DataType": "integer",
         "Column_Description": "ttmason",
         "Is_Unique": "TRUE",
-        "Is_Index": "TRUE",
-        "GQL_Alias": ""
+        "Is_Index": "TRUE"
       },
       {
         "Column_Name": "co_code",
@@ -7539,8 +8657,7 @@
         "Column_DataType": "date",
         "Column_Description": "record_date",
         "Is_Unique": "",
-        "Is_Index": "",
-        "GQL_Alias": ""
+        "Is_Index": ""
       },
       {
         "Column_Name": "mcap",
@@ -7813,11 +8930,20 @@
         "Is_Unique": "",
         "Is_Index": "",
         "GQL_Alias": "Industry_PE"
+      },
+      {
+        "Column_Name": "isconsolidated",
+        "Column_DataType": "boolean",
+        "Column_Description": "isconsolidated",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "isConsolidated"
       }
     ],
     "UniqueColumns": [
       "ttmason",
-      "co_code"
+      "co_code",
+      "isconsolidated"
     ],
     "UniqueConstraintName": "",
     "ForeignKeys": [
@@ -7831,7 +8957,8 @@
     ],
     "Indexes": [
       "ttmason",
-      "co_code"
+      "co_code",
+      "isconsolidated"
     ]
   },
   {
@@ -7863,6 +8990,27 @@
         "Is_Unique": "TRUE",
         "Is_Index": "TRUE",
         "GQL_Alias": "YRC"
+      },
+      {
+        "Column_Name": "month",
+        "Column_DataType": "int",
+        "Column_Description": "month",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "quarter",
+        "Column_DataType": "int",
+        "Column_Description": "quarter",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "year",
+        "Column_DataType": "int",
+        "Column_Description": "year",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
       },
       {
         "Column_Name": "co_code",
@@ -7911,11 +9059,23 @@
         "Is_Unique": "",
         "Is_Index": "",
         "GQL_Alias": "Mcap_Sales"
+      },
+      {
+        "Column_Name": "isconsolidated",
+        "Column_DataType": "boolean",
+        "Column_Description": "isconsolidated",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "isConsolidated"
       }
     ],
     "UniqueColumns": [
       "yrc",
-      "co_code"
+      "month",
+      "quarter",
+      "year",
+      "co_code",
+      "isconsolidated"
     ],
     "UniqueConstraintName": "",
     "ForeignKeys": [
@@ -7929,7 +9089,11 @@
     ],
     "Indexes": [
       "yrc",
-      "co_code"
+      "month",
+      "quarter",
+      "year",
+      "co_code",
+      "isconsolidated"
     ]
   },
   {
@@ -8241,11 +9405,20 @@
         "Is_Unique": "",
         "Is_Index": "",
         "GQL_Alias": "RetainedEarnings"
+      },
+      {
+        "Column_Name": "isconsolidated",
+        "Column_DataType": "boolean",
+        "Column_Description": "isconsolidated",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "isConsolidated"
       }
     ],
     "UniqueColumns": [
       "yearend",
-      "co_code"
+      "co_code",
+      "isconsolidated"
     ],
     "UniqueConstraintName": "",
     "ForeignKeys": [
@@ -8259,7 +9432,8 @@
     ],
     "Indexes": [
       "yearend",
-      "co_code"
+      "co_code",
+      "isconsolidated"
     ]
   },
   {
@@ -8539,11 +9713,20 @@
         "Is_Unique": "",
         "Is_Index": "",
         "GQL_Alias": "COGS"
+      },
+      {
+        "Column_Name": "isconsolidated",
+        "Column_DataType": "boolean",
+        "Column_Description": "isconsolidated",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "isConsolidated"
       }
     ],
     "UniqueColumns": [
       "yearend",
-      "co_code"
+      "co_code",
+      "isconsolidated"
     ],
     "UniqueConstraintName": "",
     "ForeignKeys": [
@@ -8557,7 +9740,8 @@
     ],
     "Indexes": [
       "yearend",
-      "co_code"
+      "co_code",
+      "isconsolidated"
     ]
   },
   {
