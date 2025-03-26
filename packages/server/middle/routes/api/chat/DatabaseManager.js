@@ -177,7 +177,8 @@ class DatabaseManager {
           }
         }
       }
-      fieldsForTable.push({ "array_name": table["Table Name"], fields: graphql_fields })
+      table["notes"] !== "" ? fieldsForTable.push({ "array_name": table["Table Name"], fields: graphql_fields, notes: table["notes"] }) : fieldsForTable.push({ "array_name": table["Table Name"], fields: graphql_fields })
+      
     }
     return fieldsForTable
   }
@@ -243,7 +244,18 @@ class DatabaseManager {
               'company_nse_symbol': 'HDFCBANK',
               'company_sector': 'Banks',
               'company_market_cap_in_crores': 1378225.62,
-              'company_market_cap_category': 'Large Cap'}]}"`
+              'company_market_cap_category': 'Large Cap'}]}". 
+          index_name will always be from this list     `
+      },
+      {
+        "array_name": "sector_wise_companies", 
+        "fields": [{"sector_name":"<sector_name>", "companies_in_sector": ["company_name", "company_nse_symbol", "company_sector", "company_market_cap_in_crores", "company_market_cap_category"]}],
+        "notes": `Sectors are widely tracked, and offer rich source of apple-to-apple stocks analysis. e.g. 
+        {'sector_name': 'Cement','companies_in_sector': [{'company_name': 'ACC Ltd',
+              'company_nse_symbol': 'ACC',
+              'company_sector': 'Cement',
+              'company_market_cap_in_crores': 36225.62,
+              'company_market_cap_category': 'Mid Cap'}]}"`
       }
     ]
   }
@@ -287,19 +299,25 @@ class DatabaseManager {
     let promptables = []
     const graphql_fields_for_mutual_funds = await this.getGraphQLFieldsForMutualFunds(onlyKeys)
     promptables = promptables.concat(graphql_fields_for_mutual_funds)
-    const graphql_fields_for_ratio_tables = await this.getGraphQLFieldsForNonFinancials(onlyKeys, "_ratio")
+
+    for (const nonFin of ["_ratio", "_shareholding_pattern_", "company_bulk_deals", "company_block_deals", "insider_trading", "substantial_acquisition_of_shares"]){
+      const graphql_fields_for_bulk_tables = await this.getGraphQLFieldsForNonFinancials(onlyKeys, nonFin)
+      promptables = promptables.concat(graphql_fields_for_bulk_tables)
+    }
+    /*const graphql_fields_for_ratio_tables = await this.getGraphQLFieldsForNonFinancials(onlyKeys, "_ratio")
     promptables = promptables.concat(graphql_fields_for_ratio_tables)
 
     const graphql_fields_for_shp = await this.getGraphQLFieldsForNonFinancials(onlyKeys, "_shareholding_pattern_")
     promptables = promptables.concat(graphql_fields_for_shp)
     
-    const graphql_fields_for_financials = await this.getGraphQLFieldsForFinancials(onlyKeys)
-    promptables = promptables.concat(graphql_fields_for_financials)
     const graphql_fields_for_bulk_tables = await this.getGraphQLFieldsForNonFinancials(onlyKeys, "company_bulk_deals")
     promptables = promptables.concat(graphql_fields_for_bulk_tables)
     
     const graphql_fields_for_block_tables = await this.getGraphQLFieldsForNonFinancials(onlyKeys, "company_block_deals")
-    promptables = promptables.concat(graphql_fields_for_block_tables)
+    promptables = promptables.concat(graphql_fields_for_block_tables)*/
+    
+    const graphql_fields_for_financials = await this.getGraphQLFieldsForFinancials(onlyKeys)
+    promptables = promptables.concat(graphql_fields_for_financials)
     
 
     if (onlyKeys === true){
@@ -341,10 +359,10 @@ class DatabaseManager {
       this.pre_populated_arrays[bulk] = transformedData
     }
     try{
-      const index_wise_query = `query companies_in_index {  
-  company_index_master{
-        index_name
-    company_index_wise_company{
+      const sector_wise_query = `query companies_in_sector {  
+  company_sector_master{
+        sector_name: sect_name
+    company_sector_wise_company{
       company_master{
         company_name: companyname
         company_nse_symbol: nsesymbol
@@ -355,9 +373,9 @@ class DatabaseManager {
     }
   }
 }`
-      const resp = await postToGraphQL({query: index_wise_query, variables: {}})
-      const indexWiseCompanies = resp.data.company_index_master.map(index => ({
-        index_name: index.index_name,
+      const resp = await postToGraphQL({query: sector_wise_query, variables: {}})
+      const sectorWiseCompanies = resp.data.company_index_master.map(index => ({
+        sector_name: index.sector_name,
         companies_in_index: index.company_index_wise_company.map(company => ({
           company_name: company.company_master.company_name,
           company_nse_symbol: company.company_master.company_nse_symbol,
@@ -366,7 +384,7 @@ class DatabaseManager {
           company_market_cap_category: company.company_master.company_market_cap_category
         }))
       }));
-      this.pre_populated_arrays["index_wise_companies"] = indexWiseCompanies
+      this.pre_populated_arrays["sector_wise_companies"] = sectorWiseCompanies
     }
     catch(e){
       console.error(e)

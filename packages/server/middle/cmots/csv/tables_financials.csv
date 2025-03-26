@@ -1,5 +1,5 @@
-ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Description,Column_Name,Column_DataType,Column_Description,Is_Unique,Is_Index,GQL_Alias
-1,Quarterly Results,http://jwttoken.cmots.com/Aidea/api/QuarterlyResults/476/C,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description,,,
+ReportIndex,Report Name,API URL,Notes,Updation Time,Interval,Input,Input Description,Column_Name,Column_DataType,Column_Description,Is_Unique,Is_Index,GQL_Alias
+1,Quarterly Results,http://jwttoken.cmots.com/Aidea/api/QuarterlyResults/476/C,,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description,,,
 ,,,,,,,,co_code,Int,CMOTS Company Code,TRUE,TRUE,
 ,,,,,,,,isConsolidated,Boolean,Standalone/Consolidated,TRUE,TRUE,
 ,,,,,,,,key_category,Varchar(100),Balance Sheet Field Category,TRUE,TRUE,
@@ -10,7 +10,7 @@ ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Des
 ,,,,,,,,year,int,Year,TRUE,TRUE,Year
 ,,,,,,,,rowno,int,rowno,TRUE,TRUE,RowNo
 ,,,,,,,,RID,int,RID,TRUE,TRUE,RID
-2,Profit and Loss,http://jwttoken.cmots.com/Aidea/api/ProftandLoss/6/C,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description,,,
+2,Profit and Loss,http://jwttoken.cmots.com/Aidea/api/ProftandLoss/6/C,,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description,,,
 ,,,,,,,,co_code,Int,CMOTS Company Code,TRUE,TRUE,
 ,,,,,,,,isConsolidated,Boolean,Standalone/Consolidated,TRUE,TRUE,
 ,,,,,,,,key_category,Varchar(100),Balance Sheet Field Category,TRUE,TRUE,
@@ -21,7 +21,7 @@ ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Des
 ,,,,,,,,year,int,Year,TRUE,TRUE,Year
 ,,,,,,,,rowno,int,rowno,TRUE,TRUE,RowNo
 ,,,,,,,,RID,int,RID,TRUE,TRUE,RID
-3,Balance Sheet,http://jwttoken.cmots.com/Aidea/api/BalanceSheet/6/C,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description,,,
+3,Balance Sheet,http://jwttoken.cmots.com/Aidea/api/BalanceSheet/6/C,,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description,,,
 ,,,,,,,,co_code,Int,CMOTS Company Code,TRUE,TRUE,
 ,,,,,,,,isConsolidated,Boolean,Standalone/Consolidated,TRUE,TRUE,
 ,,,,,,,,key_category,Varchar(100),Balance Sheet Field Category,TRUE,TRUE,
@@ -32,7 +32,7 @@ ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Des
 ,,,,,,,,year,int,Year,TRUE,TRUE,Year
 ,,,,,,,,rowno,int,rowno,TRUE,TRUE,RowNo
 ,,,,,,,,RID,int,RID,TRUE,TRUE,RID
-4,Cash Flow,http://jwttoken.cmots.com/Aidea/api/CashFlow/93/C,EOD,11:30 PM,Once on trading day,cocode,CMOTS Company Code,Column_Name,Column_DataType,Column_Description,,,
+4,Cash Flow,http://jwttoken.cmots.com/Aidea/api/CashFlow/93/C,,11:30 PM,Once on trading day,cocode,CMOTS Company Code,Column_Name,Column_DataType,Column_Description,,,
 ,,,,,,,,co_code,Int,CMOTS Company Code,TRUE,TRUE,
 ,,,,,,,,isConsolidated,Boolean,Standalone/Consolidated,TRUE,TRUE,
 ,,,,,,,,key_category,Varchar(100),Balance Sheet Field Category,TRUE,TRUE,
@@ -43,7 +43,7 @@ ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Des
 ,,,,,,,,year,int,Year,TRUE,TRUE,Year
 ,,,,,,,,rowno,int,rowno,TRUE,TRUE,RowNo
 ,,,,,,,,RID,int,RID,TRUE,TRUE,RID
-5,Half Yearly Results,http://jwttoken.cmots.com/Aidea/api/Half-Yearly-Results/21281/C,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description,,,
+5,Half Yearly Results,http://jwttoken.cmots.com/Aidea/api/Half-Yearly-Results/21281/C,,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description,,,
 ,,,,,,,,co_code,Int,CMOTS Company Code,TRUE,TRUE,
 ,,,,,,,,isConsolidated,Boolean,Standalone/Consolidated,TRUE,TRUE,
 ,,,,,,,,key_category,Varchar(100),Balance Sheet Field Category,TRUE,TRUE,
@@ -54,7 +54,7 @@ ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Des
 ,,,,,,,,year,int,Year,TRUE,TRUE,Year
 ,,,,,,,,rowno,int,rowno,TRUE,TRUE,RowNo
 ,,,,,,,,RID,int,RID,TRUE,TRUE,RID
-6,Nine Months Results,http://jwttoken.cmots.com/Aidea/api/Nine-Month-Result/6/C,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description,,,
+6,Nine Months Results,http://jwttoken.cmots.com/Aidea/api/Nine-Month-Result/6/C,,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description,,,
 ,,,,,,,,co_code,Int,CMOTS Company Code,TRUE,TRUE,
 ,,,,,,,,isConsolidated,Boolean,Standalone/Consolidated,TRUE,TRUE,
 ,,,,,,,,key_category,Varchar(100),Balance Sheet Field Category,TRUE,TRUE,
@@ -65,7 +65,7 @@ ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Des
 ,,,,,,,,year,int,Year,TRUE,TRUE,Year
 ,,,,,,,,rowno,int,rowno,TRUE,TRUE,RowNo
 ,,,,,,,,RID,int,RID,TRUE,TRUE,RID
-7,Yearly Results,http://jwttoken.cmots.com/Aidea/api/Yearly-Results/6/C,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description,,,
+7,Yearly Results,http://jwttoken.cmots.com/Aidea/api/Yearly-Results/6/C,,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description,,,
 ,,,,,,,,co_code,Int,CMOTS Company Code,TRUE,TRUE,
 ,,,,,,,,isConsolidated,Boolean,Standalone/Consolidated,TRUE,TRUE,
 ,,,,,,,,key_category,Varchar(100),Balance Sheet Field Category,TRUE,TRUE,
@@ -76,7 +76,7 @@ ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Des
 ,,,,,,,,year,int,Year,TRUE,TRUE,Year
 ,,,,,,,,rowno,int,rowno,TRUE,TRUE,RowNo
 ,,,,,,,,RID,int,RID,TRUE,TRUE,RID
-8,Balance Sheet Quarterly,http://jwttoken.cmots.com/Aidea/api/QuarterlyResults-BalanceSheet/476/C,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description,,,
+8,Balance Sheet Quarterly,http://jwttoken.cmots.com/Aidea/api/QuarterlyResults-BalanceSheet/476/C,,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description,,,
 ,,,,,,,,co_code,Int,CMOTS Company Code,TRUE,TRUE,
 ,,,,,,,,isConsolidated,Boolean,Standalone/Consolidated,TRUE,TRUE,
 ,,,,,,,,key_category,Varchar(100),Balance Sheet Field Category,TRUE,TRUE,
@@ -87,7 +87,7 @@ ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Des
 ,,,,,,,,year,int,Year,TRUE,TRUE,Year
 ,,,,,,,,rowno,int,rowno,TRUE,TRUE,RowNo
 ,,,,,,,,RID,int,RID,TRUE,TRUE,RID
-9,Balance Sheet Half yearly,http://jwttoken.cmots.com/Aidea/api/Results-BalanceSheet-Half-yearly/476/C,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description,,,
+9,Balance Sheet Half yearly,http://jwttoken.cmots.com/Aidea/api/Results-BalanceSheet-Half-yearly/476/C,,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description,,,
 ,,,,,,,,co_code,Int,CMOTS Company Code,TRUE,TRUE,
 ,,,,,,,,isConsolidated,Boolean,Standalone/Consolidated,TRUE,TRUE,
 ,,,,,,,,key_category,Varchar(100),Balance Sheet Field Category,TRUE,TRUE,
@@ -98,7 +98,7 @@ ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Des
 ,,,,,,,,year,int,Year,TRUE,TRUE,Year
 ,,,,,,,,rowno,int,rowno,TRUE,TRUE,RowNo
 ,,,,,,,,RID,int,RID,TRUE,TRUE,RID
-10,Balance Sheet Yearly,http://jwttoken.cmots.com/Aidea/api/Results-BalanceSheet-Yearly/6/C,EOD,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description,,,
+10,Balance Sheet Yearly,http://jwttoken.cmots.com/Aidea/api/Results-BalanceSheet-Yearly/6/C,,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description,,,
 ,,,,,,,,co_code,Int,CMOTS Company Code,TRUE,TRUE,
 ,,,,,,,,isConsolidated,Boolean,Standalone/Consolidated,TRUE,TRUE,
 ,,,,,,,,key_category,Varchar(100),Balance Sheet Field Category,TRUE,TRUE,

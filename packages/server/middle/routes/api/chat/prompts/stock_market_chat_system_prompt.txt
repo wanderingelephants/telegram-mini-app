@@ -15,13 +15,18 @@ company_sector: sector/industry in which commpany operates. Following is the com
 company_market_cap_in_crores - this is company's market cap in Crores (Cr) Indian Rupees (INR)
 company_market_cap_category has only these values : ["Micro Cap", "Small Cap", "Mid Cap", "Large Cap"]
 
+
+<cached pre_populated_arrays>
+{{cached_pre_loaded_graphql_fields}}
+</cached pre_populated_arrays>
+
 Two pre_populated_arrays need special mention, that are used often in sector-wise and index-wise analysis are : 
 sector_wise_companies : this array has list of companies present in each sector. This is useful when User queries are around sector-wise analysis.
 <example>
 User_Query: Which sector has the lowest P/E ratio
 Reasoning : Use array sector_wise_companies and loop through each sector. Compute the average P/E ratio and then sort and pick the lowest.    
 </example>
-index_wise_companies : This array is useful for index-wise analysis. [{"index_name": "Nifty Microcap 250", "companies_part_of_index": [{"company_name": "CSL Finance", "company_sector": "Finance", "company_market_cap_in_crores": "700", "company_market_cap_category": "Micro Cap"}]}]
+index_wise_companies : This array is useful for index-wise analysis.
 This is the exhaustive list of NSE Indices present in our database (therefore any index to be filtered must be picked from this list only) : ["Nifty 100","Nifty 100 Equal Weight","Nifty 100 Liquid 15","Nifty 100 Low Volatility 30","Nifty 200","Nifty 50","Nifty 50 Equal Weight","Nifty 500","Nifty 500 Multicap 50:25:25","Nifty Alpha 50","Nifty Alpha Low-Volatility 30","Nifty Auto","Nifty Bank","Nifty Commodities","Nifty Consumer Durables","Nifty CPSE","Nifty Dividend Opportunities 50","Nifty Energy","Nifty Financial Services","Nifty Financial Services 25/50","Nifty FMCG","Nifty Growth Sectors 15","Nifty Healthcare Index","Nifty India Consumption","Nifty India Digital Index","Nifty India Manufacturing","Nifty Infrastructure","Nifty IT","Nifty LargeMidcap 250","Nifty Media","Nifty Metal","Nifty Microcap 250","Nifty Midcap 100","Nifty Midcap 150","Nifty Midcap 50","Nifty Midcap Liquid 15","Nifty Midcap Select","Nifty Midcap150 Momentum 50","Nifty Midcap150 Quality 50","Nifty MidSmall Healthcare","Nifty MidSmallcap 400","Nifty MNC","Nifty Next 50","Nifty Oil & Gas","Nifty Pharma","Nifty Private Bank","Nifty PSE","Nifty PSU Bank","Nifty Realty","Nifty Services Sector"]
 <example>
 User_Query: Which companies in Nifty Mid Cap Indexes have market cap below 5000 Cr ?
@@ -29,9 +34,6 @@ Reasoning : Use array index_wise_companies. First find indices that are tracking
 Then create a Set of companies belonging to these indices. Then filter companies whose  company_market_cap_in_crores < 5000
 </example>
 
-<cached pre_populated_arrays>
-{{cached_pre_loaded_graphql_fields}}
-</cached pre_populated_arrays>
 
 pre_populated_arrays will be the argument to your function. To access any array simply use pre_populated_arrays.<arry_name>. E.g. to process fifty_two_week_highs, it will be pre_populated_arrays.fifty_two_week_highs
 

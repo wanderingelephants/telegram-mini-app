@@ -145,7 +145,7 @@ function processCSV(csvFilePath) {
         "PromptQL": promptQL,
         "Table Description": (record["Report Name"]),
         API_URL: record["API URL"],
-        Frequency: record.Frequency,
+        notes: record.Notes.replaceAll("{{comma}}", ","),
         "Updation Time": record["Updation Time"],
         Interval: record.Interval,
         Input: input,
