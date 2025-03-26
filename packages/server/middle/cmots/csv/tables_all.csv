@@ -131,7 +131,7 @@ ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Des
 ,,,,,,,,reg_email,varchar(100),Registrar Email,,,
 ,,,,,,,,reg_internet,varchar(100),Registrar Internet,,,
 ,,,,,,,,flag,varchar(100),Flag,,,
-11,CompBackground,http://jwttoken.cmots.com/Aidea/api/CompBackground/476,EOD,11:30 PM,Once on trading day,cocode,CMOTS Company code,Output,OutputType,OutDesc,,,
+11,Company Background,http://jwttoken.cmots.com/Aidea/api/CompBackground/476,EOD,11:30 PM,Once on trading day,cocode,CMOTS Company code,Output,OutputType,OutDesc,,,
 ,,,,,,,,lname,varchar(100),Company Long Name,,,
 ,,,,,,,,isin,varchar(50),ISIN,,,
 ,,,,,,,,hse_s_name,varchar(50),HSE_S_NAME,,,
@@ -400,7 +400,7 @@ ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Des
 ,,,,,,,,co_code,Int,CMOTS Company Code,TRUE,TRUE,
 ,,,,,,,,ratdate,datetime,RATDATE,TRUE,TRUE,
 ,,,,,,,,sectype,varchar(50),SEC TYPE,TRUE,TRUE,
-,,,,,,,,amount,Int,AMOUNT,,,
+,,,,,,,,amount,Int,AMOUNT,TRUE,,
 ,,,,,,,,rating,varchar(50),RATING,TRUE,TRUE,
 ,,,,,,,,ratingby,varchar(50),RATING BY,TRUE,TRUE,
 ,,,,,,,,type,varchar(50),TYPE,TRUE,TRUE,
@@ -436,7 +436,7 @@ ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Des
 ,,,,,,,,name,varchar(50),name,TRUE,TRUE,pledger_name
 ,,,,,,,,totalpledgeshares,float,Total Pledge Shares,,,total_shares_pledged
 ,,,,,,,,perc_totalsharesheld,float,TotalShares Held(%),,,percentage_shares_pledged
-33,CRAR,http://jwttoken.cmots.com/Aidea/api/CRAR/4987,EOD,11:30 PM,Once on trading day,co_code,CMOTS Company Code,Output,OutputType,OutDesc,,,
+33,Capital Adequacy Ratio,http://jwttoken.cmots.com/Aidea/api/CRAR/4987,EOD,11:30 PM,Once on trading day,co_code,CMOTS Company Code,Output,OutputType,OutDesc,,,
 ,,,,,,,,co_code,int,CMOTS Company Code,TRUE,TRUE,
 ,,,,,,,,yrc,int,Year,TRUE,TRUE,
 ,,,,,,,,grossnonperformingassets,float,Gross Non Performing Assets,,,gross_non_performing_assets
@@ -450,19 +450,19 @@ ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Des
 ,,,,,,,,personname,Varchar(100),PERSON NAME,TRUE,TRUE,insider_name
 ,,,,,,,,category,Varchar(100),CATEGORY,TRUE,TRUE,insider_category
 ,,,,,,,,typeofsecuritiesheldprior,Varchar(100),Type of Securities held Prior,TRUE,TRUE,type_of_securities_before
-,,,,,,,,numberofsecuritiesheldprior,float,Number of Securities held Prior,,,number_of_securites_before
-,,,,,,,,percentage_securitiesheldprior,Float,Percentage Securitie sheld Prior,,,percent_of_securites_before
-,,,,,,,,valueofsecurities,float,Value of Securities,,,value_of_securites_before
-,,,,,,,,totalsecurities,float,Total Securities,,,total_securities
+,,,,,,,,numberofsecuritiesheldprior,float,Number of Securities held Prior,TRUE,,number_of_securites_before
+,,,,,,,,percentage_securitiesheldprior,Float,Percentage Securitie sheld Prior,TRUE,,percent_of_securites_before
+,,,,,,,,valueofsecurities,float,Value of Securities,TRUE,,value_of_securites_before
+,,,,,,,,totalsecurities,float,Total Securities,TRUE,,total_securities
 ,,,,,,,,transactiontype,Varchar(100),Transaction Type,TRUE,TRUE,transaction_type
-,,,,,,,,typeofsecuritiesheldpost,varchar(50),Type of Securities held Post,,,type_of_securities_post_after
-,,,,,,,,numberofsecuritiesheldpost,float,Number of Securities held Post,,,number_of_securites_after
-,,,,,,,,percentage_securitiesheldpost,Float,Securities held Post(%),,,percentage_of_securites_after
+,,,,,,,,typeofsecuritiesheldpost,varchar(50),Type of Securities held Post,TRUE,,type_of_securities_post_after
+,,,,,,,,numberofsecuritiesheldpost,float,Number of Securities held Post,TRUE,,number_of_securites_after
+,,,,,,,,percentage_securitiesheldpost,Float,Securities held Post(%),TRUE,,percentage_of_securites_after
 ,,,,,,,,fromdateofacquisition,Datetime,FromDate of Acquisition,TRUE,TRUE,from_date_of_transaction
 ,,,,,,,,todateofacquisition,Datetime,ToDate of Acquisition,TRUE,TRUE,to_date_of_transaction
 ,,,,,,,,modeofacquisition,Varchar(100),Mode of Acquisition,TRUE,TRUE,transaction_mode
 ,,,,,,,,ExchangeReportedDate,Datetime,ExchangeReportedDate,TRUE,TRUE,transaction_reported_date
-35,SAST,http://jwttoken.cmots.com/Aidea/api/SubstantialAcquisition/476,EOD,11:30 PM,Once on trading day,cocode,CMOTS Company Code,Output,OutputType,OutDesc,,,
+35,Substantial Acquisition of Shares,http://jwttoken.cmots.com/Aidea/api/SubstantialAcquisition/476,EOD,11:30 PM,Once on trading day,cocode,CMOTS Company Code,Output,OutputType,OutDesc,,,
 ,,,,,,,,co_code,Int,CMOTS Company Code,TRUE,TRUE,
 ,,,,,,,,SecurityName,varchar(100),Security Name,TRUE,TRUE,security_name
 ,,,,,,,,NameofAcquirer_Seller,varchar(100),Name of Acquirer Seller,TRUE,TRUE,name_of_person
@@ -476,14 +476,14 @@ ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Des
 ,,,,,,,,HoldingAfterTransaction_PerChange_TotalCapital,Float,Holding After Transaction Percentage Change Total Capital,,,holding_percentage_change_in_total_capital
 ,,,,,,,,HoldingAfterTransaction_PerChange_DilutedCapital,Float,Holding After Transaction Pecentage Change Diluted Capital,,,holding_percentage_change_in_diluted_capital
 ,,,,,,,,ExchangeReportedDate,Datetime,Exchange Reported Date,TRUE,TRUE,transaction_date
-36,SHP_Detailed,http://jwttoken.cmots.com/Aidea/api/ShareholdingMorethanonePerDetails/476,EOD,11:30 PM,Once on trading day,co_code,CMOTS Company Code,Output,OutputType,OutDesc,,,
+36,Shareholding Pattern Detailed,http://jwttoken.cmots.com/Aidea/api/ShareholdingMorethanonePerDetails/476,EOD,11:30 PM,Once on trading day,co_code,CMOTS Company Code,Output,OutputType,OutDesc,,,
 ,,,,,,,,co_code,int,CMOTS Company Code,TRUE,TRUE,
 ,,,,,,,,yrc,int,Year Count,TRUE,TRUE,year
 ,,,,,,,,slno,int,Serial No,TRUE,TRUE,
-,,,,,,,,type,varchar(100),Type,TRUE,TRUE,type
+,,,,,,,,type,varchar(100),Type Of Shareholding,TRUE,TRUE,type
 ,,,,,,,,name,varchar(100),Name,TRUE,TRUE,name
 ,,,,,,,,PercentageStakeHolding,Float,Percentage Stake Holding,,,percentage_stake_holding
-37,SHP_Aggregate,http://jwttoken.cmots.com/Aidea/api/Aggregate-Share-Holding/5400,EOD,11:30 PM,Once on trading day,cocode,CMOTS Company Code,Output,OutputType,OutDesc,,,
+37,Shareholding Pattern Aggregate,http://jwttoken.cmots.com/Aidea/api/Aggregate-Share-Holding/5400,EOD,11:30 PM,Once on trading day,cocode,CMOTS Company Code,Output,OutputType,OutDesc,,,
 ,,,,,,,,co_code,int,CMOTS Company Code,TRUE,TRUE,
 ,,,,,,,,YRC,int,Year Count,TRUE,TRUE,year
 ,,,,,,,,Promoters,Float,Promoters,,,promoters_percentage_share
@@ -492,14 +492,14 @@ ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Des
 ,,,,,,,,MutualFund,Float,Mutual Fund,,,mutual_funds_percentage_share
 ,,,,,,,,OtherDomesticInstitution,Float,Other Domestic Institution,,,other_domestic_institution_share
 ,,,,,,,,Others,Float,Others,,,others_percentage_share
-38,SHP_More_Than_1_Percent,http://jwttoken.cmots.com/Aidea/api/ShareholdingMorethanOnePercent/476,EOD,11:30 PM,Once on trading day,co_code,CMOTS Company Code,Output,OutputType,OutDesc,,,
+38,Shareholding Pattern More Than 1 Percent,http://jwttoken.cmots.com/Aidea/api/ShareholdingMorethanOnePercent/476,EOD,11:30 PM,Once on trading day,co_code,CMOTS Company Code,Output,OutputType,OutDesc,,,
 ,,,,,,,,co_code,Int,CMOTS Company Code,TRUE,TRUE,
 ,,,,,,,,date,Date,Date,TRUE,TRUE,report_date
 ,,,,,,,,Type,varchar(100),Type,TRUE,TRUE,shareholder_type
 ,,,,,,,,Name,varchar(100),Name,TRUE,TRUE,shareholder_name
 ,,,,,,,,NOOFshares,float,No of Shares,,,number_of_shares
 ,,,,,,,,perstake,Float,Percentage Stake,,,percentage_stake
-39,Margin Ratio,http://jwttoken.cmots.com/Aidea/api/MarginRatios/476/C,EOD,11:30 PM,Once on trading day,cocode,CMOTS Company code,Output,OutputDataType,OutputDescription,,,
+39,Margin Ratios,http://jwttoken.cmots.com/Aidea/api/MarginRatios/476/C,EOD,11:30 PM,Once on trading day,cocode,CMOTS Company code,Output,OutputDataType,OutputDescription,,,
 ,,,,,,,,YRC,Int,Year Count,TRUE,TRUE,
 ,,,,,,,,co_code,Int,CMOTS Company code,TRUE,TRUE,
 ,,,,,,,,PBIDTIM,Float,PBIDTIM(%),,,
@@ -557,7 +557,7 @@ ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Des
 ,,,,,,,,FreeCashFlowYield,Float,Free Cash Flow Yield,,,
 ,,,,,,,,Salestocashflowratio,Float,Sales to cash flow ratio's,,,
 ,,,,,,,,isConsolidated,Boolean,Standalone/Consolidated,TRUE,TRUE,
-45,Growth Ratio,http://jwttoken.cmots.com/Aidea/api/GrowthRatio/6/C,EOD,11:30 PM,Once on trading day,cocode,CMOTS Company code,Output,OutputDataType,OutputDescription,,,
+45,Growth Ratios,http://jwttoken.cmots.com/Aidea/api/GrowthRatio/6/C,EOD,11:30 PM,Once on trading day,cocode,CMOTS Company code,Output,OutputDataType,OutputDescription,,,
 ,,,,,,,,YRC,int,Year Count,TRUE,TRUE,
 ,,,,,,,,co_code,Int,CMOTS Company code,TRUE,TRUE,
 ,,,,,,,,NetSalesGrowth,float,NetSalesGrowth,,,
@@ -622,7 +622,7 @@ ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Des
 ,,,,,,,,DividendPayout_TTM,Float,Dividend Payout TTM,,,
 ,,,,,,,,Industry_PE,Float,Industry PE,,,
 ,,,,,,,,isConsolidated,Boolean,Standalone/Consolidated,TRUE,TRUE,
-48,Quarterly Ratio,http://jwttoken.cmots.com/Aidea/api/QuarterlyRatio/476/C,EOD,11:30 PM,Once on trading day,Cocode,CMOTS Company Code,Output,OutputDataType,OutputDescription,,,
+48,Quarterly Ratios,http://jwttoken.cmots.com/Aidea/api/QuarterlyRatio/476/C,EOD,11:30 PM,Once on trading day,Cocode,CMOTS Company Code,Output,OutputDataType,OutputDescription,,,
 ,,,,,,,,QtrEnd,int,Quarter End,TRUE,TRUE,
 ,,,,,,,,co_code,Int,CMOTS Company code,TRUE,TRUE,
 ,,,,,,,,MCAP,float,Market CAP,,,
@@ -643,7 +643,7 @@ ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Des
 ,,,,,,,,Netprofit,float,Net profit,,,
 ,,,,,,,,COGS,float,COGS,,,
 ,,,,,,,,isConsolidated,Boolean,Standalone/Consolidated,TRUE,TRUE,
-49,Yearly Ratio,http://jwttoken.cmots.com/Aidea/api/YearlyRatio/6068/C,EOD,11:30 PM,Once on trading day,Cocode,CMOTS Company Code,Output,OutputDataType,OutputDescription,,,
+49,Yearly Ratios,http://jwttoken.cmots.com/Aidea/api/YearlyRatio/6068/C,EOD,11:30 PM,Once on trading day,Cocode,CMOTS Company Code,Output,OutputDataType,OutputDescription,,,
 ,,,,,,,,YearEnd,int,Year End,TRUE,TRUE,
 ,,,,,,,,co_code,Int,CMOTS Company code,TRUE,TRUE,
 ,,,,,,,,MCAP,float,Market CAP,,,
@@ -777,14 +777,14 @@ ReportIndex,Report Name,API URL,Frequency,Updation Time,Interval,Input,Input Des
 56,Company Bulk Deals,http://jwttoken.cmots.com/Aidea/api/Bulk-Deals/nse/22-Mar-2025/24-Mar-2025,EOD,11:30 PM,Once on trading day,DateRange,DateRange,Column_Name,Column_DataType,Column_Description,,,
 ,,,,,,,,co_code,Int,CMOTS Company Code,TRUE,TRUE,
 ,,,,,,,,date,Date,New High Low Date,TRUE,TRUE,
-,,,,,,,,clientname,varchar,Client Name,TRUE,TRUE,
-,,,,,,,,buysell,boolean,Buy Or Sell,,,
-,,,,,,,,avg_price,float,Average Price,,,
-,,,,,,,,qtyshares,int,Quantity,,,
+,,,,,,,,clientname,varchar,Client Name,TRUE,TRUE,client_name
+,,,,,,,,buysell,boolean,Buy Or Sell,,,buy_or_sell
+,,,,,,,,avg_price,float,Average Price,,,average_price
+,,,,,,,,qtyshares,int,Quantity,,,shares_quantity
 56,Company Block Deals,http://jwttoken.cmots.com/Aidea/api/Block-Deals/nse/22-Mar-2025/24-Mar-2025,EOD,11:30 PM,Once on trading day,DateRange,DateRange,Column_Name,Column_DataType,Column_Description,,,
 ,,,,,,,,co_code,Int,CMOTS Company Code,TRUE,TRUE,
 ,,,,,,,,date,Date,New High Low Date,TRUE,TRUE,
-,,,,,,,,clientname,varchar,Client Name,TRUE,TRUE,
-,,,,,,,,buysell,boolean,Buy Or Sell,,,
-,,,,,,,,avg_price,float,Average Price,,,
-,,,,,,,,qtyshares,int,Quantity,,,
+,,,,,,,,clientname,varchar,Client Name,TRUE,TRUE,client_name
+,,,,,,,,buysell,boolean,Buy Or Sell,,,buy_or_sell
+,,,,,,,,avg_price,float,Average Price,,,average_price
+,,,,,,,,qtyshares,int,Quantity,,,shares_quantity

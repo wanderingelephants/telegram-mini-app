@@ -143,12 +143,12 @@ class DatabaseManager {
       return []
     }
   }*/
-
-  async getGraphQLFieldsForRatioTables(onlyKeys) {
+  
+  async getGraphQLFieldsForNonFinancials(onlyKeys, tableNameFilter) {
     const fieldsForTable = []
     const all_tables_json = fs.readFileSync(path.join(process.env.DATA_ROOT_FOLDER, "all_tables.json"), "utf-8")
     const all_tables = JSON.parse(all_tables_json)
-    const promptables = all_tables.filter(c => c["Table Name"].toLowerCase().indexOf("_ratio") > -1)
+    const promptables = all_tables.filter(c => c["Table Name"].toLowerCase().indexOf(tableNameFilter) > -1)
 
     for (const table of promptables) {
       const columns = table.Columns.filter(c => c.GQL_Alias !== null)
@@ -157,19 +157,13 @@ class DatabaseManager {
         if (col.GQL_Alias) {
           if (col.GQL_Alias === "co_code") {
             if (table["Table Name"] !== "company_master") {
-              //mutation += `\ncompany_master {
               const prefix = onlyKeys === true ? "" : "company_master:"
-              //const suffix = onlyKeys === true ? "" : ": "
               graphql_fields.push(`${prefix}company_name${(onlyKeys === true) ? "" : ": companyname"}`)
               graphql_fields.push(`${prefix}company_nse_symbol${(onlyKeys === true) ? "" : ": nsesymbol"}`)
               graphql_fields.push(`${prefix}company_sector${(onlyKeys === true) ? "" : ": sectorname"}`)
               graphql_fields.push(`${prefix}company_market_cap_in_crores${(onlyKeys === true) ? "" : ": mcap"}`)
               graphql_fields.push(`${prefix}company_market_cap_category${(onlyKeys === true) ? "" : ": mcaptype"}`)
-              /*graphql_fields.push(`${prefix}company_nse_symbol": nsesymbol"`)
-              graphql_fields.push(`${prefix}company_sector": sectorname"`)
-              graphql_fields.push(`${prefix}company_market_cap_in_crores": mcap"`)
-              graphql_fields.push(`${prefix}company_market_cap_category": mcaptype"`)*/
-              //}`
+              
             }
           }
           else {
@@ -180,7 +174,6 @@ class DatabaseManager {
             else {
               onlyKeys === true ? graphql_fields.push(`${col.GQL_Alias}`) : graphql_fields.push(`${col.GQL_Alias}:${col.Column_Name}`)
             }
-            //mutation += `${col.GQL_Alias}:${col.Column_Name}\n`
           }
         }
       }
@@ -294,11 +287,21 @@ class DatabaseManager {
     let promptables = []
     const graphql_fields_for_mutual_funds = await this.getGraphQLFieldsForMutualFunds(onlyKeys)
     promptables = promptables.concat(graphql_fields_for_mutual_funds)
-    const graphql_fields_for_ratio_tables = await this.getGraphQLFieldsForRatioTables(onlyKeys)
+    const graphql_fields_for_ratio_tables = await this.getGraphQLFieldsForNonFinancials(onlyKeys, "_ratio")
     promptables = promptables.concat(graphql_fields_for_ratio_tables)
+
+    const graphql_fields_for_shp = await this.getGraphQLFieldsForNonFinancials(onlyKeys, "_shareholding_pattern_")
+    promptables = promptables.concat(graphql_fields_for_shp)
+    
     const graphql_fields_for_financials = await this.getGraphQLFieldsForFinancials(onlyKeys)
     promptables = promptables.concat(graphql_fields_for_financials)
+    const graphql_fields_for_bulk_tables = await this.getGraphQLFieldsForNonFinancials(onlyKeys, "company_bulk_deals")
+    promptables = promptables.concat(graphql_fields_for_bulk_tables)
     
+    const graphql_fields_for_block_tables = await this.getGraphQLFieldsForNonFinancials(onlyKeys, "company_block_deals")
+    promptables = promptables.concat(graphql_fields_for_block_tables)
+    
+
     if (onlyKeys === true){
       const graphql_fields_for_index_wise_companies = await  this.getDisplayFieldsForIndexWiseCompanies()
       promptables = promptables.concat(graphql_fields_for_index_wise_companies)
@@ -328,6 +331,14 @@ class DatabaseManager {
       catch (e) {
         console.log("Error in mutation processing for table", table["array_name"], e)
       }
+    }
+    for (const bulk of ["company_bulk_deals", "company_block_deals"]){
+      const data = this.pre_populated_arrays[bulk]
+      const transformedData = data.map(deal => ({
+        ...deal,
+        buy_or_sell: deal.buy_or_sell ? "Buy" : "Sell"
+    }));
+      this.pre_populated_arrays[bulk] = transformedData
     }
     try{
       const index_wise_query = `query companies_in_index {  
@@ -415,7 +426,7 @@ class DatabaseManager {
       console.error(e)
     }
     this.isInitialized = true
-    console.log("Database Manager initialized", (this.pre_populated_arrays.length))
+    console.log("Database Manager initialized", (this.pre_populated_arrays))
     return this.pre_populated_arrays
   }
 

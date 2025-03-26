@@ -16,7 +16,10 @@ const safeParseInt = (value) => {
   const parsed = parseInt(value);
   return isNaN(parsed) ? null : parsed;
 };
-const formatISTDateTime = () => moment().utcOffset(330).format("YYYY-MM-DD HH:mm:ss");
+const formatISTDateTime = () => {
+  const randomMs = Math.floor(Math.random() * 1) + 900; // Random value between 1 and 900
+  return moment().utcOffset(330).add(randomMs, 'milliseconds').format("YYYY-MM-DD HH:mm:ss.SSS");
+};
 const formatDate = (dateStr) => {
   if (!dateStr) return null;
   const parsedDate = moment(dateStr, ["YYYY-MM-DD HH:mm:ss", "DD/MM/YYYY", "YYYY/MM/DD", "DD-MM-YYYY"]);
@@ -46,8 +49,8 @@ function expandObject(input, co_code, isconsolidated) {
     if (match) {
       const year = parseInt(match[1], 10);
       const month = parseInt(match[2], 10);
-      const quarter = month / 3;
-
+      const quarter = (month % 3 === 0) ? month/3 : 0
+            
       output.push({
         key,
         key_category,
@@ -108,7 +111,7 @@ async function processTableApiURL(table, maxTries = 3, batch = true) {
         console.log("response.data.data is null for url", table.API_URL, response.data);
         return;
       }
-      console.log("Records", response.data.data.length);
+      //console.log("Records", response.data.data);
 
       if (batch === true &&  response.data.data.length > 0) {
         if (response.data.data[0].rowno) {
@@ -325,7 +328,7 @@ async function processNonResultsData(table, response) {
           if (key === "yrc"){
             const yrc = mutationVariables[key]
             const month = yrc%100
-            const quarter = month/3
+            const quarter = (month % 3 === 0) ? month/3 : 0
             const year = (yrc - month)/100
             mutationVariables["month"] = month
             mutationVariables["quarter"] = quarter
@@ -345,7 +348,7 @@ async function processNonResultsData(table, response) {
     .filter(col => !table.UniqueColumns.includes(col.Column_Name) && col.Column_Name !== "created_at")
     .map(col => col.Column_Name);
   const updateColumns = [...nonUniqueColumns].join(", ");
-
+  //console.log(updateColumns, mutationVariablesAll)
   const insertMutation = `mutation ${tableName}_insert($objects: [${tableName}_insert_input!]!){
       insert_${tableName}(objects: $objects, on_conflict:{
         constraint: u_${tableName},
@@ -362,6 +365,8 @@ async function processNonResultsData(table, response) {
   }
   catch (e) {
     console.log(e)
+    console.log(response.data.data)
+    console.log(mutationVariablesAll)
   }
 }
 /**
