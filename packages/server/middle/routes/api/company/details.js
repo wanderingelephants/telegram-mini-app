@@ -26,7 +26,6 @@ const route = async(req, res) => {
                 break;    
         }
         const columnList = [...columns].join("\n ")
-        console.log(columnList)
         const consolidatedFilter = entity === "balancesheet" || entity === "cashflow" || entity === "profitloss"   ? "isconsolidated: {_eq: true}," : ""
         const query = `query ${table}_get_all($symbol: String!){
             ${table}(where: {${consolidatedFilter}company_master: {nsesymbol: {_eq: $symbol}}}){
@@ -38,7 +37,6 @@ const route = async(req, res) => {
                 }
             }
         }`
-        console.log(query)
         const resp = await postToGraphQL({query, variables:{"symbol": symbol}})
         res.status(200).json(resp.data[table])
     }
