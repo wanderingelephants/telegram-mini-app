@@ -24,8 +24,8 @@ stock_holding_reporting_date - Date, the date on which mutual fund reported the 
 
 This data set can be used to answer User questions around stock holdings in mutual funds. Any qualifiers needed for mutual fund will be present as direct fields here itself. e.g. if user asks stock holdings in small cap funds rated 3 or above, then this data set can be used without depending on mutual_funds data set, since all the mutual fund fields have been denormalized and duplicated here, to  make code easier.
 
-3. corporate_announcements - each object represents a company's annoucement to the exchanges. This data set can be used to answer standalone User questions around corporate annoucements.
-IMPORTANT POINT about corporate_announcements data set. Because corporate announcements can be very big running into several pages, they cannot be loaded into memory and given as an array. You will use this GraphQL invocation to fetch the relevant records and then process it further.
+3. company_announcements - each object represents a company's annoucement to the exchanges. This data set can be used to answer standalone User questions around corporate annoucements.
+IMPORTANT POINT about company_announcements data set. Because corporate announcements can be very big running into several pages, they cannot be loaded into memory and given as an array. You will use this GraphQL invocation to fetch the relevant records and then process it further.
 Essentially, corporate announcements will be searched for key words, over a date range. 
 first, determine the fromDate and toDate and then determine the keywords, from the User Question. use this reusable piece of code. 
 you have to do create the searchTerms array based on User question, and then reuse the code. do not change any other logic.
@@ -39,9 +39,10 @@ let orConditionsString = searchTerms
 console.log("orConditionsString", orConditionsString)
 let query = `
 query GetAnnouncementsForSearchTerms($fromDate: date!, $toDate: date!) {
-  stock_announcements(where: {fromDate:{_gte: $fromDate}, toDate:{_lte: $toDate}, _or: [${orConditionsString}] }) {
-    stock{
-      company_name
+  company_announcements(where: {fromDate:{_gte: $fromDate}, toDate:{_lte: $toDate}, _or: [${orConditionsString}] }) {
+    company_master{
+      company_name: companyname
+      company_symbol: nsesymbol
     }
     announcement_document_link
     announcement_text_summary
@@ -65,9 +66,9 @@ let gqlQueryResponse = await postToGraphQL({
 query: announcements_query_for_search_terms,
 variables: announcements_query_variables
 })
-corporate_announcements = gqlQueryResponse.data.stock_announcements
+company_announcements = gqlQueryResponse.data.stock_announcements
 //map the announcement_sentiment from integer to string.
-corporate_announcements = corporate_announcements.map(ca => {
+company_announcements = company_announcements.map(ca => {
           
          return {
             company_name: ca.stock.company_name.
@@ -81,7 +82,7 @@ corporate_announcements = corporate_announcements.map(ca => {
 }
 catch(e){
 console.error(e)
-corporate_announcements = []
+company_announcements = []
 }
 
 4. insider_trades - each object represents an insider trade reported to the stock exchanges.

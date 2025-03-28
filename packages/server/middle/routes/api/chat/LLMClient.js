@@ -117,7 +117,7 @@ module.exports = analysis`
                 break;
 
             case 'FormatMockLLM':
-                llmResponse = `The best fund as per database is Motilal Oswal Small Cap\nThis has rating above 4\nFee below 0.5%`
+                llmResponse = 'For the corporate announcement by <a href="http://localhost/company/ACC">ACC Ltd</a> dated March 21, 2025, you can access the official document at: https://nsearchives.nseindia.com/corporate/RAVIDAMLE_28032025164527_KCL_intimationof_tradingwindowclosure.pdf'
                 break;
 
             case 'SummaryMockLLM':

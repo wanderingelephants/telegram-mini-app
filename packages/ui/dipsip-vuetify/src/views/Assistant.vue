@@ -129,7 +129,7 @@
 <v-expansion-panels>
   <v-expansion-panel title="What to Query">
       <v-expansion-panel-text>
-        General/Simple Questions to Deep Dive multi-hop queries picking from hundreds of financial metrics and subjective signals.
+        General/Simple Questions to Deep Dive multi-hop queries picking from hundreds of objective/subjective signals.
 
         <div style="max-height: 500px; overflow-y: auto;">
         <data-explorer-grid :categorizedArrays="categorizedArrays"/> 

@@ -67,6 +67,7 @@ import CompanyDetails from "./CompanyDetails.vue";
 //import ProfitLoss from "./ProfitLoss.vue";
 import Financials  from "./Financials.vue"
 import Ratios from "./Ratios.vue";
+import CompanyDocuments from "./CompanyDocuments.vue"
 //import Investors from "./Investors.vue";
 //import Documents from "./Documents.vue";
 
@@ -111,6 +112,7 @@ export default {
         { label: "Balance Sheet",  name: "BalanceSheet", component: "Financials", entity: "balancesheet" },
         { label: "Cash Flow",  name: "CashFlow", component: "Financials", entity: "cashflow" },
         { label: "Profit & Loss",  name: "PnL", component: "Financials", entity:  "profitloss" },
+        { label: "Documents",  name: "Documents", component: "CompanyDocuments", entity:  "documents" },
         //{ label: "Ratios", component: "Ratios" },
         //{ label: "Investors", component: "Investors" },
         //{ label: "Documents", component: "Documents" },
@@ -127,6 +129,7 @@ export default {
     //Quarters,
     //ProfitLoss,
     Financials,
+    CompanyDocuments,
     //CashFlow,
     Ratios,
     //Investors,
@@ -163,8 +166,8 @@ export default {
       // Get all section elements
       const sections = this.baseTabs.map(tab => {
         return {
-          id: tab.component,
-          element: document.getElementById(tab.component)
+          id: tab.name,
+          element: document.getElementById(tab.name)
         };
       });
       

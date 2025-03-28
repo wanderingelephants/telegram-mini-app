@@ -25,6 +25,14 @@
         </v-data-table>
       </v-card-text>
     </v-card>
+    <v-snackbar
+      v-model="snackbar.show"
+      :timeout="snackbar.timeout"
+      :color="snackbar.color"
+    >
+      {{ snackbar.message }}
+      
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -32,7 +40,7 @@
 import { mapState } from "vuex";
 
 export default {
-  name: 'BalanceSheetComponent',
+  name: 'Financials',
     props: {
     symbol: {
       type: String,
@@ -59,10 +67,14 @@ export default {
   
   data() {
     return {
-      company_balance_sheet: [
-        
-      ],
-      company_balance_sheet_display: []
+      company_balance_sheet: [],
+      company_balance_sheet_display: [],
+      snackbar: {
+        show: false,
+        message: "",
+        timeout: 3000,
+        color: "orange",
+      },
     }
   },
   
@@ -124,8 +136,25 @@ export default {
         }
         
         const jsonData = await response.json();
-        this.company_data = jsonData[0].company;
-        this.company_balance_sheet = jsonData || [];
+        console.log("financials jsonData", jsonData, this.entity)
+        let table;
+        switch(this.entity){
+            case "ratios":
+                table = "company_trailing_twelvemonths_ratios"
+                break;
+            case "balancesheet":
+                table = "company_balance_sheet"
+                break;   
+            case "profitloss":
+                table = "company_profit_and_loss"
+                break;   
+            case "cashflow":
+                table = "company_cash_flow"
+                break;    
+        }
+        this.company_data = jsonData[table];
+        this.company_balance_sheet = jsonData[table] || [];
+        console.log("this.company_balance_sheet", this.company_balance_sheet)
         this.company_balance_sheet = this.company_balance_sheet.filter(r => r.key !== "")
         this.transformBalanceSheetData()
         

@@ -150,7 +150,7 @@ export default {
         }
         
         const jsonData = await response.json();
-        this.company_data = jsonData[0];
+        this.company_data = jsonData["company_trailing_twelvemonths_ratios"][0];
         
       } catch (e) {
         console.error(e);

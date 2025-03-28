@@ -2,10 +2,10 @@ const fs = require("fs")
 const path = require("path")
 
 function getCategory(array_name) {
-    if (array_name.indexOf("_ratio") > -1) return "Ratios"
-    else if (array_name.indexOf("company_balance_sheet") > -1 || array_name.indexOf("company_cash_flow") > -1 || array_name.indexOf("company_profit_and_loss") > -1) return "Financials"
-    else if  (array_name.indexOf("_price") > -1) return "Technicals"
-    else if  (array_name.indexOf("_shareholding") > -1) return "Shareholding Pattern"
+    if (array_name.indexOf("_ratio") > -1) return "Ratio Signals"
+    else if (array_name.indexOf("company_balance_sheet") > -1 || array_name.indexOf("company_cash_flow") > -1 || array_name.indexOf("company_profit_and_loss") > -1) return "Financial Signals"
+    else if  (array_name.indexOf("_price") > -1) return "Technical Signals"
+    else if  (array_name.indexOf("substantial") > -1||array_name.indexOf("insider_trading") > -1||array_name.indexOf("_deals") > -1||array_name.indexOf("_shareholding") > -1) return "Shareholding Signals"
     else return "Subjective Signals"
 
     /*const mapping = {
