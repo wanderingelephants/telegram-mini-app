@@ -60,7 +60,12 @@ const analysis = async function(pre_populated_arrays){
 7. Do not use "const" for variables, but use "let". this is because some times, by mistake, you may try to assign a value again, and it will break the code.
 8. Date fields will end with _date suffix. Always filter on date for arrays that have a date field. Date range will often need to be deduced from User's Query. e.g. if user says last 15 days or last 3 months.
 9. For on-demand loaded arrays, use await postToGraphQL function, by constructing the GraphQL variables having "from" and "to" dates, and an array of keywords.
-10. For on-demand loaded arrays, you need to just construact an array of keywords, based on User Query, and use this code snippet
+10. For on-demand loaded arrays, you need to just construact an array of keywords, based on User Query, and use this code snippet.
+11. For various Ratios Analysis, if the User has not specified a specific array, then check if trailing_twelvemonths_ratios has  that Ratio, and use it. This is because  trailing_twelvemonths_ratios keeps only the latest value of each ratio. Where as same ratio may be present in another array with historical time periods. e.g. many performance ratios are present in trailing_twelvemonths_ratios and also performance_ratios with corresponding year. 
+12. For various Ratios, zero is bad/corrupt data. Filter out records having the ratio of 0.
+13. year, month - Almost all financial data has time dimension. Check if the corresponding array has fields year, month. Unless the user has specfied a year/month, pick only  the latest month  and year from the array. Otherwise, duplicate data will be returned. e.g. there will be multiple Return Ratios for same company (across years) 
+14. isConsolidated - this is an important boolean flag present in large majority of data sets (pre_populated_arrays). Financial Data is always presented in Standalone and Consolidated forms. i.e. Data  for Standalone business entity v/s Consolidated Data for all entities. isConsolidated = true means data is for Consolidated entity. 
+Check if the array has isConsolidated field. If so, filter on it for isConsolidated === true (by default). If the user question explicitly asks for Standalone, then only isConsolidated will be false. For most cases, apply isConsolidated === true
 
 let corporate_announcements = []
 // reuse this code snippet

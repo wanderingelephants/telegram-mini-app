@@ -475,7 +475,7 @@ ReportIndex,Report Name,API URL,Notes,Updation Time,Interval,Input,Input Descrip
 ,,,,,,,,HoldingAfterTransactionQuantity,float,Holding After Transaction Quantity,,,holding_quantity_after_transaction
 ,,,,,,,,HoldingAfterTransaction_PerChange_TotalCapital,Float,Holding After Transaction Percentage Change Total Capital,,,holding_percentage_change_in_total_capital
 ,,,,,,,,HoldingAfterTransaction_PerChange_DilutedCapital,Float,Holding After Transaction Pecentage Change Diluted Capital,,,holding_percentage_change_in_diluted_capital
-,,,,,,,,ExchangeReportedDate,Datetime,Exchange Reported Date,TRUE,TRUE,transaction_date
+,,,,,,,,ExchangeReportedDate,Datetime,Exchange Reported Date,TRUE,TRUE,reported_date
 36,Shareholding Pattern Detailed,http://jwttoken.cmots.com/Aidea/api/ShareholdingMorethanonePerDetails/476,type_of_shareholding is one of ['Public Shareholding' {{comma}} 'Shareholding of Promoter and Promoter Group'],11:30 PM,Once on trading day,co_code,CMOTS Company Code,Output,OutputType,OutDesc,,,
 ,,,,,,,,co_code,int,CMOTS Company Code,TRUE,TRUE,
 ,,,,,,,,yrc,int,Year Count,TRUE,TRUE,year

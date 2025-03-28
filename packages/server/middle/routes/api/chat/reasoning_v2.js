@@ -59,12 +59,12 @@ const route = async (req, res) => {
             messageManager = new MessageManager(path.join(dataRootFolder, "generated_functions"));
             const chatHistory = await messageManager.getChatMessages(chatSessionId)
     
-            //let lastResultMessage = await messageManager.getLastMessage(chatSessionId, activity, execResultsFileName)
-            //if (lastResultMessage.result) userLatestMessage = "Result of Previous function execution was : " + JSON.stringify(lastResultMessage.result) + "\n" + userLatestMessage
-            if (chatHistory["results"].length > 0) userLatestMessage = `Result of Previous Function Execution was :  ${chatHistory["results"][chatHistory["results"].length - 1].result} .\n Latest User Question: ${messages[messages.length - 1].content}` 
+        //    if (chatHistory["results"].length > 0) userLatestMessage = `Result of Previous Function Execution was :  ${chatHistory["results"][chatHistory["results"].length - 1].result} .\n Latest User Question: ${messages[messages.length - 1].content}` 
+        //try without sending previous execution result. because of chat history, context should still be there. works in  claude console.    
+        if (chatHistory["results"].length > 0) userLatestMessage = `User Question: ${messages[messages.length - 1].content}` 
+        
             await messageManager.saveMessage(chatSessionId, activity, { "role": 'user', content: [{ "type": 'text', "text": userLatestMessage }] }, chatMessagesFileName);
             responseHandler = new JavascriptResponseHandler(dbManager, messageManager, formattingLLMClient, activity, messages[messages.length - 1].content, {chatSessionId, email})
-            //messagesToSend = await messageManager.getMessages(chatSessionId, activity, chatMessagesFileName)
             messagesToSend = chatHistory["user_chats"]
             messagesToSend.push({ "role": 'user', content: [{ "type": 'text', "text": userLatestMessage }]})
             break
@@ -92,12 +92,12 @@ const route = async (req, res) => {
       const lines = formattedResponse.split("\n")
       for (const line of lines) {
         let sendLine = line;
-        if (line.indexOf("https://") > -1) {
+        /*if (line.indexOf("https://") > -1) {
           sendLine = line.replace(
             /(https?:\/\/[^\s.]+(?:\.[^\s.]+)*)(?=\.*\s|$)/g,
             '<a href="$1" class="links data-link" target="_blank" rel="noopener noreferrer">$1</a>'
           );
-        }
+        }*/
         json = { "response": sendLine, "done": false }
         res.write(`data: ${JSON.stringify(json)}\n\n`);
       }

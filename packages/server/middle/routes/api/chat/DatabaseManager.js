@@ -70,12 +70,9 @@ class DatabaseManager {
         ${table_name}{`
     //first dump the company_master fields if  present
     for (const  _prefix of [company_master_prefix, mutual_fund_master_prefix]) {
-      console.log("_prefix", _prefix, _prefix.substring(0, _prefix.length - 1))
       let master_fields = fieldsForTable.filter(f => f.startsWith(_prefix) === true)
-      console.log("master_fields", master_fields)
       if (master_fields.length > 0) {
         master_fields = master_fields.map(f => f.substring(_prefix.length, f.length))
-        console.log("master_fields mapped", master_fields)
         mutation += `${_prefix.substring(0, _prefix.length - 1)} { 
             ${master_fields.join(" ")}
           }`
@@ -86,11 +83,14 @@ class DatabaseManager {
 
     mutation += `}
         }`
-    console.log(mutation)
     try {
       const resp = await postToGraphQL({ query: mutation, variables: {} })
-      const newResp = JSON.parse(JSON.stringify(resp));
-
+      let newResp = {data: {table_name: []}}
+      newResp.data[table_name] = resp.data[table_name].map(({ company_master, ...rest }) => ({
+        ...company_master,
+        ...rest,
+      }));//JSON.parse(JSON.stringify(resp));
+      console.log(table_name, newResp.data[table_name].length)
       // Iterate through the array and trim the `key` field
       newResp.data[table_name].forEach(entry => {
         if (entry.key && typeof entry.key === "string") {
@@ -107,43 +107,6 @@ class DatabaseManager {
     }
 
   }
-  /*async runMutationForTable(table) {
-    const tableName = table["Table Name"]
-    let mutation = `query ${tableName}_all{
-        ${tableName}{
-      `
-    const columns = table.Columns.filter(c => c.GQL_Alias !== null)
-    for (const col of columns) {
-      if (col.GQL_Alias) {
-        if (col.GQL_Alias === "co_code") {
-          if (table["Table Name"] !== "company_master") {
-            mutation += `\ncompany_master {
-                company_short_name: companyshortname
-                company_name: companyname
-                company_nse_symbol: nsesymbol
-                company_sector: sectorname
-                company_market_cap_in_crores: mcap
-                company_market_cap_category: mcaptype
-              }`
-          }
-        }
-        else {
-          mutation += `${col.GQL_Alias}:${col.Column_Name}\n`
-        }
-      }
-    }
-    mutation += `}
-      }`
-    try {
-      const resp = await postToGraphQL({ query: mutation, variables: {} })
-      return resp.data[tableName]
-    }
-    catch (e) {
-      console.log("error in running mutation", mutation)
-      return []
-    }
-  }*/
-  
   async getGraphQLFieldsForNonFinancials(onlyKeys, tableNameFilter) {
     const fieldsForTable = []
     const all_tables_json = fs.readFileSync(path.join(process.env.DATA_ROOT_FOLDER, "all_tables.json"), "utf-8")
@@ -338,11 +301,9 @@ class DatabaseManager {
       return
     }
     const graphql_fields = await this.getGraphQLFields(false)
-    console.log(graphql_fields)
     for (const table of graphql_fields) {
       try {
         const table_name = table["array_name"]
-        console.log(table_name)
         const tableData = await this.runMutationForTable(graphql_fields, table_name, "company_master:", "mutual_fund:")
         this.pre_populated_arrays[table_name] = tableData
       }
@@ -357,6 +318,37 @@ class DatabaseManager {
         buy_or_sell: deal.buy_or_sell ? "Buy" : "Sell"
     }));
       this.pre_populated_arrays[bulk] = transformedData
+    }
+    try{
+      const index_wise_query = `query companies_in_index {  
+  company_index_master{
+        index_name
+    company_index_wise_company{
+      company_master{
+        company_name: companyname
+        company_nse_symbol: nsesymbol
+        company_sector: sectorname
+        company_market_cap_in_crores: mcap
+        company_market_cap_category: mcaptype
+      }
+    }
+  }
+}`
+      const resp = await postToGraphQL({query: index_wise_query, variables: {}})
+      const indexWiseCompanies = resp.data.company_index_master.map(index => ({
+        index_name: index.index_name,
+        companies_in_index: index.company_index_wise_company.map(company => ({
+          company_name: company.company_master.company_name,
+          company_nse_symbol: company.company_master.company_nse_symbol,
+          company_sector: company.company_master.company_sector,
+          company_market_cap_in_crores: company.company_master.company_market_cap_in_crores,
+          company_market_cap_category: company.company_master.company_market_cap_category
+        }))
+      }));
+      this.pre_populated_arrays["index_wise_companies"] = indexWiseCompanies
+    }
+    catch(e){
+      console.error(e)
     }
     try{
       const sector_wise_query = `query companies_in_sector {  
@@ -374,9 +366,9 @@ class DatabaseManager {
   }
 }`
       const resp = await postToGraphQL({query: sector_wise_query, variables: {}})
-      const sectorWiseCompanies = resp.data.company_index_master.map(index => ({
-        sector_name: index.sector_name,
-        companies_in_index: index.company_index_wise_company.map(company => ({
+      const sectorWiseCompanies = resp.data.company_sector_master.map(sector => ({
+        sector_name: sector.sector_name,
+        companies_in_sector: sector.company_sector_wise_company.map(company => ({
           company_name: company.company_master.company_name,
           company_nse_symbol: company.company_master.company_nse_symbol,
           company_sector: company.company_master.company_sector,
@@ -399,7 +391,7 @@ class DatabaseManager {
         company_market_cap_in_crores: mcap
         company_market_cap_category: mcaptype
     }
-    is_hight    
+    is_high    
     new_high_low
     change_percent
     prev_high_low
@@ -409,7 +401,7 @@ class DatabaseManager {
   }
 }`
       const resp = await postToGraphQL({query: fifty_two_week_high_low_query, variables: {}})
-      const new_highs = resp.data.company_new_fiftytwo_week_highlow.filter(r => r.is_hight === true).map(r => ({
+      const new_highs = resp.data.company_new_fiftytwo_week_highlow.filter(r => r.is_high === true).map(r => ({
         company_name: r.company_master.company_name,
           company_nse_symbol: r.company_master.company_nse_symbol,
           company_sector: r.company_master.company_sector,
@@ -424,7 +416,7 @@ class DatabaseManager {
 
       }))
       this.pre_populated_arrays["companies_hitting_new_fifty_two_week_highs"] = new_highs
-      const new_lows = resp.data.company_new_fiftytwo_week_highlow.filter(r => r.is_hight === false).map(r => ({
+      const new_lows = resp.data.company_new_fiftytwo_week_highlow.filter(r => r.is_high === false).map(r => ({
         company_name: r.company_master.company_name,
           company_nse_symbol: r.company_master.company_nse_symbol,
           company_sector: r.company_master.company_sector,
@@ -444,7 +436,7 @@ class DatabaseManager {
       console.error(e)
     }
     this.isInitialized = true
-    console.log("Database Manager initialized", (this.pre_populated_arrays))
+    console.log("Database Manager initialized", (this.pre_populated_arrays.length))
     return this.pre_populated_arrays
   }
 

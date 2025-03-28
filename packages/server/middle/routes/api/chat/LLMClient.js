@@ -63,49 +63,55 @@ class LLMClient {
                 //const filePath = path.join(process.env.DATA_ROOT_FOLDER, "generated_functions/2025/03/07/8de3ffe0-b388-4491-a302-7f6f0aa60ded/stock_market_chat", "analysis_1741321347634.js")
                 //const fileContent = fs.readFileSync(filePath, "utf-8")
                 llmResponse = `const {postToGraphQL} = require(process.env.GRAPHQL_MODULE_PATH)
-const analysis = async function(pre_populated_arrays){
-    //Step 1: Validate input arrays
-    if (!pre_populated_arrays.company_cash_flow_ratios || pre_populated_arrays.company_cash_flow_ratios.length === 0) {
-        console.error("No cash flow ratio data available");
-        return [];
-    }
+const analysis = function(pre_populated_arrays) {
+    // Reasoning Steps:
+    // 1. Create a map to track companies and their indices
+    // 2. Iterate through all indices
+    // 3. For each index, track companies
+    // 4. Find companies appearing in multiple indices
+    
+    let companyIndexMap = new Map();
 
-    //Step 2: Robust filtering for positive free cash flow per share with company name
-    let companiesWithPositiveFreeCashFlow = pre_populated_arrays.company_cash_flow_ratios.filter(company => {
-        // Use multiple checks to ensure data validity
-        let freeCashFlowValue = company.FreeCashFlowperShare;
-        return freeCashFlowValue !== null && 
-               freeCashFlowValue !== undefined && 
-               parseFloat(freeCashFlowValue) > 0;
+    // Iterate through all indices
+    console.log(pre_populated_arrays.index_wise_companies)
+    pre_populated_arrays.index_wise_companies.forEach(indexData => {
+        let indexName = indexData.index_name;
+        
+        // For each company in this index
+        indexData.companies_in_index.forEach(company => {
+            if (!companyIndexMap.has(company.company_name)) {
+                companyIndexMap.set(company.company_name, new Set());
+            }
+            
+            // Add this index to company's indices
+            companyIndexMap.get(company.company_name).add(indexName);
+        });
     });
 
-    //Step 3: If no companies found, return empty array with logging
-    if (companiesWithPositiveFreeCashFlow.length === 0) {
-        console.warn("No companies found with positive free cash flow per share");
-        return [];
+    // Filter companies in multiple indices
+    let multiIndexCompanies = [];
+    
+    for (let [companyName, indices] of companyIndexMap.entries()) {
+        if (indices.size > 1) {
+            // Find the first company object to get additional details
+            let companyDetails = pre_populated_arrays.index_wise_companies
+                .flatMap(index => index.companies_in_index)
+                .find(c => c.company_name === companyName);
+
+            multiIndexCompanies.push({
+                company_name: companyName,
+                company_nse_symbol: companyDetails.company_nse_symbol,
+                company_sector: companyDetails.company_sector,
+                indices: Array.from(indices),
+                number_of_indices: indices.size
+            });
+        }
     }
 
-    //Step 4: Sort companies by free cash flow per share in descending order
-    let sortedCompanies = companiesWithPositiveFreeCashFlow.sort((a, b) => 
-        parseFloat(b.FreeCashFlowperShare) - parseFloat(a.FreeCashFlowperShare)
-    );
+    // Sort by number of indices in descending order
+    multiIndexCompanies.sort((a, b) => b.number_of_indices - a.number_of_indices);
 
-    //Step 5: Enrich data with company details from company_master
-    let enrichedCompanies = sortedCompanies.map(cashFlowCompany => {
-        // Find corresponding company name from company_master
-        let companyDetails = pre_populated_arrays.company_master.find(company => 
-            company.company_name !== null && company.company_name !== undefined
-        );
-
-        return {
-            companyName: companyDetails ? companyDetails.company_name : "Unknown",
-            freeCashFlowPerShare: parseFloat(cashFlowCompany.FreeCashFlowperShare),
-            year: cashFlowCompany.YRC  // Assuming YRC is the year of reporting
-        };
-    });
-
-    //Step 6: Return top 50 companies or all if less than 50
-    return enrichedCompanies.slice(0, 50);
+    return multiIndexCompanies;
 }
 module.exports = analysis`
                 break;
