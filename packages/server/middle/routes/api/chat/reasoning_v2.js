@@ -102,14 +102,31 @@ const route = async (req, res) => {
         res.write(`data: ${JSON.stringify(json)}\n\n`);
       }
       /*json = { "response": `<div style="display: flex; align-items: center;">
-  <button   
-    style="background-color: #ff3b30; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.2);" 
-    data-action="set-alert"
-    data-chatuuid="${chatSessionId}"
-    data-chatid="${chatId}"
-    >
-    Set Alert
-  </button>
+  <span   
+  style="background-color: #ff3b30; 
+         color: white; 
+         padding: 4px 10px; 
+         padding-left: 12px;
+         border: none; 
+         border-radius: 6px; 
+         cursor: pointer; 
+         font-weight: 500; 
+         font-size: 14px;
+         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+         display: inline-flex;
+         align-items: center;
+         justify-content: center;
+         height: 32px;
+         line-height: 1px;
+         text-align: center;
+         white-space: nowrap;"
+  data-action="set-alert"
+  data-chatuuid="${chatSessionId}"
+  data-chatid="${chatId}"
+>
+  Save
+</span>
+
   <svg
   xmlns="http://www.w3.org/2000/svg"
   width="24"
@@ -117,7 +134,7 @@ const route = async (req, res) => {
   viewBox="0 0 24 24"
   style="margin-left: 8px; fill: #2196F3; cursor: pointer;"
   data-action="show-snackbar"
-  data-message="This is like Google News Alert. When underlying data changes, and your query conditions are met, system will notify you. This can be used to set up investing or trading strategies, based on multiple signals of your choice."
+  data-message="After Saving, you can run this like a Tabular Report, and also schedule it. Most Cost-Effective way for commonly used prompts. Think of it as a Saved Screen/Adhoc Report, in other systems."
 >
   <path d="M13,9H11V7H13M13,17H11V11H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
 </svg>
