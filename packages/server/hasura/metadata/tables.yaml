@@ -1233,6 +1233,7 @@
     - role: user
       permission:
         columns:
+          - chat_title
           - is_alert_set
         filter:
           user:

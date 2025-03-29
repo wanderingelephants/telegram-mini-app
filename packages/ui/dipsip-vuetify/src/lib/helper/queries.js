@@ -164,8 +164,17 @@ const CHAT_VIEW = gql`query UserChatHistory($chat_uuid: uuid!){
     updated_at
   }
 }`
-const UPDATE_USER_CHAT = gql`
-mutation update_user_chat($chat_id: Int!, $chat_uuid: uuid!, $is_alert_set: Boolean!){
+const SAVE_USER_CHAT = gql`
+mutation SAVE_USER_CHAT($chat_title: String!, $chat_id: Int!, $chat_uuid: uuid!, $is_alert_set: Boolean!){
+  update_user_chat(_set: {chat_title: $chat_title,is_alert_set: $is_alert_set},where: {id: {_eq: $chat_id}, chat_uuid: {_eq: $chat_uuid}}){
+    returning{
+      id
+    }
+  }
+}
+`
+const UNSAVE_USER_CHAT = gql`
+mutation UNSAVE_USER_CHAT($chat_id: Int!, $chat_uuid: uuid!, $is_alert_set: Boolean!){
   update_user_chat(_set: {is_alert_set: $is_alert_set},where: {id: {_eq: $chat_id}, chat_uuid: {_eq: $chat_uuid}}){
     returning{
       id
@@ -176,5 +185,5 @@ mutation update_user_chat($chat_id: Int!, $chat_uuid: uuid!, $is_alert_set: Bool
 export {
     GET_STOCK_LIST, INSERT_PORTLFOLIO_STOCK, GET_USER_STOCK_PORTFOLIO, DELETE_USER_STOCK_PORTFOLIO,
     GET_PORTFOLIO_ANNOUNCEMENTS, GET_USER_MF_PORTFOLIO, INSERT_USER_MF_PORTFOLIO, DELETE_USER_MF_PORTFOLIO,
-    INSERT_USER_CONFIG, DELETE_USER_CONFIG, USER_CHAT_HISTORY, CHAT_VIEW, UPDATE_USER_CHAT, USER_CHAT_MESSAGES_FOR_ID
+    INSERT_USER_CONFIG, DELETE_USER_CONFIG, USER_CHAT_HISTORY, CHAT_VIEW, SAVE_USER_CHAT,UNSAVE_USER_CHAT, USER_CHAT_MESSAGES_FOR_ID
 }

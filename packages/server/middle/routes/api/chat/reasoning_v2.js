@@ -99,7 +99,7 @@ const route = async (req, res) => {
             '<a href="$1" class="links data-link" target="_blank" rel="noopener noreferrer">$1</a>'
           );
         }*/
-        json = { "response": sendLine, "done": false }
+        json = { "response": sendLine, "done": false, "chat_id": chatId, "chat_uuid": chatSessionId }
         res.write(`data: ${JSON.stringify(json)}\n\n`);
       }
       /*json = { "response": `<div style="display: flex; align-items: center;">
@@ -141,7 +141,7 @@ const route = async (req, res) => {
 </svg>
 </div>`, "done": false }
         res.write(`data: ${JSON.stringify(json)}\n\n`);*/
-      json = { "response": "", "done": true }
+      json = { "response": "", "done": true}
       res.write(`data: ${JSON.stringify(json)}\n\n`);
       res.end();
     }

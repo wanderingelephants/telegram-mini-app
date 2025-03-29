@@ -118,13 +118,6 @@
       <!-- Chat Header -->
       <div class="chat-header">
         <v-card-title class="primary white--text">{{ title }}</v-card-title>
-        <!--<v-card-subtitle
-          class="subtitle-wrap"
-          v-for="(subTitle, idx) in subTitles"
-          :key="idx"
-        >
-          {{ subTitle }}
-        </v-card-subtitle> -->
       </div>
 <v-expansion-panels>
   <v-expansion-panel title="What to Query">
@@ -159,7 +152,7 @@
                   <v-card-text class="white-space-pre pt-0" v-html="message.content"></v-card-text>
                   <v-btn color="primary" v-if="message.is_alert_set === true" @click="setAlert(message.id, message.chat_uuid, false)">Remove Report</v-btn>
                   <v-btn color="primary" v-if="message.role === 'assistant' &&  message.is_alert_set !== true" @click="setAlert(message.id, message.chat_uuid, true)">Save</v-btn>
-                  <svg v-if="message.role === 'assistant' &&  message.is_alert_set !== true"
+                  <!--<svg v-if="message.role === 'assistant' &&  message.is_alert_set !== true"
   xmlns="http://www.w3.org/2000/svg"
   width="24"
   height="24"
@@ -169,7 +162,9 @@
   data-message="Commonly used Prompts can be Saved and run as Reports. Further, you may schedule them to act as Investing/Trading Alerts"
 >
   <path d="M13,9H11V7H13M13,17H11V11H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
-</svg>
+</svg> -->
+<span v-if="message.role === 'assistant' &&  message.is_alert_set !== true" class="ml-4"><v-icon data-action="show-snackbar"
+  data-message="Commonly used Prompts can be Saved and run as Reports. Further, you may schedule them to act as Investing/Trading Alerts.">$mdiInformationOutline</v-icon></span>
                 </v-card>
               </v-list-item>
             </template>
@@ -246,23 +241,57 @@
       {{ snackbar.message }}
       <v-progress-linear :model-value="progress" color="black" height="4" class="mt-2"></v-progress-linear>
     </v-snackbar>
+    <v-dialog v-model="showReportTitleDialog" max-width="400px">
+    <v-card>
+      <v-card-title>Save Prompt</v-card-title>
+      <v-card-text>
+        Save this Prompt as a Report
+        <v-text-field
+          v-model="savedReportTitle"
+          label="Title"
+          outlined
+          dense
+          class="mt-3"
+        ></v-text-field>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="primary" @click="saveReport">OK</v-btn>
+        <v-btn color="secondary" @click="showReportTitleDialog = false">Cancel</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+  <v-dialog v-model="showUnSaveDialog" max-width="400px">
+    <v-card>
+      <v-card-title>Remove Report</v-card-title>
+      <v-card-text>
+         Prompt will remain, Saved Report will be deleted.
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="primary" @click="saveReport">OK</v-btn>
+        <v-btn color="secondary" @click="showUnSaveDialog = false">Cancel</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
   </div>
 </template>
 
 <script>
 import {
-  USER_CHAT_HISTORY, UPDATE_USER_CHAT, USER_CHAT_MESSAGES_FOR_ID
+  USER_CHAT_HISTORY, SAVE_USER_CHAT, UNSAVE_USER_CHAT, USER_CHAT_MESSAGES_FOR_ID
 } from "../lib/helper/queries";
 import { mapState } from "vuex";
 import GoogleSignIn from "../components/GoogleSignIn";
 import DataExplorerGrid from './DataExplorerGrid.vue';
+import { getChartByID } from 'apexcharts';
 export default {
   name: "Assistant",
   components: {
     GoogleSignIn, DataExplorerGrid
   },
  async mounted() {
-    document.addEventListener("click", this.handleButtonClick);
+    //document.addEventListener("click", this.handleButtonClick);
     const chatSessionId = crypto.randomUUID();
     sessionStorage.setItem("chatSessionId", chatSessionId);
     try{
@@ -274,109 +303,12 @@ export default {
       }  
   },
   beforeUnmount() {
-    document.removeEventListener("click", this.handleButtonClick);
+    //document.removeEventListener("click", this.handleButtonClick);
   },
   data() {
     return {
       expanded: true,
-      categorizedArrays: {
-        /*financials: [
-          {
-            "dataset_name": "company_balance_sheet",
-            "dataset_category": "Financials",
-            "fields": [
-              "total_assets",
-              "total_liabilities",
-              "shareholders_equity",
-              "cash_and_cash_equivalents",
-              "long_term_debt"
-            ]
-          },
-          {
-            "dataset_name": "company_profit_loss",
-            "dataset_category": "Financials",
-            "fields": [
-              "total_revenue",
-              "operating_expenses",
-              "operating_profit",
-              "net_profit",
-              "earnings_per_share"
-            ]
-          }
-        ],
-        ratios: [
-          {
-            "dataset_name": "financial_ratios",
-            "dataset_category": "Ratios",
-            "fields": [
-              "current_ratio",
-              "debt_to_equity_ratio",
-              "return_on_equity",
-              "price_to_earnings_ratio",
-              "dividend_yield"
-            ]
-          },
-          {
-            "dataset_name": "valuation_ratios",
-            "dataset_category": "Ratios",
-            "fields": [
-              "price_to_book_ratio",
-              "enterprise_value_to_ebitda",
-              "price_to_sales_ratio",
-              "market_cap_to_revenue",
-              "ev_to_revenue"
-            ]
-          }
-        ],
-        technicals: [
-          {
-            "dataset_name": "stock_price_trends",
-            "dataset_category": "Technicals",
-            "fields": [
-              "moving_average_50d",
-              "moving_average_200d",
-              "relative_strength_index",
-              "support_level",
-              "resistance_level"
-            ]
-          },
-          {
-            "dataset_name": "trading_volumes",
-            "dataset_category": "Technicals",
-            "fields": [
-              "average_trading_volume",
-              "volume_trend",
-              "on_balance_volume",
-              "volume_price_trend",
-              "money_flow_index"
-            ]
-          }
-        ],
-        subjective: [
-          {
-            "dataset_name": "analyst_ratings",
-            "dataset_category": "Subjective",
-            "fields": [
-              "consensus_rating",
-              "target_price",
-              "rating_trend",
-              "number_of_analysts",
-              "recommendation_summary"
-            ]
-          },
-          {
-            "dataset_name": "investor_sentiment",
-            "dataset_category": "Subjective",
-            "fields": [
-              "social_media_sentiment",
-              "institutional_holding_percentage",
-              "insider_trading_activity",
-              "media_coverage_score",
-              "retail_investor_interest"
-            ]
-          }
-        ]*/
-      },
+      categorizedArrays: {},
       promptQLFields: [],
       sidebarOpen: false,
       hoveredChatId: null,
@@ -415,13 +347,11 @@ export default {
       interval: null,
       distilledModel: "reasoning_dseek",
       title: "India Stock Market AI Assistant",
-      subTitles: [
-        "Ask what Google/ChatGPT cannot answer. E.g.",
-        "Which stocks are present in only 2 mutual funds",
-        "Which companies made positive announcements last week, and their price is now below announcement day closing price",
-        "** Trained on Indian data, can make mistakes",
-      ],
+      savedReportTitle: "",
       userInputLabel: "This is an AI tool. Double Check",
+      saveAsReport:{chat_id:"", chat_uuid:"", is_alert_set:false},
+      showReportTitleDialog: false,
+      showUnSaveDialog: false,
     };
   },
   watch: {
@@ -480,13 +410,12 @@ export default {
           })
           const assistantRecord = {
             "role": "assistant",
+            "id": chat.id,
+            "chat_uuid": chat.chat_uuid,
+            "is_alert_set": chat.is_alert_set,
             "content": chat.textContent_assistant_formatted_response
           }
-          if (chat.is_alert_set === true) {
-            assistantRecord["id"] = chat.id
-            assistantRecord["is_alert_set"] = true
-            assistantRecord["chat_uuid"] = chat.chat_uuid
-          }
+          
           this.messages.push(assistantRecord)
         }
       }
@@ -599,10 +528,52 @@ export default {
         this.snackbar.show = true;
       }
     },
-    async setAlert(chat_id, chat_uuid, is_alert_set) {
+    async saveReport(){
       try{
+        const {chat_id, chat_uuid, is_alert_set} = this.saveAsReport
+        let response;
+        if (is_alert_set === true){
+          response = await  this.$apollo.query({
+          query: SAVE_USER_CHAT,
+          variables: {
+            chat_id, chat_uuid, is_alert_set, chat_title: this.savedReportTitle
+          },
+          fetchPolicy: "no-cache"
+        })
+        }
+        else {
+          response = await  this.$apollo.query({
+          query: UNSAVE_USER_CHAT,
+          variables: {
+            chat_id, chat_uuid, is_alert_set
+          },
+          fetchPolicy: "no-cache"
+        })
+        }
+
+        
+        console.log(response)
+        await this.loadChat(chat_uuid)      
+        is_alert_set === true ? this.showReportTitleDialog = false : this.showUnSaveDialog = false
+        const message = is_alert_set === true  ? "Saved as Report" : "Removed Report"
+        this.snackbar.show = true
+        this.snackbar.message = message
+        this.snackbar.timeout = is_alert_set === true ? 4000 : 3000
+        
+      }
+      catch(e){
+        console.error(e)
+      }
+    },
+    async setAlert(chat_id, chat_uuid, is_alert_set) {
+        this.saveAsReport.chat_id = chat_id
+        this.saveAsReport.chat_uuid  = chat_uuid
+        this.saveAsReport.is_alert_set =  is_alert_set
+        is_alert_set === true ? this.showReportTitleDialog = true : this.showUnSaveDialog = true
+      
+      /*try{
         const response = await  this.$apollo.query({
-        query: UPDATE_USER_CHAT,
+        query: SAVE_USER_CHAT,
         variables: {
           chat_id, chat_uuid, is_alert_set
         },
@@ -618,19 +589,7 @@ export default {
       }
       catch(e){
         console.error(e)
-      }
-      /*const response = await fetch("/api/chat/setalert", {
-          method: "POST",
-
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("jwtGoogle")}`,
-          },
-          body: JSON.stringify({
-            chat_uuid, chat_id
-          }),
-      })
-      console.log("setAlert server response", response)*/
+      }*/
     },
     async sendMessage() {
       if (!this.userGoogle) {
@@ -686,9 +645,13 @@ export default {
 
         // Read the stream
         while (true) {
-          const { done, value } = await reader.read();
+          const res = await reader.read();
+          const { done, value } =  res
 
-          if (done) break;
+          if (done) {
+            console.log("done res", res)
+            break;
+          }
 
           // Decode the chunk and split into lines
           const chunk = decoder.decode(value);
@@ -702,7 +665,7 @@ export default {
                   this.errorMessage = data.error;
                   break;
                 }
-
+                //if (data.chatId) this.currentChatId = chatId;
                 currentResponse += data.response + "\n";
                 // Update the UI with the streaming response
                 if (
@@ -716,7 +679,8 @@ export default {
                     content: currentResponse,
                   });
                 }
-
+                if (data.chat_id) this.messages[this.messages.length - 1].id = data.chat_id
+                if (data.chat_uuid) this.messages[this.messages.length - 1].chat_uuid = data.chat_uuid
                 if (data.done) {
                   break;
                 }
