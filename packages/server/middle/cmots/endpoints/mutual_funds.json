@@ -1,0 +1,20 @@
+[
+    {
+        "array_name": "mutual_funds",
+        "fields": ["mutual_fund_name", "mutual_fund_category", "mutual_fund_star_rating", "mutual_fund_fee_percentage", "mutual_fund_aum"],
+        "notes": "mutual_fund_category - String Enum ('small cap fund', 'mid cap fund', 'large cap fund', 'multi cap fund', elss', 'tax advantage fund'). mutual_fund_star_rating - Integer Enum (1,2,3,4,5)",
+        "PromptQL": "Retail" 
+    },
+    {
+        "array_name": "mutual_funds_stock_holdings",
+        "fields": ["mutual_fund_name", "mutual_fund_category", "mutual_fund_star_rating", "mutual_fund_fee_percentage", "mutual_fund_aum", "company_name", "company_sector", "stock_holding_percentage_in_fund", "stock_holding_reporting_date"],
+        "notes": "each object reprsents a stock's percentage holding in the mutual fund",
+        "PromptQL": "Retail" 
+    },
+    {
+        "array_name": "mutual_fund_stock_holding_reporting_dates",
+        "fields": "",
+        "notes": "An Array of Date , each of which represents mutual funds stock holding reporting date."
+    }
+]
+ 

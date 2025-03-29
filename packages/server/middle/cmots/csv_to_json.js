@@ -15,6 +15,8 @@ function normalizeDataType(dataType) {
   const type = dataType.toLowerCase();
 
   // Handle specific mappings according to requirements
+  if (type === "boolean") return "boolean";
+  if (type === "bigint") return "bigint";
   if (type === 'int' || type.includes('integer')) return 'integer';
   if (type === 'float' || type.includes('number') || type.includes('decimal')) return 'numeric';
   if (type.includes('varchar') || type.includes('char')) return 'text';
@@ -125,7 +127,7 @@ function processCSV(csvFilePath) {
         processConstraints(currentTable)
         tables.push(currentTable);
       }
-      let input = ""
+      let input = record.Input.toLowerCase()
       if (record.Input.toLowerCase() === "cocode" || record.Input.toLowerCase() === "co_code") input = "co_code"
       if (record.Input.toLowerCase() === "sectcode" || record.Input.toLowerCase() === "sect_code") input = "sect_code"
       if (record.Input.toLowerCase() === "indexcode" || record.Input.toLowerCase() === "index_code") input = "index_code"
@@ -143,7 +145,7 @@ function processCSV(csvFilePath) {
         "PromptQL": promptQL,
         "Table Description": (record["Report Name"]),
         API_URL: record["API URL"],
-        Frequency: record.Frequency,
+        notes: record.Notes.replaceAll("{{comma}}", ","),
         "Updation Time": record["Updation Time"],
         Interval: record.Interval,
         Input: input,
@@ -176,6 +178,9 @@ function processCSV(csvFilePath) {
 
       const abbreviated = desc//abbreviateColumnName(desc)
       gqlAlias = abbreviated === "co_code" ? "co_code" : record.GQL_Alias ? record.GQL_Alias : currentTable["Table Name"].indexOf("_ratio") > -1 ? record.Column_Name : "" 
+      if (currentTable["Table Name"].toLowerCase().indexOf("trailing_twelvemonths")){
+        if (gqlAlias.toLowerCase() === "ttmason" || gqlAlias.toLowerCase() === "date" || gqlAlias.toLowerCase() === "record_date") gqlAlias = ""
+      }
       /*if (currentTable["Table Name"].indexOf("solvency") > -1){
         console.log(currentTable["Table Name"], abbreviated, record.Column_Name, gqlAlias)
       }*/
@@ -190,6 +195,17 @@ function processCSV(csvFilePath) {
           Is_Index: record.Is_Index
         });
         if (gqlAlias !== "") currentTable.Columns[currentTable.Columns.length-1]["GQL_Alias"] = gqlAlias
+        if (abbreviated === "yrc"){
+          for (const mqr of ["month", "quarter", "year"]){
+            currentTable.Columns.push({
+              Column_Name: mqr,
+              Column_DataType: "int",
+              Column_Description: mqr,
+              Is_Unique: record.Is_Unique,
+              Is_Index: record.Is_Index
+            });
+          }
+        }
       
       }
       else console.log("Column already exists", abbreviated)

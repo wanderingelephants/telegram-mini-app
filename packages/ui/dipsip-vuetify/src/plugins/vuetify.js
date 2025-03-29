@@ -13,7 +13,8 @@ import { createVuetify } from 'vuetify'
 import { aliases, mdi } from 'vuetify/iconsets/mdi-svg'
 import { mdiSend, mdiChatProcessing, mdiCompare, mdiChartPie, mdiChartLine, 
   mdiCurrencyRupee, mdiInformationOutline, mdiMinus, mdiPlus, mdiDotsHorizontal,
-mdiClose, mdiCircle, mdiBrain, mdiChevronDoubleLeft, mdiChevronDoubleRight, mdiMenu, mdiSquareEditOutline, mdiMagnify } from '@mdi/js'
+mdiClose, mdiCircle, mdiBrain, mdiChevronDoubleLeft, mdiChevronDoubleRight, mdiMenu, mdiSquareEditOutline, 
+mdiMagnify, mdiDelete, mdiBank, mdiCalculator, mdiCommentText, mdiFolder, mdiSignalCellularOutline } from '@mdi/js'
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
@@ -36,7 +37,7 @@ export default createVuetify({
       mdiChevronDoubleLeft,mdiChevronDoubleRight,
       mdiMenu, 
       mdiSquareEditOutline,
-      mdiMagnify
+      mdiMagnify, mdiDelete, mdiBank, mdiCalculator, mdiCommentText, mdiFolder, mdiSignalCellularOutline
     },
     sets: {
       mdi,

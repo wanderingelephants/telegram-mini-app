@@ -2,79 +2,42 @@
   <v-responsive>
     <v-container fluid class="fill-height pa-0">
       <v-row no-gutters class="fill-height">
-        <!--<v-col
-          cols="12"
-          md="6"
-          order="first"
-          order-md="first"
-          class="left-panel"
-        >
-          <prompt-chat
-            :distilledModel="distilledModel"
-            :title="title"
-            :subTitles="subTitles"
-            :userInputLabel="userInputLabel"
-            :debug="debug"
-          ></prompt-chat>
-        </v-col> 
-        <v-col
-          cols="12"
-          md="6"
-          order="last"
-          order-md="last"
-          class="right-panel"
-        > -->
         <v-col cols="12">
           <v-card-text v-if="loggedInGoogle === true"
             >Welcome {{ userGoogle.displayName }}</v-card-text
           >
           <v-card>
-            <v-card-title class="subtitle-wrap"
-              >We are NOT registered with SEBI. We do not execute any trades, or
-              take any deposits.</v-card-title
-            >
-            <v-card-title class="subtitle-wrap"
-              >No Investment advice. Only providing DIY query
-              tools.</v-card-title
-            >
             <google-sign-in />
             <v-card-text>
-              <v-btn @click="updateWatchList" color="primary"
-                >Update Watch List</v-btn
-              >
-              <v-autocomplete
-                v-model="selectedStocks"
-                :items="stocks"
-                item-title="company_name"
-                :custom-filter="customFilter"
-                item-value="id"
-                :label="
-                  'Select Stocks ' +
-                  (selectedStocks.length
-                    ? `(${selectedStocks.length} selected)`
-                    : '')
-                "
-                multiple
-                chips
-                closable-chips
-                persistent-hint
-                @update:model-value="handleStockSelection"
-                :search="searchText"
-                @update:search="handleSearch"
-                return-object
-              >
-                <template v-slot:chip="{ props, item }">
-                  <v-chip
-                    v-bind="props"
-                    :text="item.raw.company_name"
-                    variant="elevated"
-                  >
-                    <v-icon start>$mdiChartLine</v-icon>
-                    {{ item.raw.company_name }}
-                  </v-chip>
-                </template>
-              </v-autocomplete>
-            </v-card-text>
+  <div class="text-h6 mb-4">Your Watchlist</div>
+  <v-row>
+    <v-col
+      v-for="item in portfolio"
+      :key="item.id"
+      cols="12"
+      sm="6"
+      md="4"
+      class="py-2"
+    >
+      <v-card outlined class="pa-3">
+        <div class="d-flex align-center justify-space-between">
+          <div class="text-subtitle-1">{{ item.company_name }}</div>
+          <span
+          
+            @click="removeStockFromPortfolio(item.id)"
+            >
+            <v-icon color="error" start>$mdiDelete</v-icon>
+          </span>
+        </div>
+      </v-card>
+    </v-col>
+  </v-row>
+  <v-row v-if="portfolio.length === 0">
+    <v-col cols="12" class="text-center">
+      <div class="text-subtitle-1 grey--text">Your watchlist is empty</div>
+    </v-col>
+  </v-row>
+</v-card-text>
             <v-card-text>
               <v-row>
                 <v-col cols="12" sm="4">
@@ -98,26 +61,13 @@
     </v-col>
   </v-row>
 </v-col>
-
-<!--<v-col cols="12">
-  <v-text-field
-    :value="dateRangeText"
-    label="Selected Date Range"
-    readonly
-    dense
-  ></v-text-field>
-</v-col> -->
-              </v-row>
+</v-row>
               <v-btn @click="getAnnouncements" color="primary">Fetch Announcements</v-btn>
-            <stock-watch-list :announcements="announcements" :insiderTrades="insiderTrades" :candles="candles"/>
+            <announcements :announcements="announcements" :insiderTrades="insiderTrades" :candles="candles"/>
             </v-card-text>
           </v-card>
         </v-col>
       </v-row>
-      <!-- INFORMATIOn DISPLAY FOR THE WATCH LIST -->
-      <!--<v-row>
-        <stock-watch-list :announcements="announcements" :insiderTrades="insiderTrades"/>
-      </v-row> -->
       <!-- Error Snackbar -->
       <v-snackbar v-model="showError" color="error" timeout="3000">
         {{ errorMessage }}
@@ -142,7 +92,7 @@ import { reverse_mapping_category_of_insider, reverse_mapping_regulation,
   reverse_mapping_transaction_type, reverse_mapping_exchange,
   reverse_mapping_announcement_sentiment } from "./mappings";
 import GoogleSignIn from "../components/GoogleSignIn";
-import StockWatchList from "./StockWatchList.vue"
+import Announcements from "./Announcements.vue"
 import MutualFundAnalysis from "../components/MutualFundAnalysis.vue";
 import {
   GET_STOCK_LIST,
@@ -156,7 +106,7 @@ export default {
     MutualFundAnalysis,
   //  PromptChat,
     GoogleSignIn,
-    StockWatchList
+    Announcements
   },
   data() {
     return {
@@ -209,7 +159,6 @@ export default {
     async loggedInGoogle(newVal) {},
     async userGoogle(newVal) {
       if (newVal && newVal.email){
-        if (this.stocks.length === 0) await this.getStocks()
         await this.getUserStockPortfolio();
       } 
     },
@@ -225,6 +174,23 @@ export default {
 },
   
   methods: {
+    async removeStockFromPortfolio(stock_id){
+      try {
+          const resp = await this.$apollo.query({
+            query: DELETE_USER_STOCK_PORTFOLIO,
+            variables: {
+              stock_id,
+              email: this.userGoogle.email,
+            },
+            fetchPolicy: "no-cache",
+          });
+          this.snackbar.message = "Removed"
+          this.snackbar.show = true
+          await this.getUserStockPortfolio()
+        } catch (e) {
+          console.error(e);
+        }
+    },
     async getAnnouncements(){
       try{
         const resp = await this.$apollo.query({
@@ -338,7 +304,6 @@ export default {
         yesterday.setDate(yesterday.getDate() - 1);
         this.fromDate = yesterday;
         this.toDate = yesterday;
-        console.log("Yday", this.fromDate, this.toDate)
         this.showCustomDatePicker = false;
         break;
         
@@ -365,94 +330,30 @@ export default {
         break;
     }
   },
-    async updateWatchList() {
-      const previousStocks = new Set(this.portfolio.map((stock) => stock.id)); // Old selection
-      const currentStocks = new Set(
-        this.selectedStocks.map((stock) => stock.id)
-      ); // New selection
-      const inserts = this.selectedStocks.filter(
-        (stock) => !previousStocks.has(stock.id)
-      );
-
-      // Deletes: Stocks that are in `portfolio` but NOT in `selectedStocks`
-      const deletes = this.portfolio.filter(
-        (stock) => !currentStocks.has(stock.id)
-      );
-      for (const [index, item] of inserts.entries()) {
-        try {
-          const resp = await this.$apollo.query({
-            query: INSERT_PORTLFOLIO_STOCK,
-            variables: {
-              object: {
-                stock_id: item.id,
-                user: {
-                  data: {
-                    email: this.userGoogle.email,
-                    google_id: this.userGoogle.uid,
-                  },
-                  on_conflict: {
-                    constraint: "users_email_key",
-                    update_columns: ["email"],
-                  },
-                },
-              },
-            },
-            fetchPolicy: "no-cache",
-          });
-        } catch (e) {
-          console.error(e);
-        }
-      }
-      for (const [index, item] of deletes.entries()) {
-        try {
-          const resp = await this.$apollo.query({
-            query: DELETE_USER_STOCK_PORTFOLIO,
-            variables: {
-              stock_id: item.id,
-              email: this.userGoogle.email,
-            },
-            fetchPolicy: "no-cache",
-          });
-        } catch (e) {
-          console.error(e);
-        }
-      }
-      this.snackbar.show = true
-      this.snackbar.message = "Watch List updated"
-    },
+    
     async getUserStockPortfolio() {
-      if (!this.userGoogle.email) return;
+      //this.portfolio = []
+      if (!this.userGoogle.email){
+        return;
+      } 
       try {
         const resp = await this.$apollo.query({
           query: GET_USER_STOCK_PORTFOLIO,
           variables: {
             email: this.userGoogle.email,
           },
-        });
-        this.selectedStocks = resp.data.portfolio_stocks.map((r) => {
-          return {
-            id: r.stock.id,
-            company_name: r.stock.company_name,
-          };
-        });
-        this.portfolio = this.selectedStocks;
-      } catch (e) {
-        console.error(e);
-      }
-    },
-    async getStocks() {
-      try {
-        let res = await this.$apollo.query({
-          query: GET_STOCK_LIST,
-          variables: {},
           fetchPolicy: "no-cache",
         });
-        this.stocks = res.data.stock;
+        this.portfolio = resp.data.portfolio_stocks.map((r) => {
+          return {
+            id: r.company_master.id,
+            company_name: r.company_master.company_name,
+          };
+        });
       } catch (e) {
         console.error(e);
       }
     },
-
     handleSearch(val) {
       // The search text will be available in 'val'
       this.searchText = val;
@@ -472,8 +373,8 @@ export default {
         yesterday.setDate(yesterday.getDate() - 1);
         this.fromDate = yesterday;
         this.toDate = yesterday;
-        
-    if (this.stocks.length == 0 && this.userGoogle) await this.getStocks();
+       await this.getUserStockPortfolio() 
+    
   },
 };
 </script>

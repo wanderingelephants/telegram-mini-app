@@ -49,9 +49,9 @@ mutation deleteUserMutualFundPortfolio($mutual_fund_id: Int!, $email: String!){
 const GET_USER_STOCK_PORTFOLIO  = gql `
 query  GetUserStockPortfolio($email: String!){
         portfolio_stocks(where: {user: {email : {_eq: $email}}}){
-						stock{
-              id
-              company_name
+						company_master{
+              id: co_code
+              company_name: companyname
             }
   			}
 }
@@ -130,7 +130,7 @@ query UserStockPortfolio($email: String!, $fromDate: date!, $toDate: date!, $fro
 }
 `
 const USER_CHAT_HISTORY = gql`query UserChatHistory($email: String!){
-  user_chat(where: {user: {email: {_eq: $email}}}){
+  user_chat(order_by: {id: desc}, where: {user: {email: {_eq: $email}}}){
     id
     chat_uuid
     chat_title

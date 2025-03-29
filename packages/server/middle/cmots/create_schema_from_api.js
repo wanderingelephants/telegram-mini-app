@@ -117,8 +117,9 @@ async function generateSchemas(csvFilePath, outputDir) {
       try {
         // Fetch data from API
         const apiResponse = await axios.get(apiUrl, axiosConfig);
+        const sortedByRowNum = apiResponse.data.data.sort((a, b) => a.rowno - b.rowno)
         // Extract column names and descriptions
-        const { columns, columnDescs } = extractColumnNames(apiResponse.data.data);
+        const { columns, columnDescs } = extractColumnNames(sortedByRowNum);
         
         // Create second API URL (from S to C)
         const apiUrl2 = apiUrl.replace('/S', '/C');

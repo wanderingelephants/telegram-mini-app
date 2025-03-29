@@ -1,6 +1,5 @@
 const path = require("path")
 const fs = require("fs")
-const { pre_populated_arrays } = require("./DatabaseManager")
 const dataFolder = process.env.DATA_ROOT_FOLDER
 const MAX_RESULTS_TO_FORMAT = 10
 const _getFilePath = function (basePath, chatSessionId, activity, filename) {
@@ -101,12 +100,30 @@ class JavascriptResponseHandler {
         await this.messageManager.saveMessage(this.customData.chatSessionId, this.activity, { result }, "results.json")
 
         let resultString = JSON.stringify(result)
+        const web_app_host = process.env.WEB_APP_HOST
         if (resultString.toLocaleLowerCase().indexOf("javascript") > -1) return "Sorry, No Response"
         let formattingPrompt = `
                 You are a result formatter for indian stock market data. 
                 In response to a User's Question, the system has generated a Result.  
                 create a natural response from the Result, considering the   
-                User Question as context, to craft the formatted response. If the Question was not related
+                User Question as context, to craft the formatted response. The Result will be a JSON 
+                array. Make sure your response includes all entities in the  array. E.g. if Result JSON array
+                has length of 12, representing 12 companies, then your response will also refer to 12 companies.
+                In trying to summarize, do not truncate or drop any data.
+                Do NOT format any numbers.
+                Regarding Company Names. Most responses sent to you will have company_name and company_nse_symbol.
+                In  such cases, in the response output the company_name as a hyper link
+                <a href="${web_app_host}/company/{company_nse_symbol}" class="links data-link" target="_blank" rel="noopener noreferrer">company_name</a>. 
+                <example>Result: {
+    company_name: 'ICICI Bank Ltd',
+    company_nse_symbol: 'ICICIBANK',
+    announcement_document_link: 'https://nsearchives/abc/xyz.pdf'
+  }
+  Your Response will be :   <a href="${web_app_host}/company/ICICIBANK" class="links data-link" target="_blank" rel="noopener noreferrer">ICICI Bank Ltd</a> has an RoA of 2.37, which is impressive.
+  The Result Array may also contain multiple http announcement_document_link. Render them also as an anchor tag. Just put the full URL as href. 
+   Link to Document:  <a href="announcement_document_link" class="links data-link" target="_blank" rel="noopener noreferrer">Document</a> 
+  </example>
+                If the Question was not related
                 to Indian Stock Market, then format a polite refusal. Some times system generated response may 
                 contain software terms like 'function' 'javascript'. Remove them before crafting your response. End users are non-technical
                 non-programming background, hence response needs to be plain english.
@@ -124,11 +141,13 @@ class JavascriptResponseHandler {
         if (functionName === "analysis"){
             const chatHistory = await this.messageManager.getChatMessages(this.customData.chatSessionId)
             const messagesToSendToFormatter = chatHistory["formatted_responses"]
+            let resultString = JSON.stringify(result)
+            if (resultString.length > 5000) resultString = resultString.substring(0, 5000)
             messagesToSendToFormatter.push({
                 "role": "user",
                 "content": [{
                     "type": "text",
-                    "text": `This is the User Question: ${this.userQuery} . In response to the User Question, the system generated this data: ${JSON.stringify(result)} . \n Output only your formatted response text, and nothing else. `
+                    "text": `This is the User Question: ${this.userQuery} . In response to the User Question, the system generated this data: ${resultString} . \n Output only your formatted response text, and nothing else. `
                 }]
             })
             formattedResponse = await this.formattingLLMClient.sendMessageToLLM(formattingPrompt, messagesToSendToFormatter)

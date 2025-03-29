@@ -33,7 +33,7 @@ class MessageManager {
     constructor(basePath) {
         this.basePath = basePath;
     }
-    async updateGQL(chat_uuid, chat_title, email, user_query, assistant_response, execution_result, assistant_formatted_response) {
+    async updateGQL(chat_uuid, chat_title, email, user_query, assistant_response, execution_result, assistant_formatted_response, isFirst) {
         const query = `mutation insertUserChat($object: user_chat_insert_input!){
   insert_user_chat_one(object: $object, on_conflict: {
     constraint: user_chat_chat_uuid_textContent_user_query_key,
@@ -52,6 +52,7 @@ class MessageManager {
                 "textContent_assistant_response": assistant_response,
                 "textContent_execution_result": execution_result,
                 "textContent_assistant_formatted_response": assistant_formatted_response,
+                isFirst,
                 "updated_at": new Date(),
                 "user": {
                     "data": {
@@ -112,7 +113,7 @@ class MessageManager {
             `This is the ${idx === 0 ? "": "latest"} User Question: ${record.textContent_user_query}\n
                               and in response, system generated this Result: ${record.textContent_execution_result}
                               Output only your formatted response text, and nothing else. `
-            const finalMessage = idx === 0 ? userMessage : "Result of previous Function Execution was : " + chatRecords[idx - 1].textContent_execution_result + "\n" + userMessage
+            const finalMessage = userMessage//idx === 0 ? userMessage : "Result of previous Function Execution was : " + chatRecords[idx - 1].textContent_execution_result + "\n" + userMessage
             messages.push({
                 "role": "user",
                 "content": [{
@@ -145,7 +146,7 @@ class MessageManager {
         }
         for (let idx=0;  idx<chatRecords.length; idx++) {
             const record = chatRecords[idx]
-            const userQueryPrevResult = idx > 0 ? `Result of Previous User Query was :  ${chatRecords[idx - 1].textContent_execution_result} .\n Latest User Question: ` : ""
+            const userQueryPrevResult = ""//idx > 0 ? `Result of Previous User Query was :  ${chatRecords[idx - 1].textContent_execution_result} .\n Latest User Question: ` : ""
             allMessages["user_chats"].push({
                 "role": "user",
                 "content": [{

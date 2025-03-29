@@ -12,19 +12,13 @@
   <v-list-item>
     <v-row align="center" class="px-2 d-flex justify-space-between">
       <!-- Collapse Button -->
-      
           <span  @click="toggleSidebar">
             <v-icon>$mdiChevronDoubleLeft</v-icon>
           </span>
-        
-
       <!-- Search Button -->
-      
-          <span icon @click="openSearch">
+      <span icon @click="openSearch">
             <v-icon>$mdiMagnify</v-icon>
           </span>
-        
-
       <!-- New Chat Button -->
       
           <v-btn icon @click="startNewChat">
@@ -124,15 +118,34 @@
       <!-- Chat Header -->
       <div class="chat-header">
         <v-card-title class="primary white--text">{{ title }}</v-card-title>
-        <v-card-subtitle
+        <!--<v-card-subtitle
           class="subtitle-wrap"
           v-for="(subTitle, idx) in subTitles"
           :key="idx"
         >
           {{ subTitle }}
-        </v-card-subtitle>
+        </v-card-subtitle> -->
       </div>
+<v-expansion-panels>
+  <v-expansion-panel title="What to Query">
+      <v-expansion-panel-text>
+        General/Simple Questions to Deep Dive multi-hop queries picking from hundreds of objective/subjective signals.
 
+        <div style="max-height: 500px; overflow-y: auto;">
+        <data-explorer-grid :categorizedArrays="categorizedArrays"/> 
+        </div>
+      </v-expansion-panel-text>
+  </v-expansion-panel>
+</v-expansion-panels> 
+<v-expansion-panels>
+  <v-expansion-panel title="How to Query">
+      <v-expansion-panel-text>
+        First, you can specify Company attributes like name, market cap (in Crores), market cap type (Small Cap, Mid Cap, Large Cap), sector name. 
+        And then fish wider and deeper along various metrics or subjective signals. Creating the right prompt is an iterative process, and nobody gets it perfect first time.
+        Be verbose in instructions, but precise with Proper Nouns like Field Names, Sector Names, Index Names, Company Names. See the exhaustive list for Sectors and Indices here .
+      </v-expansion-panel-text>
+  </v-expansion-panel>
+</v-expansion-panels> 
       <!-- Messages Area -->
       <div class="messages-wrapper" ref="messagesContainer">
         <v-card-text class="chat-messages">
@@ -144,7 +157,19 @@
                     {{ message.role === "user" ? "You" : "Assistant" }}
                   </v-card-title>
                   <v-card-text class="white-space-pre pt-0" v-html="message.content"></v-card-text>
-                  <v-btn color="primary" v-if="message.is_alert_set === true" @click="setAlert(message.id, message.chat_uuid, false)">Unset Alert</v-btn>
+                  <v-btn color="primary" v-if="message.is_alert_set === true" @click="setAlert(message.id, message.chat_uuid, false)">Remove Report</v-btn>
+                  <v-btn color="primary" v-if="message.role === 'assistant' &&  message.is_alert_set !== true" @click="setAlert(message.id, message.chat_uuid, true)">Save</v-btn>
+                  <svg v-if="message.role === 'assistant' &&  message.is_alert_set !== true"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  style="margin-left: 8px; fill: #2196F3; cursor: pointer;"
+  data-action="show-snackbar"
+  data-message="Commonly used Prompts can be Saved and run as Reports. Further, you may schedule them to act as Investing/Trading Alerts"
+>
+  <path d="M13,9H11V7H13M13,17H11V11H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
+</svg>
                 </v-card>
               </v-list-item>
             </template>
@@ -177,6 +202,7 @@
             append-inner-icon="$send"
             @click:append-inner="sendMessage"
           />
+          <span><v-icon @click="sendMessage">$mdiSend</v-icon></span>
         </v-card-actions>
       </div>
     </v-card>
@@ -227,25 +253,131 @@
 import {
   USER_CHAT_HISTORY, UPDATE_USER_CHAT
 } from "../lib/helper/queries";
-
 import { mapState } from "vuex";
 import GoogleSignIn from "../components/GoogleSignIn";
+import DataExplorerGrid from './DataExplorerGrid.vue';
 export default {
   name: "Assistant",
   components: {
-    GoogleSignIn,
+    GoogleSignIn, DataExplorerGrid
   },
-  mounted() {
+ async mounted() {
     document.addEventListener("click", this.handleButtonClick);
     const chatSessionId = crypto.randomUUID();
     sessionStorage.setItem("chatSessionId", chatSessionId);
-      
+    try{
+          const response = await fetch("/api/chat/promptfields", {})
+          this.categorizedArrays = await response.json()
+      }
+      catch(e){
+        console.error(e)
+      }  
   },
   beforeUnmount() {
     document.removeEventListener("click", this.handleButtonClick);
   },
   data() {
     return {
+      expanded: true,
+      categorizedArrays: {
+        /*financials: [
+          {
+            "dataset_name": "company_balance_sheet",
+            "dataset_category": "Financials",
+            "fields": [
+              "total_assets",
+              "total_liabilities",
+              "shareholders_equity",
+              "cash_and_cash_equivalents",
+              "long_term_debt"
+            ]
+          },
+          {
+            "dataset_name": "company_profit_loss",
+            "dataset_category": "Financials",
+            "fields": [
+              "total_revenue",
+              "operating_expenses",
+              "operating_profit",
+              "net_profit",
+              "earnings_per_share"
+            ]
+          }
+        ],
+        ratios: [
+          {
+            "dataset_name": "financial_ratios",
+            "dataset_category": "Ratios",
+            "fields": [
+              "current_ratio",
+              "debt_to_equity_ratio",
+              "return_on_equity",
+              "price_to_earnings_ratio",
+              "dividend_yield"
+            ]
+          },
+          {
+            "dataset_name": "valuation_ratios",
+            "dataset_category": "Ratios",
+            "fields": [
+              "price_to_book_ratio",
+              "enterprise_value_to_ebitda",
+              "price_to_sales_ratio",
+              "market_cap_to_revenue",
+              "ev_to_revenue"
+            ]
+          }
+        ],
+        technicals: [
+          {
+            "dataset_name": "stock_price_trends",
+            "dataset_category": "Technicals",
+            "fields": [
+              "moving_average_50d",
+              "moving_average_200d",
+              "relative_strength_index",
+              "support_level",
+              "resistance_level"
+            ]
+          },
+          {
+            "dataset_name": "trading_volumes",
+            "dataset_category": "Technicals",
+            "fields": [
+              "average_trading_volume",
+              "volume_trend",
+              "on_balance_volume",
+              "volume_price_trend",
+              "money_flow_index"
+            ]
+          }
+        ],
+        subjective: [
+          {
+            "dataset_name": "analyst_ratings",
+            "dataset_category": "Subjective",
+            "fields": [
+              "consensus_rating",
+              "target_price",
+              "rating_trend",
+              "number_of_analysts",
+              "recommendation_summary"
+            ]
+          },
+          {
+            "dataset_name": "investor_sentiment",
+            "dataset_category": "Subjective",
+            "fields": [
+              "social_media_sentiment",
+              "institutional_holding_percentage",
+              "insider_trading_activity",
+              "media_coverage_score",
+              "retail_investor_interest"
+            ]
+          }
+        ]*/
+      },
+      promptQLFields: [],
       sidebarOpen: false,
       hoveredChatId: null,
       menu: {
@@ -282,7 +414,7 @@ export default {
        progress: 100,
       interval: null,
       distilledModel: "reasoning_dseek",
-      title: "Stock Market Helper Agent",
+      title: "India Stock Market AI Assistant",
       subTitles: [
         "Ask what Google/ChatGPT cannot answer. E.g.",
         "Which stocks are present in only 2 mutual funds",
@@ -311,40 +443,58 @@ export default {
     toggleSidebar() {
       this.sidebarOpen = !this.sidebarOpen;
     },
-    async getUserChatHistory(){
-      const chatQueryResponse = await this.$apollo.query({
-        query: USER_CHAT_HISTORY,
-        variables: {email: this.userGoogle.email},
-        fetchPolicy: "no-cache"
-      })
-      this.chatHistory = []
-      for (const chat of chatQueryResponse.data.user_chat){
-        if ((this.chatHistory.filter(ch => ch.id === chat.chat_uuid)).length === 0){
-          this.chatHistory.push({
-            id: chat.chat_uuid,
-            title: chat.chat_title,
-            messages: []
-          })
-        }
-        
-          let mesgs = (this.chatHistory.filter(ch => ch.id === chat.chat_uuid))[0].messages
-          mesgs.push({
-            "role": "user",
-            "content": chat.textContent_user_query
-          })
-          const chatRecord = {
-            "role": "assistant",
-            "content": chat.textContent_assistant_formatted_response
-          }
-          if (chat.is_alert_set === true) {
-            chatRecord["id"] = chat.id
-            chatRecord["is_alert_set"] = true
-            chatRecord["chat_uuid"] = chat.chat_uuid
-          }
-          mesgs.push(chatRecord)
-        }
-      
-    },
+    async getUserChatHistory() {
+  const chatQueryResponse = await this.$apollo.query({
+    query: USER_CHAT_HISTORY,
+    variables: { email: this.userGoogle.email },
+    fetchPolicy: "no-cache"
+  });
+
+  const chatMap = new Map();
+
+  // Group chats by chat_uuid
+  for (const chat of chatQueryResponse.data.user_chat) {
+    if (!chatMap.has(chat.chat_uuid)) {
+      chatMap.set(chat.chat_uuid, {
+        id: chat.chat_uuid,
+        title: chat.chat_title,
+        messages: []
+      });
+    }
+
+    const messages = chatMap.get(chat.chat_uuid).messages;
+
+    // Add user query message
+    messages.push({
+      role: "user",
+      content: chat.textContent_user_query,
+      id: chat.id // Ensure correct sorting later
+    });
+
+    // Add assistant response message
+    const chatRecord = {
+      role: "assistant",
+      content: chat.textContent_assistant_formatted_response,
+      id: chat.id, // Ensure correct sorting later
+    };
+
+    if (chat.is_alert_set === true) {
+      chatRecord.is_alert_set = true;
+      chatRecord.chat_uuid = chat.chat_uuid;
+    }
+
+    messages.push(chatRecord);
+  }
+
+  // Convert map to array and sort
+  this.chatHistory = Array.from(chatMap.values())
+    .sort((a, b) => b.messages[0].id - a.messages[0].id) // Sort chat sessions DESC
+    .map(session => ({
+      ...session,
+      messages: session.messages.sort((a, b) => a.id - b.id) // Sort messages ASC
+    }));
+},
+
     startNewChat() {
       const chatSessionId = crypto.randomUUID();
       sessionStorage.setItem("chatSessionId", chatSessionId);

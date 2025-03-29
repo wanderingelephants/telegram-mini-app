@@ -39,16 +39,20 @@ const route = async (req, res) => {
   try {  
     const PROMPTS_FOLDER = path.join(__dirname, 'prompts');
     const systemPromptPath = path.join(PROMPTS_FOLDER, `${activity}_system_prompt.txt`);
-    const cachedArraysDefinition = path.join(process.env.DATA_ROOT_FOLDER, "graphql_fields.txt")
-    const arrayContent = fs.readFileSync(cachedArraysDefinition, "utf-8")
     let systemPrompt = await readFile(systemPromptPath, 'utf-8');
-    systemPrompt = systemPrompt.replace("{{cached_pre_loaded_graphql_fields}}", arrayContent)
-    fs.writeFileSync("fullPrompt.txt", systemPrompt)
+    if (activity === "stock_market_chat"){
+      const cachedArraysDefinition = path.join(process.env.DATA_ROOT_FOLDER, "prompts_fields.json")
+      const arrayContent = fs.readFileSync(cachedArraysDefinition, "utf-8")
+      systemPrompt = systemPrompt.replace("{{cached_pre_loaded_graphql_fields}}", arrayContent)
+      fs.writeFileSync(path.join(process.env.DATA_ROOT_FOLDER, "full_stock_market_chat_prompt.txt"), systemPrompt)
+  
+    }
     const llmClient = new LLMClient(await getLLMToUse(email, activity), await getModelToUse(email, activity));
     let formattingLLMClient = new LLMClient(await getFormattingLLMToUse(email, activity), await getModelToUse(email, activity))
     let responseHandler;
     let messagesToSend;
-    let messageManager
+    let messageManager;
+    let isFirst = false;
     //console.log("chatHistory", chatHistory)
     switch(activity){
         case "stock_market_chat":
@@ -56,12 +60,12 @@ const route = async (req, res) => {
             messageManager = new MessageManager(path.join(dataRootFolder, "generated_functions"));
             const chatHistory = await messageManager.getChatMessages(chatSessionId)
     
-            //let lastResultMessage = await messageManager.getLastMessage(chatSessionId, activity, execResultsFileName)
-            //if (lastResultMessage.result) userLatestMessage = "Result of Previous function execution was : " + JSON.stringify(lastResultMessage.result) + "\n" + userLatestMessage
-            if (chatHistory["results"].length > 0) userLatestMessage = `Result of Previous Function Execution was :  ${chatHistory["results"][chatHistory["results"].length - 1].result} .\n Latest User Question: ${messages[messages.length - 1].content}` 
+        //    if (chatHistory["results"].length > 0) userLatestMessage = `Result of Previous Function Execution was :  ${chatHistory["results"][chatHistory["results"].length - 1].result} .\n Latest User Question: ${messages[messages.length - 1].content}` 
+        //try without sending previous execution result. because of chat history, context should still be there. works in  claude console.    
+        if (chatHistory["results"].length > 0) userLatestMessage = `User Question: ${messages[messages.length - 1].content}` 
+        else isFirst = true
             await messageManager.saveMessage(chatSessionId, activity, { "role": 'user', content: [{ "type": 'text', "text": userLatestMessage }] }, chatMessagesFileName);
             responseHandler = new JavascriptResponseHandler(dbManager, messageManager, formattingLLMClient, activity, messages[messages.length - 1].content, {chatSessionId, email})
-            //messagesToSend = await messageManager.getMessages(chatSessionId, activity, chatMessagesFileName)
             messagesToSend = chatHistory["user_chats"]
             messagesToSend.push({ "role": 'user', content: [{ "type": 'text', "text": userLatestMessage }]})
             break
@@ -82,31 +86,48 @@ const route = async (req, res) => {
     let chatId;
     const chat_title = messages[messages.length - 1].content; //FIXME this will be summary title of the Question
     if (activity === "stock_market_chat"){
-      const resp = await messageManager.updateGQL(chatSessionId, chat_title, email, messages[messages.length - 1].content, llmResponse, JSON.stringify(result), formattedResponse)
+      const resp = await messageManager.updateGQL(chatSessionId, chat_title, email, messages[messages.length - 1].content, llmResponse, JSON.stringify(result), formattedResponse, isFirst)
       chatId = resp.data.insert_user_chat_one.id  
     } if (true == streaming) {
       let json;
       const lines = formattedResponse.split("\n")
       for (const line of lines) {
         let sendLine = line;
-        if (line.indexOf("https://") > -1) {
+        /*if (line.indexOf("https://") > -1) {
           sendLine = line.replace(
             /(https?:\/\/[^\s.]+(?:\.[^\s.]+)*)(?=\.*\s|$)/g,
             '<a href="$1" class="links data-link" target="_blank" rel="noopener noreferrer">$1</a>'
           );
-        }
+        }*/
         json = { "response": sendLine, "done": false }
         res.write(`data: ${JSON.stringify(json)}\n\n`);
       }
       /*json = { "response": `<div style="display: flex; align-items: center;">
-  <button   
-    style="background-color: #ff3b30; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.2);" 
-    data-action="set-alert"
-    data-chatuuid="${chatSessionId}"
-    data-chatid="${chatId}"
-    >
-    Set Alert
-  </button>
+  <span   
+  style="background-color: #ff3b30; 
+         color: white; 
+         padding: 4px 10px; 
+         padding-left: 12px;
+         border: none; 
+         border-radius: 6px; 
+         cursor: pointer; 
+         font-weight: 500; 
+         font-size: 14px;
+         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+         display: inline-flex;
+         align-items: center;
+         justify-content: center;
+         height: 32px;
+         line-height: 1px;
+         text-align: center;
+         white-space: nowrap;"
+  data-action="set-alert"
+  data-chatuuid="${chatSessionId}"
+  data-chatid="${chatId}"
+>
+  Save
+</span>
+
   <svg
   xmlns="http://www.w3.org/2000/svg"
   width="24"
@@ -114,7 +135,7 @@ const route = async (req, res) => {
   viewBox="0 0 24 24"
   style="margin-left: 8px; fill: #2196F3; cursor: pointer;"
   data-action="show-snackbar"
-  data-message="This is like Google News Alert. When underlying data changes, and your query conditions are met, system will notify you. This can be used to set up investing or trading strategies, based on multiple signals of your choice."
+  data-message="After Saving, you can run this like a Tabular Report, and also schedule it. Most Cost-Effective way for commonly used prompts. Think of it as a Saved Screen/Adhoc Report, in other systems."
 >
   <path d="M13,9H11V7H13M13,17H11V11H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
 </svg>

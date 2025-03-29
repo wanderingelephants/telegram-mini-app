@@ -50,6 +50,10 @@ const routes = {
             view: require("./api/chat/view"),
             promptfields: require("../cmots/endpoints/promptfields")
         },
+        company:{
+            details: require("./api/company/details"),
+            list: require("./api/company/list")
+        },
         cmots:{
             company: require("../cmots/endpoints/company"),
             master: require("../cmots/endpoints/master"),
@@ -108,6 +112,8 @@ const routes = {
 };
 router.post("/api/auth/google", routes.api.auth.google)
 router.get("/api/auth/callback", routes.api.auth.callback)
+router.get("/api/company/details/:symbol/:entity", verifyToken, routes.api.company.details)
+router.get("/api/company/list", routes.api.company.list)
 router.post("/api/chat/reasoning", verifyToken, routes.api.chat.reasoning)
 router.post("/api/chat/share", verifyToken, routes.api.chat.share)
 router.post("/api/chat/setalert", verifyToken, routes.api.chat.setalert)
