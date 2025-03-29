@@ -130,7 +130,19 @@ query UserStockPortfolio($email: String!, $fromDate: date!, $toDate: date!, $fro
 }
 `
 const USER_CHAT_HISTORY = gql`query UserChatHistory($email: String!){
-  user_chat(order_by: {id: desc}, where: {user: {email: {_eq: $email}}}){
+  user_chat(order_by: {id: desc}, where: {isFirst:{_eq: true},user: {email: {_eq: $email}}}){
+    id
+    chat_uuid
+    chat_title
+    textContent_user_query
+    textContent_assistant_formatted_response
+    created_at
+    updated_at
+    is_alert_set
+  }
+}`
+const USER_CHAT_MESSAGES_FOR_ID = gql`query UserChatHistory($email: String!, $chat_uuid: uuid!){
+  user_chat(order_by: {id: asc}, where: {chat_uuid:{_eq: $chat_uuid},user: {email: {_eq: $email}}}){
     id
     chat_uuid
     chat_title
@@ -164,5 +176,5 @@ mutation update_user_chat($chat_id: Int!, $chat_uuid: uuid!, $is_alert_set: Bool
 export {
     GET_STOCK_LIST, INSERT_PORTLFOLIO_STOCK, GET_USER_STOCK_PORTFOLIO, DELETE_USER_STOCK_PORTFOLIO,
     GET_PORTFOLIO_ANNOUNCEMENTS, GET_USER_MF_PORTFOLIO, INSERT_USER_MF_PORTFOLIO, DELETE_USER_MF_PORTFOLIO,
-    INSERT_USER_CONFIG, DELETE_USER_CONFIG, USER_CHAT_HISTORY, CHAT_VIEW, UPDATE_USER_CHAT
+    INSERT_USER_CONFIG, DELETE_USER_CONFIG, USER_CHAT_HISTORY, CHAT_VIEW, UPDATE_USER_CHAT, USER_CHAT_MESSAGES_FOR_ID
 }

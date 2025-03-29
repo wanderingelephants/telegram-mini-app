@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const util = require('util');
+const crypto = require('crypto');
 const mkdir = util.promisify(fs.mkdir);
 const writeFile = util.promisify(fs.writeFile);
 const readFile = util.promisify(fs.readFile);
@@ -34,11 +35,19 @@ class MessageManager {
         this.basePath = basePath;
     }
     async updateGQL(chat_uuid, chat_title, email, user_query, assistant_response, execution_result, assistant_formatted_response, isFirst) {
+        const chat_hash = crypto.createHash('md5').update(JSON.stringify({
+            "chat_uuid": chat_uuid,
+                "chat_title": chat_title,
+                "textContent_user_query": user_query,
+                "textContent_assistant_response": assistant_response,
+                "textContent_execution_result": execution_result,
+                "textContent_assistant_formatted_response": assistant_formatted_response,
+                isFirst
+        })).digest('hex'); //instead of having a unique composite key comprising all columns, just hash the whole object, and have unique key on the hash 
         const query = `mutation insertUserChat($object: user_chat_insert_input!){
   insert_user_chat_one(object: $object, on_conflict: {
-    constraint: user_chat_chat_uuid_textContent_user_query_key,
-    update_columns: [textContent_user_query,textContent_execution_result,
-    textContent_assistant_response, textContent_assistant_formatted_response]
+    constraint: user_chat_chat_hash_key,
+    update_columns: [updated_at]
   }){
     id
     chat_uuid
@@ -53,6 +62,7 @@ class MessageManager {
                 "textContent_execution_result": execution_result,
                 "textContent_assistant_formatted_response": assistant_formatted_response,
                 isFirst,
+                chat_hash,
                 "updated_at": new Date(),
                 "user": {
                     "data": {

@@ -251,7 +251,7 @@
 
 <script>
 import {
-  USER_CHAT_HISTORY, UPDATE_USER_CHAT
+  USER_CHAT_HISTORY, UPDATE_USER_CHAT, USER_CHAT_MESSAGES_FOR_ID
 } from "../lib/helper/queries";
 import { mapState } from "vuex";
 import GoogleSignIn from "../components/GoogleSignIn";
@@ -443,74 +443,62 @@ export default {
     toggleSidebar() {
       this.sidebarOpen = !this.sidebarOpen;
     },
-    async getUserChatHistory() {
-  const chatQueryResponse = await this.$apollo.query({
-    query: USER_CHAT_HISTORY,
-    variables: { email: this.userGoogle.email },
-    fetchPolicy: "no-cache"
-  });
-
-  const chatMap = new Map();
-
-  // Group chats by chat_uuid
-  for (const chat of chatQueryResponse.data.user_chat) {
-    if (!chatMap.has(chat.chat_uuid)) {
-      chatMap.set(chat.chat_uuid, {
-        id: chat.chat_uuid,
-        title: chat.chat_title,
-        messages: []
-      });
-    }
-
-    const messages = chatMap.get(chat.chat_uuid).messages;
-
-    // Add user query message
-    messages.push({
-      role: "user",
-      content: chat.textContent_user_query,
-      id: chat.id // Ensure correct sorting later
-    });
-
-    // Add assistant response message
-    const chatRecord = {
-      role: "assistant",
-      content: chat.textContent_assistant_formatted_response,
-      id: chat.id, // Ensure correct sorting later
-    };
-
-    if (chat.is_alert_set === true) {
-      chatRecord.is_alert_set = true;
-      chatRecord.chat_uuid = chat.chat_uuid;
-    }
-
-    messages.push(chatRecord);
-  }
-
-  // Convert map to array and sort
-  this.chatHistory = Array.from(chatMap.values())
-    .sort((a, b) => b.messages[0].id - a.messages[0].id) // Sort chat sessions DESC
-    .map(session => ({
-      ...session,
-      messages: session.messages.sort((a, b) => a.id - b.id) // Sort messages ASC
-    }));
-},
-
+    async getUserChatHistory(){
+      const chatQueryResponse = await this.$apollo.query({
+        query: USER_CHAT_HISTORY,
+        variables: {email: this.userGoogle.email},
+        fetchPolicy: "no-cache"
+      })
+      this.chatHistory = []
+      for (const chat of chatQueryResponse.data.user_chat){
+        this.chatHistory.push({
+          id: chat.chat_uuid,
+          title: chat.chat_title
+        })
+      }
+    },
     startNewChat() {
       const chatSessionId = crypto.randomUUID();
       sessionStorage.setItem("chatSessionId", chatSessionId);
       this.messages = []; // Clear messages for a new session
       this.title = "New Chat";
     },
-    loadChat(chatId) {
+    async loadChat(chatId) {
+      this.messages = []
       sessionStorage.setItem("chatSessionId", chatId);
-      this.messages = this.chatHistory.filter(c => c.id === chatId)[0].messages
-      console.log(this.messages)
+      try{
+        const resp = await this.$apollo.query({
+          query: USER_CHAT_MESSAGES_FOR_ID,
+          variables: {email: this.userGoogle.email, chat_uuid: chatId},
+          fetchPolicy: "no-cache"
+        })
+        const chats = resp.data.user_chat
+        for (const chat of chats){
+          this.messages.push({
+            "role": "user",
+            "content": chat.textContent_user_query
+          })
+          const assistantRecord = {
+            "role": "assistant",
+            "content": chat.textContent_assistant_formatted_response
+          }
+          if (chat.is_alert_set === true) {
+            assistantRecord["id"] = chat.id
+            assistantRecord["is_alert_set"] = true
+            assistantRecord["chat_uuid"] = chat.chat_uuid
+          }
+          this.messages.push(assistantRecord)
+        }
+      }
+      catch(e){
+        console.error(e)
+      }
+      
     },
     openMenu(event, chatId) {
   // Prevent the default event and stop propagation
   event.preventDefault();
   event.stopPropagation();
-  console.log("openMenu", event.clientX, event.clientY)
   // Set the position based on the mouse click
   this.menu.x = event.clientX;
   this.menu.y = event.clientY;
@@ -518,7 +506,7 @@ export default {
   this.menu.show = true;
 },
     async shareChat(chatId) {
-      console.log("Sharing chat:", chatId);
+      
       try{
           const response = await fetch("/api/chat/share", {
           method: "POST",

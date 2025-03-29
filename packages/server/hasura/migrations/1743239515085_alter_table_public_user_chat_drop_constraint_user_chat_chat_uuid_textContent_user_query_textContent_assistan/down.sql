@@ -1,0 +1,1 @@
+alter table "public"."user_chat" add constraint "user_chat_textContent_assistant_response_chat_uuid_textContent_user_query_key" unique ("textContent_assistant_response", "chat_uuid", "textContent_user_query");
