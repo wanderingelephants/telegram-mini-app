@@ -51,7 +51,8 @@ const route = async (req, res) => {
     let formattingLLMClient = new LLMClient(await getFormattingLLMToUse(email, activity), await getModelToUse(email, activity))
     let responseHandler;
     let messagesToSend;
-    let messageManager
+    let messageManager;
+    let isFirst = false;
     //console.log("chatHistory", chatHistory)
     switch(activity){
         case "stock_market_chat":
@@ -62,7 +63,7 @@ const route = async (req, res) => {
         //    if (chatHistory["results"].length > 0) userLatestMessage = `Result of Previous Function Execution was :  ${chatHistory["results"][chatHistory["results"].length - 1].result} .\n Latest User Question: ${messages[messages.length - 1].content}` 
         //try without sending previous execution result. because of chat history, context should still be there. works in  claude console.    
         if (chatHistory["results"].length > 0) userLatestMessage = `User Question: ${messages[messages.length - 1].content}` 
-        
+        else isFirst = true
             await messageManager.saveMessage(chatSessionId, activity, { "role": 'user', content: [{ "type": 'text', "text": userLatestMessage }] }, chatMessagesFileName);
             responseHandler = new JavascriptResponseHandler(dbManager, messageManager, formattingLLMClient, activity, messages[messages.length - 1].content, {chatSessionId, email})
             messagesToSend = chatHistory["user_chats"]
@@ -85,7 +86,7 @@ const route = async (req, res) => {
     let chatId;
     const chat_title = messages[messages.length - 1].content; //FIXME this will be summary title of the Question
     if (activity === "stock_market_chat"){
-      const resp = await messageManager.updateGQL(chatSessionId, chat_title, email, messages[messages.length - 1].content, llmResponse, JSON.stringify(result), formattedResponse)
+      const resp = await messageManager.updateGQL(chatSessionId, chat_title, email, messages[messages.length - 1].content, llmResponse, JSON.stringify(result), formattedResponse, isFirst)
       chatId = resp.data.insert_user_chat_one.id  
     } if (true == streaming) {
       let json;

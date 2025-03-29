@@ -130,7 +130,7 @@ query UserStockPortfolio($email: String!, $fromDate: date!, $toDate: date!, $fro
 }
 `
 const USER_CHAT_HISTORY = gql`query UserChatHistory($email: String!){
-  user_chat(where: {user: {email: {_eq: $email}}}){
+  user_chat(order_by: {id: desc}, where: {user: {email: {_eq: $email}}}){
     id
     chat_uuid
     chat_title

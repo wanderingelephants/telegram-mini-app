@@ -33,7 +33,7 @@ class MessageManager {
     constructor(basePath) {
         this.basePath = basePath;
     }
-    async updateGQL(chat_uuid, chat_title, email, user_query, assistant_response, execution_result, assistant_formatted_response) {
+    async updateGQL(chat_uuid, chat_title, email, user_query, assistant_response, execution_result, assistant_formatted_response, isFirst) {
         const query = `mutation insertUserChat($object: user_chat_insert_input!){
   insert_user_chat_one(object: $object, on_conflict: {
     constraint: user_chat_chat_uuid_textContent_user_query_key,
@@ -52,6 +52,7 @@ class MessageManager {
                 "textContent_assistant_response": assistant_response,
                 "textContent_execution_result": execution_result,
                 "textContent_assistant_formatted_response": assistant_formatted_response,
+                isFirst,
                 "updated_at": new Date(),
                 "user": {
                     "data": {

@@ -64,54 +64,7 @@ class LLMClient {
                 //const fileContent = fs.readFileSync(filePath, "utf-8")
                 llmResponse = `const {postToGraphQL} = require(process.env.GRAPHQL_MODULE_PATH)
 const analysis = function(pre_populated_arrays) {
-    // Reasoning Steps:
-    // 1. Create a map to track companies and their indices
-    // 2. Iterate through all indices
-    // 3. For each index, track companies
-    // 4. Find companies appearing in multiple indices
-    
-    let companyIndexMap = new Map();
-
-    // Iterate through all indices
-    console.log(pre_populated_arrays.index_wise_companies)
-    pre_populated_arrays.index_wise_companies.forEach(indexData => {
-        let indexName = indexData.index_name;
-        
-        // For each company in this index
-        indexData.companies_in_index.forEach(company => {
-            if (!companyIndexMap.has(company.company_name)) {
-                companyIndexMap.set(company.company_name, new Set());
-            }
-            
-            // Add this index to company's indices
-            companyIndexMap.get(company.company_name).add(indexName);
-        });
-    });
-
-    // Filter companies in multiple indices
-    let multiIndexCompanies = [];
-    
-    for (let [companyName, indices] of companyIndexMap.entries()) {
-        if (indices.size > 1) {
-            // Find the first company object to get additional details
-            let companyDetails = pre_populated_arrays.index_wise_companies
-                .flatMap(index => index.companies_in_index)
-                .find(c => c.company_name === companyName);
-
-            multiIndexCompanies.push({
-                company_name: companyName,
-                company_nse_symbol: companyDetails.company_nse_symbol,
-                company_sector: companyDetails.company_sector,
-                indices: Array.from(indices),
-                number_of_indices: indices.size
-            });
-        }
-    }
-
-    // Sort by number of indices in descending order
-    multiIndexCompanies.sort((a, b) => b.number_of_indices - a.number_of_indices);
-
-    return multiIndexCompanies;
+    return [{"company_name": "Infy", "company_sector": "IT"}]
 }
 module.exports = analysis`
                 break;

@@ -157,7 +157,19 @@
                     {{ message.role === "user" ? "You" : "Assistant" }}
                   </v-card-title>
                   <v-card-text class="white-space-pre pt-0" v-html="message.content"></v-card-text>
-                  <v-btn color="primary" v-if="message.is_alert_set === true" @click="setAlert(message.id, message.chat_uuid, false)">Unset Alert</v-btn>
+                  <v-btn color="primary" v-if="message.is_alert_set === true" @click="setAlert(message.id, message.chat_uuid, false)">Remove Report</v-btn>
+                  <v-btn color="primary" v-if="message.role === 'assistant' &&  message.is_alert_set !== true" @click="setAlert(message.id, message.chat_uuid, true)">Save</v-btn>
+                  <svg v-if="message.role === 'assistant' &&  message.is_alert_set !== true"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  style="margin-left: 8px; fill: #2196F3; cursor: pointer;"
+  data-action="show-snackbar"
+  data-message="Commonly used Prompts can be Saved and run as Reports. Further, you may schedule them to act as Investing/Trading Alerts"
+>
+  <path d="M13,9H11V7H13M13,17H11V11H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
+</svg>
                 </v-card>
               </v-list-item>
             </template>
@@ -431,40 +443,58 @@ export default {
     toggleSidebar() {
       this.sidebarOpen = !this.sidebarOpen;
     },
-    async getUserChatHistory(){
-      const chatQueryResponse = await this.$apollo.query({
-        query: USER_CHAT_HISTORY,
-        variables: {email: this.userGoogle.email},
-        fetchPolicy: "no-cache"
-      })
-      this.chatHistory = []
-      for (const chat of chatQueryResponse.data.user_chat){
-        if ((this.chatHistory.filter(ch => ch.id === chat.chat_uuid)).length === 0){
-          this.chatHistory.push({
-            id: chat.chat_uuid,
-            title: chat.chat_title,
-            messages: []
-          })
-        }
-        
-          let mesgs = (this.chatHistory.filter(ch => ch.id === chat.chat_uuid))[0].messages
-          mesgs.push({
-            "role": "user",
-            "content": chat.textContent_user_query
-          })
-          const chatRecord = {
-            "role": "assistant",
-            "content": chat.textContent_assistant_formatted_response
-          }
-          if (chat.is_alert_set === true) {
-            chatRecord["id"] = chat.id
-            chatRecord["is_alert_set"] = true
-            chatRecord["chat_uuid"] = chat.chat_uuid
-          }
-          mesgs.push(chatRecord)
-        }
-      
-    },
+    async getUserChatHistory() {
+  const chatQueryResponse = await this.$apollo.query({
+    query: USER_CHAT_HISTORY,
+    variables: { email: this.userGoogle.email },
+    fetchPolicy: "no-cache"
+  });
+
+  const chatMap = new Map();
+
+  // Group chats by chat_uuid
+  for (const chat of chatQueryResponse.data.user_chat) {
+    if (!chatMap.has(chat.chat_uuid)) {
+      chatMap.set(chat.chat_uuid, {
+        id: chat.chat_uuid,
+        title: chat.chat_title,
+        messages: []
+      });
+    }
+
+    const messages = chatMap.get(chat.chat_uuid).messages;
+
+    // Add user query message
+    messages.push({
+      role: "user",
+      content: chat.textContent_user_query,
+      id: chat.id // Ensure correct sorting later
+    });
+
+    // Add assistant response message
+    const chatRecord = {
+      role: "assistant",
+      content: chat.textContent_assistant_formatted_response,
+      id: chat.id, // Ensure correct sorting later
+    };
+
+    if (chat.is_alert_set === true) {
+      chatRecord.is_alert_set = true;
+      chatRecord.chat_uuid = chat.chat_uuid;
+    }
+
+    messages.push(chatRecord);
+  }
+
+  // Convert map to array and sort
+  this.chatHistory = Array.from(chatMap.values())
+    .sort((a, b) => b.messages[0].id - a.messages[0].id) // Sort chat sessions DESC
+    .map(session => ({
+      ...session,
+      messages: session.messages.sort((a, b) => a.id - b.id) // Sort messages ASC
+    }));
+},
+
     startNewChat() {
       const chatSessionId = crypto.randomUUID();
       sessionStorage.setItem("chatSessionId", chatSessionId);
