@@ -11,10 +11,12 @@ import 'vuetify/styles'
 // Composables
 import { createVuetify } from 'vuetify'
 import { aliases, mdi } from 'vuetify/iconsets/mdi-svg'
-import { mdiSend, mdiChatProcessing, mdiCompare, mdiChartPie, mdiChartLine, 
-  mdiCurrencyRupee, mdiInformationOutline, mdiMinus, mdiPlus, mdiDotsHorizontal,
-mdiClose, mdiCircle, mdiBrain, mdiChevronDoubleLeft, mdiChevronDoubleRight, mdiMenu, mdiSquareEditOutline, 
-mdiMagnify, mdiDelete, mdiBank, mdiCalculator, mdiCommentText, mdiFolder, mdiSignalCellularOutline } from '@mdi/js'
+import { mdiBank, mdiBrain, mdiCalculator, mdiChatProcessing, mdiChartLine, 
+  mdiChartPie, mdiChevronDoubleLeft, mdiChevronDoubleRight, mdiCircle, mdiClose, 
+  mdiCommentText, mdiCompare, mdiCurrencyRupee, mdiDelete, mdiDotsHorizontal, 
+  mdiFolder, mdiInformationOutline, mdiMagnify, mdiMenu, mdiMicrophone, mdiMinus, mdiPlus, 
+  mdiSend, mdiSignalCellularOutline, mdiSquareEditOutline, mdiTrashCan } from '@mdi/js'
+
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
@@ -22,22 +24,11 @@ export default createVuetify({
     defaultSet: 'mdi',
     aliases:{
       ...aliases,
-      mdiSend,
-      mdiChatProcessing,
-      mdiCompare,
-      mdiChartPie,
-      mdiChartLine,
-      mdiCurrencyRupee,
-      mdiInformationOutline,
-      mdiMinus,
-      mdiPlus, mdiDotsHorizontal,
-      mdiClose,
-      mdiCircle,
-      mdiBrain,
-      mdiChevronDoubleLeft,mdiChevronDoubleRight,
-      mdiMenu, 
-      mdiSquareEditOutline,
-      mdiMagnify, mdiDelete, mdiBank, mdiCalculator, mdiCommentText, mdiFolder, mdiSignalCellularOutline
+      mdiBank, mdiBrain, mdiCalculator, mdiChatProcessing, mdiChartLine, 
+  mdiChartPie, mdiChevronDoubleLeft, mdiChevronDoubleRight, mdiCircle, mdiClose, 
+  mdiCommentText, mdiCompare, mdiCurrencyRupee, mdiDelete, mdiDotsHorizontal, 
+  mdiFolder, mdiInformationOutline, mdiMagnify, mdiMenu, mdiMicrophone, mdiMinus, mdiPlus, 
+  mdiSend, mdiSignalCellularOutline, mdiSquareEditOutline, mdiTrashCan
     },
     sets: {
       mdi,
