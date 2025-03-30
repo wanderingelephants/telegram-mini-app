@@ -129,13 +129,18 @@
         </div>
       </v-expansion-panel-text>
   </v-expansion-panel>
-</v-expansion-panels> 
-<v-expansion-panels>
   <v-expansion-panel title="How to Query">
       <v-expansion-panel-text>
         First, you can specify Company attributes like name, market cap (in Crores), market cap type (Small Cap, Mid Cap, Large Cap), sector name. 
         And then fish wider and deeper along various metrics or subjective signals. Creating the right prompt is an iterative process, and nobody gets it perfect first time.
         Be verbose in instructions, but precise with Proper Nouns like Field Names, Sector Names, Index Names, Company Names. See the exhaustive list for Sectors and Indices here .
+      </v-expansion-panel-text>
+  </v-expansion-panel>
+  <v-expansion-panel title="Your Saved Prompts">
+      <v-expansion-panel-text>
+        <div style="max-height: 500px; overflow-y: auto;">
+        <saved-prompts :userEmail="userGoogle.email"/>
+        </div>
       </v-expansion-panel-text>
   </v-expansion-panel>
 </v-expansion-panels> 
@@ -284,11 +289,12 @@ import {
 import { mapState } from "vuex";
 import GoogleSignIn from "../components/GoogleSignIn";
 import DataExplorerGrid from './DataExplorerGrid.vue';
-import { getChartByID } from 'apexcharts';
+import SavedPrompts from "./SavedPrompts.vue";
+
 export default {
   name: "Assistant",
   components: {
-    GoogleSignIn, DataExplorerGrid
+    GoogleSignIn, DataExplorerGrid, SavedPrompts
   },
  async mounted() {
     //document.addEventListener("click", this.handleButtonClick);
@@ -550,9 +556,6 @@ export default {
           fetchPolicy: "no-cache"
         })
         }
-
-        
-        console.log(response)
         await this.loadChat(chat_uuid)      
         is_alert_set === true ? this.showReportTitleDialog = false : this.showUnSaveDialog = false
         const message = is_alert_set === true  ? "Saved as Report" : "Removed Report"
@@ -570,26 +573,6 @@ export default {
         this.saveAsReport.chat_uuid  = chat_uuid
         this.saveAsReport.is_alert_set =  is_alert_set
         is_alert_set === true ? this.showReportTitleDialog = true : this.showUnSaveDialog = true
-      
-      /*try{
-        const response = await  this.$apollo.query({
-        query: SAVE_USER_CHAT,
-        variables: {
-          chat_id, chat_uuid, is_alert_set
-        },
-        fetchPolicy: "no-cache"
-      })
-        console.log(response)
-        this.getUserChatHistory()
-        const message = is_alert_set === true  ? "Alert Set" : "Alert Removed"
-        this.snackbar.show = true
-        this.snackbar.message = message
-        this.snackbar.timeout = is_alert_set === true ? 4000 : 3000
-        
-      }
-      catch(e){
-        console.error(e)
-      }*/
     },
     async sendMessage() {
       if (!this.userGoogle) {

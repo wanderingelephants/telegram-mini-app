@@ -182,8 +182,17 @@ mutation UNSAVE_USER_CHAT($chat_id: Int!, $chat_uuid: uuid!, $is_alert_set: Bool
   }
 }
 `
+const USER_SAVED_PROMPTS = gql`query UserSavedPrompts($email: String!){
+  user_chat(order_by: {id: desc}, where: {is_alert_set: {_eq: TRUE},user: {email: {_eq: $email}}}){
+    id
+    chat_uuid
+    chat_title
+    textContent_user_query
+  }
+}`
 export {
     GET_STOCK_LIST, INSERT_PORTLFOLIO_STOCK, GET_USER_STOCK_PORTFOLIO, DELETE_USER_STOCK_PORTFOLIO,
     GET_PORTFOLIO_ANNOUNCEMENTS, GET_USER_MF_PORTFOLIO, INSERT_USER_MF_PORTFOLIO, DELETE_USER_MF_PORTFOLIO,
-    INSERT_USER_CONFIG, DELETE_USER_CONFIG, USER_CHAT_HISTORY, CHAT_VIEW, SAVE_USER_CHAT,UNSAVE_USER_CHAT, USER_CHAT_MESSAGES_FOR_ID
+    INSERT_USER_CONFIG, DELETE_USER_CONFIG, USER_CHAT_HISTORY, CHAT_VIEW, SAVE_USER_CHAT,UNSAVE_USER_CHAT, 
+    USER_CHAT_MESSAGES_FOR_ID,USER_SAVED_PROMPTS
 }

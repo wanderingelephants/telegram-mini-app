@@ -2,13 +2,7 @@ const path = require("path")
 const fs = require("fs")
 const dataFolder = process.env.DATA_ROOT_FOLDER
 const MAX_RESULTS_TO_FORMAT = 10
-const _getFilePath = function (basePath, chatSessionId, activity, filename) {
-    const date = new Date();
-    const year = date.getFullYear() + "";
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return path.join(basePath, year, month, day, chatSessionId, activity, filename);
-}
+
 class JavascriptResponseHandler {
     constructor(dbManager, messageManager, formattingLLMClient, activity, userQuery, customData, testAgainstFunction) {
         this.dbManager = dbManager
@@ -27,6 +21,15 @@ class JavascriptResponseHandler {
             return functionText.substring(0, lastIdx)
         else return functionText
     }
+    _getFilePath(basePath, chatSessionId, activity, filename) {
+        const date = new Date();
+        const year = date.getFullYear() + "";
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const folderPath = path.join(basePath, year, month, day, chatSessionId, activity)
+        fs.mkdirSync(folderPath, {recursive: true})
+        return path.join(folderPath, filename);
+    }
     async convertToConstFormat(functionText) {
         let functionName = "general_query"
         let startIdx = functionText.indexOf("const analysis")
@@ -44,7 +47,7 @@ class JavascriptResponseHandler {
         }
         functionText += `\nmodule.exports = ${functionName}`
         const generatedFileName = `${functionName}_${(new Date()).getTime()}.js`;
-        const generatedFilePath = _getFilePath(path.join(dataFolder, "generated_functions"), this.customData.chatSessionId, this.activity, generatedFileName);
+        const generatedFilePath = this._getFilePath(path.join(dataFolder, "generated_functions"), this.customData.chatSessionId, this.activity, generatedFileName);
         fs.writeFileSync(generatedFilePath, `${gqlImportPrefix}\n${functionText}`);
         return { functionName, generatedFilePath }
     }
@@ -67,7 +70,7 @@ class JavascriptResponseHandler {
         functionName = functionAndPath.functionName
         generatedFilePath = functionAndPath.generatedFilePath
         //}
-        
+
         try {
             switch (functionName) {
                 case "general_query":
@@ -75,12 +78,7 @@ class JavascriptResponseHandler {
                     result = await general_query()
                     break;
                 case "analysis":
-                    const analysis = require(generatedFilePath)
-                    const pre_populated_arrays = await this.dbManager.getData()
-                    const user_stock_portfolio = await this.dbManager.getUserStockPortfolio(this.customData.email)
-                    pre_populated_arrays["user_stock_portfolio"] = user_stock_portfolio
-                    result = await analysis(pre_populated_arrays)
-                    console.log("JS Result", result)
+                    result = await this.executeAnalysisFunction(generatedFilePath, this.customData.email)
                     break;
             }
 
@@ -91,11 +89,21 @@ class JavascriptResponseHandler {
         }
         return { functionName, result }
     }
+    async executeAnalysisFunction(generatedFilePath, email) {
+        let result;
+        const analysis = require(generatedFilePath)
+        const pre_populated_arrays = await this.dbManager.getData()
+        const user_stock_portfolio = await this.dbManager.getUserStockPortfolio(email)
+        pre_populated_arrays["user_stock_portfolio"] = user_stock_portfolio
+        result = await analysis(pre_populated_arrays)
+        console.log("JS Result", result)
+        return result;
+    }
     async handleResponse(llmResponse) {
         let formattedResponse;
         let jsExecResponse = await this.executeJavaScript(llmResponse);
         let { result, functionName } = jsExecResponse
-        if (result == "Sorry, No Response") return {formattedResponse, result}
+        if (result == "Sorry, No Response") return { formattedResponse, result }
         if (Array.isArray(result) && result.length > 10) result = result.slice(0, MAX_RESULTS_TO_FORMAT)
         await this.messageManager.saveMessage(this.customData.chatSessionId, this.activity, { result }, "results.json")
 
@@ -137,8 +145,8 @@ class JavascriptResponseHandler {
 
         //const messages = await this.messageManager.getMessages(this.customData.chatSessionId, this.activity, 'messages_formatted.json')
 
-       
-        if (functionName === "analysis"){
+
+        if (functionName === "analysis") {
             const chatHistory = await this.messageManager.getChatMessages(this.customData.chatSessionId)
             const messagesToSendToFormatter = chatHistory["formatted_responses"]
             let resultString = JSON.stringify(result)
@@ -157,7 +165,7 @@ class JavascriptResponseHandler {
         await this.messageManager.saveMessage(this.customData.chatSessionId, this.activity, { "role": 'assistant', content: [{ "type": 'text', "text": formattedResponse }] }, 'messages_formatted.json');
 
         console.log("formattedResponse", formattedResponse)
-        return {formattedResponse, result}
+        return { formattedResponse, result }
 
     }
 }

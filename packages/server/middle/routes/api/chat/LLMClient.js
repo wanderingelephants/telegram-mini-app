@@ -62,11 +62,11 @@ class LLMClient {
             case 'JavascriptMockLLM':
                 //const filePath = path.join(process.env.DATA_ROOT_FOLDER, "generated_functions/2025/03/07/8de3ffe0-b388-4491-a302-7f6f0aa60ded/stock_market_chat", "analysis_1741321347634.js")
                 //const fileContent = fs.readFileSync(filePath, "utf-8")
-                llmResponse = `const {postToGraphQL} = require(process.env.GRAPHQL_MODULE_PATH)
+                llmResponse = `
 const analysis = function(pre_populated_arrays) {
-    return [{"company_name": "Infy", "company_sector": "IT"}]
+    return [{"company_name": "Infy", "company_sector": "IT"},{"company_name": "Infy", "company_sector": "IT"},{"company_name": "Infy", "company_sector": "IT"},{"company_name": "Infy", "company_sector": "IT"},{"company_name": "Infy", "company_sector": "IT"}]
 }
-module.exports = analysis`
+`
                 break;
 
             case 'FormatMockLLM':
