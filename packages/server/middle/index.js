@@ -121,14 +121,20 @@ dbManager.getData().then(resp => {
   })
   app.use(cookieParser());
   app.use((req, res, next) => {
-    let sessionId = req.cookies?.dSessionID;
-    if (!sessionId) {
-      sessionId = crypto.randomUUID();
-      res.cookie('dSessionID', sessionId, { httpOnly: true });
-    }
+    try {
+      let sessionId = req.cookies?.dSessionID;
+      
+      if (!sessionId) {
+        sessionId = crypto.randomUUID();
+        res.cookie("dSessionID", sessionId, { httpOnly: true });
+      }
   
-    req.sessionId = sessionId;
-    next();
+      req.sessionId = sessionId;
+      next(); // Proceed to the next middleware
+    } catch (error) {
+      console.error("Session middleware error:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
   });
   app.use('/', require('./routes'));
   

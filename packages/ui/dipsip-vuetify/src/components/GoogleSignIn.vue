@@ -129,7 +129,7 @@ export default {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ idToken }),
+          body: JSON.stringify({ idToken, "test": "hello" }),
         });
         console.log("signInWithGoogle", response)
         if (response.ok) {
