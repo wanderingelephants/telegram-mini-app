@@ -299,7 +299,6 @@
       </v-row>
       <v-row no-gutters>
        <v-col cols="6">
-              <google-sign-in/>
               </v-col>
         <v-col cols="6" v-if="loggedInGoogle == true && loggedInTG == false">
           <v-tooltip
