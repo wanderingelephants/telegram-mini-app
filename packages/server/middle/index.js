@@ -130,7 +130,7 @@ dbManager.getData().then(resp => {
       }
   
       req.sessionId = sessionId;
-      console.log("req body",  req.body)
+      console.log("Incoming request req.method, req.url, req.body:", req.method, req.url, req.body);
       next(); // Proceed to the next middleware
     } catch (error) {
       console.error("Session middleware error:", error);
