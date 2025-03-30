@@ -48,44 +48,23 @@ export default {
       this.authInstance = auth;
       this.isInitialized = true;
 
-      /*onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    const idToken = await user.getIdToken(true); // Force refresh if needed
-    try {
-          const response = await fetch("/api/auth/google", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ idToken }),
-          });
-          const json = await response.json();
-          if (!response.ok) {
-            // Token invalid - clear storage
-            localStorage.removeItem("AUTH_TOKEN");
-            this.$store.commit("setloggedInGoogle", false);
-            localStorage.removeItem("jwtGoogle");
-          } else {
-            this.$store.commit("setloggedInGoogle", true);
-            this.$store.commit("setUserGoogle", json.userGoogle);
-            localStorage.setItem("AUTH_TOKEN", json.token)
-            localStorage.setItem("jwtGoogle", idToken);
-          }
-        } catch (error) {
-          console.error("Token verification error:", error);
-        }
-  } else {
-    
-  }
-});*/
       // Set up auth state listener
       this.unsubscribeAuth = onIdTokenChanged(auth, async (user) => {
+        console.log("onIdTokenChanged", user)
         if (user) {
           // User is signed in
           const idToken = await user.getIdToken(true);
-          localStorage.setItem("jwtGoogle", idToken);
-          this.$store.commit("setloggedInGoogle", true);
-          this.$store.commit("setUserGoogle", user);
+          try{
+            await sendTokenToBackend(idToken)
+            this.$store.commit("setUserGoogle", user);
+          }
+          catch(e){
+            console.error(e)
+            localStorage.removeItem("jwtGoogle");
+            this.$store.commit("setloggedInGoogle", false);
+            this.$store.commit("setUserGoogle", null);
+          }
+          
         } else {
           // User is signed out
           localStorage.removeItem("jwtGoogle");
@@ -93,12 +72,6 @@ export default {
           this.$store.commit("setUserGoogle", null);
         }
       });
-
-      // Check for existing token and validate it
-      //const existingToken = localStorage.getItem("jwtGoogle");
-      //if (existingToken) {
-        
-      //}
     } catch (error) {
       console.error("Failed to initialize Firebase:", error);
     }
@@ -129,29 +102,17 @@ export default {
       console.error("Error signing out:", error);
     }
   },
-    async signInWithGoogle() {
-      if (!this.isInitialized || !this.authInstance) {
-        console.error("Firebase not yet initialized");
-        return;
-      }
-
-      try {
-        const provider = new GoogleAuthProvider();
-        const result = await signInWithPopup(this.authInstance, provider);
-        const idToken = await result.user.getIdToken(true);
-
-        // Send token to your backend
-        const response = await fetch("/api/auth/google", {
+  async sendTokenToBackend(idToken){
+    const response = await fetch("/api/auth/google", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ idToken, "test": "hello" }),
         });
-        console.log("signInWithGoogle", response)
+        console.log("/api/auth/google response", response)
         if (response.ok) {
           const json = await response.json();
-          console.log("SignIn", json)
           this.showDialog = false;
           localStorage.setItem("AUTH_TOKEN", json.token);
           localStorage.setItem("jwtGoogle", idToken);
@@ -163,6 +124,19 @@ export default {
           localStorage.removeItem("jwtGoogle");
           this.$store.commit("setloggedInGoogle", false);
         }
+  },
+    async signInWithGoogle() {
+      if (!this.isInitialized || !this.authInstance) {
+        console.error("Firebase not yet initialized");
+        return;
+      }
+
+      try {
+        const provider = new GoogleAuthProvider();
+        const result = await signInWithPopup(this.authInstance, provider);
+        const idToken = await result.user.getIdToken(true);
+        await this.sendTokenToBackend(idToken)
+        
       } catch (error) {
         console.error("Google sign-in error:", error);
       }
