@@ -42,13 +42,13 @@
             >
               Run
             </v-btn>
-            <v-btn 
+            <!--<v-btn 
               color="secondary" 
               class="ml-2" 
               @click="showScheduleDialog = true"
             >
               Schedule
-            </v-btn>
+            </v-btn> -->
           </v-col>
         </v-row>
         
@@ -136,7 +136,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="grey darken-1" text @click="showScheduleDialog = false">Cancel</v-btn>
-          <v-btn color="primary" @click="schedulePrompt">Save</v-btn>
+          <v-btn color="primary" @click="schedulePrompt" disabled>Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
