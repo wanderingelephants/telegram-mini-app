@@ -22,7 +22,7 @@
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title>Menu</v-toolbar-title>
       <!-- Company Search Autocomplete -->
-      <!--<v-autocomplete
+      <v-autocomplete
   v-model="selectedCompany"
   :items="companies"
   :loading="isLoading"
@@ -38,7 +38,7 @@
   :filter="customFilter"
 >
   
-</v-autocomplete> -->
+</v-autocomplete> 
       
       <v-spacer></v-spacer>
     </v-app-bar>
@@ -143,7 +143,7 @@ export default {
   },
     // In a real app, you might want to implement a method to fetch companies
     // either on mounted or as the user types (with debounce)
-    /*async fetchCompanies(query) {
+    async fetchCompanies(query) {
       this.isLoading = true;
       try {
         const response = await fetch(`/api/company/list`);
@@ -156,7 +156,7 @@ export default {
       } finally {
         this.isLoading = false;
       }
-    }*/
+    }
   }
 }
 </script>
