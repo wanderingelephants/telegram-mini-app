@@ -247,11 +247,7 @@
             :prepend-inner-icon="userInput ? '$mdiTrashCan' : ''"
             @click:prepend-inner="userInput = ''"
           />
-          <span
-            ><v-icon @click="startSpeechRecognition"
-              >$mdiMicrophone</v-icon
-            ></span
-          >
+          <span v-if="isMicSupported"><v-icon @click="startSpeechRecognition">$mdiMicrophone</v-icon></span>
           <span v-if="userInput.trim()"><v-icon @click="sendMessage">$mdiSend</v-icon></span>
         </v-card-actions>
       </div>
