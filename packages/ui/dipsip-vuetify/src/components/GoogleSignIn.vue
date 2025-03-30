@@ -1,6 +1,9 @@
 <template>
-  <v-btn @click="signInWithGoogle" color="primary" v-if="!loggedInGoogle">
+  <v-btn v-if="!loggedInGoogle" @click="signInWithGoogle" color="primary">
     Sign in with Google
+  </v-btn>
+  <v-btn v-else @click="signOut" color="red">
+    Sign out
   </v-btn>
 </template>
 
@@ -112,6 +115,20 @@ export default {
     closeDialog() {
       this.showDialog = false;
     },
+    async signOut() {
+    if (!this.authInstance) return;
+
+    try {
+      await this.authInstance.signOut();
+      localStorage.removeItem("jwtGoogle");  // Clear token
+      localStorage.removeItem("AUTH_TOKEN"); // Clear backend session token
+      this.$store.commit("setloggedInGoogle", false);
+      this.$store.commit("setUserGoogle", null);
+      console.log("User signed out successfully");
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  },
     async signInWithGoogle() {
       if (!this.isInitialized || !this.authInstance) {
         console.error("Firebase not yet initialized");
