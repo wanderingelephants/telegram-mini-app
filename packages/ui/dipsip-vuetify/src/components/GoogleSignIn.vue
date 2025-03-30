@@ -45,13 +45,10 @@ export default {
       this.authInstance = auth;
       this.isInitialized = true;
 
-      onAuthStateChanged(auth, async (user) => {
+      /*onAuthStateChanged(auth, async (user) => {
   if (user) {
-    // No need to manually store the token in localStorage
     const idToken = await user.getIdToken(true); // Force refresh if needed
-    // You can now send this fresh token to your backend
     try {
-          // Verify token with your backend
           const response = await fetch("/api/auth/google", {
             method: "POST",
             headers: {
@@ -75,9 +72,9 @@ export default {
           console.error("Token verification error:", error);
         }
   } else {
-    // User is signed out, handle accordingly
+    
   }
-});
+});*/
       // Set up auth state listener
       this.unsubscribeAuth = onIdTokenChanged(auth, async (user) => {
         if (user) {
@@ -134,7 +131,7 @@ export default {
           },
           body: JSON.stringify({ idToken }),
         });
-
+        console.log("signInWithGoogle", response)
         if (response.ok) {
           const json = await response.json();
           console.log("SignIn", json)
@@ -143,6 +140,11 @@ export default {
           localStorage.setItem("jwtGoogle", idToken);
           this.$store.commit("setloggedInGoogle", true);
           //this.$store.commit("setUserGoogle", json.userGoogle);
+        }
+        else {
+          console.error("Invalid token, clearing storage");
+          localStorage.removeItem("jwtGoogle");
+          this.$store.commit("setloggedInGoogle", false);
         }
       } catch (error) {
         console.error("Google sign-in error:", error);
