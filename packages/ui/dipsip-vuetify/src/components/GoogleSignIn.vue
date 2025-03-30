@@ -55,7 +55,7 @@ export default {
           // User is signed in
           const idToken = await user.getIdToken(true);
           try{
-            await sendTokenToBackend(idToken)
+            await this.sendTokenToBackend(idToken)
             this.$store.commit("setUserGoogle", user);
           }
           catch(e){
