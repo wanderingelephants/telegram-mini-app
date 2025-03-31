@@ -12,7 +12,7 @@ services:
       - /home/ec2-user/app/dipsip/certs/www:/var/www/certbot
       - /home/ec2-user/app/dipsip/certs/conf:/etc/letsencrypt
     depends_on:
-      -api
+      - api
   certbot:
     image: certbot/certbot
     volumes:
