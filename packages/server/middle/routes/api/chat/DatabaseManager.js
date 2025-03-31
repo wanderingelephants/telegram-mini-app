@@ -138,7 +138,11 @@ class DatabaseManager {
               graphql_fields.push("month")
             }
             else {
-              onlyKeys === true ? graphql_fields.push(`${col.GQL_Alias}`) : graphql_fields.push(`${col.GQL_Alias}:${col.Column_Name}`)
+              if (onlyKeys === true){
+                if (col.Column_Name.toLowerCase() !== "isconsolidated") graphql_fields.push(`${col.GQL_Alias}`)
+              }else {
+                graphql_fields.push(`${col.GQL_Alias}:${col.Column_Name}`)
+              }
             }
           }
         }
@@ -239,7 +243,7 @@ class DatabaseManager {
 
         const distinctKeysQuery = `query {company_${fin}(distinct_on: key) {key}}`
         const resp = await postToGraphQL({ query: distinctKeysQuery, variables: {} })
-        const fields = resp.data[`company_${fin}`].filter(r => r.key !== "").map(r => r.key.trim())
+        const fields = resp.data[`company_${fin}`].filter(r => r.key !== "" && r.key.toLowerCase() !== "isconsolidated").map(r => r.key.trim())
         company_master_fields = company_master_fields.concat(fields)
       }
       else {
