@@ -13,10 +13,10 @@ class JavascriptResponseHandler {
         this.customData = customData //primarily email of user to get his portfoliio, which cant be obtained at bootstrap load data
         this.testAgainstFunction = testAgainstFunction
     }
-    stripJSTicks(functionText, stringToStrip) {
-        const idx = functionText.indexOf(stringToStrip)
-        if (idx > -1) functionText = functionText.substring(idx + stringToStrip.length)
-        const lastIdx = functionText.lastIndexOf(stringToStrip)
+    stripJSTicks(functionText) {
+        const idx = functionText.indexOf("```javascript")
+        if (idx > -1) functionText = functionText.substring(idx + "```javascript".length)
+        const lastIdx = functionText.lastIndexOf("```")
         if (lastIdx > -1)
             return functionText.substring(0, lastIdx)
         else return functionText
@@ -31,8 +31,10 @@ class JavascriptResponseHandler {
         return path.join(folderPath, filename);
     }
     async convertToConstFormat(functionText) {
+        console.log("convertToConstFormat", functionText)
         let functionName = "general_query"
         let startIdx = functionText.indexOf("const analysis")
+        console.log("startIdx",  startIdx)
         let gqlImportPrefix = ""
         if (startIdx > -1) {
             functionName = "analysis"
@@ -53,10 +55,14 @@ class JavascriptResponseHandler {
     }
     async executeJavaScript(functionText) {
         let result;
-        functionText = this.stripJSTicks(functionText, '```javascript')
-        functionText = this.stripJSTicks(functionText, '```')
+        /*functionText = this.stripJSTicks(functionText, '```javascript')
+        console.log("after strip", functionText)
+        functionText = this.stripJSTicks(functionText, '```')*/
+        functionText = this.stripJSTicks(functionText)
+        console.log("after  strip", functionText)
         let lastIdx = functionText.lastIndexOf("}")
         functionText = functionText.substring(0, lastIdx + 1)
+        console.log("after substring", functionText)
         functionText = functionText.trim()
         let functionName;
         let generatedFilePath;

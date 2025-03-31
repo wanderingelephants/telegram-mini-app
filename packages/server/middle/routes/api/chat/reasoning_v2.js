@@ -78,7 +78,7 @@ const route = async (req, res) => {
     if (true == streaming)
         res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive' });
     
-    const llmResponse = await llmClient.sendMessageToLLM(systemPrompt, messagesToSend, customData);
+    const llmResponse = await llmClient.sendMessageToLLM(systemPrompt, messagesToSend, userLatestMessage);
     if (activity === "stock_market_chat") await messageManager.saveMessage(chatSessionId, activity, { "role": 'assistant', "content": [{ "type": 'text', "text": llmResponse }] }, chatMessagesFileName);
     console.log("llmResponse", llmResponse)
     const handlerResponse = await responseHandler.handleResponse(llmResponse)

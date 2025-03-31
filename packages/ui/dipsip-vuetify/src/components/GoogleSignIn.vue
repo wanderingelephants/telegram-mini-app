@@ -2,9 +2,9 @@
   <v-btn v-if="!loggedInGoogle" @click="signInWithGoogle" color="primary">
     Sign in with Google
   </v-btn>
-  <v-btn v-else @click="signOut" color="red">
+  <!--<v-btn v-else @click="signOut" color="red">
     Sign out
-  </v-btn>
+  </v-btn> -->
 </template>
 
 <script>

@@ -118,8 +118,7 @@
       <v-expansion-panels>
         <v-expansion-panel title="What to Query">
           <v-expansion-panel-text>
-            General/Simple Questions to Deep Dive multi-hop queries picking from
-            scores of objective/subjective signals.
+            From the simple "कौन से म्यूच्यूअल फंड्स के रिटर्न्स 20% के ऊपर हैं, और फीस 0.5 परसेंट के नीचे है"  to complex multi-hop queries - "Which Mid Cap companies in the Cement Sector have Trade Receivables above 100 Crores and Price to Book below 1. Further get me those companies where there were any capex announcements in the last one week."
 
             <div style="max-height: 500px; overflow-y: auto">
               <data-explorer-grid :categorizedArrays="categorizedArrays" />
@@ -246,6 +245,7 @@
             @click:append-inner="sendMessage"
             :prepend-inner-icon="userInput ? '$mdiTrashCan' : ''"
             @click:prepend-inner="userInput = ''"
+            @keydown="handleKeydown"
           />
           <span v-if="isMicSupported"><v-icon @click="startSpeechRecognition">$mdiMicrophone</v-icon></span>
           <span v-if="userInput.trim()"><v-icon @click="sendMessage">$mdiSend</v-icon></span>
@@ -657,6 +657,12 @@ export default {
         this.userInput += (this.userInput ? '\n' : '') + event.results[0][0].transcript;
       };
       recognition.start();
+    },
+    handleKeydown(event) {
+    if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
+        event.preventDefault(); // Prevents adding a new line
+        this.sendMessage();
+      }
     },
     async sendMessage() {
       if (!this.userGoogle) {

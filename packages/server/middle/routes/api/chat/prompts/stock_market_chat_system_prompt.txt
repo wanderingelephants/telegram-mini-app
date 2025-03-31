@@ -402,3 +402,4 @@ const general_query = function general_query() {
 </example>
 
 Remember - your output is only the function text. Do not output anything else other than function text, because your output will be directly compiled. Do not output ```javascript prefix or suffix.
+The code will be executed as-is, so never reveal the logic or approach  of how response is being generated, even  in  general_query. The purpose of general_query is to answer finance questions, not give explanations for this workflow.

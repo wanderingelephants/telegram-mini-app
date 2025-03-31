@@ -1,7 +1,10 @@
 const axios = require("axios")
-const { Anthropic } = require('@anthropic-ai/sdk');
+const { Anthropic } = require('@anthropic-ai/sdk');  
 const fs = require("fs");
 const path = require("path")
+const {
+    GoogleGenerativeAI
+  } = require("@google/generative-ai");
 //Sends a chat request and sends back response. For Instruct also use chat model with  
 //sytem prompt and single message
 class LLMClient {
@@ -11,6 +14,7 @@ class LLMClient {
         this.langModel = langModel //'claude-3-5-haiku-20241022'
         this.temperature = 0
     }
+    //some models like Gemini take message separately and  have history object for n-1 messages
     async sendMessageToLLM(systemPrompt, messages) {
         const llmStructuredMessages = messages.map(msg => ({
             role: msg.role,
@@ -42,7 +46,36 @@ class LLMClient {
                     console.error(e)
                 }
                 break
-
+            case 'Gemini':
+                try{
+                
+                    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+                    const model = genAI.getGenerativeModel({model: this.langModel, systemInstruction: systemPrompt});
+                    
+                    const generationConfig = {
+                        temperature: 0,
+                        topP: 0.95,
+                        topK: 40,
+                        maxOutputTokens: 16384,
+                        responseModalities: [],
+                        responseMimeType: "text/plain"
+                    };
+                    const historyMessages = messages.length > 2 ? messages.slice(0, messages.length - 1) : messages
+                    const history = historyMessages.map(msg => ({
+                        role: msg.role === "user" ? "user" : "model",
+                        parts: [{"text": msg.content[0].text}] // dynamically wrapping in a string
+                    }));
+                    const chatSession = model.startChat({
+                        generationConfig,
+                        history:  history
+                    })
+                    const result = await chatSession.sendMessage(messages[messages.length-1].content[0].text);
+                    llmResponse = result.response.text()
+                }
+                catch(e){
+                    console.error(e)
+                }
+                break    
             case 'Ollama':
                 try {
                     const finalPrompt = systemPrompt.replace("{{text_replace}}", messages[0].content)

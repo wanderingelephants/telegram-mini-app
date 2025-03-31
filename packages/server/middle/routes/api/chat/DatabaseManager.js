@@ -66,8 +66,10 @@ class DatabaseManager {
 
   async runMutationForTable(graphql_fields, table_name, company_master_prefix, mutual_fund_master_prefix) {
     const fieldsForTable = graphql_fields.filter(t => t["array_name"] === table_name)[0].fields
+    console.log("fieldsForTable", fieldsForTable)
+    const consolidatedFilter = fieldsForTable.filter(f => f === "isConsolidated:isconsolidated").length > 0 ? "(where: {isconsolidated: {_eq: true}})" : ""
     let mutation = `query ${table_name}_all{
-        ${table_name}{`
+        ${table_name}${consolidatedFilter}{`
     //first dump the company_master fields if  present
     for (const  _prefix of [company_master_prefix, mutual_fund_master_prefix]) {
       let master_fields = fieldsForTable.filter(f => f.startsWith(_prefix) === true)
@@ -84,6 +86,7 @@ class DatabaseManager {
     mutation += `}
         }`
     try {
+      console.log(mutation)
       const resp = await postToGraphQL({ query: mutation, variables: {} })
       let newResp = {data: {table_name: []}}
       newResp.data[table_name] = resp.data[table_name].map(({ company_master, ...rest }) => ({
@@ -248,6 +251,7 @@ class DatabaseManager {
 
         company_master_fields.push("key")
         company_master_fields.push("value")
+        company_master_fields.push("isConsolidated:isconsolidated")
       }
       company_master_fields.push("year")
       company_master_fields.push("month")

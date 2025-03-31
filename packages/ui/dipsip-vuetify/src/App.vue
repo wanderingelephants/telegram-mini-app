@@ -53,6 +53,7 @@
       </v-container>
     </v-main>
     <v-btn
+      v-if="$route.path !== '/assistant'"
       class="chat-fab"
       color="secondary"
       icon
@@ -101,19 +102,7 @@ export default {
         //{ title: 'Offerings', path: '/pricing' },
         { title: 'About Us', path: '/about' }
       ],
-      companies: [
-        /*{ name: 'Apple Inc.', symbol: 'AAPL' },
-        { name: 'Microsoft Corporation', symbol: 'MSFT' },
-        { name: 'Amazon.com Inc.', symbol: 'AMZN' },
-        { name: 'Alphabet Inc.', symbol: 'GOOGL' },
-        { name: 'Meta Platforms Inc.', symbol: 'META' },
-        { name: 'Tesla Inc.', symbol: 'TSLA' },
-        { name: 'NVIDIA Corporation', symbol: 'NVDA' },
-        { name: 'Berkshire Hathaway Inc.', symbol: 'BRK.A' },
-        { name: 'JPMorgan Chase & Co.', symbol: 'JPM' },
-        { name: 'Johnson & Johnson', symbol: 'JNJ' }*/
-        // In a real app, you would fetch this data from your API
-      ]
+      companies: []
     }
   },
   
