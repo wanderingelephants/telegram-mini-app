@@ -12,7 +12,8 @@ services:
       - /home/ec2-user/app/dipsip/certs/www:/var/www/certbot
       - /home/ec2-user/app/dipsip/certs/conf:/etc/letsencrypt
     depends_on:
-      - api
+      api:
+        condition: service_healthy
   certbot:
     image: certbot/certbot
     volumes:
@@ -37,6 +38,12 @@ services:
       dockerfile: Dockerfile.api
     ports:
       - "3000:3000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 5s       # Check every 5 seconds
+      retries: 5         # Retry up to 5 times
+      start_period: 10s  # Wait 10s before first check
+      timeout: 5s        # Fail if no response in 5s  
     environment:
       - NODE_ENV=production
       - OLLAMA_URL=http://51.158.62.147:11434
