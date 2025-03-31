@@ -2,18 +2,60 @@ const axios = require("axios")
 const { Anthropic } = require('@anthropic-ai/sdk');  
 const fs = require("fs");
 const path = require("path")
+let cacheManager;
 const {
     GoogleGenerativeAI
   } = require("@google/generative-ai");
+  const {
+    GoogleAICacheManager,
+    GoogleAIFileManager,
+  } = require("@google/generative-ai/server")
 //Sends a chat request and sends back response. For Instruct also use chat model with  
 //sytem prompt and single message
+async function initiateCache(){
+    console.log("initializeCache", process.env.LLM_TO_USE)
+    if (process.env.LLM_TO_USE !== "GeminiCache") return;
+                cacheManager = new GoogleAICacheManager(process.env.GEMINI_API_KEY, 3600*1000);
+                const fileManager = new GoogleAIFileManager(process.env.GEMINI_API_KEY);
+                const fileData = `${process.env.DATA_ROOT_FOLDER}/full_prompt.txt`;//fs.readFileSync(`${process.env.DATA_ROOT_FOLDER}/full_prompt.txt`)
+                
+                //console.log(fileData)
+                const uploadResult = await fileManager.uploadFile(fileData, {
+                    mimeType: "text/plain",
+                });
+                console.log("uploadResult", uploadResult)
+                
+                //const listFiles = await fileManager.listFiles()
+                const cacheResult = await cacheManager.create({
+                    model: `models/gemini-1.5-flash-001`,
+                    contents: [
+                      {
+                        role: "user",
+                        parts: [
+                          {
+                            fileData: {
+                              fileUri: uploadResult.file.uri,
+                              mimeType: uploadResult.file.mimeType,
+                            },
+                          },
+                        ],
+                      },
+                    ],
+                  });
+                  console.log(cacheResult)
+                  const cacheName = cacheResult.name;
+                  return {cacheName}
+                
+}
 class LLMClient {
     constructor(llmToUse, langModel) {
         console.log("LLMClient constructor", { llmToUse, langModel })
         this.llmToUse = llmToUse
         this.langModel = langModel //'claude-3-5-haiku-20241022'
         this.temperature = 0
+        this.initiateCache().then(resp => this.cacheName = resp.cacheName)
     }
+    
     //some models like Gemini take message separately and  have history object for n-1 messages
     async sendMessageToLLM(systemPrompt, messages) {
         const llmStructuredMessages = messages.map(msg => ({
@@ -46,6 +88,36 @@ class LLMClient {
                     console.error(e)
                 }
                 break
+            case 'GeminiCache':
+                try{
+                    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+                    const getCacheResult = await cacheManager.get(this.cacheName);
+                      const model = genAI.getGenerativeModelFromCachedContent(getCacheResult);  
+                    const generationConfig = {
+                        temperature: 0,
+                        topP: 0.95,
+                        topK: 40,
+                        maxOutputTokens: 16384,
+                        responseModalities: [],
+                        responseMimeType: "text/plain"
+                    };
+                    const historyMessages = messages.length > 2 ? messages.slice(0, messages.length - 1) : messages
+                    const history = historyMessages.map(msg => ({
+                        role: msg.role === "user" ? "user" : "model",
+                        parts: [{"text": msg.content[0].text}] // dynamically wrapping in a string
+                    }));
+                    const chatSession = model.startChat({
+                        generationConfig,
+                        history:  history
+                    })
+                    const result = await chatSession.sendMessage(messages[messages.length-1].content[0].text);
+                    llmResponse = result.response.text()
+                    
+                }
+                catch(e){
+                    console.error(e)
+                }
+                break    
             case 'Gemini':
                 try{
                 
@@ -120,3 +192,4 @@ const analysis = function(pre_populated_arrays) {
     }
 }
 module.exports = LLMClient
+initiateCache()
