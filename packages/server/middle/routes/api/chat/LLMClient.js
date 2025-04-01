@@ -53,7 +53,6 @@ class LLMClient {
         this.llmToUse = llmToUse
         this.langModel = langModel //'claude-3-5-haiku-20241022'
         this.temperature = 0
-        this.initiateCache().then(resp => this.cacheName = resp.cacheName)
     }
     
     //some models like Gemini take message separately and  have history object for n-1 messages
@@ -192,4 +191,4 @@ const analysis = function(pre_populated_arrays) {
     }
 }
 module.exports = LLMClient
-initiateCache()
+//initiateCache()
