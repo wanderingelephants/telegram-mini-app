@@ -60,6 +60,9 @@ const routes = {
             master: require("../cmots/endpoints/master"),
             fromdatetodate: require("../cmots/endpoints/fromdatetodate")
         },
+        icicidirect:{
+            login: require("./api/icicidirect/login")
+        },
         indices: {
             AUTOBEES: require("./api/indices/AUTOBEES.json"),
             BANKBEES: require("./api/indices/BANKBEES.json"),
@@ -129,6 +132,8 @@ router.get("/api/cmots/company/:apiType/:companyId/:standaloneConsolidated", rou
 router.get("/api/cmots/fromdatetodate/:apiType/:fromdate/:todate", routes.api.cmots.fromdatetodate)
 router.post("/api/telegram/auth", routes.api.telegram.auth)
 router.get("/api/kite/order/create", routes.api.kite.order.create)
+router.post("/api/icicidirect/login", routes.api.icicidirect.login)
+
 router.get("/api/kite/login/success", routes.api.kite.login.success)
 router.get("/api/kite/instrument/quote", routes.api.kite.instrument.eod)
 router.get("/api/kite/instrument/eod", routes.api.kite.instrument.eod)
