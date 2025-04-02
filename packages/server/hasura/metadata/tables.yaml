@@ -1372,3 +1372,17 @@
           email:
             _eq: X-Hasura-User-Id
         check: null
+- table:
+    name: company_price_volume
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
+    name: company_price_volume_daily_moving_averages
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
