@@ -198,6 +198,13 @@
       using:
         foreign_key_constraint_on: co_code
 - table:
+    name: company_historical_price_volume_by_date
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
     name: company_history
     schema: public
   object_relationships:
@@ -727,6 +734,13 @@
       using:
         foreign_key_constraint_on: co_code
 - table:
+    name: company_price_volume_daily_moving_averages
+    schema: public
+  object_relationships:
+    - name: company_master
+      using:
+        foreign_key_constraint_on: co_code
+- table:
     name: company_profile
     schema: public
   object_relationships:
@@ -1011,6 +1025,9 @@
         foreign_key_constraint_on: stock_id
 - table:
     name: nse_nifty_prices
+    schema: public
+- table:
+    name: oclh_1s
     schema: public
 - table:
     name: portfolio_mutual_funds
@@ -1372,17 +1389,3 @@
           email:
             _eq: X-Hasura-User-Id
         check: null
-- table:
-    name: company_historical_price_volume_by_date
-    schema: public
-  object_relationships:
-    - name: company_master
-      using:
-        foreign_key_constraint_on: co_code
-- table:
-    name: company_price_volume_daily_moving_averages
-    schema: public
-  object_relationships:
-    - name: company_master
-      using:
-        foreign_key_constraint_on: co_code
