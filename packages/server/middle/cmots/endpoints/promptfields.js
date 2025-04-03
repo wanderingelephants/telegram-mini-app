@@ -62,7 +62,7 @@ const route = async (req, res) => {
         promptFields.push({"array_name": "chairmans_report", "fields": ["keyword hints"]})
         promptFields.push({"array_name": "directors_report", "fields": ["keyword hints"]})
         promptFields.push({"array_name": "auditors_report", "fields": ["keyword hints"]})
-        
+        if (req.query.noTransform === "true") return res.status(200).json(promptFields)
         const categorizedArrays = transformData(promptFields)
         //const financials = promptFields.filter(t => t.array_name.indexOf("balancesheet") > -1)
         

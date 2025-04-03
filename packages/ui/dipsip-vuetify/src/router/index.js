@@ -3,7 +3,7 @@ import Carousel from '@/views/Carousel.vue'
 import PrivacyPolicy from '@/views/PrivacyPolicy.vue'
 import ContactUs from '@/views/ContactUs.vue'
 import AboutUs from '@/views/AboutUs.vue'
-
+import Fields from '@/utils/Fields'
 import SettingsPage from '@/views/SettingsPage.vue'
 import WebScraper from '@/views/WebScraper.vue'
 import Utils from '@/views/Utils.vue'
@@ -28,6 +28,11 @@ const routes = [
     path: '/principles',
     name: 'Principles',
     component: () => import('../components/Principles')
+  },
+  {
+    path: '/fields',
+    name: 'Fields',
+    component: () => import('../utils/Fields')
   },
   {
     path: '/settings',

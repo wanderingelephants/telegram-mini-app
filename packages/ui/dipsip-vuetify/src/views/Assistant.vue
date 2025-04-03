@@ -115,7 +115,7 @@
       <div class="chat-header">
         <v-card-title class="primary white--text">{{ title }}</v-card-title>
       </div>
-      <v-expansion-panels>
+      <v-expansion-panels color="white">
         <v-expansion-panel title="What to Query">
           <v-expansion-panel-text>
             From the simple "कौन से म्यूच्यूअल फंड्स के रिटर्न्स 20% के ऊपर हैं, और फीस 0.5 परसेंट के नीचे है"  to complex multi-hop queries - "Which Mid Cap companies in the Cement Sector have Trade Receivables above 100 Crores and Price to Book below 1. Further get me those companies where there were any capex announcements in the last one week."

@@ -3,7 +3,7 @@
     <v-card>
       <v-card-title> Company Documents </v-card-title>
 
-      <v-expansion-panels>
+      <v-expansion-panels color="white">
         <v-expansion-panel>
           <v-expansion-panel-title>
             {{ chairman_report.year }} Chairman's Report
