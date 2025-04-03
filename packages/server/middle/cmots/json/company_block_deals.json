@@ -1,0 +1,94 @@
+[
+  {
+    "ReportIndex": 56,
+    "Table Name": "company_block_deals",
+    "PromptQL": "",
+    "Table Description": "Company Block Deals",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/Block-Deals/nse/22-Mar-2025/24-Mar-2025",
+    "notes": "",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "daterange",
+    "Input Description": "DateRange",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "co_code",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "co_code"
+      },
+      {
+        "Column_Name": "record_date",
+        "Column_DataType": "date",
+        "Column_Description": "record_date",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "date"
+      },
+      {
+        "Column_Name": "clientname",
+        "Column_DataType": "text",
+        "Column_Description": "clientname",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "client_name"
+      },
+      {
+        "Column_Name": "buysell",
+        "Column_DataType": "boolean",
+        "Column_Description": "buysell",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "buy_or_sell"
+      },
+      {
+        "Column_Name": "avg_price",
+        "Column_DataType": "numeric",
+        "Column_Description": "avg_price",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "average_price"
+      },
+      {
+        "Column_Name": "qtyshares",
+        "Column_DataType": "integer",
+        "Column_Description": "qtyshares",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "shares_quantity"
+      }
+    ],
+    "UniqueColumns": [
+      "co_code",
+      "record_date",
+      "clientname"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [
+      {
+        "Column_Name": "co_code",
+        "References": {
+          "Table_Name": "company_master",
+          "Column_Name": "co_code"
+        }
+      }
+    ],
+    "Indexes": [
+      "co_code",
+      "record_date",
+      "clientname"
+    ]
+  }
+]

@@ -1,0 +1,109 @@
+[
+  {
+    "ReportIndex": 5,
+    "Table Name": "company_index_wise_company",
+    "PromptQL": "",
+    "Table Description": "Index Wise Company",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/IndexWiseComp/26753",
+    "notes": "",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "index_code",
+    "Input Description": "index_code",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "co_code",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "co_code"
+      },
+      {
+        "Column_Name": "companyshortname",
+        "Column_DataType": "text",
+        "Column_Description": "companyshortname",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "companylongname",
+        "Column_DataType": "text",
+        "Column_Description": "companylongname",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "index_code",
+        "Column_DataType": "integer",
+        "Column_Description": "index_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "bsecode",
+        "Column_DataType": "integer",
+        "Column_Description": "bsecode",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "nsesymbol",
+        "Column_DataType": "text",
+        "Column_Description": "nsesymbol",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "isin",
+        "Column_DataType": "text",
+        "Column_Description": "isin",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "sectorname",
+        "Column_DataType": "text",
+        "Column_Description": "sectorname",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "sector_name"
+      }
+    ],
+    "UniqueColumns": [
+      "co_code",
+      "index_code"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [
+      {
+        "Column_Name": "index_code",
+        "References": {
+          "Table_Name": "company_index_master",
+          "Column_Name": "index_code"
+        }
+      },
+      {
+        "Column_Name": "co_code",
+        "References": {
+          "Table_Name": "company_master",
+          "Column_Name": "co_code"
+        }
+      }
+    ],
+    "Indexes": [
+      "co_code",
+      "index_code"
+    ]
+  }
+]

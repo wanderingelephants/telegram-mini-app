@@ -1,0 +1,342 @@
+[
+  {
+    "ReportIndex": 49,
+    "Table Name": "company_yearly_ratios",
+    "PromptQL": "Retail",
+    "Table Description": "Yearly Ratios",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/YearlyRatio/6068/C",
+    "notes": "",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "co_code",
+    "Input Description": "CMOTS Company Code",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "yearend",
+        "Column_DataType": "integer",
+        "Column_Description": "yearend",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "YearEnd"
+      },
+      {
+        "Column_Name": "co_code",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "co_code"
+      },
+      {
+        "Column_Name": "mcap",
+        "Column_DataType": "numeric",
+        "Column_Description": "mcap",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "MCAP"
+      },
+      {
+        "Column_Name": "ev",
+        "Column_DataType": "numeric",
+        "Column_Description": "ev",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "EV"
+      },
+      {
+        "Column_Name": "pe",
+        "Column_DataType": "numeric",
+        "Column_Description": "pe",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "PE"
+      },
+      {
+        "Column_Name": "pbv",
+        "Column_DataType": "numeric",
+        "Column_Description": "pbv",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "PBV"
+      },
+      {
+        "Column_Name": "divyield",
+        "Column_DataType": "numeric",
+        "Column_Description": "divyield",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "DIVYIELD"
+      },
+      {
+        "Column_Name": "dividendpayout",
+        "Column_DataType": "numeric",
+        "Column_Description": "dividendpayout",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "DividendPayout"
+      },
+      {
+        "Column_Name": "eps",
+        "Column_DataType": "numeric",
+        "Column_Description": "eps",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "EPS"
+      },
+      {
+        "Column_Name": "bookvalue",
+        "Column_DataType": "numeric",
+        "Column_Description": "bookvalue",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "BookValue"
+      },
+      {
+        "Column_Name": "roa",
+        "Column_DataType": "numeric",
+        "Column_Description": "roa",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "ROA"
+      },
+      {
+        "Column_Name": "roe",
+        "Column_DataType": "numeric",
+        "Column_Description": "roe",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "ROE"
+      },
+      {
+        "Column_Name": "roce",
+        "Column_DataType": "numeric",
+        "Column_Description": "roce",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "ROCE"
+      },
+      {
+        "Column_Name": "ebit",
+        "Column_DataType": "numeric",
+        "Column_Description": "ebit",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "EBIT"
+      },
+      {
+        "Column_Name": "ebitda",
+        "Column_DataType": "numeric",
+        "Column_Description": "ebitda",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "EBITDA"
+      },
+      {
+        "Column_Name": "ev_sales",
+        "Column_DataType": "numeric",
+        "Column_Description": "ev_sales",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "EV_Sales"
+      },
+      {
+        "Column_Name": "ev_ebitda",
+        "Column_DataType": "numeric",
+        "Column_Description": "ev_ebitda",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "EV_EBITDA"
+      },
+      {
+        "Column_Name": "netincomemargin",
+        "Column_DataType": "numeric",
+        "Column_Description": "netincomemargin",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "NetIncomeMargin"
+      },
+      {
+        "Column_Name": "grossincomemargin",
+        "Column_DataType": "numeric",
+        "Column_Description": "grossincomemargin",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "GrossIncomeMargin"
+      },
+      {
+        "Column_Name": "assetturnover",
+        "Column_DataType": "numeric",
+        "Column_Description": "assetturnover",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "AssetTurnover"
+      },
+      {
+        "Column_Name": "currentratio",
+        "Column_DataType": "numeric",
+        "Column_Description": "currentratio",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "CurrentRatio"
+      },
+      {
+        "Column_Name": "debt_equity",
+        "Column_DataType": "numeric",
+        "Column_Description": "debt_equity",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Debt_Equity"
+      },
+      {
+        "Column_Name": "fcf_margin",
+        "Column_DataType": "numeric",
+        "Column_Description": "fcf_margin",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "FCF_Margin"
+      },
+      {
+        "Column_Name": "sales_totalasset",
+        "Column_DataType": "numeric",
+        "Column_Description": "sales_totalasset",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Sales_TotalAsset"
+      },
+      {
+        "Column_Name": "netdebt_fcf",
+        "Column_DataType": "numeric",
+        "Column_Description": "netdebt_fcf",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "NetDebt_FCF"
+      },
+      {
+        "Column_Name": "netdebt_ebitda",
+        "Column_DataType": "numeric",
+        "Column_Description": "netdebt_ebitda",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "NetDebt_EBITDA"
+      },
+      {
+        "Column_Name": "ebitda_margin",
+        "Column_DataType": "numeric",
+        "Column_Description": "ebitda_margin",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "EBITDA_Margin"
+      },
+      {
+        "Column_Name": "totalshareholdersequity",
+        "Column_DataType": "numeric",
+        "Column_Description": "totalshareholdersequity",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "TotalShareHoldersEquity"
+      },
+      {
+        "Column_Name": "shorttermdebt",
+        "Column_DataType": "numeric",
+        "Column_Description": "shorttermdebt",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "ShorttermDebt"
+      },
+      {
+        "Column_Name": "longtermdebt",
+        "Column_DataType": "numeric",
+        "Column_Description": "longtermdebt",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "LongtermDebt"
+      },
+      {
+        "Column_Name": "sharesoutstanding",
+        "Column_DataType": "numeric",
+        "Column_Description": "sharesoutstanding",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "SharesOutstanding"
+      },
+      {
+        "Column_Name": "netsales",
+        "Column_DataType": "numeric",
+        "Column_Description": "netsales",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "NetSales"
+      },
+      {
+        "Column_Name": "netprofit",
+        "Column_DataType": "numeric",
+        "Column_Description": "netprofit",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Netprofit"
+      },
+      {
+        "Column_Name": "annualdividend",
+        "Column_DataType": "numeric",
+        "Column_Description": "annualdividend",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "AnnualDividend"
+      },
+      {
+        "Column_Name": "cogs",
+        "Column_DataType": "numeric",
+        "Column_Description": "cogs",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "COGS"
+      },
+      {
+        "Column_Name": "retainedearnings",
+        "Column_DataType": "numeric",
+        "Column_Description": "retainedearnings",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "RetainedEarnings"
+      },
+      {
+        "Column_Name": "isconsolidated",
+        "Column_DataType": "boolean",
+        "Column_Description": "isconsolidated",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "isConsolidated"
+      }
+    ],
+    "UniqueColumns": [
+      "yearend",
+      "co_code",
+      "isconsolidated"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [
+      {
+        "Column_Name": "co_code",
+        "References": {
+          "Table_Name": "company_master",
+          "Column_Name": "co_code"
+        }
+      }
+    ],
+    "Indexes": [
+      "yearend",
+      "co_code",
+      "isconsolidated"
+    ]
+  }
+]

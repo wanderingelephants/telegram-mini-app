@@ -1,0 +1,109 @@
+[
+  {
+    "ReportIndex": 54,
+    "Table Name": "company_announcements",
+    "PromptQL": "",
+    "Table Description": "Company Announcements",
+    "API_URL": "",
+    "notes": "",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "co_code",
+    "Input Description": "CMOTS Company Code",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "co_code",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "co_code"
+      },
+      {
+        "Column_Name": "announcement_record_date",
+        "Column_DataType": "date",
+        "Column_Description": "announcement_record_date",
+        "Is_Unique": "",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "announcement_document_link",
+        "Column_DataType": "text",
+        "Column_Description": "announcement_document_link",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "announcement_text",
+        "Column_DataType": "text",
+        "Column_Description": "announcement_text",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "announcement_text_summary",
+        "Column_DataType": "text",
+        "Column_Description": "announcement_text_summary",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "announcement_category",
+        "Column_DataType": "text",
+        "Column_Description": "announcement_category",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "announcement_sub_category",
+        "Column_DataType": "text",
+        "Column_Description": "announcement_sub_category",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "announcement_impact",
+        "Column_DataType": "text",
+        "Column_Description": "announcement_impact",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "announcement_sentiment",
+        "Column_DataType": "text",
+        "Column_Description": "announcement_sentiment",
+        "Is_Unique": "",
+        "Is_Index": ""
+      }
+    ],
+    "UniqueColumns": [
+      "co_code",
+      "announcement_document_link"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [
+      {
+        "Column_Name": "co_code",
+        "References": {
+          "Table_Name": "company_master",
+          "Column_Name": "co_code"
+        }
+      }
+    ],
+    "Indexes": [
+      "co_code",
+      "announcement_record_date",
+      "announcement_document_link"
+    ]
+  }
+]

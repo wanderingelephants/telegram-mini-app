@@ -1,0 +1,153 @@
+[
+  {
+    "ReportIndex": 41,
+    "Table Name": "company_efficiency_ratios",
+    "PromptQL": "Retail",
+    "Table Description": "Efficiency Ratios",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/EfficiencyRatios/476/C",
+    "notes": "",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "co_code",
+    "Input Description": "CMOTS Company code",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "yrc",
+        "Column_DataType": "integer",
+        "Column_Description": "yrc",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "YRC"
+      },
+      {
+        "Column_Name": "month",
+        "Column_DataType": "int",
+        "Column_Description": "month",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "quarter",
+        "Column_DataType": "int",
+        "Column_Description": "quarter",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "year",
+        "Column_DataType": "int",
+        "Column_Description": "year",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "co_code",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "co_code"
+      },
+      {
+        "Column_Name": "fixedcapitals_sales",
+        "Column_DataType": "numeric",
+        "Column_Description": "fixedcapitals_sales",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "FixedCapitals_Sales"
+      },
+      {
+        "Column_Name": "receivabledays",
+        "Column_DataType": "numeric",
+        "Column_Description": "receivabledays",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "ReceivableDays"
+      },
+      {
+        "Column_Name": "inventorydays",
+        "Column_DataType": "numeric",
+        "Column_Description": "inventorydays",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "InventoryDays"
+      },
+      {
+        "Column_Name": "payabledays",
+        "Column_DataType": "numeric",
+        "Column_Description": "payabledays",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "PayableDays"
+      },
+      {
+        "Column_Name": "costincomeratio",
+        "Column_DataType": "numeric",
+        "Column_Description": "costincomeratio",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "CostIncomeRatio"
+      },
+      {
+        "Column_Name": "corecostincomeratio",
+        "Column_DataType": "numeric",
+        "Column_Description": "corecostincomeratio",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "CoreCostIncomeRatio"
+      },
+      {
+        "Column_Name": "operatingcoststoassets",
+        "Column_DataType": "numeric",
+        "Column_Description": "operatingcoststoassets",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "OperatingCostsToAssets"
+      },
+      {
+        "Column_Name": "isconsolidated",
+        "Column_DataType": "boolean",
+        "Column_Description": "isconsolidated",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "isConsolidated"
+      }
+    ],
+    "UniqueColumns": [
+      "yrc",
+      "month",
+      "quarter",
+      "year",
+      "co_code",
+      "isconsolidated"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [
+      {
+        "Column_Name": "co_code",
+        "References": {
+          "Table_Name": "company_master",
+          "Column_Name": "co_code"
+        }
+      }
+    ],
+    "Indexes": [
+      "yrc",
+      "month",
+      "quarter",
+      "year",
+      "co_code",
+      "isconsolidated"
+    ]
+  }
+]

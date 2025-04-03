@@ -1,0 +1,669 @@
+[
+  {
+    "ReportIndex": 23,
+    "Table Name": "company_deferred_tax",
+    "PromptQL": "",
+    "Table Description": "Deferred Tax",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/Deferred_Tax/6",
+    "notes": "",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "co_code",
+    "Input Description": "CMOTS Company code",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "co_code",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "co_code"
+      },
+      {
+        "Column_Name": "yrc",
+        "Column_DataType": "integer",
+        "Column_Description": "yrc",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "month",
+        "Column_DataType": "int",
+        "Column_Description": "month",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "quarter",
+        "Column_DataType": "int",
+        "Column_Description": "quarter",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "year",
+        "Column_DataType": "int",
+        "Column_Description": "year",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "aseg1",
+        "Column_DataType": "text",
+        "Column_Description": "aseg1",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aval1",
+        "Column_DataType": "integer",
+        "Column_Description": "aval1",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aseg2",
+        "Column_DataType": "text",
+        "Column_Description": "aseg2",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aval2",
+        "Column_DataType": "integer",
+        "Column_Description": "aval2",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aseg3",
+        "Column_DataType": "text",
+        "Column_Description": "aseg3",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aval3",
+        "Column_DataType": "integer",
+        "Column_Description": "aval3",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aseg4",
+        "Column_DataType": "text",
+        "Column_Description": "aseg4",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aval4",
+        "Column_DataType": "integer",
+        "Column_Description": "aval4",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aseg5",
+        "Column_DataType": "text",
+        "Column_Description": "aseg5",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aval5",
+        "Column_DataType": "integer",
+        "Column_Description": "aval5",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aseg6",
+        "Column_DataType": "text",
+        "Column_Description": "aseg6",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aval6",
+        "Column_DataType": "integer",
+        "Column_Description": "aval6",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aseg7",
+        "Column_DataType": "text",
+        "Column_Description": "aseg7",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aval7",
+        "Column_DataType": "integer",
+        "Column_Description": "aval7",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aseg8",
+        "Column_DataType": "text",
+        "Column_Description": "aseg8",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aval8",
+        "Column_DataType": "integer",
+        "Column_Description": "aval8",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aseg9",
+        "Column_DataType": "text",
+        "Column_Description": "aseg9",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aval9",
+        "Column_DataType": "integer",
+        "Column_Description": "aval9",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aseg10",
+        "Column_DataType": "text",
+        "Column_Description": "aseg10",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aval10",
+        "Column_DataType": "integer",
+        "Column_Description": "aval10",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aseg11",
+        "Column_DataType": "text",
+        "Column_Description": "aseg11",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aval11",
+        "Column_DataType": "integer",
+        "Column_Description": "aval11",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aseg12",
+        "Column_DataType": "text",
+        "Column_Description": "aseg12",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aval12",
+        "Column_DataType": "integer",
+        "Column_Description": "aval12",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aseg13",
+        "Column_DataType": "text",
+        "Column_Description": "aseg13",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aval13",
+        "Column_DataType": "integer",
+        "Column_Description": "aval13",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aseg14",
+        "Column_DataType": "text",
+        "Column_Description": "aseg14",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aval14",
+        "Column_DataType": "integer",
+        "Column_Description": "aval14",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aseg15",
+        "Column_DataType": "text",
+        "Column_Description": "aseg15",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aval15",
+        "Column_DataType": "integer",
+        "Column_Description": "aval15",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aseg16",
+        "Column_DataType": "text",
+        "Column_Description": "aseg16",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aval16",
+        "Column_DataType": "integer",
+        "Column_Description": "aval16",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aseg17",
+        "Column_DataType": "text",
+        "Column_Description": "aseg17",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aval17",
+        "Column_DataType": "integer",
+        "Column_Description": "aval17",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aseg18",
+        "Column_DataType": "text",
+        "Column_Description": "aseg18",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aval18",
+        "Column_DataType": "integer",
+        "Column_Description": "aval18",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aseg19",
+        "Column_DataType": "text",
+        "Column_Description": "aseg19",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aval19",
+        "Column_DataType": "integer",
+        "Column_Description": "aval19",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aseg20",
+        "Column_DataType": "text",
+        "Column_Description": "aseg20",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "aval20",
+        "Column_DataType": "integer",
+        "Column_Description": "aval20",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lseg1",
+        "Column_DataType": "text",
+        "Column_Description": "lseg1",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lval1",
+        "Column_DataType": "integer",
+        "Column_Description": "lval1",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lseg2",
+        "Column_DataType": "text",
+        "Column_Description": "lseg2",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lval2",
+        "Column_DataType": "integer",
+        "Column_Description": "lval2",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lseg3",
+        "Column_DataType": "text",
+        "Column_Description": "lseg3",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lval3",
+        "Column_DataType": "integer",
+        "Column_Description": "lval3",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lseg4",
+        "Column_DataType": "text",
+        "Column_Description": "lseg4",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lval4",
+        "Column_DataType": "integer",
+        "Column_Description": "lval4",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lseg5",
+        "Column_DataType": "text",
+        "Column_Description": "lseg5",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lval5",
+        "Column_DataType": "integer",
+        "Column_Description": "lval5",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lseg6",
+        "Column_DataType": "text",
+        "Column_Description": "lseg6",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lval6",
+        "Column_DataType": "integer",
+        "Column_Description": "lval6",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lseg7",
+        "Column_DataType": "text",
+        "Column_Description": "lseg7",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lval7",
+        "Column_DataType": "integer",
+        "Column_Description": "lval7",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lseg8",
+        "Column_DataType": "text",
+        "Column_Description": "lseg8",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lval8",
+        "Column_DataType": "integer",
+        "Column_Description": "lval8",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lseg9",
+        "Column_DataType": "text",
+        "Column_Description": "lseg9",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lval9",
+        "Column_DataType": "integer",
+        "Column_Description": "lval9",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lseg10",
+        "Column_DataType": "text",
+        "Column_Description": "lseg10",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lval10",
+        "Column_DataType": "integer",
+        "Column_Description": "lval10",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lseg11",
+        "Column_DataType": "text",
+        "Column_Description": "lseg11",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lval11",
+        "Column_DataType": "integer",
+        "Column_Description": "lval11",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lseg12",
+        "Column_DataType": "text",
+        "Column_Description": "lseg12",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lval12",
+        "Column_DataType": "integer",
+        "Column_Description": "lval12",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lseg13",
+        "Column_DataType": "text",
+        "Column_Description": "lseg13",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lval13",
+        "Column_DataType": "integer",
+        "Column_Description": "lval13",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lseg14",
+        "Column_DataType": "text",
+        "Column_Description": "lseg14",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lval14",
+        "Column_DataType": "integer",
+        "Column_Description": "lval14",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lseg15",
+        "Column_DataType": "text",
+        "Column_Description": "lseg15",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lval15",
+        "Column_DataType": "integer",
+        "Column_Description": "lval15",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lseg16",
+        "Column_DataType": "text",
+        "Column_Description": "lseg16",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lval16",
+        "Column_DataType": "integer",
+        "Column_Description": "lval16",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lseg17",
+        "Column_DataType": "text",
+        "Column_Description": "lseg17",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lval17",
+        "Column_DataType": "integer",
+        "Column_Description": "lval17",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lseg18",
+        "Column_DataType": "text",
+        "Column_Description": "lseg18",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lval18",
+        "Column_DataType": "integer",
+        "Column_Description": "lval18",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lseg19",
+        "Column_DataType": "text",
+        "Column_Description": "lseg19",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lval19",
+        "Column_DataType": "integer",
+        "Column_Description": "lval19",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lseg20",
+        "Column_DataType": "text",
+        "Column_Description": "lseg20",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lval20",
+        "Column_DataType": "integer",
+        "Column_Description": "lval20",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "atotal",
+        "Column_DataType": "integer",
+        "Column_Description": "atotal",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "ltotal",
+        "Column_DataType": "integer",
+        "Column_Description": "ltotal",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "flag",
+        "Column_DataType": "text",
+        "Column_Description": "flag",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      }
+    ],
+    "UniqueColumns": [
+      "co_code",
+      "yrc",
+      "month",
+      "quarter",
+      "year",
+      "flag"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [
+      {
+        "Column_Name": "co_code",
+        "References": {
+          "Table_Name": "company_master",
+          "Column_Name": "co_code"
+        }
+      }
+    ],
+    "Indexes": [
+      "co_code",
+      "yrc",
+      "month",
+      "quarter",
+      "year",
+      "flag"
+    ]
+  }
+]

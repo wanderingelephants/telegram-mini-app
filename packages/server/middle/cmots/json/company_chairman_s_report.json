@@ -1,0 +1,74 @@
+[
+  {
+    "ReportIndex": 14,
+    "Table Name": "company_chairman_s_report",
+    "PromptQL": "",
+    "Table Description": "Chairman's Report",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/ChairmansReport/6",
+    "notes": "",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "co_code",
+    "Input Description": "CMOTS Company code",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "co_code",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "co_code"
+      },
+      {
+        "Column_Name": "lname",
+        "Column_DataType": "text",
+        "Column_Description": "lname",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "chairreport",
+        "Column_DataType": "text",
+        "Column_Description": "chairreport",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "chairman_report"
+      },
+      {
+        "Column_Name": "yr",
+        "Column_DataType": "integer",
+        "Column_Description": "yr",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      }
+    ],
+    "UniqueColumns": [
+      "co_code",
+      "yr"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [
+      {
+        "Column_Name": "co_code",
+        "References": {
+          "Table_Name": "company_master",
+          "Column_Name": "co_code"
+        }
+      }
+    ],
+    "Indexes": [
+      "co_code",
+      "yr"
+    ]
+  }
+]

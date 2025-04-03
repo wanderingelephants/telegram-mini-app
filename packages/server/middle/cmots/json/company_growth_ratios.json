@@ -1,0 +1,169 @@
+[
+  {
+    "ReportIndex": 45,
+    "Table Name": "company_growth_ratios",
+    "PromptQL": "Retail",
+    "Table Description": "Growth Ratios",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/GrowthRatio/6/C",
+    "notes": "",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "co_code",
+    "Input Description": "CMOTS Company code",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "yrc",
+        "Column_DataType": "integer",
+        "Column_Description": "yrc",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "YRC"
+      },
+      {
+        "Column_Name": "month",
+        "Column_DataType": "int",
+        "Column_Description": "month",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "quarter",
+        "Column_DataType": "int",
+        "Column_Description": "quarter",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "year",
+        "Column_DataType": "int",
+        "Column_Description": "year",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "co_code",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "co_code"
+      },
+      {
+        "Column_Name": "netsalesgrowth",
+        "Column_DataType": "numeric",
+        "Column_Description": "netsalesgrowth",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "NetSalesGrowth"
+      },
+      {
+        "Column_Name": "ebitdagrowth",
+        "Column_DataType": "numeric",
+        "Column_Description": "ebitdagrowth",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "EBITDAGrowth"
+      },
+      {
+        "Column_Name": "ebitgrowth",
+        "Column_DataType": "numeric",
+        "Column_Description": "ebitgrowth",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "EBITGrowth"
+      },
+      {
+        "Column_Name": "patgrowth",
+        "Column_DataType": "numeric",
+        "Column_Description": "patgrowth",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "PATGrowth"
+      },
+      {
+        "Column_Name": "coreoperatingincomegrowth",
+        "Column_DataType": "numeric",
+        "Column_Description": "coreoperatingincomegrowth",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "CoreOperatingIncomeGrowth"
+      },
+      {
+        "Column_Name": "netprofitgrowth",
+        "Column_DataType": "numeric",
+        "Column_Description": "netprofitgrowth",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "NetProfitGrowth"
+      },
+      {
+        "Column_Name": "bvpsgrowth",
+        "Column_DataType": "numeric",
+        "Column_Description": "bvpsgrowth",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "BVPSGrowth"
+      },
+      {
+        "Column_Name": "advancesgrowth",
+        "Column_DataType": "numeric",
+        "Column_Description": "advancesgrowth",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "AdvancesGrowth"
+      },
+      {
+        "Column_Name": "eps",
+        "Column_DataType": "numeric",
+        "Column_Description": "eps",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "EPS"
+      },
+      {
+        "Column_Name": "isconsolidated",
+        "Column_DataType": "boolean",
+        "Column_Description": "isconsolidated",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "isConsolidated"
+      }
+    ],
+    "UniqueColumns": [
+      "yrc",
+      "month",
+      "quarter",
+      "year",
+      "co_code",
+      "isconsolidated"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [
+      {
+        "Column_Name": "co_code",
+        "References": {
+          "Table_Name": "company_master",
+          "Column_Name": "co_code"
+        }
+      }
+    ],
+    "Indexes": [
+      "yrc",
+      "month",
+      "quarter",
+      "year",
+      "co_code",
+      "isconsolidated"
+    ]
+  }
+]

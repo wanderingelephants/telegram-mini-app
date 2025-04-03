@@ -1,0 +1,127 @@
+[
+  {
+    "ReportIndex": 33,
+    "Table Name": "company_capital_adequacy_ratio",
+    "PromptQL": "Retail",
+    "Table Description": "Capital Adequacy Ratio",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/CRAR/4987",
+    "notes": "",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "co_code",
+    "Input Description": "CMOTS Company Code",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "co_code",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "co_code"
+      },
+      {
+        "Column_Name": "yrc",
+        "Column_DataType": "integer",
+        "Column_Description": "yrc",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "yrc"
+      },
+      {
+        "Column_Name": "month",
+        "Column_DataType": "int",
+        "Column_Description": "month",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "quarter",
+        "Column_DataType": "int",
+        "Column_Description": "quarter",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "year",
+        "Column_DataType": "int",
+        "Column_Description": "year",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "grossnonperformingassets",
+        "Column_DataType": "numeric",
+        "Column_Description": "grossnonperformingassets",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "gross_non_performing_assets"
+      },
+      {
+        "Column_Name": "netnonperformingassets",
+        "Column_DataType": "numeric",
+        "Column_Description": "netnonperformingassets",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "net_non_performing_assets"
+      },
+      {
+        "Column_Name": "capitaladequacyratio_baseliii",
+        "Column_DataType": "numeric",
+        "Column_Description": "capitaladequacyratio_baseliii",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "captial_adequacy_ratio_baseliii"
+      },
+      {
+        "Column_Name": "tiericapital",
+        "Column_DataType": "numeric",
+        "Column_Description": "tiericapital",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "tier_1_capital"
+      },
+      {
+        "Column_Name": "tieriicapital",
+        "Column_DataType": "numeric",
+        "Column_Description": "tieriicapital",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "tier_2_capital"
+      }
+    ],
+    "UniqueColumns": [
+      "co_code",
+      "yrc",
+      "month",
+      "quarter",
+      "year"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [
+      {
+        "Column_Name": "co_code",
+        "References": {
+          "Table_Name": "company_master",
+          "Column_Name": "co_code"
+        }
+      }
+    ],
+    "Indexes": [
+      "co_code",
+      "yrc",
+      "month",
+      "quarter",
+      "year"
+    ]
+  }
+]

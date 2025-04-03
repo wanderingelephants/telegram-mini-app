@@ -1,0 +1,135 @@
+[
+  {
+    "ReportIndex": 37,
+    "Table Name": "company_shareholding_pattern_aggregate",
+    "PromptQL": "",
+    "Table Description": "Shareholding Pattern Aggregate",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/Aggregate-Share-Holding/5400",
+    "notes": "",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "co_code",
+    "Input Description": "CMOTS Company Code",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "co_code",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "co_code"
+      },
+      {
+        "Column_Name": "yrc",
+        "Column_DataType": "integer",
+        "Column_Description": "yrc",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "year"
+      },
+      {
+        "Column_Name": "month",
+        "Column_DataType": "int",
+        "Column_Description": "month",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "quarter",
+        "Column_DataType": "int",
+        "Column_Description": "quarter",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "year",
+        "Column_DataType": "int",
+        "Column_Description": "year",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "promoters",
+        "Column_DataType": "numeric",
+        "Column_Description": "promoters",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "promoters_percentage_share"
+      },
+      {
+        "Column_Name": "retail",
+        "Column_DataType": "numeric",
+        "Column_Description": "retail",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "retail_percentage_share"
+      },
+      {
+        "Column_Name": "foreigninstitution",
+        "Column_DataType": "numeric",
+        "Column_Description": "foreigninstitution",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "foreign_institutions_percentage_share"
+      },
+      {
+        "Column_Name": "mutualfund",
+        "Column_DataType": "numeric",
+        "Column_Description": "mutualfund",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "mutual_funds_percentage_share"
+      },
+      {
+        "Column_Name": "otherdomesticinstitution",
+        "Column_DataType": "numeric",
+        "Column_Description": "otherdomesticinstitution",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "other_domestic_institution_share"
+      },
+      {
+        "Column_Name": "others",
+        "Column_DataType": "numeric",
+        "Column_Description": "others",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "others_percentage_share"
+      }
+    ],
+    "UniqueColumns": [
+      "co_code",
+      "yrc",
+      "month",
+      "quarter",
+      "year"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [
+      {
+        "Column_Name": "co_code",
+        "References": {
+          "Table_Name": "company_master",
+          "Column_Name": "co_code"
+        }
+      }
+    ],
+    "Indexes": [
+      "co_code",
+      "yrc",
+      "month",
+      "quarter",
+      "year"
+    ]
+  }
+]

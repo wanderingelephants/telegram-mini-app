@@ -1,0 +1,138 @@
+[
+  {
+    "ReportIndex": 20,
+    "Table Name": "company_raw_material",
+    "PromptQL": "",
+    "Table Description": "Raw Material",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/RawMaterials/6",
+    "notes": "",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "co_code",
+    "Input Description": "CMOTS Company code",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "co_code",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "co_code"
+      },
+      {
+        "Column_Name": "lname",
+        "Column_DataType": "text",
+        "Column_Description": "lname",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "yrc",
+        "Column_DataType": "integer",
+        "Column_Description": "yrc",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "month",
+        "Column_DataType": "int",
+        "Column_Description": "month",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "quarter",
+        "Column_DataType": "int",
+        "Column_Description": "quarter",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "year",
+        "Column_DataType": "int",
+        "Column_Description": "year",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "prname",
+        "Column_DataType": "text",
+        "Column_Description": "prname",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "product_name"
+      },
+      {
+        "Column_Name": "uom",
+        "Column_DataType": "text",
+        "Column_Description": "uom",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "unit_of_measurement"
+      },
+      {
+        "Column_Name": "qty",
+        "Column_DataType": "numeric",
+        "Column_Description": "qty",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "quantity"
+      },
+      {
+        "Column_Name": "value",
+        "Column_DataType": "numeric",
+        "Column_Description": "value",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "value"
+      },
+      {
+        "Column_Name": "symbol",
+        "Column_DataType": "text",
+        "Column_Description": "symbol",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      }
+    ],
+    "UniqueColumns": [
+      "co_code",
+      "yrc",
+      "month",
+      "quarter",
+      "year",
+      "prname",
+      "uom",
+      "symbol"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [
+      {
+        "Column_Name": "co_code",
+        "References": {
+          "Table_Name": "company_master",
+          "Column_Name": "co_code"
+        }
+      }
+    ],
+    "Indexes": [
+      "co_code",
+      "yrc",
+      "month",
+      "quarter",
+      "year",
+      "prname",
+      "uom",
+      "symbol"
+    ]
+  }
+]

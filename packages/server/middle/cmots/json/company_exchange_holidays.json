@@ -1,0 +1,55 @@
+[
+  {
+    "ReportIndex": 6,
+    "Table Name": "company_exchange_holidays",
+    "PromptQL": "",
+    "Table Description": "Exchange Holidays",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/Exchange-Holidays/NSE",
+    "notes": "",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "exchg",
+    "Input Description": "Exchange(BSE / NSE)",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "holidaydate",
+        "Column_DataType": "date",
+        "Column_Description": "holidaydate",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "purpose",
+        "Column_DataType": "text",
+        "Column_Description": "purpose",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "day",
+        "Column_DataType": "text",
+        "Column_Description": "day",
+        "Is_Unique": "",
+        "Is_Index": ""
+      }
+    ],
+    "UniqueColumns": [
+      "holidaydate"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [],
+    "Indexes": [
+      "holidaydate"
+    ]
+  }
+]

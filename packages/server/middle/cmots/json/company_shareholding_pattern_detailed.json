@@ -1,0 +1,124 @@
+[
+  {
+    "ReportIndex": 36,
+    "Table Name": "company_shareholding_pattern_detailed",
+    "PromptQL": "",
+    "Table Description": "Shareholding Pattern Detailed",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/ShareholdingMorethanonePerDetails/476",
+    "notes": "type_of_shareholding is one of ['Public Shareholding' , 'Shareholding of Promoter and Promoter Group']",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "co_code",
+    "Input Description": "CMOTS Company Code",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "co_code",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "co_code"
+      },
+      {
+        "Column_Name": "yrc",
+        "Column_DataType": "integer",
+        "Column_Description": "yrc",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "year"
+      },
+      {
+        "Column_Name": "month",
+        "Column_DataType": "int",
+        "Column_Description": "month",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "quarter",
+        "Column_DataType": "int",
+        "Column_Description": "quarter",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "year",
+        "Column_DataType": "int",
+        "Column_Description": "year",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "slno",
+        "Column_DataType": "integer",
+        "Column_Description": "slno",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "type",
+        "Column_DataType": "text",
+        "Column_Description": "type",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "type_of_shareholding"
+      },
+      {
+        "Column_Name": "name",
+        "Column_DataType": "text",
+        "Column_Description": "name",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "name"
+      },
+      {
+        "Column_Name": "percentagestakeholding",
+        "Column_DataType": "numeric",
+        "Column_Description": "percentagestakeholding",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "percentage_stake_holding"
+      }
+    ],
+    "UniqueColumns": [
+      "co_code",
+      "yrc",
+      "month",
+      "quarter",
+      "year",
+      "slno",
+      "type",
+      "name"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [
+      {
+        "Column_Name": "co_code",
+        "References": {
+          "Table_Name": "company_master",
+          "Column_Name": "co_code"
+        }
+      }
+    ],
+    "Indexes": [
+      "co_code",
+      "yrc",
+      "month",
+      "quarter",
+      "year",
+      "slno",
+      "type",
+      "name"
+    ]
+  }
+]

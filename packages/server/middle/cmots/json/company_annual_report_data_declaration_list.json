@@ -1,0 +1,70 @@
+[
+  {
+    "ReportIndex": 9,
+    "Table Name": "company_annual_report_data_declaration_list",
+    "PromptQL": "",
+    "Table Description": "Annual Report Data Declaration List",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/AnnualDataDeclarations/2024-08-10",
+    "notes": "",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "latestdate",
+    "Input Description": "Latest Date",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "co_code",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "co_code"
+      },
+      {
+        "Column_Name": "reportdate",
+        "Column_DataType": "date",
+        "Column_Description": "reportdate",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "date"
+      },
+      {
+        "Column_Name": "reporttype",
+        "Column_DataType": "text",
+        "Column_Description": "reporttype",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "report_type"
+      }
+    ],
+    "UniqueColumns": [
+      "co_code",
+      "reportdate",
+      "reporttype"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [
+      {
+        "Column_Name": "co_code",
+        "References": {
+          "Table_Name": "company_master",
+          "Column_Name": "co_code"
+        }
+      }
+    ],
+    "Indexes": [
+      "co_code",
+      "reportdate",
+      "reporttype"
+    ]
+  }
+]

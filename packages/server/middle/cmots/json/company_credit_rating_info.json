@@ -1,0 +1,127 @@
+[
+  {
+    "ReportIndex": 28,
+    "Table Name": "company_credit_rating_info",
+    "PromptQL": "",
+    "Table Description": "Credit Rating Info",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/CreditRatingInfo/476",
+    "notes": "",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "co_code",
+    "Input Description": "CMOTS Company code",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "co_code",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "co_code"
+      },
+      {
+        "Column_Name": "ratdate",
+        "Column_DataType": "date",
+        "Column_Description": "ratdate",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "date"
+      },
+      {
+        "Column_Name": "sectype",
+        "Column_DataType": "text",
+        "Column_Description": "sectype",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "amount",
+        "Column_DataType": "integer",
+        "Column_Description": "amount",
+        "Is_Unique": "TRUE",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "rating",
+        "Column_DataType": "text",
+        "Column_Description": "rating",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "ratingby",
+        "Column_DataType": "text",
+        "Column_Description": "ratingby",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "type",
+        "Column_DataType": "text",
+        "Column_Description": "type",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "note",
+        "Column_DataType": "text",
+        "Column_Description": "note",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "stoblig",
+        "Column_DataType": "text",
+        "Column_Description": "stoblig",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "stattype",
+        "Column_DataType": "text",
+        "Column_Description": "stattype",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      }
+    ],
+    "UniqueColumns": [
+      "co_code",
+      "ratdate",
+      "sectype",
+      "amount",
+      "rating",
+      "ratingby",
+      "type",
+      "stattype"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [
+      {
+        "Column_Name": "co_code",
+        "References": {
+          "Table_Name": "company_master",
+          "Column_Name": "co_code"
+        }
+      }
+    ],
+    "Indexes": [
+      "co_code",
+      "ratdate",
+      "sectype",
+      "rating",
+      "ratingby",
+      "type",
+      "stattype"
+    ]
+  }
+]

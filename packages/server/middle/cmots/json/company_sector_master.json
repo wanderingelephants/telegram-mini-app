@@ -1,0 +1,49 @@
+[
+  {
+    "ReportIndex": 2,
+    "Table Name": "company_sector_master",
+    "PromptQL": "",
+    "Table Description": "Sector Master",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/SectorMaster",
+    "notes": "",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "n/a",
+    "Input Description": "N/A",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "sect_code",
+        "Column_DataType": "integer",
+        "Column_Description": "sect_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "sect_name",
+        "Column_DataType": "text",
+        "Column_Description": "sect_name",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "sector_name"
+      }
+    ],
+    "UniqueColumns": [
+      "sect_code"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [],
+    "Indexes": [
+      "sect_code"
+    ]
+  }
+]

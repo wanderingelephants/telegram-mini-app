@@ -1,0 +1,177 @@
+[
+  {
+    "ReportIndex": 52,
+    "Table Name": "company_return_ratios_bank",
+    "PromptQL": "Retail",
+    "Table Description": "Return Ratios Bank",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/RatiosReturn/4987/C",
+    "notes": "",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "co_code",
+    "Input Description": "CMOTS Company Code",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "yrc",
+        "Column_DataType": "integer",
+        "Column_Description": "yrc",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "YRC"
+      },
+      {
+        "Column_Name": "month",
+        "Column_DataType": "int",
+        "Column_Description": "month",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "quarter",
+        "Column_DataType": "int",
+        "Column_Description": "quarter",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "year",
+        "Column_DataType": "int",
+        "Column_Description": "year",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "co_code",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "co_code"
+      },
+      {
+        "Column_Name": "return_roe",
+        "Column_DataType": "numeric",
+        "Column_Description": "return_roe",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Return_ROE"
+      },
+      {
+        "Column_Name": "return_roe_netprofit",
+        "Column_DataType": "numeric",
+        "Column_Description": "return_roe_netprofit",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Return_ROE_NetProfit"
+      },
+      {
+        "Column_Name": "return_roe_networth",
+        "Column_DataType": "numeric",
+        "Column_Description": "return_roe_networth",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Return_ROE_Networth"
+      },
+      {
+        "Column_Name": "return_ro_assets",
+        "Column_DataType": "numeric",
+        "Column_Description": "return_ro_assets",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Return_RO_Assets"
+      },
+      {
+        "Column_Name": "return_ro_assets_netprofit",
+        "Column_DataType": "numeric",
+        "Column_Description": "return_ro_assets_netprofit",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Return_RO_Assets_NetProfit"
+      },
+      {
+        "Column_Name": "return_ro_assets_totalfixedassets",
+        "Column_DataType": "numeric",
+        "Column_Description": "return_ro_assets_totalfixedassets",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Return_RO_Assets_TotalFixedAssets"
+      },
+      {
+        "Column_Name": "return_netinterestmargin",
+        "Column_DataType": "numeric",
+        "Column_Description": "return_netinterestmargin",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Return_NetInterestMargin"
+      },
+      {
+        "Column_Name": "return_yieldonadvances",
+        "Column_DataType": "numeric",
+        "Column_Description": "return_yieldonadvances",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Return_YieldOnAdvances"
+      },
+      {
+        "Column_Name": "return_yieldonadvances_interestearned",
+        "Column_DataType": "numeric",
+        "Column_Description": "return_yieldonadvances_interestearned",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Return_YieldOnAdvances_InterestEarned"
+      },
+      {
+        "Column_Name": "return_yieldonadvances_advances",
+        "Column_DataType": "numeric",
+        "Column_Description": "return_yieldonadvances_advances",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Return_YieldOnAdvances_Advances"
+      },
+      {
+        "Column_Name": "isconsolidated",
+        "Column_DataType": "boolean",
+        "Column_Description": "isconsolidated",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "isConsolidated"
+      }
+    ],
+    "UniqueColumns": [
+      "yrc",
+      "month",
+      "quarter",
+      "year",
+      "co_code",
+      "isconsolidated"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [
+      {
+        "Column_Name": "co_code",
+        "References": {
+          "Table_Name": "company_master",
+          "Column_Name": "co_code"
+        }
+      }
+    ],
+    "Indexes": [
+      "yrc",
+      "month",
+      "quarter",
+      "year",
+      "co_code",
+      "isconsolidated"
+    ]
+  }
+]

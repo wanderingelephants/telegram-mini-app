@@ -1,0 +1,350 @@
+[
+  {
+    "ReportIndex": 47,
+    "Table Name": "company_trailing_twelvemonths_ratios",
+    "PromptQL": "Retail",
+    "Table Description": "Trailing_TwelveMonths_Ratios",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/DailyRatios/476/C",
+    "notes": "",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "co_code",
+    "Input Description": "CMOTS Company Code",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "ttmason",
+        "Column_DataType": "integer",
+        "Column_Description": "ttmason",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "date"
+      },
+      {
+        "Column_Name": "co_code",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "co_code"
+      },
+      {
+        "Column_Name": "record_date",
+        "Column_DataType": "date",
+        "Column_Description": "record_date",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "date"
+      },
+      {
+        "Column_Name": "mcap",
+        "Column_DataType": "numeric",
+        "Column_Description": "mcap",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "MCAP"
+      },
+      {
+        "Column_Name": "ev",
+        "Column_DataType": "numeric",
+        "Column_Description": "ev",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "EV"
+      },
+      {
+        "Column_Name": "pe",
+        "Column_DataType": "numeric",
+        "Column_Description": "pe",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "PE"
+      },
+      {
+        "Column_Name": "pbv",
+        "Column_DataType": "numeric",
+        "Column_Description": "pbv",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "PBV"
+      },
+      {
+        "Column_Name": "divyield",
+        "Column_DataType": "numeric",
+        "Column_Description": "divyield",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "DIVYIELD"
+      },
+      {
+        "Column_Name": "eps",
+        "Column_DataType": "numeric",
+        "Column_Description": "eps",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "EPS"
+      },
+      {
+        "Column_Name": "bookvalue",
+        "Column_DataType": "numeric",
+        "Column_Description": "bookvalue",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "BookValue"
+      },
+      {
+        "Column_Name": "roa_ttm",
+        "Column_DataType": "numeric",
+        "Column_Description": "roa_ttm",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "ROA_TTM"
+      },
+      {
+        "Column_Name": "roe_ttm",
+        "Column_DataType": "numeric",
+        "Column_Description": "roe_ttm",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "ROE_TTM"
+      },
+      {
+        "Column_Name": "roce_ttm",
+        "Column_DataType": "numeric",
+        "Column_Description": "roce_ttm",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "ROCE_TTM"
+      },
+      {
+        "Column_Name": "ebit_ttm",
+        "Column_DataType": "numeric",
+        "Column_Description": "ebit_ttm",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "EBIT_TTM"
+      },
+      {
+        "Column_Name": "ebitda_ttm",
+        "Column_DataType": "numeric",
+        "Column_Description": "ebitda_ttm",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "EBITDA_TTM"
+      },
+      {
+        "Column_Name": "ev_sales_ttm",
+        "Column_DataType": "numeric",
+        "Column_Description": "ev_sales_ttm",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "EV_Sales_TTM"
+      },
+      {
+        "Column_Name": "ev_ebitda_ttm",
+        "Column_DataType": "numeric",
+        "Column_Description": "ev_ebitda_ttm",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "EV_EBITDA_TTM"
+      },
+      {
+        "Column_Name": "netincomemargin_ttm",
+        "Column_DataType": "numeric",
+        "Column_Description": "netincomemargin_ttm",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "NetIncomeMargin_TTM"
+      },
+      {
+        "Column_Name": "grossincomemargin_ttm",
+        "Column_DataType": "numeric",
+        "Column_Description": "grossincomemargin_ttm",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "GrossIncomeMargin_TTM"
+      },
+      {
+        "Column_Name": "assetturnover_ttm",
+        "Column_DataType": "numeric",
+        "Column_Description": "assetturnover_ttm",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "AssetTurnover_TTM"
+      },
+      {
+        "Column_Name": "currentratio_ttm",
+        "Column_DataType": "numeric",
+        "Column_Description": "currentratio_ttm",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "CurrentRatio_TTM"
+      },
+      {
+        "Column_Name": "debt_equity_ttm",
+        "Column_DataType": "numeric",
+        "Column_Description": "debt_equity_ttm",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Debt_Equity_TTM"
+      },
+      {
+        "Column_Name": "sales_totalassets_ttm",
+        "Column_DataType": "numeric",
+        "Column_Description": "sales_totalassets_ttm",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Sales_TotalAssets_TTM"
+      },
+      {
+        "Column_Name": "netdebt_ebitda_ttm",
+        "Column_DataType": "numeric",
+        "Column_Description": "netdebt_ebitda_ttm",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "NetDebt_EBITDA_TTM"
+      },
+      {
+        "Column_Name": "ebitda_margin_ttm",
+        "Column_DataType": "numeric",
+        "Column_Description": "ebitda_margin_ttm",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "EBITDA_Margin_TTM"
+      },
+      {
+        "Column_Name": "totalshareholdersequity_ttm",
+        "Column_DataType": "numeric",
+        "Column_Description": "totalshareholdersequity_ttm",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "TotalShareHoldersEquity_TTM"
+      },
+      {
+        "Column_Name": "shorttermdebt_ttm",
+        "Column_DataType": "numeric",
+        "Column_Description": "shorttermdebt_ttm",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "ShorttermDebt_TTM"
+      },
+      {
+        "Column_Name": "longtermdebt_ttm",
+        "Column_DataType": "numeric",
+        "Column_Description": "longtermdebt_ttm",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "LongtermDebt_TTM"
+      },
+      {
+        "Column_Name": "sharesoutstanding",
+        "Column_DataType": "numeric",
+        "Column_Description": "sharesoutstanding",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "SharesOutstanding"
+      },
+      {
+        "Column_Name": "epsdiluted",
+        "Column_DataType": "numeric",
+        "Column_Description": "epsdiluted",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "EPSDiluted"
+      },
+      {
+        "Column_Name": "netsales",
+        "Column_DataType": "numeric",
+        "Column_Description": "netsales",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "NetSales"
+      },
+      {
+        "Column_Name": "netprofit",
+        "Column_DataType": "numeric",
+        "Column_Description": "netprofit",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Netprofit"
+      },
+      {
+        "Column_Name": "annualdividend",
+        "Column_DataType": "numeric",
+        "Column_Description": "annualdividend",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "AnnualDividend"
+      },
+      {
+        "Column_Name": "cogs",
+        "Column_DataType": "numeric",
+        "Column_Description": "cogs",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "COGS"
+      },
+      {
+        "Column_Name": "pegratio_ttm",
+        "Column_DataType": "numeric",
+        "Column_Description": "pegratio_ttm",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "PEGRatio_TTM"
+      },
+      {
+        "Column_Name": "dividendpayout_ttm",
+        "Column_DataType": "numeric",
+        "Column_Description": "dividendpayout_ttm",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "DividendPayout_TTM"
+      },
+      {
+        "Column_Name": "industry_pe",
+        "Column_DataType": "numeric",
+        "Column_Description": "industry_pe",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Industry_PE"
+      },
+      {
+        "Column_Name": "isconsolidated",
+        "Column_DataType": "boolean",
+        "Column_Description": "isconsolidated",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "isConsolidated"
+      }
+    ],
+    "UniqueColumns": [
+      "ttmason",
+      "co_code",
+      "isconsolidated"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [
+      {
+        "Column_Name": "co_code",
+        "References": {
+          "Table_Name": "company_master",
+          "Column_Name": "co_code"
+        }
+      }
+    ],
+    "Indexes": [
+      "ttmason",
+      "co_code",
+      "isconsolidated"
+    ]
+  }
+]

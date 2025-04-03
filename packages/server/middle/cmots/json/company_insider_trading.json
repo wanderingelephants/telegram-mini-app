@@ -1,0 +1,200 @@
+[
+  {
+    "ReportIndex": 34,
+    "Table Name": "company_insider_trading",
+    "PromptQL": "Retail",
+    "Table Description": "Insider Trading",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/InsiderTrading/476",
+    "notes": "",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "co_code",
+    "Input Description": "CMOTS Company code",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "co_code",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "co_code"
+      },
+      {
+        "Column_Name": "companyname",
+        "Column_DataType": "text",
+        "Column_Description": "companyname",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "personname",
+        "Column_DataType": "text",
+        "Column_Description": "personname",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "insider_name"
+      },
+      {
+        "Column_Name": "category",
+        "Column_DataType": "text",
+        "Column_Description": "category",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "insider_category"
+      },
+      {
+        "Column_Name": "typeofsecuritiesheldprior",
+        "Column_DataType": "text",
+        "Column_Description": "typeofsecuritiesheldprior",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "type_of_securities_before"
+      },
+      {
+        "Column_Name": "numberofsecuritiesheldprior",
+        "Column_DataType": "numeric",
+        "Column_Description": "numberofsecuritiesheldprior",
+        "Is_Unique": "TRUE",
+        "Is_Index": "",
+        "GQL_Alias": "number_of_securites_before"
+      },
+      {
+        "Column_Name": "percentage_securitiesheldprior",
+        "Column_DataType": "numeric",
+        "Column_Description": "percentage_securitiesheldprior",
+        "Is_Unique": "TRUE",
+        "Is_Index": "",
+        "GQL_Alias": "percent_of_securites_before"
+      },
+      {
+        "Column_Name": "valueofsecurities",
+        "Column_DataType": "numeric",
+        "Column_Description": "valueofsecurities",
+        "Is_Unique": "TRUE",
+        "Is_Index": "",
+        "GQL_Alias": "value_of_securites_before"
+      },
+      {
+        "Column_Name": "totalsecurities",
+        "Column_DataType": "numeric",
+        "Column_Description": "totalsecurities",
+        "Is_Unique": "TRUE",
+        "Is_Index": "",
+        "GQL_Alias": "total_securities"
+      },
+      {
+        "Column_Name": "transactiontype",
+        "Column_DataType": "text",
+        "Column_Description": "transactiontype",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "transaction_type"
+      },
+      {
+        "Column_Name": "typeofsecuritiesheldpost",
+        "Column_DataType": "text",
+        "Column_Description": "typeofsecuritiesheldpost",
+        "Is_Unique": "TRUE",
+        "Is_Index": "",
+        "GQL_Alias": "type_of_securities_post_after"
+      },
+      {
+        "Column_Name": "numberofsecuritiesheldpost",
+        "Column_DataType": "numeric",
+        "Column_Description": "numberofsecuritiesheldpost",
+        "Is_Unique": "TRUE",
+        "Is_Index": "",
+        "GQL_Alias": "number_of_securites_after"
+      },
+      {
+        "Column_Name": "percentage_securitiesheldpost",
+        "Column_DataType": "numeric",
+        "Column_Description": "percentage_securitiesheldpost",
+        "Is_Unique": "TRUE",
+        "Is_Index": "",
+        "GQL_Alias": "percentage_of_securites_after"
+      },
+      {
+        "Column_Name": "fromdateofacquisition",
+        "Column_DataType": "date",
+        "Column_Description": "fromdateofacquisition",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "from_date_of_transaction"
+      },
+      {
+        "Column_Name": "todateofacquisition",
+        "Column_DataType": "date",
+        "Column_Description": "todateofacquisition",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "to_date_of_transaction"
+      },
+      {
+        "Column_Name": "modeofacquisition",
+        "Column_DataType": "text",
+        "Column_Description": "modeofacquisition",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "transaction_mode"
+      },
+      {
+        "Column_Name": "exchangereporteddate",
+        "Column_DataType": "date",
+        "Column_Description": "exchangereporteddate",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "transaction_reported_date"
+      }
+    ],
+    "UniqueColumns": [
+      "co_code",
+      "personname",
+      "category",
+      "typeofsecuritiesheldprior",
+      "numberofsecuritiesheldprior",
+      "percentage_securitiesheldprior",
+      "valueofsecurities",
+      "totalsecurities",
+      "transactiontype",
+      "typeofsecuritiesheldpost",
+      "numberofsecuritiesheldpost",
+      "percentage_securitiesheldpost",
+      "fromdateofacquisition",
+      "todateofacquisition",
+      "modeofacquisition",
+      "exchangereporteddate"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [
+      {
+        "Column_Name": "co_code",
+        "References": {
+          "Table_Name": "company_master",
+          "Column_Name": "co_code"
+        }
+      }
+    ],
+    "Indexes": [
+      "co_code",
+      "personname",
+      "category",
+      "typeofsecuritiesheldprior",
+      "transactiontype",
+      "fromdateofacquisition",
+      "todateofacquisition",
+      "modeofacquisition",
+      "exchangereporteddate"
+    ]
+  }
+]

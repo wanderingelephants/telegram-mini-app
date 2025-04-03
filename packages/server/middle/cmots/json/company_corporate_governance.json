@@ -1,0 +1,67 @@
+[
+  {
+    "ReportIndex": 30,
+    "Table Name": "company_corporate_governance",
+    "PromptQL": "",
+    "Table Description": "Corporate Governance",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/CorporateGovernance/6",
+    "notes": "",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "co_code",
+    "Input Description": "CMOTS Company Code",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "co_code",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "co_code"
+      },
+      {
+        "Column_Name": "record_date",
+        "Column_DataType": "date",
+        "Column_Description": "record_date",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "date"
+      },
+      {
+        "Column_Name": "corpgov_report",
+        "Column_DataType": "text",
+        "Column_Description": "corpgov_report",
+        "Is_Unique": "",
+        "Is_Index": ""
+      }
+    ],
+    "UniqueColumns": [
+      "co_code",
+      "record_date"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [
+      {
+        "Column_Name": "co_code",
+        "References": {
+          "Table_Name": "company_master",
+          "Column_Name": "co_code"
+        }
+      }
+    ],
+    "Indexes": [
+      "co_code",
+      "record_date"
+    ]
+  }
+]

@@ -1,0 +1,122 @@
+[
+  {
+    "ReportIndex": 27,
+    "Table Name": "company_location",
+    "PromptQL": "",
+    "Table Description": "Location",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/locations/6",
+    "notes": "",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "co_code",
+    "Input Description": "CMOTS Company code",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "co_code",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "co_code"
+      },
+      {
+        "Column_Name": "type",
+        "Column_DataType": "text",
+        "Column_Description": "type",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "add1",
+        "Column_DataType": "text",
+        "Column_Description": "add1",
+        "Is_Unique": "TRUE",
+        "Is_Index": "FALSE"
+      },
+      {
+        "Column_Name": "add2",
+        "Column_DataType": "text",
+        "Column_Description": "add2",
+        "Is_Unique": "TRUE",
+        "Is_Index": "FALSE"
+      },
+      {
+        "Column_Name": "add3",
+        "Column_DataType": "text",
+        "Column_Description": "add3",
+        "Is_Unique": "TRUE",
+        "Is_Index": "FALSE"
+      },
+      {
+        "Column_Name": "city",
+        "Column_DataType": "text",
+        "Column_Description": "city",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "pin",
+        "Column_DataType": "text",
+        "Column_Description": "pin",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "tel1",
+        "Column_DataType": "text",
+        "Column_Description": "tel1",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "fax1",
+        "Column_DataType": "text",
+        "Column_Description": "fax1",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "st_name",
+        "Column_DataType": "text",
+        "Column_Description": "st_name",
+        "Is_Unique": "",
+        "Is_Index": ""
+      }
+    ],
+    "UniqueColumns": [
+      "co_code",
+      "type",
+      "add1",
+      "add2",
+      "add3",
+      "city",
+      "pin"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [
+      {
+        "Column_Name": "co_code",
+        "References": {
+          "Table_Name": "company_master",
+          "Column_Name": "co_code"
+        }
+      }
+    ],
+    "Indexes": [
+      "co_code",
+      "type",
+      "city",
+      "pin"
+    ]
+  }
+]

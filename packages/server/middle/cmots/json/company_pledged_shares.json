@@ -1,0 +1,96 @@
+[
+  {
+    "ReportIndex": 32,
+    "Table Name": "company_pledged_shares",
+    "PromptQL": "",
+    "Table Description": "Pledged Shares",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/Pledgesharesdetails/6",
+    "notes": "",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "co_code",
+    "Input Description": "CMOTS Company Code",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "co_code",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "co_code"
+      },
+      {
+        "Column_Name": "record_date",
+        "Column_DataType": "date",
+        "Column_Description": "record_date",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "date"
+      },
+      {
+        "Column_Name": "type",
+        "Column_DataType": "text",
+        "Column_Description": "type",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "pledge_type"
+      },
+      {
+        "Column_Name": "name",
+        "Column_DataType": "text",
+        "Column_Description": "name",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "pledger_name"
+      },
+      {
+        "Column_Name": "totalpledgeshares",
+        "Column_DataType": "numeric",
+        "Column_Description": "totalpledgeshares",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "total_shares_pledged"
+      },
+      {
+        "Column_Name": "perc_totalsharesheld",
+        "Column_DataType": "numeric",
+        "Column_Description": "perc_totalsharesheld",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "percentage_shares_pledged"
+      }
+    ],
+    "UniqueColumns": [
+      "co_code",
+      "record_date",
+      "type",
+      "name"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [
+      {
+        "Column_Name": "co_code",
+        "References": {
+          "Table_Name": "company_master",
+          "Column_Name": "co_code"
+        }
+      }
+    ],
+    "Indexes": [
+      "co_code",
+      "record_date",
+      "type",
+      "name"
+    ]
+  }
+]

@@ -1,0 +1,137 @@
+[
+  {
+    "ReportIndex": 43,
+    "Table Name": "company_valuation_ratios",
+    "PromptQL": "Retail",
+    "Table Description": "Valuation Ratios",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/ValuationRatios/476/C",
+    "notes": "",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "co_code",
+    "Input Description": "CMOTS Company code",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "yrc",
+        "Column_DataType": "integer",
+        "Column_Description": "yrc",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "YRC"
+      },
+      {
+        "Column_Name": "month",
+        "Column_DataType": "int",
+        "Column_Description": "month",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "quarter",
+        "Column_DataType": "int",
+        "Column_Description": "quarter",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "year",
+        "Column_DataType": "int",
+        "Column_Description": "year",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "co_code",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "co_code"
+      },
+      {
+        "Column_Name": "pe",
+        "Column_DataType": "numeric",
+        "Column_Description": "pe",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "PE"
+      },
+      {
+        "Column_Name": "price_bookvalue",
+        "Column_DataType": "numeric",
+        "Column_Description": "price_bookvalue",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Price_BookValue"
+      },
+      {
+        "Column_Name": "dividendyield",
+        "Column_DataType": "numeric",
+        "Column_Description": "dividendyield",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "DividendYield"
+      },
+      {
+        "Column_Name": "ev_ebitda",
+        "Column_DataType": "numeric",
+        "Column_Description": "ev_ebitda",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "EV_EBITDA"
+      },
+      {
+        "Column_Name": "mcap_sales",
+        "Column_DataType": "numeric",
+        "Column_Description": "mcap_sales",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Mcap_Sales"
+      },
+      {
+        "Column_Name": "isconsolidated",
+        "Column_DataType": "boolean",
+        "Column_Description": "isconsolidated",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "isConsolidated"
+      }
+    ],
+    "UniqueColumns": [
+      "yrc",
+      "month",
+      "quarter",
+      "year",
+      "co_code",
+      "isconsolidated"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [
+      {
+        "Column_Name": "co_code",
+        "References": {
+          "Table_Name": "company_master",
+          "Column_Name": "co_code"
+        }
+      }
+    ],
+    "Indexes": [
+      "yrc",
+      "month",
+      "quarter",
+      "year",
+      "co_code",
+      "isconsolidated"
+    ]
+  }
+]

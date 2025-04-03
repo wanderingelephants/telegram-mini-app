@@ -6,5 +6,4 @@ sqlite_db
 failed_records*
 cmots.sh
 cmots/hasura_test/*
-cmots/json/*
 cmots/hasura_mutations/*

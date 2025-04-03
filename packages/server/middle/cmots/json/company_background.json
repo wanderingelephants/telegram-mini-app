@@ -1,0 +1,491 @@
+[
+  {
+    "ReportIndex": 11,
+    "Table Name": "company_background",
+    "PromptQL": "",
+    "Table Description": "Company Background",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/CompBackground/476",
+    "notes": "",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "co_code",
+    "Input Description": "CMOTS Company code",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "lname",
+        "Column_DataType": "text",
+        "Column_Description": "lname",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "isin",
+        "Column_DataType": "text",
+        "Column_Description": "isin",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "hse_s_name",
+        "Column_DataType": "text",
+        "Column_Description": "hse_s_name",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "inc_dt",
+        "Column_DataType": "text",
+        "Column_Description": "inc_dt",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "regadd1",
+        "Column_DataType": "text",
+        "Column_Description": "regadd1",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "regadd2",
+        "Column_DataType": "text",
+        "Column_Description": "regadd2",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "regdist",
+        "Column_DataType": "text",
+        "Column_Description": "regdist",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "regstate",
+        "Column_DataType": "text",
+        "Column_Description": "regstate",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "regpin",
+        "Column_DataType": "text",
+        "Column_Description": "regpin",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "tel1",
+        "Column_DataType": "text",
+        "Column_Description": "tel1",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "ind_l_name",
+        "Column_DataType": "text",
+        "Column_Description": "ind_l_name",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "tel2",
+        "Column_DataType": "text",
+        "Column_Description": "tel2",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "fax1",
+        "Column_DataType": "text",
+        "Column_Description": "fax1",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "fax2",
+        "Column_DataType": "text",
+        "Column_Description": "fax2",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "auditor",
+        "Column_DataType": "text",
+        "Column_Description": "auditor",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "fv",
+        "Column_DataType": "integer",
+        "Column_Description": "fv",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "mkt_lot",
+        "Column_DataType": "integer",
+        "Column_Description": "mkt_lot",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "chairman",
+        "Column_DataType": "text",
+        "Column_Description": "chairman",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "co_sec",
+        "Column_DataType": "text",
+        "Column_Description": "co_sec",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "co_code",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "co_code"
+      },
+      {
+        "Column_Name": "email",
+        "Column_DataType": "text",
+        "Column_Description": "email",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "internet",
+        "Column_DataType": "text",
+        "Column_Description": "internet",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "dir_name",
+        "Column_DataType": "text",
+        "Column_Description": "dir_name",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "dir_desg",
+        "Column_DataType": "text",
+        "Column_Description": "dir_desg",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "co_code1",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code1",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "ho_add1",
+        "Column_DataType": "text",
+        "Column_Description": "ho_add1",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "ho_add2",
+        "Column_DataType": "text",
+        "Column_Description": "ho_add2",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "ho_add3",
+        "Column_DataType": "text",
+        "Column_Description": "ho_add3",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "ho_city",
+        "Column_DataType": "text",
+        "Column_Description": "ho_city",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "ho_stcode",
+        "Column_DataType": "text",
+        "Column_Description": "ho_stcode",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "ho_statename",
+        "Column_DataType": "text",
+        "Column_Description": "ho_statename",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "ho_pin",
+        "Column_DataType": "integer",
+        "Column_Description": "ho_pin",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "ho_tel1",
+        "Column_DataType": "text",
+        "Column_Description": "ho_tel1",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "ho_tel2",
+        "Column_DataType": "integer",
+        "Column_Description": "ho_tel2",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "ho_fax1",
+        "Column_DataType": "integer",
+        "Column_Description": "ho_fax1",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "ho_fax2",
+        "Column_DataType": "integer",
+        "Column_Description": "ho_fax2",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "ho_email",
+        "Column_DataType": "text",
+        "Column_Description": "ho_email",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "ho_ctry_name",
+        "Column_DataType": "text",
+        "Column_Description": "ho_ctry_name",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "co_code2",
+        "Column_DataType": "numeric",
+        "Column_Description": "co_code2",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "co_add1",
+        "Column_DataType": "numeric",
+        "Column_Description": "co_add1",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "co_add2",
+        "Column_DataType": "numeric",
+        "Column_Description": "co_add2",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "co_add3",
+        "Column_DataType": "numeric",
+        "Column_Description": "co_add3",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "co_city",
+        "Column_DataType": "numeric",
+        "Column_Description": "co_city",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "co_stcode",
+        "Column_DataType": "numeric",
+        "Column_Description": "co_stcode",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "co_statename",
+        "Column_DataType": "numeric",
+        "Column_Description": "co_statename",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "co_pin",
+        "Column_DataType": "numeric",
+        "Column_Description": "co_pin",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "co_tel1",
+        "Column_DataType": "numeric",
+        "Column_Description": "co_tel1",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "co_tel2",
+        "Column_DataType": "numeric",
+        "Column_Description": "co_tel2",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "co_fax1",
+        "Column_DataType": "numeric",
+        "Column_Description": "co_fax1",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "co_fax2",
+        "Column_DataType": "numeric",
+        "Column_Description": "co_fax2",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "co_email",
+        "Column_DataType": "numeric",
+        "Column_Description": "co_email",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "co_ctry_name",
+        "Column_DataType": "numeric",
+        "Column_Description": "co_ctry_name",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "co_code3",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code3",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "rcode",
+        "Column_DataType": "text",
+        "Column_Description": "rcode",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "reg_name",
+        "Column_DataType": "text",
+        "Column_Description": "reg_name",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "reg_add1",
+        "Column_DataType": "text",
+        "Column_Description": "reg_add1",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "reg_add2",
+        "Column_DataType": "text",
+        "Column_Description": "reg_add2",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "reg_add3",
+        "Column_DataType": "text",
+        "Column_Description": "reg_add3",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "reg_add4",
+        "Column_DataType": "text",
+        "Column_Description": "reg_add4",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "reg_tel",
+        "Column_DataType": "text",
+        "Column_Description": "reg_tel",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "reg_fax",
+        "Column_DataType": "text",
+        "Column_Description": "reg_fax",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "reg_email",
+        "Column_DataType": "text",
+        "Column_Description": "reg_email",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "reg_internet",
+        "Column_DataType": "text",
+        "Column_Description": "reg_internet",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "flag",
+        "Column_DataType": "text",
+        "Column_Description": "flag",
+        "Is_Unique": "",
+        "Is_Index": ""
+      }
+    ],
+    "UniqueColumns": [
+      "co_code"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [
+      {
+        "Column_Name": "co_code",
+        "References": {
+          "Table_Name": "company_master",
+          "Column_Name": "co_code"
+        }
+      }
+    ],
+    "Indexes": [
+      "co_code"
+    ]
+  }
+]

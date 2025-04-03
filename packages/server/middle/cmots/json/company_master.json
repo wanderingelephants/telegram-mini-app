@@ -1,0 +1,170 @@
+[
+  {
+    "ReportIndex": 1,
+    "Table Name": "company_master",
+    "PromptQL": "Retail",
+    "Table Description": "Company Master",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/CompanyMaster",
+    "notes": "",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "na",
+    "Input Description": "NA",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "co_code",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "co_code"
+      },
+      {
+        "Column_Name": "bsecode",
+        "Column_DataType": "integer",
+        "Column_Description": "bsecode",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "nsesymbol",
+        "Column_DataType": "text",
+        "Column_Description": "nsesymbol",
+        "Is_Unique": "",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "companyname",
+        "Column_DataType": "text",
+        "Column_Description": "companyname",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "company_name"
+      },
+      {
+        "Column_Name": "companyshortname",
+        "Column_DataType": "text",
+        "Column_Description": "companyshortname",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "categoryname",
+        "Column_DataType": "text",
+        "Column_Description": "categoryname",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "isin",
+        "Column_DataType": "text",
+        "Column_Description": "isin",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "bsegroup",
+        "Column_DataType": "text",
+        "Column_Description": "bsegroup",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "mcaptype",
+        "Column_DataType": "text",
+        "Column_Description": "mcaptype",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "sectorcode",
+        "Column_DataType": "integer",
+        "Column_Description": "sectorcode",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "sectorname",
+        "Column_DataType": "text",
+        "Column_Description": "sectorname",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "industrycode",
+        "Column_DataType": "integer",
+        "Column_Description": "industrycode",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "industryname",
+        "Column_DataType": "text",
+        "Column_Description": "industryname",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "bselistedflag",
+        "Column_DataType": "text",
+        "Column_Description": "bselistedflag",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "nselistedflag",
+        "Column_DataType": "text",
+        "Column_Description": "nselistedflag",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "displaytype",
+        "Column_DataType": "text",
+        "Column_Description": "displaytype",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "bsestatus",
+        "Column_DataType": "text",
+        "Column_Description": "bsestatus",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "nsestatus",
+        "Column_DataType": "text",
+        "Column_Description": "nsestatus",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "mcap",
+        "Column_DataType": "numeric",
+        "Column_Description": "mcap",
+        "Is_Unique": "",
+        "Is_Index": ""
+      }
+    ],
+    "UniqueColumns": [
+      "co_code"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [],
+    "Indexes": [
+      "co_code",
+      "nsesymbol"
+    ]
+  }
+]

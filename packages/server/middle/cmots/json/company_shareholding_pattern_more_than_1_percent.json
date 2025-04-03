@@ -1,0 +1,96 @@
+[
+  {
+    "ReportIndex": 38,
+    "Table Name": "company_shareholding_pattern_more_than_1_percent",
+    "PromptQL": "",
+    "Table Description": "Shareholding Pattern More Than 1 Percent",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/ShareholdingMorethanOnePercent/476",
+    "notes": "type_of_shareholding is one of ['Public Shareholding' , 'Shareholding of Promoter and Promoter Group']",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "co_code",
+    "Input Description": "CMOTS Company Code",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "co_code",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "co_code"
+      },
+      {
+        "Column_Name": "record_date",
+        "Column_DataType": "date",
+        "Column_Description": "record_date",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "date"
+      },
+      {
+        "Column_Name": "type",
+        "Column_DataType": "text",
+        "Column_Description": "type",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "type_of_shareholding"
+      },
+      {
+        "Column_Name": "name",
+        "Column_DataType": "text",
+        "Column_Description": "name",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "shareholder_name"
+      },
+      {
+        "Column_Name": "noofshares",
+        "Column_DataType": "numeric",
+        "Column_Description": "noofshares",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "number_of_shares"
+      },
+      {
+        "Column_Name": "perstake",
+        "Column_DataType": "numeric",
+        "Column_Description": "perstake",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "percentage_stake"
+      }
+    ],
+    "UniqueColumns": [
+      "co_code",
+      "record_date",
+      "type",
+      "name"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [
+      {
+        "Column_Name": "co_code",
+        "References": {
+          "Table_Name": "company_master",
+          "Column_Name": "co_code"
+        }
+      }
+    ],
+    "Indexes": [
+      "co_code",
+      "record_date",
+      "type",
+      "name"
+    ]
+  }
+]

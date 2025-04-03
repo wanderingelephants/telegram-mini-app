@@ -1,0 +1,160 @@
+[
+  {
+    "ReportIndex": 35,
+    "Table Name": "company_substantial_acquisition_of_shares",
+    "PromptQL": "",
+    "Table Description": "Substantial Acquisition of Shares",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/SubstantialAcquisition/476",
+    "notes": "",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "co_code",
+    "Input Description": "CMOTS Company Code",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "co_code",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "co_code"
+      },
+      {
+        "Column_Name": "securityname",
+        "Column_DataType": "text",
+        "Column_Description": "securityname",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "security_name"
+      },
+      {
+        "Column_Name": "nameofacquirer_seller",
+        "Column_DataType": "text",
+        "Column_Description": "nameofacquirer_seller",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "name_of_person"
+      },
+      {
+        "Column_Name": "promoter_promotergroup",
+        "Column_DataType": "text",
+        "Column_Description": "promoter_promotergroup",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "is_promoter_group"
+      },
+      {
+        "Column_Name": "transactionperiod",
+        "Column_DataType": "date",
+        "Column_Description": "transactionperiod",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "transaction_date"
+      },
+      {
+        "Column_Name": "acq_sale",
+        "Column_DataType": "text",
+        "Column_Description": "acq_sale",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "acquistion_or_sale"
+      },
+      {
+        "Column_Name": "modeofbuy_sale",
+        "Column_DataType": "text",
+        "Column_Description": "modeofbuy_sale",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "transaction_mode"
+      },
+      {
+        "Column_Name": "transactedquantity",
+        "Column_DataType": "numeric",
+        "Column_Description": "transactedquantity",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "transacted_quantity"
+      },
+      {
+        "Column_Name": "transactedquantity_perchange",
+        "Column_DataType": "numeric",
+        "Column_Description": "transactedquantity_perchange",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "transacted_quantity_percent_change"
+      },
+      {
+        "Column_Name": "holdingaftertransactionquantity",
+        "Column_DataType": "numeric",
+        "Column_Description": "holdingaftertransactionquantity",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "holding_quantity_after_transaction"
+      },
+      {
+        "Column_Name": "holdingaftertransaction_perchange_totalcapital",
+        "Column_DataType": "numeric",
+        "Column_Description": "holdingaftertransaction_perchange_totalcapital",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "holding_percentage_change_in_total_capital"
+      },
+      {
+        "Column_Name": "holdingaftertransaction_perchange_dilutedcapital",
+        "Column_DataType": "numeric",
+        "Column_Description": "holdingaftertransaction_perchange_dilutedcapital",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "holding_percentage_change_in_diluted_capital"
+      },
+      {
+        "Column_Name": "exchangereporteddate",
+        "Column_DataType": "date",
+        "Column_Description": "exchangereporteddate",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "reported_date"
+      }
+    ],
+    "UniqueColumns": [
+      "co_code",
+      "securityname",
+      "nameofacquirer_seller",
+      "promoter_promotergroup",
+      "transactionperiod",
+      "acq_sale",
+      "modeofbuy_sale",
+      "exchangereporteddate"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [
+      {
+        "Column_Name": "co_code",
+        "References": {
+          "Table_Name": "company_master",
+          "Column_Name": "co_code"
+        }
+      }
+    ],
+    "Indexes": [
+      "co_code",
+      "securityname",
+      "nameofacquirer_seller",
+      "promoter_promotergroup",
+      "transactionperiod",
+      "acq_sale",
+      "modeofbuy_sale",
+      "exchangereporteddate"
+    ]
+  }
+]

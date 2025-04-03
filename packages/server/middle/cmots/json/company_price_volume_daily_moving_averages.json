@@ -1,0 +1,162 @@
+[
+  {
+    "ReportIndex": 2,
+    "Table Name": "company_price_volume_daily_moving_averages",
+    "PromptQL": "",
+    "Table Description": "Company Price Volume Daily Moving Averages",
+    "API_URL": "",
+    "notes": "Analysis around support/resistance,  breakout/crash based on latest closing price/volume compared with DMAs",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "co_code",
+    "Input Description": "CMOTS Company Code",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "co_code",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "co_code"
+      },
+      {
+        "Column_Name": "latest_closing_price",
+        "Column_DataType": "numeric",
+        "Column_Description": "latest_closing_price",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Latest_Closing_Price"
+      },
+      {
+        "Column_Name": "latest_closing_volume",
+        "Column_DataType": "numeric",
+        "Column_Description": "latest_closing_volume",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Latest_Closing_Volume"
+      },
+      {
+        "Column_Name": "price_dma_5_day",
+        "Column_DataType": "numeric",
+        "Column_Description": "price_dma_5_day",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Price_5_Day_Moving_Average"
+      },
+      {
+        "Column_Name": "price_dma_10_day",
+        "Column_DataType": "numeric",
+        "Column_Description": "price_dma_10_day",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Price_10_Day_Moving_Average"
+      },
+      {
+        "Column_Name": "price_dma_20_day",
+        "Column_DataType": "numeric",
+        "Column_Description": "price_dma_20_day",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Price_20_Day_Moving_Average"
+      },
+      {
+        "Column_Name": "price_dma_50_day",
+        "Column_DataType": "numeric",
+        "Column_Description": "price_dma_50_day",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Price_50_Day_Moving_Average"
+      },
+      {
+        "Column_Name": "price_dma_100_day",
+        "Column_DataType": "numeric",
+        "Column_Description": "price_dma_100_day",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Price_100_Day_Moving_Average"
+      },
+      {
+        "Column_Name": "price_dma_200_day",
+        "Column_DataType": "numeric",
+        "Column_Description": "price_dma_200_day",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Price_200_Day_Moving_Average"
+      },
+      {
+        "Column_Name": "volume_dma_5_day",
+        "Column_DataType": "numeric",
+        "Column_Description": "volume_dma_5_day",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Volume_5_Day_Moving_Average"
+      },
+      {
+        "Column_Name": "volume_dma_10_day",
+        "Column_DataType": "numeric",
+        "Column_Description": "volume_dma_10_day",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Volume_10_Day_Moving_Average"
+      },
+      {
+        "Column_Name": "volume_dma_20_day",
+        "Column_DataType": "numeric",
+        "Column_Description": "volume_dma_20_day",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Volume_20_Day_Moving_Average"
+      },
+      {
+        "Column_Name": "volume_dma_50_day",
+        "Column_DataType": "numeric",
+        "Column_Description": "volume_dma_50_day",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Volume_50_Day_Moving_Average"
+      },
+      {
+        "Column_Name": "volume_dma_100_day",
+        "Column_DataType": "numeric",
+        "Column_Description": "volume_dma_100_day",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Volume_100_Day_Moving_Average"
+      },
+      {
+        "Column_Name": "volume_dma_200_day",
+        "Column_DataType": "numeric",
+        "Column_Description": "volume_dma_200_day",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Volume_200_Day_Moving_Average"
+      }
+    ],
+    "UniqueColumns": [
+      "co_code"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [
+      {
+        "Column_Name": "co_code",
+        "References": {
+          "Table_Name": "company_master",
+          "Column_Name": "co_code"
+        }
+      }
+    ],
+    "Indexes": [
+      "co_code"
+    ]
+  }
+]

@@ -1,0 +1,122 @@
+[
+  {
+    "ReportIndex": 4,
+    "Table Name": "company_sector_wise_company",
+    "PromptQL": "",
+    "Table Description": "Sector Wise Company",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/SectorWiseComp/00000006",
+    "notes": "",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "sect_code",
+    "Input Description": "Sect Code",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "co_code",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "co_code"
+      },
+      {
+        "Column_Name": "co_name",
+        "Column_DataType": "text",
+        "Column_Description": "co_name",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "lname",
+        "Column_DataType": "text",
+        "Column_Description": "lname",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "sect_code",
+        "Column_DataType": "integer",
+        "Column_Description": "sect_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "sc_code",
+        "Column_DataType": "integer",
+        "Column_Description": "sc_code",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "symbol",
+        "Column_DataType": "text",
+        "Column_Description": "symbol",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "sect_name",
+        "Column_DataType": "text",
+        "Column_Description": "sect_name",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "exchange_bse",
+        "Column_DataType": "text",
+        "Column_Description": "exchange_bse",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "exchange_nse",
+        "Column_DataType": "text",
+        "Column_Description": "exchange_nse",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "isin",
+        "Column_DataType": "text",
+        "Column_Description": "isin",
+        "Is_Unique": "",
+        "Is_Index": ""
+      }
+    ],
+    "UniqueColumns": [
+      "co_code",
+      "sect_code"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [
+      {
+        "Column_Name": "sect_code",
+        "References": {
+          "Table_Name": "company_sector_master",
+          "Column_Name": "sect_code"
+        }
+      },
+      {
+        "Column_Name": "co_code",
+        "References": {
+          "Table_Name": "company_master",
+          "Column_Name": "co_code"
+        }
+      }
+    ],
+    "Indexes": [
+      "co_code",
+      "sect_code"
+    ]
+  }
+]

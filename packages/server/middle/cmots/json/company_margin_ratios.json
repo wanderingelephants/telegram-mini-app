@@ -1,0 +1,169 @@
+[
+  {
+    "ReportIndex": 39,
+    "Table Name": "company_margin_ratios",
+    "PromptQL": "Retail",
+    "Table Description": "Margin Ratios",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/MarginRatios/476/C",
+    "notes": "",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "co_code",
+    "Input Description": "CMOTS Company code",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "yrc",
+        "Column_DataType": "integer",
+        "Column_Description": "yrc",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "YRC"
+      },
+      {
+        "Column_Name": "month",
+        "Column_DataType": "int",
+        "Column_Description": "month",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "quarter",
+        "Column_DataType": "int",
+        "Column_Description": "quarter",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "year",
+        "Column_DataType": "int",
+        "Column_Description": "year",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "co_code",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "co_code"
+      },
+      {
+        "Column_Name": "pbidtim",
+        "Column_DataType": "numeric",
+        "Column_Description": "pbidtim",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "PBIDTIM"
+      },
+      {
+        "Column_Name": "ebitm",
+        "Column_DataType": "numeric",
+        "Column_Description": "ebitm",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "EBITM"
+      },
+      {
+        "Column_Name": "pretaxmargin",
+        "Column_DataType": "numeric",
+        "Column_Description": "pretaxmargin",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "PreTaxMargin"
+      },
+      {
+        "Column_Name": "patm",
+        "Column_DataType": "numeric",
+        "Column_Description": "patm",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "PATM"
+      },
+      {
+        "Column_Name": "yieldonadvances",
+        "Column_DataType": "numeric",
+        "Column_Description": "yieldonadvances",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "YieldonAdvances"
+      },
+      {
+        "Column_Name": "yieldoninvestments",
+        "Column_DataType": "numeric",
+        "Column_Description": "yieldoninvestments",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "YieldonInvestments"
+      },
+      {
+        "Column_Name": "costofliabilities",
+        "Column_DataType": "numeric",
+        "Column_Description": "costofliabilities",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "CostofLiabilities"
+      },
+      {
+        "Column_Name": "nim",
+        "Column_DataType": "numeric",
+        "Column_Description": "nim",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "NIM"
+      },
+      {
+        "Column_Name": "cpm",
+        "Column_DataType": "numeric",
+        "Column_Description": "cpm",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "CPM"
+      },
+      {
+        "Column_Name": "isconsolidated",
+        "Column_DataType": "boolean",
+        "Column_Description": "isconsolidated",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "isConsolidated"
+      }
+    ],
+    "UniqueColumns": [
+      "yrc",
+      "month",
+      "quarter",
+      "year",
+      "co_code",
+      "isconsolidated"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [
+      {
+        "Column_Name": "co_code",
+        "References": {
+          "Table_Name": "company_master",
+          "Column_Name": "co_code"
+        }
+      }
+    ],
+    "Indexes": [
+      "yrc",
+      "month",
+      "quarter",
+      "year",
+      "co_code",
+      "isconsolidated"
+    ]
+  }
+]

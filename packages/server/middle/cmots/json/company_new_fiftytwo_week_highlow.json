@@ -1,0 +1,101 @@
+[
+  {
+    "ReportIndex": 55,
+    "Table Name": "company_new_fiftytwo_week_highlow",
+    "PromptQL": "",
+    "Table Description": "Company New FiftyTwo Week HighLow",
+    "API_URL": "",
+    "notes": "",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "co_code",
+    "Input Description": "CMOTS Company Code",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "co_code",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "co_code"
+      },
+      {
+        "Column_Name": "record_date",
+        "Column_DataType": "date",
+        "Column_Description": "record_date",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "last_traded_price",
+        "Column_DataType": "numeric",
+        "Column_Description": "last_traded_price",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "change_percent",
+        "Column_DataType": "numeric",
+        "Column_Description": "change_percent",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "new_high_low",
+        "Column_DataType": "numeric",
+        "Column_Description": "new_high_low",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "prev_high_low",
+        "Column_DataType": "numeric",
+        "Column_Description": "prev_high_low",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "prev_high_low_record_date",
+        "Column_DataType": "date",
+        "Column_Description": "prev_high_low_record_date",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "is_high",
+        "Column_DataType": "boolean",
+        "Column_Description": "is_high",
+        "Is_Unique": "",
+        "Is_Index": ""
+      }
+    ],
+    "UniqueColumns": [
+      "co_code",
+      "record_date"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [
+      {
+        "Column_Name": "co_code",
+        "References": {
+          "Table_Name": "company_master",
+          "Column_Name": "co_code"
+        }
+      }
+    ],
+    "Indexes": [
+      "co_code",
+      "record_date"
+    ]
+  }
+]

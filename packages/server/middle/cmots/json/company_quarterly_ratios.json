@@ -1,0 +1,206 @@
+[
+  {
+    "ReportIndex": 48,
+    "Table Name": "company_quarterly_ratios",
+    "PromptQL": "Retail",
+    "Table Description": "Quarterly Ratios",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/QuarterlyRatio/476/C",
+    "notes": "",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "co_code",
+    "Input Description": "CMOTS Company Code",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "qtrend",
+        "Column_DataType": "integer",
+        "Column_Description": "qtrend",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "QtrEnd"
+      },
+      {
+        "Column_Name": "co_code",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "co_code"
+      },
+      {
+        "Column_Name": "mcap",
+        "Column_DataType": "numeric",
+        "Column_Description": "mcap",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "MCAP"
+      },
+      {
+        "Column_Name": "ev",
+        "Column_DataType": "numeric",
+        "Column_Description": "ev",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "EV"
+      },
+      {
+        "Column_Name": "pe",
+        "Column_DataType": "numeric",
+        "Column_Description": "pe",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "PE"
+      },
+      {
+        "Column_Name": "pbv",
+        "Column_DataType": "numeric",
+        "Column_Description": "pbv",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "PBV"
+      },
+      {
+        "Column_Name": "eps",
+        "Column_DataType": "numeric",
+        "Column_Description": "eps",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "EPS"
+      },
+      {
+        "Column_Name": "bookvalue",
+        "Column_DataType": "numeric",
+        "Column_Description": "bookvalue",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "BookValue"
+      },
+      {
+        "Column_Name": "ebit",
+        "Column_DataType": "numeric",
+        "Column_Description": "ebit",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "EBIT"
+      },
+      {
+        "Column_Name": "ebitda",
+        "Column_DataType": "numeric",
+        "Column_Description": "ebitda",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "EBITDA"
+      },
+      {
+        "Column_Name": "ev_sales",
+        "Column_DataType": "numeric",
+        "Column_Description": "ev_sales",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "EV_Sales"
+      },
+      {
+        "Column_Name": "ev_ebitda",
+        "Column_DataType": "numeric",
+        "Column_Description": "ev_ebitda",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "EV_EBITDA"
+      },
+      {
+        "Column_Name": "netincomemargin",
+        "Column_DataType": "numeric",
+        "Column_Description": "netincomemargin",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "NetIncomeMargin"
+      },
+      {
+        "Column_Name": "grossincomemargin",
+        "Column_DataType": "numeric",
+        "Column_Description": "grossincomemargin",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "GrossIncomeMargin"
+      },
+      {
+        "Column_Name": "ebitdamargin",
+        "Column_DataType": "numeric",
+        "Column_Description": "ebitdamargin",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "EBITDAMargin"
+      },
+      {
+        "Column_Name": "epsdiluted",
+        "Column_DataType": "numeric",
+        "Column_Description": "epsdiluted",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "EPSDiluted"
+      },
+      {
+        "Column_Name": "netsales",
+        "Column_DataType": "numeric",
+        "Column_Description": "netsales",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "NetSales"
+      },
+      {
+        "Column_Name": "netprofit",
+        "Column_DataType": "numeric",
+        "Column_Description": "netprofit",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Netprofit"
+      },
+      {
+        "Column_Name": "cogs",
+        "Column_DataType": "numeric",
+        "Column_Description": "cogs",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "COGS"
+      },
+      {
+        "Column_Name": "isconsolidated",
+        "Column_DataType": "boolean",
+        "Column_Description": "isconsolidated",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "isConsolidated"
+      }
+    ],
+    "UniqueColumns": [
+      "qtrend",
+      "co_code",
+      "isconsolidated"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [
+      {
+        "Column_Name": "co_code",
+        "References": {
+          "Table_Name": "company_master",
+          "Column_Name": "co_code"
+        }
+      }
+    ],
+    "Indexes": [
+      "qtrend",
+      "co_code",
+      "isconsolidated"
+    ]
+  }
+]

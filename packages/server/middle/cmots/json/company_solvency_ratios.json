@@ -1,0 +1,169 @@
+[
+  {
+    "ReportIndex": 53,
+    "Table Name": "company_solvency_ratios",
+    "PromptQL": "Retail",
+    "Table Description": "Solvency Ratios",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/RatiosSolvency/476/C",
+    "notes": "",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "co_code",
+    "Input Description": "CMOTS Company Code",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "yrc",
+        "Column_DataType": "integer",
+        "Column_Description": "yrc",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "yrc"
+      },
+      {
+        "Column_Name": "month",
+        "Column_DataType": "int",
+        "Column_Description": "month",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "quarter",
+        "Column_DataType": "int",
+        "Column_Description": "quarter",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "year",
+        "Column_DataType": "int",
+        "Column_Description": "year",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "co_code",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "co_code"
+      },
+      {
+        "Column_Name": "solvency_totaldebttoequityratio",
+        "Column_DataType": "numeric",
+        "Column_Description": "solvency_totaldebttoequityratio",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "solvency_totaldebttoequityratio"
+      },
+      {
+        "Column_Name": "solvency_totaldebttoequityratio_totaldebt",
+        "Column_DataType": "numeric",
+        "Column_Description": "solvency_totaldebttoequityratio_totaldebt",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "solvency_totaldebttoequityratio_totaldebt"
+      },
+      {
+        "Column_Name": "solvency_totaldebttoequityratio_networth",
+        "Column_DataType": "numeric",
+        "Column_Description": "solvency_totaldebttoequityratio_networth",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "solvency_totaldebttoequityratio_networth"
+      },
+      {
+        "Column_Name": "solvency_interestcoverageratio",
+        "Column_DataType": "numeric",
+        "Column_Description": "solvency_interestcoverageratio",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "solvency_interestcoverageratio"
+      },
+      {
+        "Column_Name": "solvency_interestcoverageratio_ebit",
+        "Column_DataType": "numeric",
+        "Column_Description": "solvency_interestcoverageratio_ebit",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "solvency_interestcoverageratio_ebit"
+      },
+      {
+        "Column_Name": "solvency_interestcoverageratio_interestpayments",
+        "Column_DataType": "numeric",
+        "Column_Description": "solvency_interestcoverageratio_interestpayments",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "solvency_interestcoverageratio_interestpayments"
+      },
+      {
+        "Column_Name": "solvency_currentratio",
+        "Column_DataType": "numeric",
+        "Column_Description": "solvency_currentratio",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "solvency_currentratio"
+      },
+      {
+        "Column_Name": "solvency_currentratio_currentasset",
+        "Column_DataType": "numeric",
+        "Column_Description": "solvency_currentratio_currentasset",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "solvency_currentratio_currentasset"
+      },
+      {
+        "Column_Name": "solvency_currentratio_currentliabilities",
+        "Column_DataType": "numeric",
+        "Column_Description": "solvency_currentratio_currentliabilities",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "solvency_currentratio_currentliabilities"
+      },
+      {
+        "Column_Name": "isconsolidated",
+        "Column_DataType": "boolean",
+        "Column_Description": "isconsolidated",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "isConsolidated"
+      }
+    ],
+    "UniqueColumns": [
+      "yrc",
+      "month",
+      "quarter",
+      "year",
+      "co_code",
+      "isconsolidated"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [
+      {
+        "Column_Name": "co_code",
+        "References": {
+          "Table_Name": "company_master",
+          "Column_Name": "co_code"
+        }
+      }
+    ],
+    "Indexes": [
+      "yrc",
+      "month",
+      "quarter",
+      "year",
+      "co_code",
+      "isconsolidated"
+    ]
+  }
+]

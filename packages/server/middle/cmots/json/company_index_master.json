@@ -1,0 +1,64 @@
+[
+  {
+    "ReportIndex": 3,
+    "Table Name": "company_index_master",
+    "PromptQL": "",
+    "Table Description": "Index Master",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/Index-master/NSE",
+    "notes": "",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "exchange",
+    "Input Description": "Exchange(BSE / NSE)",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "exchange",
+        "Column_DataType": "text",
+        "Column_Description": "exchange",
+        "Is_Unique": "",
+        "Is_Index": ""
+      },
+      {
+        "Column_Name": "index_code",
+        "Column_DataType": "integer",
+        "Column_Description": "index_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "index_name",
+        "Column_DataType": "text",
+        "Column_Description": "index_name",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "index_name"
+      },
+      {
+        "Column_Name": "index_symbol",
+        "Column_DataType": "text",
+        "Column_Description": "index_symbol",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "index_symbol"
+      }
+    ],
+    "UniqueColumns": [
+      "index_code"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [],
+    "Indexes": [
+      "index_code"
+    ]
+  }
+]

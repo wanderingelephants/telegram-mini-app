@@ -1,0 +1,169 @@
+[
+  {
+    "ReportIndex": 46,
+    "Table Name": "company_liquidity_ratios",
+    "PromptQL": "Retail",
+    "Table Description": "Liquidity Ratios",
+    "API_URL": "http://jwttoken.cmots.com/Aidea/api/LiquidityRatios/6/C",
+    "notes": "",
+    "Updation Time": "11:30 PM",
+    "Interval": "Once on trading day",
+    "Input": "co_code",
+    "Input Description": "CMOTS Company code",
+    "Columns": [
+      {
+        "Column_Name": "created_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "created time"
+      },
+      {
+        "Column_Name": "updated_at",
+        "Column_DataType": "timestamp",
+        "Column_Description": "updated time"
+      },
+      {
+        "Column_Name": "yrc",
+        "Column_DataType": "integer",
+        "Column_Description": "yrc",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "YRC"
+      },
+      {
+        "Column_Name": "month",
+        "Column_DataType": "int",
+        "Column_Description": "month",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "quarter",
+        "Column_DataType": "int",
+        "Column_Description": "quarter",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "year",
+        "Column_DataType": "int",
+        "Column_Description": "year",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE"
+      },
+      {
+        "Column_Name": "co_code",
+        "Column_DataType": "integer",
+        "Column_Description": "co_code",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "co_code"
+      },
+      {
+        "Column_Name": "loans_to_deposits",
+        "Column_DataType": "numeric",
+        "Column_Description": "loans_to_deposits",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Loans_to_Deposits"
+      },
+      {
+        "Column_Name": "cash_to_deposits",
+        "Column_DataType": "numeric",
+        "Column_Description": "cash_to_deposits",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Cash_to_Deposits"
+      },
+      {
+        "Column_Name": "investment_todeposits",
+        "Column_DataType": "numeric",
+        "Column_Description": "investment_todeposits",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Investment_toDeposits"
+      },
+      {
+        "Column_Name": "incloan_to_deposit",
+        "Column_DataType": "numeric",
+        "Column_Description": "incloan_to_deposit",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "IncLoan_to_Deposit"
+      },
+      {
+        "Column_Name": "credit_to_deposits",
+        "Column_DataType": "numeric",
+        "Column_Description": "credit_to_deposits",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Credit_to_Deposits"
+      },
+      {
+        "Column_Name": "interestexpended_to_interestearned",
+        "Column_DataType": "numeric",
+        "Column_Description": "interestexpended_to_interestearned",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "InterestExpended_to_Interestearned"
+      },
+      {
+        "Column_Name": "interestincome_to_totalfunds",
+        "Column_DataType": "numeric",
+        "Column_Description": "interestincome_to_totalfunds",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "Interestincome_to_Totalfunds"
+      },
+      {
+        "Column_Name": "interestexpended_to_totalfunds",
+        "Column_DataType": "numeric",
+        "Column_Description": "interestexpended_to_totalfunds",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "InterestExpended_to_Totalfunds"
+      },
+      {
+        "Column_Name": "casa",
+        "Column_DataType": "numeric",
+        "Column_Description": "casa",
+        "Is_Unique": "",
+        "Is_Index": "",
+        "GQL_Alias": "CASA"
+      },
+      {
+        "Column_Name": "isconsolidated",
+        "Column_DataType": "boolean",
+        "Column_Description": "isconsolidated",
+        "Is_Unique": "TRUE",
+        "Is_Index": "TRUE",
+        "GQL_Alias": "isConsolidated"
+      }
+    ],
+    "UniqueColumns": [
+      "yrc",
+      "month",
+      "quarter",
+      "year",
+      "co_code",
+      "isconsolidated"
+    ],
+    "UniqueConstraintName": "",
+    "ForeignKeys": [
+      {
+        "Column_Name": "co_code",
+        "References": {
+          "Table_Name": "company_master",
+          "Column_Name": "co_code"
+        }
+      }
+    ],
+    "Indexes": [
+      "yrc",
+      "month",
+      "quarter",
+      "year",
+      "co_code",
+      "isconsolidated"
+    ]
+  }
+]
