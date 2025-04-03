@@ -42,9 +42,8 @@ pre_populated_arrays will be the argument to your function. To access any array 
 <on-demand loaded arrays>
 <array>
 <array_name>company_announcements</array_name> 
-<field_names>company_name, company_nse_symbol, announcement_date, announcement_text_summary, announcement_sentiment</field_names>
+<field_names>company_name, company_nse_symbol, announcement_date, announcement_document_link</field_names>
 <graphql_table_to_query>company_announcements</graphql_table_to_query>
- <notes>announcement_sentiment is either Positive, Negative or Netrual. This field signfies if the corporate announcement has positive/negative/neutral impact on company's business or stock price. E.g. winning a large order will have Positive sentiment</notes>
 </array>
 <array>
 <array_name>company_chairman_s_report</array_name> 
@@ -106,12 +105,9 @@ query GetAnnouncementsForSearchTerms($fromDate: date!, $toDate: date!) {
         company_market_cap_category: mcaptype
     }
     announcement_document_link
-    announcement_text_summary
     announcement_record_date
   }
 }`;
-//Notice above that while column 'announcement_text' was used in search clause, but was not included  in output.  this  is because column 'announcement_text' has very large text.
-//Therefore, never include column 'announcement_text' in the output.
 let today = new Date();
     let sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(today.getDate() - 7);
@@ -134,7 +130,6 @@ company_announcements = company_announcements.map(ca => {
          return {
             company_name: ca.company_master.company_name,
             company_nse_symbol: ca.company_master.company_nse_symbol,
-            announcement_text_summary: ca.announcement_text_summary,
             announcement_document_link: ca.announcement_document_link,
             announcement_date: ca.announcement_record_date
          }

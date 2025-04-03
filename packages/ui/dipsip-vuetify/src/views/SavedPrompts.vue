@@ -42,6 +42,11 @@
             >
               Run
             </v-btn>
+            <v-btn class="ml-4"
+                    color="primary"
+                    @click="deleteSavedPrompt(selectedPrompt.chat_uuid, selectedPrompt.id)"
+                    >Delete</v-btn
+            >
             <!--<v-btn 
               color="secondary" 
               class="ml-2" 
@@ -153,7 +158,8 @@
 
 <script>
 import {
-  USER_SAVED_PROMPTS
+  USER_SAVED_PROMPTS,
+  UNSAVE_USER_CHAT
 } from "../lib/helper/queries";
 
 export default {
@@ -238,7 +244,32 @@ export default {
         this.selectedPrompt = null;
       }
     },
-    
+    async deleteSavedPrompt(chat_uuid, chat_id){
+      try{
+        const response = await this.$apollo.query({
+            query: UNSAVE_USER_CHAT,
+            variables: {
+              chat_id,
+              chat_uuid,
+              is_alert_set: false,
+            },
+            fetchPolicy: "no-cache",
+          });
+          await this.getUserChatHistory()
+          this.snackbar.color = "success";
+          this.snackbar.message = "Deleted";
+          this.snackbar.show = true;
+          return;
+        
+      }
+      catch(e){
+        console.error(e)
+        this.snackbar.color = "error";
+          this.snackbar.message = "Could not Delete";
+          this.snackbar.show = true;
+      }
+      
+    },
     async runSavedPrompt(chat_uuid, chat_id) {
       this.runningPrompt = true;
       this.hasRunQuery = true;

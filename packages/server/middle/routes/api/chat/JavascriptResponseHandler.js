@@ -31,7 +31,7 @@ class JavascriptResponseHandler {
         return path.join(folderPath, filename);
     }
     async convertToConstFormat(functionText) {
-        console.log("convertToConstFormat", functionText)
+        console.log(functionText)
         let functionName = "general_query"
         let startIdx = functionText.indexOf("const analysis")
         console.log("startIdx",  startIdx)

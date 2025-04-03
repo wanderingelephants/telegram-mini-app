@@ -53,6 +53,7 @@
 <script>
 import { mapState } from "vuex";
 import GoogleSignIn from "../components/GoogleSignIn";
+import { gql } from "graphql-tag";
 
 export default {
     computed: {
@@ -89,17 +90,34 @@ export default {
         getHeaders(records) {
             return records.length > 0 ? Object.keys(records[0]) : [];
         },
-        async executeFunction() {
-            try {
-                const sanitizedFunctionText = this.functionText.replace(/^const analysis = async function/, 'async function analysis');
-                const asyncFunc = new Function('pre_populated_arrays', `return (${sanitizedFunctionText})(pre_populated_arrays);`);
-                this.executionResults = await asyncFunc(this.tabularData);
-                console.log(this.executionResults)
-            } catch (error) {
-                console.error("Error executing function:", error);
-                this.executionResults = [];
+        async postToGraphQL(payload){
+            console.log("postToGraphQL", payload.query)
+            console.log(payload.variables)
+            try{
+                const resp = await this.$apollo.query({
+                    query: gql`${payload.query}`,
+                    variables: payload.variables,
+                    fetchPolicy: "no-cache",
+                })
+                return resp
             }
-        }
+            catch(e){
+                console.error(e)
+            }
+        },
+        async executeFunction() {
+    try {
+        const sanitizedFunctionText = this.functionText.replace(/^const analysis = async function/, 'async function analysis');
+        const asyncFunc = new Function('pre_populated_arrays', 'postToGraphQL', 
+            `return (${sanitizedFunctionText})(pre_populated_arrays);`
+        );
+        this.executionResults = await asyncFunc(this.tabularData, this.postToGraphQL);
+    } catch (error) {
+        console.error("Error executing function:", error);
+        this.executionResults = [];
+    }
+}
+
     }
 };
 </script>

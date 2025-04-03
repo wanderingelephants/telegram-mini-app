@@ -8,7 +8,6 @@ const route = async(req, res) => {
   try {
     const { idToken } = req.body;
     const customClaims = await admin.auth().verifyIdToken(idToken);
-    console.log("google adminn auth verifyIDToken", customClaims)
             if(!customClaims.email) {
                 let user = await firebase.auth().getUser(customClaims.uid);
                 customClaims.email = user.providerData[0].email;
@@ -18,10 +17,8 @@ const route = async(req, res) => {
               "x-hasura-role": "user",
               "x-hasura-default-role": "user"
           }
-          //console.log("req.body.account", req.body.account)
-          //if(req.body.account) {
+          
               claims['x-hasura-user-id'] = customClaims.email;
-          //}
           const currentTimestamp = new Date().toISOString();
               const resp = await postToGraphQL({
                   query: `
@@ -60,8 +57,8 @@ const route = async(req, res) => {
                     updated_at: currentTimestamp  
                   }
               })
-              console.log("insert resp", resp)
-              const isAdmin = resp.data.insert_users_one.isAdmin
+              
+              const isAdmin = customClaims.email === process.env.ADMIN_ID//resp.data.insert_users_one.isAdmin
               if (isAdmin){
                 claims['x-hasura-role'] = "admin"
                 claims['x-hasura-allowed-roles'] = ["admin", "user"]
