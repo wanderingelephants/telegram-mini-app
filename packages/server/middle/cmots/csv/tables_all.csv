@@ -64,7 +64,7 @@ ReportIndex,Report Name,API URL,Notes,Updation Time,Interval,Input,Input Descrip
 ,,,,,,,,ReportType,Varchar(100),Report Type,TRUE,TRUE,
 9,Annual Report Data Declaration List,http://jwttoken.cmots.com/Aidea/api/AnnualDataDeclarations/2024-08-10,,11:30 PM,Once on trading day,latestdate,Latest Date,Output,OutputType,OutDesc,,,
 ,,,,,,,,co_code,int,CMOTS Company Code,TRUE,TRUE,
-,,,,,,,,ReportDate,Datetime,Report Date,TRUE,TRUE,report_date
+,,,,,,,,ReportDate,Datetime,Report Date,TRUE,TRUE,date
 ,,,,,,,,ReportType,Varchar(100),Report Type,TRUE,TRUE,report_type
 10,Company Profile,http://jwttoken.cmots.com/Aidea/api/CompanyProfile/476,,11:30 PM,Once on trading day,cocode,CMOTS Company code,Output,OutputType,OutDesc,,,
 ,,,,,,,,lname,varchar(100),Company Long Name,,,
@@ -398,7 +398,7 @@ ReportIndex,Report Name,API URL,Notes,Updation Time,Interval,Input,Input Descrip
 ,,,,,,,,st_name,varchar(50),ST_NAME,,,
 28,Credit Rating Info,http://jwttoken.cmots.com/Aidea/api/CreditRatingInfo/476,,11:30 PM,Once on trading day,cocode,CMOTS Company code,Output,OutputType,OutDesc,,,
 ,,,,,,,,co_code,Int,CMOTS Company Code,TRUE,TRUE,
-,,,,,,,,ratdate,datetime,RATDATE,TRUE,TRUE,
+,,,,,,,,ratdate,datetime,RATDATE,TRUE,TRUE,date
 ,,,,,,,,sectype,varchar(50),SEC TYPE,TRUE,TRUE,
 ,,,,,,,,amount,Int,AMOUNT,TRUE,,
 ,,,,,,,,rating,varchar(50),RATING,TRUE,TRUE,
@@ -418,7 +418,7 @@ ReportIndex,Report Name,API URL,Notes,Updation Time,Interval,Input,Input Descrip
 ,,,,,,,,permenantdisabledemployee,float,Permenant Disabled Employee,,,
 30,Corporate Governance,http://jwttoken.cmots.com/Aidea/api/CorporateGovernance/6,,11:30 PM,Once on trading day,cocode,CMOTS Company Code,Output,OutputType,OutDesc,,,
 ,,,,,,,,co_code,int,CMOTS company code,TRUE,TRUE,
-,,,,,,,,date,datetime,Date,TRUE,TRUE,
+,,,,,,,,date,datetime,Date,TRUE,TRUE,date
 ,,,,,,,,corpgov_report,ntext,Corp Gov Report,,,
 31,Capital structure,http://jwttoken.cmots.com/Aidea/api/capital-structure/1375,,11:30 PM,Once on trading day,co_code,CMOTS Company Code,Output,OutputType,OutDesc,,,
 ,,,,,,,,co_code,int,co_code,TRUE,TRUE,
@@ -431,7 +431,7 @@ ReportIndex,Report Name,API URL,Notes,Updation Time,Interval,Input,Input Descrip
 ,,,,,,,,EquityPaidUp,float,EquityPaidUp,,,
 32,Pledged Shares,http://jwttoken.cmots.com/Aidea/api/Pledgesharesdetails/6,,11:30 PM,Once on trading day,cocode,CMOTS Company Code,Output,OutputType,OutDesc,,,
 ,,,,,,,,co_code,int,CMOTS Company Code,TRUE,TRUE,
-,,,,,,,,date,datetime,date,TRUE,TRUE,plede_date
+,,,,,,,,date,datetime,date,TRUE,TRUE,date
 ,,,,,,,,type,varchar(50),Type,TRUE,TRUE,pledge_type
 ,,,,,,,,name,varchar(50),name,TRUE,TRUE,pledger_name
 ,,,,,,,,totalpledgeshares,float,Total Pledge Shares,,,total_shares_pledged
@@ -494,7 +494,7 @@ ReportIndex,Report Name,API URL,Notes,Updation Time,Interval,Input,Input Descrip
 ,,,,,,,,Others,Float,Others,,,others_percentage_share
 38,Shareholding Pattern More Than 1 Percent,http://jwttoken.cmots.com/Aidea/api/ShareholdingMorethanOnePercent/476,type_of_shareholding is one of ['Public Shareholding' {{comma}} 'Shareholding of Promoter and Promoter Group'],11:30 PM,Once on trading day,co_code,CMOTS Company Code,Output,OutputType,OutDesc,,,
 ,,,,,,,,co_code,Int,CMOTS Company Code,TRUE,TRUE,
-,,,,,,,,date,Date,Date,TRUE,TRUE,report_date
+,,,,,,,,date,Date,Date,TRUE,TRUE,date
 ,,,,,,,,Type,varchar(100),Type,TRUE,TRUE,type_of_shareholding
 ,,,,,,,,Name,varchar(100),Name,TRUE,TRUE,shareholder_name
 ,,,,,,,,NOOFshares,float,No of Shares,,,number_of_shares
@@ -776,14 +776,14 @@ ReportIndex,Report Name,API URL,Notes,Updation Time,Interval,Input,Input Descrip
 ,,,,,,,,is_high,boolean,Is High or Low,,,
 56,Company Bulk Deals,http://jwttoken.cmots.com/Aidea/api/Bulk-Deals/nse/22-Mar-2025/24-Mar-2025,,11:30 PM,Once on trading day,DateRange,DateRange,Column_Name,Column_DataType,Column_Description,,,
 ,,,,,,,,co_code,Int,CMOTS Company Code,TRUE,TRUE,
-,,,,,,,,date,Date,New High Low Date,TRUE,TRUE,
+,,,,,,,,date,Date,New High Low Date,TRUE,TRUE,date
 ,,,,,,,,clientname,varchar,Client Name,TRUE,TRUE,client_name
 ,,,,,,,,buysell,boolean,Buy Or Sell,,,buy_or_sell
 ,,,,,,,,avg_price,float,Average Price,,,average_price
 ,,,,,,,,qtyshares,int,Quantity,,,shares_quantity
 56,Company Block Deals,http://jwttoken.cmots.com/Aidea/api/Block-Deals/nse/22-Mar-2025/24-Mar-2025,,11:30 PM,Once on trading day,DateRange,DateRange,Column_Name,Column_DataType,Column_Description,,,
 ,,,,,,,,co_code,Int,CMOTS Company Code,TRUE,TRUE,
-,,,,,,,,date,Date,New High Low Date,TRUE,TRUE,
+,,,,,,,,date,Date,New High Low Date,TRUE,TRUE,date
 ,,,,,,,,clientname,varchar,Client Name,TRUE,TRUE,client_name
 ,,,,,,,,buysell,boolean,Buy Or Sell,,,buy_or_sell
 ,,,,,,,,avg_price,float,Average Price,,,average_price
