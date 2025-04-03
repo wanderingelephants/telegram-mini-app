@@ -55,7 +55,7 @@ function transformData(inputArray) {
 const route = async (req, res) => {
     
     try{
-        const data = fs.readFileSync(path.join(process.env.DATA_ROOT_FOLDER, "prompts_fields.json"), "utf-8")  
+        const data = fs.readFileSync(path.join("./cmots/csv/prompts_fields.json"), "utf-8")  
         const promptFields = JSON.parse(data)
         console.log("Total", promptFields.length)
         promptFields.push({"array_name": "corporate_announcements", "fields": ["keyword hints (e.g. capex, large orders, preferential offer)"]})

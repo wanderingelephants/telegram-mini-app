@@ -110,7 +110,7 @@ class DatabaseManager {
   }
   async getGraphQLFieldsForNonFinancials(onlyKeys, tableNameFilter) {
     const fieldsForTable = []
-    const all_tables_json = fs.readFileSync(path.join(process.env.DATA_ROOT_FOLDER, "all_tables.json"), "utf-8")
+    const all_tables_json = fs.readFileSync("./cmots/csv/all_tables.json", "utf-8")
     const all_tables = JSON.parse(all_tables_json)
     console.log("get tables for ", tableNameFilter, all_tables.filter(c => !c["Table Name"]))
     const promptables = all_tables.filter(c => c["Table Name"].toLowerCase().indexOf(tableNameFilter) > -1)

@@ -41,7 +41,7 @@ const route = async (req, res) => {
     const systemPromptPath = path.join(PROMPTS_FOLDER, `${activity}_system_prompt.txt`);
     let systemPrompt = await readFile(systemPromptPath, 'utf-8');
     if (activity === "stock_market_chat"){
-      const cachedArraysDefinition = path.join(process.env.DATA_ROOT_FOLDER, "prompts_fields.json")
+      const cachedArraysDefinition = path.join("./cmots/csv/prompts_fields.json")
       const arrayContent = fs.readFileSync(cachedArraysDefinition, "utf-8")
       systemPrompt = systemPrompt.replace("{{cached_pre_loaded_graphql_fields}}", arrayContent)
       fs.writeFileSync(path.join(process.env.DATA_ROOT_FOLDER, "full_stock_market_chat_prompt.txt"), systemPrompt)
