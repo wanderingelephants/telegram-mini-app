@@ -1027,9 +1027,6 @@
     name: nse_nifty_prices
     schema: public
 - table:
-    name: oclh_1s
-    schema: public
-- table:
     name: portfolio_mutual_funds
     schema: public
   object_relationships:
