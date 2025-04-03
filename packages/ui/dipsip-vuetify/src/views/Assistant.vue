@@ -247,7 +247,7 @@
             @click:prepend-inner="userInput = ''"
             @keydown="handleKeydown"
           />
-          <span v-if="isMicSupported"><v-icon @click="startSpeechRecognition">$mdiMicrophone</v-icon></span>
+          <!--<span v-if="isMicSupported"><v-icon @click="startSpeechRecognition">$mdiMicrophone</v-icon></span> -->
           <span v-if="userInput.trim()"><v-icon @click="sendMessage">$mdiSend</v-icon></span>
         </v-card-actions>
       </div>
@@ -414,7 +414,7 @@ export default {
       progress: 100,
       interval: null,
       distilledModel: "reasoning_dseek",
-      title: "India Stock Market AI Assistant",
+      title: "India Stock/MF Discovery Assistant",
       savedReportTitle: "",
       userInputLabel: "This is an AI tool. Double Check",
       saveAsReport: { chat_id: "", chat_uuid: "", is_alert_set: false },

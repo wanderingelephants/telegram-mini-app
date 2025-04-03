@@ -1,45 +1,28 @@
 <template>
-  <v-card 
-    flat 
-    class="data-explorer-scroll-container"
-  >
-    <v-card-text class="pa-0">
-      <v-container fluid class="pa-0">
-        <v-row 
-          no-gutters 
-          class="data-explorer-scroll-container"
-        >
-          <v-col 
-            :cols="12" 
-            :sm="6" 
-            :md="6" 
-            :lg="3" 
-            v-for="(categoryData, categoryName) in processedArrays" 
-            :key="categoryName"
-            class="pa-1"
-          >
-            <v-card 
-              class="category-card" 
-              :color="getCategoryColor(categoryName)"
-              variant="outlined"
-            >
-              <v-card-title class="d-flex align-center category-header py-2">
-                <v-icon :color="getCategoryColor(categoryName)" class="mr-2">
-                  {{ getCategoryIcon(categoryName) }}
-                </v-icon>
-                {{ formatCategoryName(categoryName) }}
-              </v-card-title>
-              <v-card-text class="pa-0">
-                <data-explorer 
-                  :arrayList="categoryData"
-                />
-              </v-card-text>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-card-text>
-  </v-card>
+  <v-container fluid>
+    <v-row>
+      <v-col
+        v-for="(item, index) in processedArrays"
+        :key="index"
+        cols="12"
+        sm="6"
+        md="4"
+        class="pa-2"
+      >
+        <v-card class="category-card" variant="outlined">
+          <v-card-title class="d-flex align-center category-header py-2">
+            <v-icon class="mr-2">
+              {{ getCategoryIcon(index) }}
+            </v-icon>
+            {{ formatCategoryName(index) }}
+          </v-card-title>
+          <v-card-text class="pa-0">
+            <data-explorer :arrayList="item" />
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -77,11 +60,11 @@ export default {
     },
     getCategoryIcon(categoryName) {
       const categoryIcons = {
-        Financials: '$mdiBank',
-        Ratios: '$mdiCalculator',
-        Technicals: '$mdiChartLine',
+        "Financial Signals": '$mdiBank',
+        "Ratio Signals": '$mdiCalculator',
+        "Price/Volume Signals": '$mdiChartLine',
         "Subjective Signals": '$mdiSignalCellularOutline',
-        "Shareholding Pattern": '$mdiChartPie'
+        "Shareholding Signals": '$mdiChartPie'
       }
       return categoryIcons[categoryName] || '$mdiFolder'
     }
@@ -130,7 +113,12 @@ export default {
   background: #888;
   border-radius: 4px;
 }
-
+@media (max-width: 600px) {
+  .category-card {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+}
 @media (max-width: 600px) {
   .data-explorer-grid-container {
     max-height: none; /* Remove max-height constraint */

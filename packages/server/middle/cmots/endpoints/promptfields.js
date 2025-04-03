@@ -4,7 +4,7 @@ const path = require("path")
 function getCategory(array_name) {
     if (array_name.indexOf("_ratio") > -1) return "Ratio Signals"
     else if (array_name.indexOf("company_balance_sheet") > -1 || array_name.indexOf("company_cash_flow") > -1 || array_name.indexOf("company_profit_and_loss") > -1) return "Financial Signals"
-    else if  (array_name.indexOf("_price") > -1) return "Technical Signals"
+    else if  (array_name.indexOf("_fifty_two_week_") > -1 || array_name.indexOf("_price") > -1) return "Price/Volume Signals"
     else if  (array_name.indexOf("substantial") > -1||array_name.indexOf("insider_trading") > -1||array_name.indexOf("_deals") > -1||array_name.indexOf("_shareholding") > -1) return "Shareholding Signals"
     else return "Subjective Signals"
 
@@ -58,6 +58,11 @@ const route = async (req, res) => {
         const data = fs.readFileSync(path.join(process.env.DATA_ROOT_FOLDER, "prompts_fields.json"), "utf-8")  
         const promptFields = JSON.parse(data)
         console.log("Total", promptFields.length)
+        promptFields.push({"array_name": "corporate_announcements", "fields": ["keyword hints (e.g. capex, large orders, preferential offer)"]})
+        promptFields.push({"array_name": "chairmans_report", "fields": ["keyword hints"]})
+        promptFields.push({"array_name": "directors_report", "fields": ["keyword hints"]})
+        promptFields.push({"array_name": "auditors_report", "fields": ["keyword hints"]})
+        
         const categorizedArrays = transformData(promptFields)
         //const financials = promptFields.filter(t => t.array_name.indexOf("balancesheet") > -1)
         

@@ -49,7 +49,8 @@ const routes = {
             setalert: require("./api/chat/setalert"),
             view: require("./api/chat/view"),
             runPrompt: require("./api/chat/runPrompt"),
-            promptfields: require("../cmots/endpoints/promptfields")
+            promptfields: require("../cmots/endpoints/promptfields"),
+            arrayview: require("./api/chat/arrayview")
         },
         company:{
             details: require("./api/company/details"),
@@ -118,6 +119,7 @@ router.post("/api/auth/google", routes.api.auth.google)
 router.get("/api/auth/callback", routes.api.auth.callback)
 router.get("/api/company/details/:symbol/:entity", verifyToken, routes.api.company.details)
 router.get("/api/company/list", routes.api.company.list)
+router.get("/api/chat/arrayview", verifyAdminToken, routes.api.chat.arrayview)
 router.post("/api/chat/reasoning", verifyToken, routes.api.chat.reasoning)
 router.post("/api/chat/runPrompt", verifyToken, routes.api.chat.runPrompt)
 router.post("/api/chat/share", verifyToken, routes.api.chat.share)

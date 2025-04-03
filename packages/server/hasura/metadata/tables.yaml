@@ -1373,7 +1373,7 @@
             _eq: X-Hasura-User-Id
         check: null
 - table:
-    name: company_price_volume
+    name: company_historical_price_volume_by_date
     schema: public
   object_relationships:
     - name: company_master

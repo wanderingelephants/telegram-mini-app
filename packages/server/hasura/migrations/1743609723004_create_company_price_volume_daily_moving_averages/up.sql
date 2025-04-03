@@ -4,6 +4,8 @@ CREATE TABLE "company_price_volume_daily_moving_averages" (
   "created_at" timestamptz ,
   "updated_at" timestamptz ,
   "co_code" integer  not null,
+  "latest_closing_price" numeric ,
+  "latest_closing_volume" numeric ,
   "price_dma_5_day" numeric ,
   "price_dma_10_day" numeric ,
   "price_dma_20_day" numeric ,

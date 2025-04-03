@@ -112,6 +112,7 @@ class DatabaseManager {
     const fieldsForTable = []
     const all_tables_json = fs.readFileSync(path.join(process.env.DATA_ROOT_FOLDER, "all_tables.json"), "utf-8")
     const all_tables = JSON.parse(all_tables_json)
+    console.log("get tables for ", tableNameFilter, all_tables.filter(c => !c["Table Name"]))
     const promptables = all_tables.filter(c => c["Table Name"].toLowerCase().indexOf(tableNameFilter) > -1)
 
     for (const table of promptables) {
@@ -269,7 +270,7 @@ class DatabaseManager {
     const graphql_fields_for_mutual_funds = await this.getGraphQLFieldsForMutualFunds(onlyKeys)
     promptables = promptables.concat(graphql_fields_for_mutual_funds)
 
-    for (const nonFin of ["_ratio", "_shareholding_pattern_", "company_bulk_deals", "company_block_deals", "insider_trading", "substantial_acquisition_of_shares"]){
+    for (const nonFin of ["_ratio", "_shareholding_pattern_", "company_bulk_deals", "company_block_deals", "insider_trading", "substantial_acquisition_of_shares", "_price_volume"]){
       const graphql_fields_for_bulk_tables = await this.getGraphQLFieldsForNonFinancials(onlyKeys, nonFin)
       promptables = promptables.concat(graphql_fields_for_bulk_tables)
     }

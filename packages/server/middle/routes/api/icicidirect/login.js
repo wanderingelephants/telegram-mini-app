@@ -1,44 +1,15 @@
 const axios = require("axios");
 const { postToGraphQL } = require("../../../lib/helper");
 const BreezeConnect = require('breezeconnect').BreezeConnect;
+let breeze;
 const moment = require("moment")
 const formatDate = (dateStr) => {
     if (!dateStr) return null;
     const parsedDate = moment(dateStr, ["YYYY-MM-DD HH:mm:ss", "DD/MM/YYYY", "YYYY/MM/DD", "DD-MM-YYYY"]);
     return parsedDate.isValid() ? parsedDate.utcOffset(330).format("YYYY-MM-DD") : dateStr;
-  };
-const icicidirectsymbols = require("../../../cmots/json/icicidirectsymbols.json")  
-const route = async (req, res) => {
-
-    try{
-        var apiKey = process.env.ICICI_DIRECT_API_KEY;
-var appSecret = process.env.ICICI_DIRECT_SECRET;
-var breeze = new BreezeConnect({"appKey":apiKey});
-
-const {apisession} = req.query
-console.log("icicid login success", apisession)
-
-const sessionResp = await breeze.generateSession(appSecret, apisession)
-console.log("sessionResp", sessionResp)
-await apiCalls();
-console.log("icici d loading done")
-
-async function apiCalls(){
-    /*if (true){
-        for (const relStock of ["BRIIND", "RELIND", "STABAN", "HDFBAN", "ICIBAN", "ADAPOR", "ULTCEM" ]){
-            let resp = await breeze.getHistoricalData({
-                interval:"1day",   //'1minute', '5minute', '30minute','1day'
-                fromDate: "2025-03-31T07:00:00.000Z",
-                toDate: "2025-04-02T07:00:00.000Z",
-                stockCode: relStock,
-                exchangeCode:"NSE",   // 'NSE','BSE','NFO'
-                productType:"cash"
-            })
-            console.log(relStock, resp)
-        }
-        
-        return;
-    }*/
+};
+const icicidirectsymbols = require("../../../cmots/csv/icicidirectsymbols.json")
+const loadHistoricalData = async () => {
     try {
         const query = `query get_nse_symbols{
           company_master{
@@ -47,9 +18,9 @@ async function apiCalls(){
             isin
           }
         }`
-        const insertMutation = `mutation insert_closing_prices($objects: [company_price_volume_insert_input!]!){
-  insert_company_price_volume(objects: $objects, on_conflict:{
-    constraint: u_company_price_volume,
+        const insertMutation = `mutation insert_closing_prices($objects: [company_historical_price_volume_by_date_insert_input!]!){
+  insert_company_historical_price_volume_by_date(objects: $objects, on_conflict:{
+    constraint: u_company_historical_price_volume_by_date,
     update_columns: [updated_at]
   }){
     affected_rows
@@ -57,19 +28,19 @@ async function apiCalls(){
 }`
         const gqlResp = await postToGraphQL({ query, variables: {} })
         const companies = gqlResp.data.company_master
-        for (const company of companies){
+        for (const company of companies) {
             const iciciStockCode = icicidirectsymbols.filter(i => i.ISINCode === company.isin)[0].ShortName
-        
+
             const resp = await breeze.getHistoricalData({
-                interval:"1day",   //'1minute', '5minute', '30minute','1day'
+                interval: "1day",   //'1minute', '5minute', '30minute','1day'
                 fromDate: "2024-03-31T07:00:00.000Z",
                 toDate: "2025-04-02T07:00:00.000Z",
                 stockCode: iciciStockCode,
-                exchangeCode:"NSE",   // 'NSE','BSE','NFO'
-                productType:"cash"
+                exchangeCode: "NSE",   // 'NSE','BSE','NFO'
+                productType: "cash"
             })
             //console.log("oclh", resp)
-            if (resp.Success){
+            if (resp.Success) {
                 try {
                     const mutationArray = resp.Success.map(r => {
                         return {
@@ -87,30 +58,72 @@ async function apiCalls(){
                     //console.log(insertMutation, mutationArray)
                     const mutationResp = await postToGraphQL({
                         query: insertMutation,
-                        variables: {"objects": mutationArray}
+                        variables: { "objects": mutationArray }
                     })
-                    
+
                 }
-                catch(e){
+                catch (e) {
                     console.error(e)
                 }
-                
+
             }
-            else  {
+            else {
                 console.log(company.nsesymbol, resp)
             }
         }
-        
-      }
-      catch (e) {
-        console.error(e)
-      }
-}
 
-return res.status(200).json("ok")
     }
-    catch(e){
+    catch (e) {
         console.error(e)
+    }
+}
+const streaming = async () => {
+    breeze.wsConnect();
+
+    //Callback to receive ticks.
+    function onTicks(ticks) {
+        console.log("ticks", ticks);
+    }
+
+    //Assign the callbacks
+    breeze.onTicks = onTicks;
+
+    /*breeze.subscribeFeeds(
+        {
+            exchangeCode:"NSE", 
+            stockCode:"ZEEENT", 
+            productType:"cash", 
+            getExchangeQuotes:true, 
+            getMarketDepth:true,
+            interval: "1minute"
+        }
+    ).then(function(resp){console.log(resp)});*/
+    //subscribe stocks feeds by stock-token
+    breeze.subscribeFeeds({ stockToken: "4.1!1594", getMarketDepth:true,
+            interval: "1minute" }).then(
+        function (resp) {
+            console.log(resp);
+        }
+    )
+
+}
+const route = async (req, res) => {
+
+    try {
+        var apiKey = process.env.ICICI_DIRECT_API_KEY;
+        var appSecret = process.env.ICICI_DIRECT_SECRET;
+        breeze = new BreezeConnect({ "appKey": apiKey });
+
+        const { apisession } = req.query
+        console.log("icicid apisession", apisession)
+
+        const sessionResp = await breeze.generateSession(appSecret, apisession)
+        console.log("sessionResp", sessionResp)
+        await streaming();
+        return res.status(200).json("ok")
+    }
+    catch (e) {
+        console.error("error in generate session", e)
         return res.status(500).json("error")
     }
 
