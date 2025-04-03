@@ -26,8 +26,7 @@
         "Column_DataType": "integer",
         "Column_Description": "ttmason",
         "Is_Unique": "TRUE",
-        "Is_Index": "TRUE",
-        "GQL_Alias": "date"
+        "Is_Index": "TRUE"
       },
       {
         "Column_Name": "co_code",

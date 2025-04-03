@@ -1,0 +1,1 @@
+node --env-file=.env get_graphql_fields.js 

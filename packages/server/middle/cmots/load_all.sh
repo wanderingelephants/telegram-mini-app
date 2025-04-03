@@ -63,7 +63,7 @@ node --env-file=../.env persist_data_for_tables_json.js json/company_subsidiarie
  node --env-file=../.env persist_data_for_tables_json.js json/company_yearly_ratios.json
  node --env-file=../.env persist_data_for_tables_json.js json/company_yearly_results.json
  node --env-file=../.env persist_data_for_tables_json.js json/company_yearly_result_based_ratios.json
- node --env-file=../.env get_graphql_fields.js 
+ #node --env-file=../.env get_graphql_fields.js 
 
 # node --env-file=../.env persist_data_for_tables_json.js json/company_sector_wise_company.json
 # node --env-file=../.env persist_data_for_tables_json.js json/company_index_wise_company.json

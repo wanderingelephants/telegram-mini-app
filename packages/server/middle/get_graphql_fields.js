@@ -1,4 +1,4 @@
-const dbManager = require("../routes/api/chat/DatabaseManager")
+const dbManager = require("./routes/api/chat/DatabaseManager")
 const path = require("path")
 const fs = require("fs")
 dbManager.getGraphQLFields(true).then(resp => fs.writeFileSync("./cmots/csv/prompts_fields.json", JSON.stringify(resp)))

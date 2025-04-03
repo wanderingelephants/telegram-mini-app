@@ -1,4 +1,3 @@
-DATA_ROOT_FOLDER=/Users/sachetsingh1/telegram-mini-app/packages/data
 node csv_to_json.js /Users/sachetsingh1/telegram-mini-app/packages/server/middle/cmots/csv/tables_all.csv /Users/sachetsingh1/telegram-mini-app/packages/server/middle/cmots/json
 node csv_to_json.js /Users/sachetsingh1/telegram-mini-app/packages/server/middle/cmots/csv/tables_financials.csv /Users/sachetsingh1/telegram-mini-app/packages/server/middle/cmots/json
 node csv_to_json.js /Users/sachetsingh1/telegram-mini-app/packages/server/middle/cmots/csv/tables_price_volume.csv /Users/sachetsingh1/telegram-mini-app/packages/server/middle/cmots/json
