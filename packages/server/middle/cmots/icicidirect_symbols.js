@@ -19,6 +19,7 @@ function processCSV(csvFilePath, outputFolder) {
     
     // Filter only the required columns
     const requiredColumns = [
+      "Token",
       "ShortName", 
       "Series", 
       "CompanyName",
