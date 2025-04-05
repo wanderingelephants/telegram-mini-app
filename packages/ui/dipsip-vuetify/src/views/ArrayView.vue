@@ -107,7 +107,7 @@ export default {
         },
         async executeFunction() {
     try {
-        const sanitizedFunctionText = this.functionText.replace(/^const analysis = async function/, 'async function analysis');
+        const sanitizedFunctionText = this.functionText//this.functionText.replace(/^const analysis = async function/, 'async function analysis');
         const asyncFunc = new Function('pre_populated_arrays', 'postToGraphQL', 
             `return (${sanitizedFunctionText})(pre_populated_arrays);`
         );

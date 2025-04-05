@@ -1,5 +1,6 @@
 const path = require("path")
 const fs = require("fs")
+const { postToGraphQL } = require("../../../lib/helper")
 const dataFolder = process.env.DATA_ROOT_FOLDER
 const MAX_RESULTS_TO_FORMAT = 10
 
@@ -32,7 +33,7 @@ class JavascriptResponseHandler {
     }
     async convertToConstFormat(functionText) {
         console.log(functionText)
-        let functionName = "general_query"
+        let functionName = "general_stock_market_query"
         let startIdx = functionText.indexOf("const analysis")
         console.log("startIdx",  startIdx)
         let gqlImportPrefix = ""
@@ -43,7 +44,7 @@ class JavascriptResponseHandler {
             gqlImportPrefix = "const {postToGraphQL} = require(process.env.GRAPHQL_MODULE_PATH)"
         }
         else {
-            startIdx = functionText.indexOf("const general_query")
+            startIdx = functionText.indexOf("const general_stock_market_query")
             const endIndex = functionText.lastIndexOf("}")
             functionText = functionText.substring(startIdx, endIndex + 1)
         }
@@ -64,24 +65,35 @@ class JavascriptResponseHandler {
         functionText = functionText.substring(0, lastIdx + 1)
         console.log("after substring", functionText)
         functionText = functionText.trim()
-        let functionName;
-        let generatedFilePath;
-        /*if (this.testAgainstFunction !== "") {
-            generatedFilePath = testAgainstFunction
-            const toks = generatedFilePath.split("/")
-            functionName = toks[toks.length - 1].split("_")[0]
+        let executionResults = []
+        const functionName = functionText.indexOf("async function analysis") > -1 ? "analysis" : "general_stock_market_query"
+        try{
+            const asyncFunc = new Function('pre_populated_arrays', 'postToGraphQL', 
+            `return (${functionText})(pre_populated_arrays);`
+            );
+            const pre_populated_arrays = await this.dbManager.getData()
+            const user_stock_portfolio = await this.dbManager.getUserStockPortfolio(this.customData.email)
+            pre_populated_arrays["user_stock_portfolio"] = user_stock_portfolio
+        
+            executionResults = await asyncFunc(pre_populated_arrays, postToGraphQL);
+            console.log("executionResults", executionResults.length)
+            return {functionName, result: executionResults}
         }
-        else {*/
+        catch(e){
+            console.error(e)
+            return {functionName, result: executionResults}
+        }
+        /*let functionName;
+        let generatedFilePath;
         const functionAndPath = await this.convertToConstFormat(functionText)
         functionName = functionAndPath.functionName
         generatedFilePath = functionAndPath.generatedFilePath
-        //}
-
+        
         try {
             switch (functionName) {
-                case "general_query":
-                    const general_query = require(generatedFilePath)
-                    result = await general_query()
+                case "general_stock_market_query":
+                    const general_stock_market_query = require(generatedFilePath)
+                    result = await general_stock_market_query()
                     break;
                 case "analysis":
                     result = await this.executeAnalysisFunction(generatedFilePath, this.customData.email)
@@ -93,7 +105,7 @@ class JavascriptResponseHandler {
             console.error(e)
             result = "Sorry, No Response"
         }
-        return { functionName, result }
+        return { functionName, result }*/
     }
     async executeAnalysisFunction(generatedFilePath, email) {
         let result;
@@ -166,7 +178,7 @@ class JavascriptResponseHandler {
             })
             formattedResponse = await this.formattingLLMClient.sendMessageToLLM(formattingPrompt, messagesToSendToFormatter)
         }
-        else if (functionName === "general_query") formattedResponse = result
+        else if (functionName === "general_stock_market_query") formattedResponse = result
         else formattedResponse = "No Response"
         await this.messageManager.saveMessage(this.customData.chatSessionId, this.activity, { "role": 'assistant', content: [{ "type": 'text', "text": formattedResponse }] }, 'messages_formatted.json');
 
