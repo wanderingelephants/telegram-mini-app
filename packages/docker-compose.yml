@@ -31,6 +31,26 @@ services:
     ports:
     - "8081:8080"
     restart: always
+  deno-executor:
+    image: denoland/deno:latest
+    container_name: deno-executor
+    command: ["run", "--allow-net", "--allow-env", "/app/server.ts"]
+    working_dir: /app
+    volumes:
+      - ./server/deno:/app
+    environment:
+      - NODE_API_URL=${NODE_API_URL}
+      - HASURA_ADMIN_SECRET=${HASURA_ADMIN_SECRET}  
+    ports:
+      - "4123:4123"
+    security_opt:
+    - seccomp:unconfined
+    cap_add:
+    - SYS_ADMIN  
+    extra_hosts:
+    - "host.docker.internal:192.168.31.82"
+    depends_on:
+      - graphql-engine
   api:
     build:
       context: ./server/middle

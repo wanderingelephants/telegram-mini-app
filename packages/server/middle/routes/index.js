@@ -8,6 +8,12 @@ const serviceAccount = require(`${config}/firebase-admin.json`)
 admin.initializeApp({
 credential: admin.credential.cert(serviceAccount)
 });
+const verifyInternalHeader = async(req, res, next) => {
+    if (req.headers['x-internal-request'] !== 'true') {
+        return res.status(403).send('Forbidden');
+    }
+    next()
+}
 const verifyAdminToken = async (req, res, next) => {
     try {
       const idToken = req.headers.authorization?.split("Bearer ")[1];
@@ -22,7 +28,7 @@ const verifyAdminToken = async (req, res, next) => {
     } catch (error) {
       res.status(401).json({ error: "Invalid token" });
     }
-    };
+};
 const verifyToken = async (req, res, next) => {
 try {
   const idToken = req.headers.authorization?.split("Bearer ")[1];
@@ -120,6 +126,7 @@ router.get("/api/auth/callback", routes.api.auth.callback)
 router.get("/api/company/details/:symbol/:entity", verifyToken, routes.api.company.details)
 router.get("/api/company/list", routes.api.company.list)
 router.get("/api/chat/arrayview", verifyAdminToken, routes.api.chat.arrayview)
+router.get("/api/internal/data", verifyInternalHeader, routes.api.chat.arrayview)
 router.post("/api/chat/reasoning", verifyToken, routes.api.chat.reasoning)
 router.post("/api/chat/runPrompt", verifyToken, routes.api.chat.runPrompt)
 router.post("/api/chat/share", verifyToken, routes.api.chat.share)
