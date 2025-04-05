@@ -38,15 +38,16 @@ class Breeze{
             console.error(e)
         }        
     }
-    loadHistoricalData = async (interval) => {
+    loadHistoricalData = async (interval, fromTime, toTime) => {
         let tableName = "company_historical_price_volume_by_date"
-        let UniqueConstraintName = "u_company_historical_price_volume_by_date"
+        
         let update_columns = "updated_at"
         if  (interval === "1minute"){
-            tableName = "oclh_1minute"
-            UniqueConstraintName = "oclh_1s_co_code_time_key"
+            tableName = "company_intraday_oclh_candles_by_minute"
+            
             update_columns = "open, high, low, close"
         }
+        const UniqueConstraintName = `u_${tableName}`
         try {
             const query = `query get_nse_symbols{
               company_master{
@@ -70,8 +71,8 @@ class Breeze{
     
                 const resp = await this.breeze.getHistoricalData({
                     interval,   //'1minute', '5minute', '30minute','1day'
-                    fromDate: "2025-04-04T09:00:00.000Z",
-                    toDate: "2025-04-04T16:00:00.000Z",
+                    fromDate: fromTime,
+                    toDate: toTime,
                     stockCode: iciciStockCode,
                     exchangeCode: "NSE",   // 'NSE','BSE','NFO'
                     productType: "cash"
@@ -79,9 +80,8 @@ class Breeze{
                 //console.log("oclh", resp)
                 if (resp.Success) {
                     try {
-                        const mutationArray = resp.Success.map(r => {
-                            //console.log(r)
-                            return {
+                        let mutationArray = resp.Success.map(r => {
+                            const mutationFields = {
                                 created_at: new Date(),
                                 updated_at: new Date(),
                                 co_code: company.co_code+"",
@@ -90,10 +90,14 @@ class Breeze{
                                 low: parseFloat(r.low),
                                 close: parseFloat(r.close),
                                 volume: parseFloat(r.volume),
-                                time: r.datetime
+                                //time: r.datetime
                                 //record_date: formatDate(r.datetime)
                             }
+                            interval === "1minute" ? mutationFields["datetime_minute"] = r.datetime : mutationFields["record_date"] = formatDate(r.datetime)
+                            
+                            return mutationFields
                         })
+                        mutationArray = mutationArray.filter(r => r.volume > 0)
                         //console.log(insertMutation, mutationArray)
                         const mutationResp = await postToGraphQL({
                             query: insertMutation,

@@ -270,7 +270,7 @@ class DatabaseManager {
     const graphql_fields_for_mutual_funds = await this.getGraphQLFieldsForMutualFunds(onlyKeys)
     promptables = promptables.concat(graphql_fields_for_mutual_funds)
 
-    for (const nonFin of ["_ratio", "_shareholding_pattern_", "company_bulk_deals", "company_block_deals", "insider_trading", "substantial_acquisition_of_shares", "_price_volume"]){
+    for (const nonFin of ["_ratio", "_shareholding_pattern_", "company_bulk_deals", "company_block_deals", "insider_trading", "substantial_acquisition_of_shares", "_price_volume", "intraday_oclh_"]){
       const graphql_fields_for_bulk_tables = await this.getGraphQLFieldsForNonFinancials(onlyKeys, nonFin)
       promptables = promptables.concat(graphql_fields_for_bulk_tables)
     }

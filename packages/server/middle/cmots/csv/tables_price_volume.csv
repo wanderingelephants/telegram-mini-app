@@ -23,3 +23,11 @@ ReportIndex,Report Name,API URL,Notes,Updation Time,Interval,Input,Input Descrip
 ,,,,,,,,volume_dma_50_day,float,50_Day_Volume_DMA,,,Volume_50_Day_Moving_Average
 ,,,,,,,,volume_dma_100_day,float,100_Day_Volume_DMA,,,Volume_100_Day_Moving_Average
 ,,,,,,,,volume_dma_200_day,float,200_Day_Volume_DMA,,,Volume_200_Day_Moving_Average
+3,Company intraday oclh candles by minute,,Intra Day Prices/Volume by Minute to analyze intra-day trading patterns,11:30 PM,Once on trading day,CO_CODE,CMOTS Company Code,Column_Name,Column_DataType,Column_Description,,,
+,,,,,,,,co_code,Int,CMOTS Company Code,TRUE,TRUE,
+,,,,,,,,datetime_minute,timestamp,price_timestamp_minute,TRUE,TRUE,datetime_minute
+,,,,,,,,open,float,Open Price,,,Open_Price
+,,,,,,,,high,float,High Price,,,High_Price
+,,,,,,,,low,float,Low Price,,,Low_Price
+,,,,,,,,close,float,Close Price,,,Closing_Price
+,,,,,,,,volume,float,Volume,,,Traded_Volume

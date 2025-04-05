@@ -6,6 +6,7 @@ jq -s '[.[][]]' json/company_index_master.json json/company_sector_master.json j
 #node --env-file=../.env json_to_pgsql.js json/all_tables.json ../../hasura
 #node --env-file=../.env json_to_pgsql.js json/company_historical_price_volume_by_date.json ../../hasura
 #node --env-file=../.env json_to_pgsql.js json/company_price_volume_daily_moving_averages.json ../../hasura
+#node --env-file=../.env json_to_pgsql.js json/company_intraday_oclh_candles_by_minute.json ../../hasura
 
 cp json/all_tables.json csv
 
