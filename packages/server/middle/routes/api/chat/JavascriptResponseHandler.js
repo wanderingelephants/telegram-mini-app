@@ -60,10 +60,8 @@ class JavascriptResponseHandler {
         console.log("after strip", functionText)
         functionText = this.stripJSTicks(functionText, '```')*/
         functionText = this.stripJSTicks(functionText)
-        console.log("after  strip", functionText)
         let lastIdx = functionText.lastIndexOf("}")
         functionText = functionText.substring(0, lastIdx + 1)
-        console.log("after substring", functionText)
         functionText = functionText.trim()
         let executionResults = []
         const functionName = functionText.indexOf("async function analysis") > -1 ? "analysis" : "general_stock_market_query"
@@ -126,13 +124,14 @@ class JavascriptResponseHandler {
         const user_stock_portfolio = await this.dbManager.getUserStockPortfolio(email)
         pre_populated_arrays["user_stock_portfolio"] = user_stock_portfolio
         result = await analysis(pre_populated_arrays)
-        console.log("JS Result", result)
+        
         return result;
     }
     async handleResponse(llmResponse) {
         let formattedResponse;
         let jsExecResponse = await this.executeJavaScript(llmResponse);
         let { result, functionName } = jsExecResponse
+        console.log("result", result)
         if (result == "Sorry, No Response") return { formattedResponse, result }
         if (Array.isArray(result) && result.length > 10) result = result.slice(0, MAX_RESULTS_TO_FORMAT)
         await this.messageManager.saveMessage(this.customData.chatSessionId, this.activity, { result }, "results.json")
