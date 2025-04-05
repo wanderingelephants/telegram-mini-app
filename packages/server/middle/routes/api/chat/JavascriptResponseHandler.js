@@ -31,7 +31,7 @@ class JavascriptResponseHandler {
         fs.mkdirSync(folderPath, {recursive: true})
         return path.join(folderPath, filename);
     }
-    async convertToConstFormat(functionText) {
+    /*async convertToConstFormat(functionText) {
         console.log(functionText)
         let functionName = "general_stock_market_query"
         let startIdx = functionText.indexOf("const analysis")
@@ -53,7 +53,7 @@ class JavascriptResponseHandler {
         const generatedFilePath = this._getFilePath(path.join(dataFolder, "generated_functions"), this.customData.chatSessionId, this.activity, generatedFileName);
         fs.writeFileSync(generatedFilePath, `${gqlImportPrefix}\n${functionText}`);
         return { functionName, generatedFilePath }
-    }
+    }*/
     async executeJavaScript(functionText) {
         let result;
         /*functionText = this.stripJSTicks(functionText, '```javascript')
