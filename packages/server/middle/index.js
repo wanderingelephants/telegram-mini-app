@@ -141,7 +141,9 @@ const { DateTime } = require('luxon');
   
   const dbManager = require("./routes/api/chat/DatabaseManager");
 
-  dbManager.getData().then(console.log("db init done"))
+  dbManager.getData().then(fetch(`${process.env.DENO_HOST_PORT}/init`, {
+    method: "POST"
+  }).then(resp => console.log(resp)))
 
 //})
 

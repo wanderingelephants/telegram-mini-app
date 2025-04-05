@@ -54,6 +54,9 @@ serve(async (req) => {
     const { functionText } = await req.json();
   
     if (!pre_populated_arrays) {
+        await initData();
+    }
+    if (!pre_populated_arrays) {
       return new Response(JSON.stringify({ error: "Data not initialized" }), {
         status: 500,
         headers: { "Content-Type": "application/json" }

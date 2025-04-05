@@ -41,7 +41,7 @@ class DatabaseManager {
   }
 
   async getData() {
-    // If data hasn't been initialized yet, initialize it
+    console.log("Database Manager getData()")
     if (!this.isInitialized) {
       await this.initData();
     }
