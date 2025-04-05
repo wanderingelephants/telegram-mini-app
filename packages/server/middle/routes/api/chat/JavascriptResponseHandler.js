@@ -3,7 +3,7 @@ const fs = require("fs")
 const { postToGraphQL } = require("../../../lib/helper")
 const dataFolder = process.env.DATA_ROOT_FOLDER
 const MAX_RESULTS_TO_FORMAT = 10
-
+const DENO_HOST_PORT=process.env.DENO_HOST_PORT
 class JavascriptResponseHandler {
     constructor(dbManager, messageManager, formattingLLMClient, activity, userQuery, customData, testAgainstFunction) {
         this.dbManager = dbManager
@@ -68,6 +68,18 @@ class JavascriptResponseHandler {
         let executionResults = []
         const functionName = functionText.indexOf("async function analysis") > -1 ? "analysis" : "general_stock_market_query"
         try{
+            const fnResp = await fetch(`${DENO_HOST_PORT}/exec`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ functionText }),
+              });    
+            executionResults = await fnResp.json()  
+        }
+        catch(e){
+            console.error(e)
+        }
+        return {functionName, result: executionResults}
+        /*try{
             const asyncFunc = new Function('pre_populated_arrays', 'postToGraphQL', 
             `return (${functionText})(pre_populated_arrays);`
             );
@@ -82,7 +94,7 @@ class JavascriptResponseHandler {
         catch(e){
             console.error(e)
             return {functionName, result: executionResults}
-        }
+        }*/
         /*let functionName;
         let generatedFilePath;
         const functionAndPath = await this.convertToConstFormat(functionText)
